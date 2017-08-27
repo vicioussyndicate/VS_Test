@@ -4,6 +4,7 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="reset.css"/>
@@ -22,21 +23,21 @@
           </div>
           <div class="options" id="options">
             <div class="option" id="show">
-              <button class="optionBtn option-toggle">Show</button>
+              <button class="optionBtn option-toggle">Ranks: All</button>
               <div class="dropdown hidden">
                 <button class="optionSelBtn" id="classes">Classes</button>
                 <button class="optionSelBtn" id="decks">Decks</button>
               </div>
             </div>
             <div class="option" id="format">
-              <button class="optionBtn option-toggle">Format</button>
+              <button class="optionBtn option-toggle">Standard</button>
               <div class="dropdown hidden">
                 <button class="optionSelBtn" id="standard">Standard</button>
                 <button class="optionSelBtn" id="wild">Wild</button>
               </div>
             </div>
             <div class="option" id="time">
-              <button class="optionBtn option-toggle">Time</button>
+              <button class="optionBtn option-toggle">Last Month</button>
               <div class="dropdown hidden">
                 <button class="optionSelBtn" id="lastD">Last Day</button>
                 <button class="optionSelBtn" id="lastW">Last Week</button>
@@ -44,15 +45,12 @@
               </div>
             </div>
             <div class="option" id="sort">
-              <button class="optionBtn option-toggle">Sort</button>
+              <button class="optionBtn option-toggle">Freq</button>
               <div class="dropdown hidden">
                 <button class="optionSelBtn" id="byClass">By Class</button>
                 <button class="optionSelBtn" id="byFreq">By Frequency</button>
                 <button class="optionSelBtn" id="byWR">By Win Rate</button>
               </div>
-            </div>
-            <div class="option">
-              <button class="optionBtn detail-toggle" id="detailToggle">+</button>
             </div>
           </div>
         </nav>
@@ -76,5 +74,7 @@
       <div class="detail-window" id="details"></div>
     </div>
     <script src="script.js"></script>
+    <script src="ladder.js"></script>
+    <script src="table.js"></script>
   </body>
 </html>
