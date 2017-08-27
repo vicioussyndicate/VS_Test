@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        meta(http-equiv="X-UA-Compatible", content="ie=edge")
+        script(src="https://cdn.plot.ly/plotly-latest.min.js")
+        link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css")
+        link(rel="stylesheet", href="reset.css")
+        link(rel="stylesheet", href="styles_new.css")
+        title VS
+    body
+        .ultra-wrapper
+            .main-wrapper
+                nav.navbar
+                    .tabs
+                        button.tab#ladder Ladder
+                        button.tab#table VS
+                        button.tab#decks Decks
+                        button.tab#profile ( i )
+
+                    .options#options
+                        .option#show
+                            button.optionBtn.option-toggle Show
+                            .dropdown.hidden
+                                button.optionSelBtn#classes Classes
+                                button.optionSelBtn#decks Decks
+                        .option#format
+                            button.optionBtn.option-toggle Format
+                            .dropdown.hidden
+                                button.optionSelBtn#standard Standard
+                                button.optionSelBtn#wild Wild
+                        .option#time
+                            button.optionBtn.option-toggle Time
+                            .dropdown.hidden
+                                button.optionSelBtn#lastD Last Day
+                                button.optionSelBtn#lastW Last Week
+                                button.optionSelBtn#lastM Last Month
+                        .option#sort
+                            button.optionBtn.option-toggle Sort
+                            .dropdown.hidden
+                                button.optionSelBtn#byClass By Class
+                                button.optionSelBtn#byFreq By Frequency
+                                button.optionSelBtn#byWR By Win Rate
+                        .option
+                            button.optionBtn#detailToggle.detail-toggle +
+                .content-wrapper
+                    .content#charts
+                        #ladderWindow.chart
+                            #chart1
+                        #tableWindow.chart
+                            #chart2
+                        #decksWindow.chart
+                            #chart3
+                        #profileWindow.chart
+                            #chart4 Only available for VS Premium members
+            .detail-window#details
+        script(src="script.js")
