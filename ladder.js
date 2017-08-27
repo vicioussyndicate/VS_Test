@@ -1,7 +1,8 @@
 // ---------------------------- LADDER -------------------------------- // ------------------------------------ LADDE ------------------------- // 
 
 function makeLadder(f,t) {
-	
+    
+    console.log('fixed version')
 	
     
     var archetypes = []
@@ -236,7 +237,7 @@ function sortLadderBy(what) {
         
         traceMoveTo = traceMoveTo.concat(indices)
     }
-    
+
     Plotly.moveTraces('chart1', range(0,21*numArch),traceMoveTo);
 }
 

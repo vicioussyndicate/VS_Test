@@ -54,8 +54,7 @@ var colorscale_Table = [
 
 
 
-
-
+console.log('v2.2')
 
 
 
