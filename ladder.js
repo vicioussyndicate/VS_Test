@@ -10,10 +10,9 @@ function makeLadder(f,t) {
     var rankSums = DATA_ladder[f][t].imported.gamesPerRank
     var ARCHETYPES = DATA_ladder[f][t].imported.archetypes
 
-    var numArch = archetypes.length
+    var numArch = ARCHETYPES.length
     for (var arch of ARCHETYPES) {archetypes.push({C: arch[0], A: arch[1], color: randomColor()})}
-    
-    
+   
     
     for (var i=0;i<hsRanks;i++) {
         if (rankSums[i] == 0) {continue}
@@ -214,7 +213,7 @@ function getIndicesSortedBy(arr,what) {
 }
 
 function sortLadderBy(what) {
-
+    
     var traceMoveTo = []
     var t = ui.ladder.t
     var f = ui.ladder.f
@@ -231,13 +230,13 @@ function sortLadderBy(what) {
 
         else {console.log("sortLadderBy() Error: 'what' invalid"); return}
 
-
         for (var j=0;j<indices.length;j++) {indices[j] += i*numArch}
         var DATA_ladder_below = DATA.data.slice(0,i*numArch).concat(DATA_ladder_rank)
         DATA.data = DATA_ladder_below.concat(DATA.data.slice((i+1)*numArch),DATA.data.length)
         
         traceMoveTo = traceMoveTo.concat(indices)
     }
+    
     Plotly.moveTraces('chart1', range(0,21*numArch),traceMoveTo);
 }
 
