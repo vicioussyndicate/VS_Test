@@ -59,9 +59,9 @@ function makeTable(f,t,r) {
 
     // Copy Data
 
-    var FR =            DATA_table[f][t][r].imported.frequency
-    var TABLE =         DATA_table[f][t][r].imported.table
-    var ARCHETYPES =    DATA_table[f][t][r].imported.archetypes
+    var FR =            DATA_table[f][t][r].imported.frequency.slice()
+    var TABLE =         DATA_table[f][t][r].imported.table.slice()
+    var ARCHETYPES =    DATA_table[f][t][r].imported.archetypes.slice()
     
 
 
@@ -113,19 +113,8 @@ function makeTable(f,t,r) {
             
             table[i][j] = wr
             table[j][i] = 1-wr
-            textTable[i][j] =
-
-`
-${hero}<br>
-<b>vs:</b> ${opp}<br>
-<b>wr:</b>  ${(wr*100).toFixed(0)}%  (${totGames})
-`           
-           textTable[j][i] = 
-`
-${opp}<br>
-<b>vs:</b> ${hero}<br>
-<b>wr:</b>  ${((1-wr)*100).toFixed(0)}%  (${totGames})
-` 
+            textTable[i][j] =`${hero}<br><b>vs:</b> ${opp}<br><b>wr:</b>  ${(wr*100).toFixed(0)}%  (${totGames})`           
+            textTable[j][i] =`${opp}<br><b>vs:</b> ${hero}<br><b>wr:</b>  ${((1-wr)*100).toFixed(0)}%  (${totGames})` 
 
         }
     }
@@ -179,18 +168,23 @@ ${opp}<br>
             anchor: 'x',
         },
     }
+    
 
-    // CopyStuff over
-    console.log('make Table archetype sorted by fr?:',archetypes)
     DATA_table[f][t][r].table = table
     DATA_table[f][t][r].textTable = textTable
     DATA_table[f][t][r].archetypes = archetypes
-    DATA_table[f][t][r].archetypes_sorted = archetypes.slice()
-    DATA_table[f][t][r].frequency_sorted = frequency.slice()
+    
+    
     DATA_table[f][t][r].frequency = frequency
     DATA_table[f][t][r].classPlusArch = classPlusArch
     DATA_table[f][t][r].winrates = winrates
+    
+    
+    
     DATA_table[f][t][r].layout = layout
+    DATA_table[f][t][r].freqPlotData = getFreqPlotData(frequency.slice(),archetypes.slice())
+    //DATA_table[f][t][r].wrPlotData = getWRPlotData(winrates.slice(),archetypes.slice())
+    
 }
 
 
@@ -221,29 +215,54 @@ ${opp}<br>
 // -------------
 
 function plotTable(f,t,r) {
+
+    ui.table.f = f
+    ui.table.t = t
+    ui.table.r = r
     
-    var data = [{
+    var TABLE = DATA_table[f][t][r].table // ??
+    var overallWR = DATA_table[f][t][r].winrates
+    var table = TABLE.concat([overallWR])
+    var arch = DATA_table[f][t][r].archetypes.concat(['Overall'])
+    var textRow = []
+    for (var i=0;i<table[0].length;i++) {textRow.push("Overall WR: "+(100*overallWR[i]).toFixed(1)+"%")}
+    var textTable = DATA_table[f][t][r].textTable.concat([textRow])
+
+
+    
+    var trace_Table = {
         type: 'heatmap',
-        z: DATA_table[f][t][r].table,
+        z: table,
         x: DATA_table[f][t][r].archetypes,
-        y: DATA_table[f][t][r].archetypes,
-        text: DATA_table[f][t][r].textTable,
+        y: arch,
+        text: textTable,
         hoverinfo: 'text',
         colorscale: colorscale_Table,
         showscale: false,
-    }]
+    }
 
     // Default Frequency Trace
-    var trace_Freq_Default = {
+    var trace_FR = {
         visible: false,	
-        x: DATA_table[f][t][r].archetypes_sorted,
+        x: DATA_table[f][t][r].archetypes,
         y: range(0,DATA_table[f][t][r].archetypes.length),
         xaxis: 'x',
         yaxis: 'y2',
         type: 'line',
         hoverinfo: 'x+y',
     }
-    data.push(trace_Freq_Default)
+    
+    var trace_WR = {
+        visible: false,	
+        x: DATA_table[f][t][r].archetypes,
+        y: range(0,DATA_table[f][t][r].archetypes.length),
+        xaxis: 'x',
+        yaxis: 'y2',
+        type: 'line',
+        hoverinfo: 'x+y',
+    }
+    
+    data = [trace_Table,trace_FR,trace_WR]
 
     Plotly.newPlot('chart2',data,DATA_table[f][t][r].layout,{displayModeBar: false})
     document.getElementById('chart2').on('plotly_click', zoomToggle)
@@ -266,34 +285,80 @@ function plotTable(f,t,r) {
 
 
 
-// 3. Plot Freq
+// 3. SubPlots
 // -------------
 
-function plotTableFreq(f,t,r) {
+
+
+function plotFreq(f,t,r) {
+    Plotly.restyle('chart2',DATA_table[f][t][r].freqPlotData,1)
+}
+
+function getFreqPlotData(freq,arch) {
 
     var freqSum = 0
-    var freq = DATA_table[f][t][r].frequency_sorted.slice()
-    var arch_sorted = DATA_table[f][t][r].archetypes_sorted
+    var text = []
 
-    for (f of freq) {freqSum+=f}
-    for (var i=0;i<freq.length;i++) {freq[i] = freq[i]/freqSum}
-
-    console.log('plotTable',arch_sorted)
-
-    var update_Freq = {
-        x: [arch_sorted],
-        y: [freq],
-        visible:true,
-        hoverinfo: 'y',
+    for (var i=0;i<freq.length;i++) {freqSum+=freq[i]}
+    for (var i=0;i<freq.length;i++) {
+        freq[i] = freq[i]/freqSum
+        text.push("FR: "+(100*freq[i]).toFixed(1)+"%")
     }
-    Plotly.restyle('chart2',update_Freq,1)
+
+
+    var freqPlotData = {
+        x: [arch],
+        y: [freq],
+        text: [text],
+        visible:true,
+        hoverinfo: 'text',
+    }
+    return freqPlotData
 }
 
 
 
 
 
+function subplotWR (f,t,r,idx) {
+    var wr
 
+    if (idx == -1 || idx >= DATA_table[f][t][r].archetypes.length) {wr = DATA_table[f][t][r].winrates.slice()}
+    else {wr =    DATA_table[f][t][r].table[idx].slice()}
+
+    var arch  = DATA_table[f][t][r].archetypes.slice()
+    
+    if (idx > arch.length) {return}
+    
+    var text = []
+    for (var i=0;i<wr.length;i++) {wr[i]-= 0.5; text.push("WR: "+(100*wr[i]).toFixed(1)+"%")}
+
+    var wrPlotData = {
+        type: 'bar',
+        x: [arch],
+        y: [wr],
+        text: [text],
+        visible: true,
+        hoverinfo:'text',
+    }
+    
+    
+    Plotly.restyle('chart2',wrPlotData,2)
+}
+
+function getWRPlotData(wr,arch) {
+    var text = []
+    for (var i=0;i<wr.length;i++) {wr[i]-= 0.5; text.push("WR: "+(100*wr[i]).toFixed(1)+"%")}
+    var wrPlotData = {
+        type: 'bar',
+        x: [arch],
+        y: [wr],
+        text: [text],
+        visible: true,
+        hoverinfo:'text',
+    }
+    return wrPlotData
+}
 
 
 
@@ -314,7 +379,7 @@ function zoomToggle(data) {
     var t = ui.table.t
     var r = ui.table.r
     var arch = data.points[0].y
-    var numArch = DATA_table[f][t][r].archetypes.length
+    var numArch = DATA_table[f][t][r].archetypes.length +1 // +1 for the 'overall' row
 
     if (ui.table.zoomIn == false) {zoomIn(f,t,r,arch)}
     else { zoomOut(numArch)}
@@ -325,9 +390,9 @@ function zoomToggle(data) {
 
 
 function zoomIn(f,t,r,arch) {
-    console.log('zoomin',f,t,r,arch,DATA_table[f][t][r])
-    var archetypes_sorted = DATA_table[f][t][r].archetypes_sorted
-    var idx = archetypes_sorted.indexOf(arch)
+    var archetypes = DATA_table[f][t][r].archetypes
+    var idx = archetypes.indexOf(arch)
+    if (arch == 'Overall') {idx = DATA_table[f][t][r].archetypes.length}
     var layout = {
         yaxis: {range: [idx-0.5, idx+0.5],fixedrange:true,color:'white',tickcolor:'white'},
         yaxis2: {
@@ -338,10 +403,10 @@ function zoomIn(f,t,r,arch) {
     }
     
     Plotly.relayout('chart2',layout)
-    plotTableFreq(f,t,r)
-    
+    plotFreq(f,t,r)
+    subplotWR(f,t,r,idx)
     ui.table.zoomIn = true
-    ui.table.zoomIdx = arch
+    ui.table.zoomArch = arch
 }
 
 
@@ -362,7 +427,7 @@ function zoomOut (numArch) {
         yaxis2: {domain: [0, 0.01], visible: false,fixedrange:true},
     }
     Plotly.relayout('chart2',layout_zoomOut);
-    Plotly.restyle('chart2',{visible:false},1)
+    Plotly.restyle('chart2',{visible:false},[1,2])
         
     ui.table.zoomIn = false
 }
@@ -410,7 +475,6 @@ function sortTableBy(what,newPlot=false) {
     var sortByFR = function (a, b) { return data.frequency[a] > data.frequency[b] ? -1 : data.frequency[a] < data.frequency[b] ? 1 : 0; }
     var sortByClass = function (a, b) { return data.classPlusArch[a] < data.classPlusArch[b] ? -1 : data.classPlusArch[a] > data.classPlusArch[b] ? 1 : 0; }
 
-    if (what==undefined) {what = choice(['winrate','frequency','class'])}
 
     if (what == 'winrate') {idxs.sort(sortByWR)}
     if (what == 'frequency') {idxs.sort(sortByFR)}
@@ -421,12 +485,17 @@ function sortTableBy(what,newPlot=false) {
     let textTable = []
     var archetypes = []
     var frequency = []
+    var winrates = []
+    var classPlusArch = []
 
     for (var i=0;i<numArch;i++) {
         var idx = idxs[i]
-
+        
+        classPlusArch.push(data.classPlusArch[idx])
         archetypes.push(data.archetypes[idx])
         frequency.push(data.frequency[idx])
+        winrates.push(data.winrates[idx])
+        
         
         var tableRow = []
         var textTableRow = []
@@ -437,47 +506,20 @@ function sortTableBy(what,newPlot=false) {
         table.push(tableRow)
         textTable.push(textTableRow)
     }
+    
    
-
-   
-    var data_plot = [{
-        z: table,
-        x: archetypes,
-        y: archetypes,
-        text: textTable,
-        hoverinfo: 'text',
-        type: 'heatmap',
-        colorscale: colorscale_Table,
-        showscale: false,
-    }]
-    // Default Frequency Trace
-    var trace_freq = {
-        visible: false,	
-        x: archetypes,
-        y: range(0,archetypes.length),
-        xaxis: 'x',
-        yaxis: 'y2',
-        type: 'line',
-        hoverinfo: 'x+y',
-    }
-
+    DATA_table[f][t][r].table = table
+    DATA_table[f][t][r].archetypes = archetypes
+    DATA_table[f][t][r].classPlusArch = classPlusArch
+    DATA_table[f][t][r].frequency  = frequency
+    DATA_table[f][t][r].winrates  = winrates
+    DATA_table[f][t][r].freqPlotData = getFreqPlotData(frequency,archetypes)
     
-
-    data_plot.push(trace_freq)
-
-    var t0 = performance.now();
-    Plotly.newPlot('chart2',data_plot,data.layout,{displayModeBar: false})
-    document.getElementById('chart2').on('plotly_click', zoomToggle)
     
-    var t1 = performance.now()
-    console.log(what+" sort of Table took "+(t1-t0).toFixed(2)+" ms")
+    plotTable(f,t,r)
+    if (ui.table.zoomIn) {zoomIn(f,t,r,ui.table.zoomArch)}
+    return
 
-    
-
-    DATA_table[f][t][r].archetypes_sorted = archetypes
-    DATA_table[f][t][r].frequency_sorted = frequency
-
-    if (ui.table.zoomIn) {zoomOut(archetypes.length)}//zoomIn(ui.table.zoomIdx)}
 }
 
 
@@ -505,8 +547,7 @@ function changeTable(f,t,r) {
     ui.table.t = t
     ui.table.r = r
     
-    if (ui.table.sortBy != 'frequency') {sortTableBy(ui.table.sortBy,true)}
-    else {plotTable(f,t,r)} 
+    sortTableBy(ui.table.sortBy,true)
 }
 
 

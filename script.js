@@ -34,15 +34,15 @@ var hsClasses = ["Druid","Hunter","Mage","Paladin","Priest","Rogue","Shaman","Wa
 // }
 
 var hsColors = {
-    Druid: "brown",
-    Hunter: "green",
-    Mage: "blue",
-    Paladin: "pink",
-    Priest: "white",
-    Rogue: "grey",
-    Shaman: "orange",
-    Warlock: "violet",
-    Warrior: "red"}
+    Druid: "bc7700",
+    Hunter: "1a7c3f",
+    Mage: "3db49b",
+    Paladin: "ffad77",
+    Priest: "ddd9bb",
+    Rogue: "729172",
+    Shaman: "306291",
+    Warlock: "da269a",
+    Warrior: "880d05"}
 
 var colorscale_Table = [
     [0, '#3f0c03'],
@@ -52,9 +52,6 @@ var colorscale_Table = [
     [1, '#75960a']
 ];
 
-
-
-console.log('v2.2')
 
 
 
@@ -105,7 +102,7 @@ var ui = {
         t: 'lastWeek',
         r: 'ranks_all',
         zoomIn: false,
-        zoomIdx: 0,
+        zoomArch: '',
         sortBy: 'frequency',
     }
 }
@@ -252,12 +249,18 @@ function setupTableData (data) {
                     imported: tableData[f][t][r][key],
                     table: null,
                     archetypes: null,
-                    classPlusArch: null, // used for sorting
-                    textTable: null,
                     winrates: null,
                     frequency: null,
+
+                    classPlusArch: null,
+                    textTable: null,
+                    
+                    layout: null,
+                    freqPlotData: null,
+                    wrPlotData: null,
+
                     archetypes_sorted: null,
-                    frequency_sorted: null,
+                    table_sorted: null,
                 }
                 makeTable(f,t,r)
             }

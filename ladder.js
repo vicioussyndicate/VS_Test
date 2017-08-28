@@ -2,7 +2,6 @@
 
 function makeLadder(f,t) {
     
-    console.log('fixed version')
 	
     
     var archetypes = []
@@ -130,7 +129,6 @@ function makeLadder(f,t) {
     }
 
 
-    console.log(classData)
     
 
   
