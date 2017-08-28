@@ -331,7 +331,7 @@ function subplotWR (f,t,r,idx) {
     if (idx > arch.length) {return}
     
     var text = []
-    for (var i=0;i<wr.length;i++) {wr[i]-= 0.5; text.push("WR: "+(100*wr[i]).toFixed(1)+"%")}
+    for (var i=0;i<wr.length;i++) {text.push("WR: "+(100*wr[i]).toFixed(1)+"%"); wr[i]-= 0.5}
 
     var wrPlotData = {
         type: 'bar',
@@ -340,12 +340,20 @@ function subplotWR (f,t,r,idx) {
         text: [text],
         visible: true,
         hoverinfo:'text',
+        marker: {
+            color: '#2a9fc1',
+            // line: {
+            //     color: '#84d6ee',
+            //     width: 1.5
+            //   }
+          },
     }
     
     
     Plotly.restyle('chart2',wrPlotData,2)
 }
 
+/*
 function getWRPlotData(wr,arch) {
     var text = []
     for (var i=0;i<wr.length;i++) {wr[i]-= 0.5; text.push("WR: "+(100*wr[i]).toFixed(1)+"%")}
@@ -359,7 +367,7 @@ function getWRPlotData(wr,arch) {
     }
     return wrPlotData
 }
-
+*/
 
 
 

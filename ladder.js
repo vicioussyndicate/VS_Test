@@ -332,7 +332,8 @@ function sortClassLadderBy(what) {
 
         for (var j=0;j<indices.length;j++) {indices[j] += i*numArch}
         var DATA_ladder_below = DATA.classData.slice(0,i*numArch).concat(DATA_ladder_rank)
-        DATA.classData = DATA_ladder_below.concat(DATA.classData.slice((i+1)*numArch),DATA.classData.length)
+        var DATA_ladder_above = DATA.classData.slice((i+1)*numArch,DATA.classData.length)
+        DATA.classData = DATA_ladder_below.concat(DATA_ladder_above)
         
         traceMoveTo = traceMoveTo.concat(indices)
     }
