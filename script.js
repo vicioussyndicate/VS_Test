@@ -8,6 +8,8 @@ INFO
 */
 
 
+var t0 = performance.now();
+
 // Global Variables
 var hsRanks = 21
 var numArch_ladder = 0
@@ -60,8 +62,9 @@ var colorscale_Table = [
 
 window.onload = function() {
     
-    setupFirebase()
     setupUI()
+    setupFirebase()
+    
         
 }
 
@@ -90,6 +93,7 @@ var ui = {
     ladder: {
         f: 'Standard', 
         t: 'lastDay',
+        plotted: false,
         sortBy: 'frequency',
     },
     classLadder: {
@@ -99,8 +103,9 @@ var ui = {
     },
     table: {
         f: 'Standard',
-        t: 'lastWeek',
+        t: 'lastMonth',
         r: 'ranks_all',
+        plotted: false,
         zoomIn: false,
         zoomArch: '',
         sortBy: 'frequency',
@@ -115,9 +120,9 @@ var ui = {
 // UI
 
 function setupUI() {
-    document.getElementById('ladder').classList.add('highlighted')
-    document.getElementById('ladderWindow').style.display = 'inline-block'
-    ui.tabs.activeID = 'ladder';
+    document.getElementById('decks').classList.add('highlighted')
+    document.getElementById('decksWindow').style.display = 'inline-block'
+    ui.tabs.activeID = 'decks';
 
     for(let i=0;i<tabs.length;i++) {    
         tabs[i].addEventListener("click", toggleMainTabs);}
@@ -142,6 +147,10 @@ function toggleMainTabs(e) {
         document.getElementById(ui.tabs.activeID).classList.remove('highlighted')
     }
     const tabID = e.target.id;
+    if (tabID == 'ladder' && !ui.ladder.plotted) {
+        plotLadder(ui.ladder.f,ui.ladder.t)
+        ui.ladder.plotted = true
+    }
     document.getElementById(e.target.id).classList.add('highlighted')
     document.getElementById(tabID+'Window').style.display = 'inline-block'
     ui.tabs.activeID = tabID;
@@ -238,7 +247,7 @@ var table_ranks =   ['ranks_all'] //later: ['ranks_L_5','ranks_6_15','ranks_all'
 function setupTableData (data) {
 
     var tableData = data.val()
-
+    
     for (f of hsFormats) {
         DATA_table[f] = {}
         for (t of table_times) {
@@ -262,19 +271,21 @@ function setupTableData (data) {
                     archetypes_sorted: null,
                     table_sorted: null,
                 }
-                makeTable(f,t,r)
+                //if (f == ui.table.f && t == ui.table.t && r == ui.table.r) {
+                    makeTable(f,t,r)
+                //}
             }
         }
     }
-    plotTable('Standard','lastMonth','ranks_all')
 
     
+    plotTable(ui.table.f,ui.table.t,ui.table.r)
 }
 
 function setupLadderData (data) {
     
     var ladderData = data.val()
-
+    
     for (f of hsFormats) {
         DATA_ladder[f] = {}
         for (t of ladder_times) {
@@ -285,12 +296,18 @@ function setupLadderData (data) {
                 archetypes: null,
                 data_classes: null,
             }
-            makeLadder(f,t)
+            //if (f == ui.ladder.f && t == ui.ladder.t) {
+                makeLadder(f,t)
+            //}
         } 
     }
 
-    plotLadder('Standard','lastDay')
-    plotClassLadder('Standard','lastMonth')
+    //plotLadder('Standard','lastDay')
+    plotClassLadder(ui.classLadder.f,ui.classLadder.t)
+    
+    var t1 = performance.now()
+    console.log("App initializing took " + (t1 - t0) + " ms.")
+    
 }
 
 
@@ -395,5 +412,4 @@ function randomColor() {return 'rgb('+randint(0,255)+','+randint(0,255)+','+rand
 function range(a,b) {var range = []; for (var i=a;i<b;i++) {range.push(i)}; return range}
 function fillRange(a,b,c) {var range = []; for (var i=a;i<b;i++) {range.push(c)}; return range}
 
-//hsColors = ["#cc9933","#339966","#99cccc","#fefe99","#c0c0c0","#445145","#2c5ab7","#862ba0","#9e2a41"]
-//hsColors = ["#b26c45","#80c698","#6b8bce","#f0ce70","#efefe7","#445145","#186880","#8b2a8f","#cc2749"]
+

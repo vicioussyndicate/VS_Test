@@ -108,7 +108,7 @@ function makeLadder(f,t) {
             var name = hsClasses[i]
             var text = name+" "+wr.toFixed(2)+" "+fr.toFixed(2)
             var color = hsColors[name]
-            //console.log(i,fr)
+
         
             var trace = {
                 x:[fr],
@@ -144,6 +144,7 @@ function makeLadder(f,t) {
 		showlegend: false,
 		displayModeBar: false,
 		autosize: true,
+        width: '100%',
 		hovermode: 'closest',
 		xaxis: {
             visible: true, 
@@ -178,8 +179,26 @@ function makeLadder(f,t) {
     DATA_ladder[f][t].numArch = numArch
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function plotLadder(f,t) {
-    Plotly.newPlot('chart1',DATA_ladder[f][t].data,DATA_ladder[f][t].layout,{displayModeBar: false,})
+
+    Plotly.newPlot('chart1',DATA_ladder[f][t].data, DATA_ladder[f][t].layout, {displayModeBar: false,})
     ui.ladder.f = f
     ui.ladder.t = t
 }
@@ -190,11 +209,77 @@ function plotClassLadder(f,t) {
     ui.classLadder.t = t
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // -----    SORT FUNCTIONS   -----//
+
+
+
+function sortLadderBy(what) {
+    
+    var traceMoveTo = []
+    var t = ui.ladder.t
+    var f = ui.ladder.f
+    var DATA = DATA_ladder[f][t]
+    var numArch = DATA.numArch
+
+
+    for (var i=0;i<hsRanks;i++) {
+        var DATA_ladder_rank = DATA.data.slice(i*numArch, (i+1)*numArch)
+
+        var indices = getIndicesSortedBy(DATA_ladder_rank,what)
+        
+        if      (what == 'class')       {DATA_ladder_rank.sort(classSort)}
+        else if (what == 'frequency')   {DATA_ladder_rank.sort(frSort)}
+        else if (what == 'winrate')     {DATA_ladder_rank.sort(wrSort)} 
+
+        else {console.log("sortLadderBy() Error: 'what' invalid"); return}
+
+        for (var j=0;j<indices.length;j++) {indices[j] += i*numArch}
+
+        var DATA_ladder_below = DATA.data.slice(0,i*numArch).concat(DATA_ladder_rank)
+        var DATA_ladder_above = DATA.data.slice((i+1)*numArch,DATA.data.length)
+
+        DATA.data = DATA_ladder_below.concat(DATA_ladder_above)
+        
+        traceMoveTo = traceMoveTo.concat(indices)
+    }
+
+    Plotly.moveTraces('chart1', range(0,21*numArch),traceMoveTo);
+    
+}
+
+
+
 
 function wrSort(a,b) { return a.winrate < b.winrate ? -1 : a.winrate > b.winrate ? 1 : 0; }
 function frSort(a,b) { return a.x[0] < b.x[0] ? -1 : a.x[0] > b.x[0] ? 1 : 0; }
 function classSort(a,b) { return a.hsClass+a.hsArch < b.hsClass+b.hsArch ? -1 : a.hsClass+a.hsArch > b.hsClass+b.hsArch ? 1 : 0; }
+
+
+
+
 
 
 function getIndicesSortedBy(arr,what) {
@@ -206,38 +291,21 @@ function getIndicesSortedBy(arr,what) {
     if (what=='winrate')    {for (var i=0;i<arr.length;i++) {indices.push(i); toSort.push(arr[i].winrate)}}
 
     indices.sort(function (a, b) { return toSort[a] < toSort[b] ? -1 : toSort[a] > toSort[b] ? 1 : 0; });
+
     var indices_target = []
     for (var i=0;i<indices.length;i++) {indices_target.push(indices.indexOf(i))}
     return indices_target
 }
 
-function sortLadderBy(what) {
-    
-    var traceMoveTo = []
-    var t = ui.ladder.t
-    var f = ui.ladder.f
-    var DATA = DATA_ladder[f][t]
-    var numArch = DATA.numArch
 
-    for (var i=0;i<hsRanks;i++) {
-        var DATA_ladder_rank = DATA.data.slice(i*numArch, (i+1)*numArch)
-        var indices = getIndicesSortedBy(DATA_ladder_rank,what)
-        
-        if      (what == 'class')       {DATA_ladder_rank.sort(classSort)}
-        else if (what == 'frequency')   {DATA_ladder_rank.sort(frSort)}
-        else if (what == 'winrate')     {DATA_ladder_rank.sort(wrSort)} 
 
-        else {console.log("sortLadderBy() Error: 'what' invalid"); return}
 
-        for (var j=0;j<indices.length;j++) {indices[j] += i*numArch}
-        var DATA_ladder_below = DATA.data.slice(0,i*numArch).concat(DATA_ladder_rank)
-        DATA.data = DATA_ladder_below.concat(DATA.data.slice((i+1)*numArch),DATA.data.length)
-        
-        traceMoveTo = traceMoveTo.concat(indices)
-    }
 
-    Plotly.moveTraces('chart1', range(0,21*numArch),traceMoveTo);
-}
+
+
+
+
+
 
 
 
@@ -275,7 +343,17 @@ function sortClassLadderBy(what) {
 
 
 
+
+
+
+
+
+
+
+
 function changeLadder(f,t) {
+    //console.log('change ladder to',f,t)
+    
     if (ui.ladder.f == f && ui.ladder.t == t) {console.log('ladder already plotted');return}
     plotLadder(f,t)
 }
