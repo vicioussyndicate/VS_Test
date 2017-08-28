@@ -159,6 +159,7 @@ function makeTable(f,t,r) {
             b: 30,
             t: 100
         },
+        width: '100%',
 
         yaxis2: {
             visible: false,
