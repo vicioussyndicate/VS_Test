@@ -159,7 +159,7 @@ function makeTable(f,t,r) {
             b: 30,
             t: 100
         },
-        width: '100%',
+        width: 800,
 
         yaxis2: {
             visible: false,
@@ -184,8 +184,8 @@ function makeTable(f,t,r) {
     
     DATA_table[f][t][r].layout = layout
     DATA_table[f][t][r].freqPlotData = getFreqPlotData(frequency.slice(),archetypes.slice())
-    //DATA_table[f][t][r].wrPlotData = getWRPlotData(winrates.slice(),archetypes.slice())
     
+    sortTableBy('frequency',plot=false,ftr={f:f,t:t,r:r})   
 }
 
 
@@ -267,6 +267,8 @@ function plotTable(f,t,r) {
 
     Plotly.newPlot('chart2',data,DATA_table[f][t][r].layout,{displayModeBar: false})
     document.getElementById('chart2').on('plotly_click', zoomToggle)
+
+    if (ui.table.zoomIn) {zoomIn(f,t,r,ui.table.zoomArch)}
 }
 
 
@@ -354,24 +356,6 @@ function subplotWR (f,t,r,idx) {
     Plotly.restyle('chart2',wrPlotData,2)
 }
 
-/*
-function getWRPlotData(wr,arch) {
-    var text = []
-    for (var i=0;i<wr.length;i++) {wr[i]-= 0.5; text.push("WR: "+(100*wr[i]).toFixed(1)+"%")}
-    var wrPlotData = {
-        type: 'bar',
-        x: [arch],
-        y: [wr],
-        text: [text],
-        visible: true,
-        hoverinfo:'text',
-    }
-    return wrPlotData
-}
-*/
-
-
-
 
 
 
@@ -388,7 +372,7 @@ function zoomToggle(data) {
     var t = ui.table.t
     var r = ui.table.r
     var arch = data.points[0].y
-    var numArch = DATA_table[f][t][r].archetypes.length +1 // +1 for the 'overall' row
+    var numArch = DATA_table[f][t][r].archetypes.length
 
     if (ui.table.zoomIn == false) {zoomIn(f,t,r,arch)}
     else { zoomOut(numArch)}
@@ -399,9 +383,13 @@ function zoomToggle(data) {
 
 
 function zoomIn(f,t,r,arch) {
+
     var archetypes = DATA_table[f][t][r].archetypes
-    var idx = archetypes.indexOf(arch)
-    if (arch == 'Overall') {idx = DATA_table[f][t][r].archetypes.length}
+    var idx =       archetypes.indexOf(arch)
+
+    if (arch == 'Overall')  {idx = DATA_table[f][t][r].archetypes.length}
+    if (idx == -1)          {zoomOut(archetypes.length); return}
+
     var layout = {
         yaxis: {range: [idx-0.5, idx+0.5],fixedrange:true,color:'white',tickcolor:'white'},
         yaxis2: {
@@ -410,10 +398,11 @@ function zoomIn(f,t,r,arch) {
             fixedrange: true,
         },
     }
-    
+
     Plotly.relayout('chart2',layout)
     plotFreq(f,t,r)
     subplotWR(f,t,r,idx)
+
     ui.table.zoomIn = true
     ui.table.zoomArch = arch
 }
@@ -426,6 +415,7 @@ function zoomIn(f,t,r,arch) {
 
 
 function zoomOut (numArch) {
+    numArch += 1 // because of the overall row
     var layout_zoomOut = {
         yaxis:{	
             range:[numArch-0.5,-0.5],
@@ -465,13 +455,14 @@ function zoomOut (numArch) {
 // 5. Sort Table
 // -------------
 
-function sortTableBy(what,newPlot=false) {
-    if (ui.table.sortBy == what && !newPlot) {console.log('already sorted by '+what);return}
-
-    var f = ui.table.f
-    var t = ui.table.t
-    var r = ui.table.r
-    ui.table.sortBy = what
+function sortTableBy(what,plot=true,ftr=null) {
+    if (ui.table.sortBy == what && ui.fullyLoaded) {console.log('already sorted by '+what);return}
+    
+    var f,t,r
+    if (ftr==null) {f = ui.table.f; t = ui.table.t; r = ui.table.r; ui.table.sortBy = what}
+    else {f = ftr.f; t = ftr.t; r = ftr.r;}
+    
+    
 
     
     var data = DATA_table[f][t][r]
@@ -523,12 +514,17 @@ function sortTableBy(what,newPlot=false) {
     DATA_table[f][t][r].frequency  = frequency
     DATA_table[f][t][r].winrates  = winrates
     DATA_table[f][t][r].freqPlotData = getFreqPlotData(frequency,archetypes)
-    
-    
-    plotTable(f,t,r)
-    if (ui.table.zoomIn) {zoomIn(f,t,r,ui.table.zoomArch)}
-    return
 
+    // Archetypes sorted by frequency stored for creating ladder plot legend
+    if (what == 'frequency' && t == 'lastMonth' && DATA_table[f][t][r].archetypesLadder == null) {
+        DATA_table[f][t][r].archetypesLadder = archetypes.slice()
+    } 
+    
+    
+    if (plot) { 
+        plotTable(f,t,r)
+    }
+    return
 }
 
 
@@ -556,7 +552,7 @@ function changeTable(f,t,r) {
     ui.table.t = t
     ui.table.r = r
     
-    sortTableBy(ui.table.sortBy,true)
+    plotTable(f,t,r)
 }
 
 

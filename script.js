@@ -15,7 +15,7 @@ var hsRanks = 21
 var numArch_ladder = 0
 var numArch_table_std = 14      // top 14 archetype will be posted on the table
 var numArch_table_wild = 9
-var ladder_xmin = 0.03         // minimal x value
+var ladder_xmin = 0.01         // minimal x value
 
 var table_default_sort = 'frequency'
 var table_default_time = 'lastWeek'
@@ -63,11 +63,23 @@ var colorscale_Table = [
 window.onload = function() {
     
     setupUI()
-    setupFirebase()
+    setupFirebase() // 1. setup table, 2. setup ladder
     
         
 }
 
+
+
+function finishedLoading() {
+
+
+    plotTable(ui.table.f,ui.table.t,ui.table.r)
+    plotClassLadder(ui.classLadder.f,ui.classLadder.t)
+
+    ui.fullyLoaded = true
+
+    console.log("App initializing took " + (performance.now() - t0) + " ms.")
+}
 
 
 
@@ -84,6 +96,7 @@ var optionSelectionButtons = document.querySelectorAll('.optionSelBtn')
 
 
 var ui = {      // UI handler
+    fullyLoaded: false,
     tabs: {
         activeID: null,
     },
@@ -94,12 +107,12 @@ var ui = {      // UI handler
         f: 'Standard', 
         t: 'lastDay',
         plotted: false,
-        sortBy: 'frequency',
+        sortBy: 'class',
     },
     classLadder: {
         f: 'Standard', 
         t: 'lastDay',
-        sortBy: 'frequency',
+        sortBy: 'class',
     },
     table: {
         f: 'Standard',
@@ -133,23 +146,44 @@ function setupUI() {
 
     for (let i=0;i<optionSelectionButtons.length;i++) { 
         optionSelectionButtons[i].addEventListener("click", optionSelection)}
+    
+    var contentFooter_classLadder = document.querySelectorAll('#classLadderWindow .content-footer')[0]
+    var contentFooter_ladder = document.querySelectorAll('#ladderWindow .content-footer')[0]
+
+    for (var i=0;i<9;i++) {
+        var hsClass = hsClasses[i]
+
+        var legendDiv = document.createElement('div') // parent
+        var colorSplash = document.createElement('div') // child 1
+        var className = document.createElement('p') // child 2
+
+
+        legendDiv.className = 'classLadder-legend'
+        colorSplash.style = 'background-color:#'+hsColors[hsClass]+';height:15px;width:30px;margin:0 auto;'
+        className.style.marginTop = '0.3em'
+        className.innerHTML = hsClass
+
+        legendDiv.appendChild(colorSplash)
+        legendDiv.appendChild(className)
+        contentFooter_classLadder.appendChild(legendDiv)
+    }
 }
-
-
-
 
 
 
 // Tabs
 
 function toggleMainTabs(e) {
-    console.log(e.target.id)
+    
+    if (!ui.fullyLoaded) {return}
     if (ui.tabs.activeID != null) {
         document.getElementById(ui.tabs.activeID+'Window').style.display = 'none'
         document.getElementById(ui.tabs.activeID).classList.remove('highlighted')
     }
     const tabID = e.target.id;
     if (tabID == 'ladder' && !ui.ladder.plotted) {
+
+        sortLadderBy(ui.ladder.sortBy,plot=false) // plot=false importan!
         plotLadder(ui.ladder.f,ui.ladder.t)
         ui.ladder.plotted = true
     }
@@ -165,7 +199,8 @@ function toggleMainTabs(e) {
 
 // Options
 
-function dropDownToggle(e) {    
+function dropDownToggle(e) {
+    if (!ui.fullyLoaded) {return}    
     const targetParentID = e.target.parentElement.id;
     toggleShow(targetParentID);
 }
@@ -261,16 +296,14 @@ function setupTableData (data) {
                     imported: tableData[f][t][r][key],
                     table: null,
                     archetypes: null,
+                    archetypesLadder: null,
                     winrates: null,
                     frequency: null,
-
                     classPlusArch: null,
                     textTable: null,
-                    
                     layout: null,
                     freqPlotData: null,
-                    wrPlotData: null,
-
+                    //wrPlotData: null,
                     archetypes_sorted: null,
                     table_sorted: null,
                 }
@@ -280,9 +313,6 @@ function setupTableData (data) {
             }
         }
     }
-
-    
-    plotTable(ui.table.f,ui.table.t,ui.table.r)
 }
 
 function setupLadderData (data) {
@@ -305,12 +335,7 @@ function setupLadderData (data) {
         } 
     }
 
-    //plotLadder('Standard','lastDay')
-    plotClassLadder(ui.classLadder.f,ui.classLadder.t)
-    
-    var t1 = performance.now()
-    console.log("App initializing took " + (t1 - t0) + " ms.")
-    
+    finishedLoading()
 }
 
 

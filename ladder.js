@@ -9,6 +9,8 @@ function makeLadder(f,t) {
     var ARCHETYPES =    DATA_ladder[f][t].imported.archetypes
     var rankData =      DATA_ladder[f][t].imported.rankData // form : [rank0 = [ #games arch1, #games arch2, ...   ], ranks1 = [#games arch1, ....], ...]
     var rankSums =      DATA_ladder[f][t].imported.gamesPerRank
+    var totGames = 0
+    
     
 
     var numArch = ARCHETYPES.length
@@ -16,6 +18,7 @@ function makeLadder(f,t) {
    
     
     for (var i=0;i<hsRanks;i++) {
+        totGames += rankSums[i]
         if (rankSums[i] == 0) {continue}
 
         var classRankRow = fillRange(0,9,0)
@@ -172,18 +175,13 @@ function makeLadder(f,t) {
             b:0,
             t:0,
         },
-		// margin: {
-        //     l: 35,
-        //     r: 10,
-        //     b: 10,
-        //     t: 10
-        // },
 	}
     
     DATA_ladder[f][t].data = data
     DATA_ladder[f][t].classData = classData
     DATA_ladder[f][t].layout = layout
     DATA_ladder[f][t].numArch = numArch
+    DATA_ladder[f][t].totGames = totGames
 }
 
 
@@ -236,12 +234,18 @@ function smoothLadder(data) {
 function plotLadder(f,t) {
 
     Plotly.newPlot('chart1',DATA_ladder[f][t].data, DATA_ladder[f][t].layout, {displayModeBar: false,})
+    createLadderLegend(f,t)
+    var windowInfo = document.querySelectorAll('#ladderWindow .windowInfo')[0]    
+    windowInfo.innerHTML = f+" "+t+" <br/><span>("+DATA_ladder[f][t].totGames+")</span>"
+
     ui.ladder.f = f
     ui.ladder.t = t
 }
 
 function plotClassLadder(f,t) {
     Plotly.newPlot('chart3',DATA_ladder[f][t].classData,DATA_ladder[f][t].layout,{displayModeBar: false,})
+    var windowInfo = document.querySelectorAll('#classLadderWindow .windowInfo')[0]    
+    windowInfo.innerHTML = f+" "+t+" <br/><span>("+DATA_ladder[f][t].totGames+")</span>"
     ui.classLadder.f = f
     ui.classLadder.t = t
 }
@@ -249,7 +253,48 @@ function plotClassLadder(f,t) {
 
 
 
+function createLadderLegend(f,t) {
+    var contentFooter_ladder = document.querySelectorAll('#ladderWindow .content-footer')[0]
 
+    while (contentFooter_ladder.firstChild) {contentFooter_ladder.removeChild(contentFooter_ladder.firstChild);}
+
+    var maxElements = 10
+    var countElements = 0
+    var DATA = DATA_ladder[f][t]
+    var numArch = DATA.numArch
+    var rank = 16 // at what rank to sample archetypes?
+    var xmin = 0.05
+
+    var archetypes = DATA_table[f]['lastMonth']['ranks_all'].archetypesLadder // sorted by frequency
+    for (var x=0;x<archetypes.length;x++) {
+        for (var i=0;i<numArch;i++) {
+
+            var arch = DATA.data[i+numArch*rank]
+
+            if (arch.name != archetypes[x]) {continue}
+            //if (arch.x < xmin) {continue}
+
+            var legendDiv = document.createElement('div') // parent
+            var colorSplash = document.createElement('div') // child 1
+            var archName = document.createElement('l') // child 2
+
+
+            legendDiv.className = 'ladder-legend'
+            legendDiv.style.fontSize = '0.8em'
+            colorSplash.style = 'background-color:'+arch.marker.color+';height:15px;width:30px;margin:0 auto 0.7em auto;'
+            archName.innerHTML = arch.name
+
+            legendDiv.appendChild(colorSplash)
+            legendDiv.appendChild(archName)
+
+            contentFooter_ladder.appendChild(legendDiv)
+            
+            countElements += 1
+            if (countElements >= maxElements) {break}
+        }
+        if (countElements >= maxElements) {break}
+    }
+}
 
 
 
@@ -273,7 +318,7 @@ function plotClassLadder(f,t) {
 
 
 
-function sortLadderBy(what) {
+function sortLadderBy(what,plot=true) {
     
     var traceMoveTo = []
     var t = ui.ladder.t
@@ -302,8 +347,14 @@ function sortLadderBy(what) {
         
         traceMoveTo = traceMoveTo.concat(indices)
     }
-
-    Plotly.moveTraces('chart1', range(0,21*numArch),traceMoveTo);
+    
+    if (plot) { 
+        Plotly.moveTraces('chart1', range(0,21*numArch),traceMoveTo)
+        var sortInfo = document.querySelectorAll('#ladderWindow .sortInfo')[0]
+        var text = 'Highest '+what+"<br/><span>"+'▼'+"</span>"
+        if (what == 'class') {text = ''}
+        sortInfo.innerHTML = text
+    }
     
 }
 
