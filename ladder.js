@@ -5,10 +5,11 @@ function makeLadder(f,t) {
 	
     
     var archetypes = []
-    var rankData = DATA_ladder[f][t].imported.rankData
     var classRankData = []
-    var rankSums = DATA_ladder[f][t].imported.gamesPerRank
-    var ARCHETYPES = DATA_ladder[f][t].imported.archetypes
+    var ARCHETYPES =    DATA_ladder[f][t].imported.archetypes
+    var rankData =      DATA_ladder[f][t].imported.rankData // form : [rank0 = [ #games arch1, #games arch2, ...   ], ranks1 = [#games arch1, ....], ...]
+    var rankSums =      DATA_ladder[f][t].imported.gamesPerRank
+    
 
     var numArch = ARCHETYPES.length
     for (var arch of ARCHETYPES) {archetypes.push({C: arch[0], A: arch[1], color: randomColor()})}
@@ -143,8 +144,8 @@ function makeLadder(f,t) {
 		barmode: 'stack',
 		showlegend: false,
 		displayModeBar: false,
-		autosize: true,
-        width: '100%',
+		//autosize: false,
+        width: 790,
 		hovermode: 'closest',
 		xaxis: {
             visible: true, 
@@ -165,12 +166,18 @@ function makeLadder(f,t) {
 		},
 		plot_bgcolor: "#222",
         paper_bgcolor: "#222",
-		margin: {
-            l: 35,
-            r: 10,
-            b: 10,
-            t: 10
+        margin: {
+            l:35,
+            r:0,
+            b:0,
+            t:0,
         },
+		// margin: {
+        //     l: 35,
+        //     r: 10,
+        //     b: 10,
+        //     t: 10
+        // },
 	}
     
     DATA_ladder[f][t].data = data
@@ -185,6 +192,36 @@ function makeLadder(f,t) {
 
 
 
+function smoothLadder(data) {
+
+    const w_rank = 3.5
+    var w_lower = 0 // weight of lower rank
+    var w_upper = 0 // weight of upper rank
+    
+    for (var i=1;i<data.length-1;i++) {
+
+        var upperRank = data[i-1]
+        var lowerRank = data[i+1]
+
+        if (data[i].sum > 0) {
+            w_upper = data[i-1].sum/data[i].sum
+            w_lower = data[i+1].sum/data[i].sum
+            // Limits:
+            if (w_upper > 2*w_rank) {w_upper = 2*w_rank}
+            if (w_lower > 2*w_rank) {w_lower = 2*w_rank}
+        } else {
+            w_upper = 1
+            w_lower = 1
+        }
+
+        var w_tot = w_rank + w_lower + w_upper
+        // weight data_chart
+        for (var j=0;j<9;j++) {
+            data[i].data_chart[j+1] = (data[i].data_chart[j+1]*w_rank + lowerRank[j+1]*w_lower + upperRank[j+1]*w_upper)/w_tot
+        }
+    }
+    return data
+}
 
 
 

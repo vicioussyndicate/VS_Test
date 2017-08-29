@@ -16,10 +16,10 @@
       <div class="main-wrapper">
         <nav class="navbar">
           <div class="tabs">
-            <button class="tab" id="decks">Classes</button>
+            <button class="tab" id="classLadder">Classes</button>
             <button class="tab" id="ladder">Decks</button>
             <button class="tab" id="table">VS</button>
-            <button class="tab" id="profile">info</button>
+            <button class="tab" id="info">info</button>
           </div>
           <div class="options" id="options">
             <div class="option" id="show">
@@ -56,17 +56,37 @@
         </nav>
         <div class="content-wrapper">
           <div class="content" id="charts">
-            <div class="chart" id="ladderWindow">
-              <div id="chart1"></div>
+
+            <div class="chart" id="classLadderWindow">
+              <div class="content-header">
+                <p class="rankInfo">Ranks</p>
+                <p class="windowInfo">Games: 20'019 <br/><span>(8. - 10. August)</span></p>
+                <p class="sortInfo">Best Deck</p>
+              </div>
+              <div id="chart3"></div>
+              <div class="content-footer">
+                <div><div style="background-color:brown;height:10px;width:10px"></div> Druid</div>
+                <div>Hunter</div>
+                <div>Mage</div>
+              </div>
             </div>
+
+            <div class="chart" id="ladderWindow">
+              <div class="content-header">
+                <p class="rankInfo">Ranks</p>
+                <p class="windowInfo">Games: 20'019 <br/><span>(8. - 10. August)</span></p>
+                <p class="sortInfo">Best Deck</p>
+              </div>
+              <div id="chart1"></div>
+              <div class="content-footer">Arch1 Arch2 Arch3</div>
+            </div>
+
             <div class="chart" id="tableWindow">
               <div id="chart2"></div>
             </div>
-            <div class="chart" id="decksWindow">
-              <div id="chart3"></div>
-            </div>
-            <div class="chart" id="profileWindow">
-              <div id="chart4">Only available for VS Premium members</div>
+            
+            <div class="chart" id="infoWindow">
+              <div id="chart4">General information about this app.<br/> General information about vicious Syndicate.</div>
             </div>
           </div>
         </div>

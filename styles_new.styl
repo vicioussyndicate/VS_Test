@@ -7,18 +7,11 @@ button
         content: ""
 body
     
-//     .ultra-wrapper
-//         margin: 1%
-//         width: 100%
-//         display: flex
-//         .detail-window
-//             flex: 1
-//             background: blue
+
         .main-wrapper
-            //flex: 2
-            //display: flex
-            max-width: 500px
-            margin: 0 auto
+            max-width: 800px
+            height: 800px
+            margin: 10px auto
             display: flex
             flex-direction: column
             .navbar
@@ -96,15 +89,53 @@ body
                     .detail-toggle
                         height: 3rem
             .content-wrapper
-                color: blue
                 margin: 1% 0% 0% 1%
                 .content
                     display: flex
                     flex-direction: column
+                    color: white
                     .chart
-                        //color: blue
                         background-color: #222
                         display: none
+                        .content-header
+                            width: 100%
+                            margin-top: 0.6em
+                            margin-bottom: 0.6em
+                            font-size: 1em
+                            background-color: #222
+                            color: white
+                            display: flex
+                            flex-direction: row
+                            justify-content: space-between
+                            font-family: Tahoma
+                            font-weight: bold
+                            
+                            .rankInfo
+                                color: darkgray
+                                margin-left: 1em
+
+                            .windowInfo
+                                font-size: 1.1em
+
+                                span
+                                    color: darkgray
+                                    font-size: 0.7em
+                                
+
+                            .sortInfo
+                                margin-right: 2em
+                                
+
+                        .content-footer
+                            background-color: #222
+                            color: white
+                            display: flex
+                            flex-direction: row
+                            justify-content: space-between
+                            font-family: Tahoma
+                            font-weight: bold
+                            margin-left: 2em
+                            margin-right: 2em
+                            margin-top: 0.6em
+                            margin-bottom: 0.6em
                         
-                .detail-window
-                    color: blue

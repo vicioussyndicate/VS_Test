@@ -7,7 +7,7 @@
 // Contents:
 // 1. Make Table
 // 2. Plot Table
-// 3. Plot Freq
+// 3. Subplots
 // 4. ZoomIn/ Out/ Toggle
 // 5. Sort Table
 

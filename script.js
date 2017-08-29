@@ -83,7 +83,7 @@ var options = document.querySelectorAll('#options .option-toggle');
 var optionSelectionButtons = document.querySelectorAll('.optionSelBtn')
 
 
-var ui = {
+var ui = {      // UI handler
     tabs: {
         activeID: null,
     },
@@ -117,12 +117,13 @@ var ui = {
 
 
 
-// UI
+// SETUP UI
 
 function setupUI() {
-    document.getElementById('decks').classList.add('highlighted')
-    document.getElementById('decksWindow').style.display = 'inline-block'
-    ui.tabs.activeID = 'decks';
+    var initialID = 'classLadder'
+    document.getElementById(initialID).classList.add('highlighted')
+    document.getElementById(initialID+'Window').style.display = 'inline-block'
+    ui.tabs.activeID = initialID;
 
     for(let i=0;i<tabs.length;i++) {    
         tabs[i].addEventListener("click", toggleMainTabs);}
@@ -142,6 +143,7 @@ function setupUI() {
 // Tabs
 
 function toggleMainTabs(e) {
+    console.log(e.target.id)
     if (ui.tabs.activeID != null) {
         document.getElementById(ui.tabs.activeID+'Window').style.display = 'none'
         document.getElementById(ui.tabs.activeID).classList.remove('highlighted')
@@ -202,7 +204,7 @@ function optionSelection(e) {
         if (btnID == 'byWR') {sortLadderBy('winrate')}
     }
 
-    if (ui.tabs.activeID == 'decks') {
+    if (ui.tabs.activeID == 'classLadder') {
         if (btnID == 'standard') {changeClassLadder('Standard',ui.ladder.t)}
         if (btnID == 'wild')     {changeClassLadder('Wild',ui.ladder.t)}
         
@@ -236,8 +238,9 @@ function optionSelection(e) {
 
 
 // Global Data
-var DATA_ladder = {}
+var DATA_ladder = {}  // main data structs
 var DATA_table = {}
+
 var hsFormats =     ['Standard','Wild']
 var ladder_times =  ['lastDay','lastWeek','lastMonth']
 var table_times =   ['lastWeek','lastMonth']
@@ -347,40 +350,6 @@ function errMsg() {print("failed to load Data")}
 
 
 
-
-
-/*
-// Smooths the data_chart across ranks 1-19
-function smoothData(data) {
-
-    const w_rank = 3.5
-    var w_lower = 0 // weight of lower rank
-    var w_upper = 0 // weight of upper rank
-    
-    for (var i=1;i<data.length-1;i++) {
-        var upperRank = data[i-1].data_chart
-        var lowerRank = data[i+1].data_chart
-        if (data[i].sum > 0) {
-            w_upper = data[i-1].sum/data[i].sum
-            w_lower = data[i+1].sum/data[i].sum
-            // Limits:
-            if (w_upper > 2*w_rank) {w_upper = 2*w_rank}
-            if (w_lower > 2*w_rank) {w_lower = 2*w_rank}
-        } else {
-            w_upper = 1
-            w_lower = 1
-        }
-
-        var w_tot = w_rank + w_lower + w_upper
-        // weight data_chart
-        for (var j=0;j<9;j++) {
-            data[i].data_chart[j+1] = (data[i].data_chart[j+1]*w_rank + lowerRank[j+1]*w_lower + upperRank[j+1]*w_upper)/w_tot
-        }
-    }
-    return data
-}
-
-*/
 
 
 
