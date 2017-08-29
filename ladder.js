@@ -258,7 +258,7 @@ function createLadderLegend(f,t) {
 
     while (contentFooter_ladder.firstChild) {contentFooter_ladder.removeChild(contentFooter_ladder.firstChild);}
 
-    var maxElements = 10
+    var maxElements = 9
     var countElements = 0
     var DATA = DATA_ladder[f][t]
     var numArch = DATA.numArch

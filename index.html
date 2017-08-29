@@ -16,34 +16,48 @@
       <div class="main-wrapper">
         <nav class="navbar">
           <div class="tabs">
-            <button class="tab" id="classLadder">Classes</button>
-            <button class="tab" id="ladder">Decks</button>
+            <button class="tab" id="classLadder">Ladder</button>
             <button class="tab" id="table">VS</button>
             <button class="tab" id="info">info</button>
           </div>
+
+          
+
           <div class="options" id="options">
-            <div class="option" id="show">
-              <button class="optionBtn option-toggle">Ranks: All</button>
+            <div class="option" id="disp">
+              <button class="optionBtn option-toggle">Classes</button>
               <div class="dropdown hidden">
                 <button class="optionSelBtn" id="classes">Classes</button>
                 <button class="optionSelBtn" id="decks">Decks</button>
               </div>
             </div>
+
+             <div class="option" id="ranks">
+              <button class="optionBtn option-toggle">All Ranks</button>
+              <div class="dropdown hidden">
+                <button class="optionSelBtn" id="ranks_all">All Ranks</button>
+                <button class="optionSelBtn" id="ranks_L_5">Ranks L-5</button>
+                <button class="optionSelBtn" id="ranks_6_15">Ranks 6-15</button>
+              </div>
+            </div>
+
             <div class="option" id="format">
               <button class="optionBtn option-toggle">Standard</button>
               <div class="dropdown hidden">
-                <button class="optionSelBtn" id="standard">Standard</button>
-                <button class="optionSelBtn" id="wild">Wild</button>
+                <button class="optionSelBtn" id="Standard">Standard</button>
+                <button class="optionSelBtn" id="Wild">Wild</button>
               </div>
             </div>
+
             <div class="option" id="time">
               <button class="optionBtn option-toggle">Last Month</button>
               <div class="dropdown hidden">
-                <button class="optionSelBtn" id="lastD">Last Day</button>
-                <button class="optionSelBtn" id="lastW">Last Week</button>
-                <button class="optionSelBtn" id="lastM">Last Month</button>
+                <button class="optionSelBtn" id="lastDay">Last Day</button>
+                <button class="optionSelBtn" id="lastWeek">Last Week</button>
+                <button class="optionSelBtn" id="lastMonth">Last Month</button>
               </div>
             </div>
+
             <div class="option" id="sort">
               <button class="optionBtn option-toggle">Freq</button>
               <div class="dropdown hidden">
@@ -52,6 +66,15 @@
                 <button class="optionSelBtn" id="byWR">By Win Rate</button>
               </div>
             </div>
+
+            <div class="option" id="subplots">
+              <button class="optionBtn option-toggle">Subplot</button>
+              <div class="dropdown hidden">
+                <button class="optionSelBtn" id="frSubplot">Frequency</button>
+                <button class="optionSelBtn" id="wrSubplot">Winrate</button>
+              </div>
+            </div>
+            <button class="optionBtn" id="tooltips">i</button>
           </div>
         </nav>
         <div class="content-wrapper">

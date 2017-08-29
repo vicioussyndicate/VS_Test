@@ -103,6 +103,7 @@ var ui = {      // UI handler
     options: {
         activeID: null,
     },
+    activeLadder: null,
     ladder: {
         f: 'Standard', 
         t: 'lastDay',
@@ -132,6 +133,9 @@ var ui = {      // UI handler
 
 // SETUP UI
 
+var ladderOptions = []    // to show when switch to ladder tab
+var tableOptions = [] 
+
 function setupUI() {
     var initialID = 'classLadder'
     document.getElementById(initialID).classList.add('highlighted')
@@ -147,8 +151,15 @@ function setupUI() {
     for (let i=0;i<optionSelectionButtons.length;i++) { 
         optionSelectionButtons[i].addEventListener("click", optionSelection)}
     
+    // Show/ hide Options
+    ladderOptions.push(document.querySelectorAll('#disp')[0])
+
+    tableOptions.push(document.querySelectorAll('#ranks')[0])
+    tableOptions.push(document.querySelectorAll('#subplots')[0])
+    
+
+    // Class Ladder Legend
     var contentFooter_classLadder = document.querySelectorAll('#classLadderWindow .content-footer')[0]
-    var contentFooter_ladder = document.querySelectorAll('#ladderWindow .content-footer')[0]
 
     for (var i=0;i<9;i++) {
         var hsClass = hsClasses[i]
@@ -181,16 +192,27 @@ function toggleMainTabs(e) {
         document.getElementById(ui.tabs.activeID).classList.remove('highlighted')
     }
     const tabID = e.target.id;
-    if (tabID == 'ladder' && !ui.ladder.plotted) {
+    
+    if (tabID == 'ladder') {switchToLadder()}
 
-        sortLadderBy(ui.ladder.sortBy,plot=false) // plot=false importan!
-        plotLadder(ui.ladder.f,ui.ladder.t)
-        ui.ladder.plotted = true
-    }
+    if (tabID == 'classLadder') {
+       
+switchToClassLadder()}
+
+    if (tabID == 'table') {
+        console.log('switch to table',tableOptions)
+        for (var i=0;i<ladderOptions.length;i++) {ladderOptions[i].style.display = 'none'}
+        for (var i=0;i<tableOptions.length;i++) {tableOptions[i].style.display = 'flex'}
+        document.getElementById('lastDay').style.display = 'none'
+    }    
+
+
+    
     document.getElementById(e.target.id).classList.add('highlighted')
     document.getElementById(tabID+'Window').style.display = 'inline-block'
     ui.tabs.activeID = tabID;
 }
+
 
 
 
@@ -211,8 +233,34 @@ function toggleShow(ID) {
 }
 
 
+function initLadder() {
+    sortLadderBy(ui.ladder.sortBy,plot=false) // plot=false importan!
+    plotLadder(ui.ladder.f,ui.ladder.t)
+    ui.ladder.plotted = true
+}
 
+function switchToLadder () {
 
+    for (var i=0;i<ladderOptions.length;i++) {ladderOptions[i].style.display = 'flex'}
+    for (var i=0;i<tableOptions.length;i++) {tableOptions[i].style.display = 'none'}
+    document.getElementById('lastDay').style.display = 'block'
+
+    if (!ui.ladder.plotted) {initLadder()}
+    document.getElementById('classLadderWindow').style.display = 'none'
+    document.getElementById('ladderWindow').style.display = 'inline-block'
+    ui.acitveLadder = 'ladder'
+}
+
+function switchToClassLadder () {
+
+    for (var i=0;i<ladderOptions.length;i++) {ladderOptions[i].style.display = 'flex'}
+    for (var i=0;i<tableOptions.length;i++) {tableOptions[i].style.display = 'none'}
+    document.getElementById('lastDay').style.display = 'block'
+
+    document.getElementById('classLadderWindow').style.display = 'inline-block'
+    document.getElementById('ladderWindow').style.display = 'none'
+    ui.acitveLadder = 'classLadder'
+}
 
 
 
@@ -223,8 +271,8 @@ function optionSelection(e) {
     const btnID = e.target.id
     if (ui.tabs.activeID == 'ladder') {
     
-        if (btnID == 'classes') {console.log("classes")}
-        if (btnID == 'decks') {console.log("decks")}
+        if (btnID == 'classes') {switchToClassLadder()}
+        if (btnID == 'decks') {switchToLadder()}
 
         if (btnID == 'standard') {changeLadder('Standard',ui.ladder.t)}
         if (btnID == 'wild')     {changeLadder('Wild',ui.ladder.t)}
@@ -240,6 +288,10 @@ function optionSelection(e) {
     }
 
     if (ui.tabs.activeID == 'classLadder') {
+
+        if (btnID == 'classes') {switchToClassLadder()}
+        if (btnID == 'decks') {switchToLadder()}
+
         if (btnID == 'standard') {changeClassLadder('Standard',ui.ladder.t)}
         if (btnID == 'wild')     {changeClassLadder('Wild',ui.ladder.t)}
         
