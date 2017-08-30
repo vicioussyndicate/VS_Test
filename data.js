@@ -35,12 +35,9 @@ function setupTableData (data) {
                     textTable: null,
                     layout: null,
                     freqPlotData: null,
-                    archetypes_sorted: null,
-                    table_sorted: null,
+                    sortBy: null,
                 }
-                //if (f == ui.table.f && t == ui.table.t && r == ui.table.r) {
-                    makeTable(f,t,r)
-                //}
+                makeTable(f,t,r)
             }
         }
     }
@@ -59,10 +56,9 @@ function setupLadderData (data) {
                 data: null,
                 archetypes: null,
                 data_classes: null,
+                sortedBy: null,
             }
-            //if (f == ui.ladder.f && t == ui.ladder.t) {
-                makeLadder(f,t)
-            //}
+            makeLadder(f,t)
         } 
     }
 

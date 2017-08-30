@@ -80,13 +80,14 @@ function makeLadder(f,t) {
             var arch = archetypes[i]
             var name = arch.A+" "+arch.C.replace('§', '');
             var fr = rankData[rank][i]
-            var text = `<b>${name}   </b><br>freq: ${(fr*100).toFixed(1)}%`
+            var text = `<b>${name}     </b><br>freq: ${(fr*100).toFixed(1)}%`
             
             var winrate = 0
             var totFR = 0
             var table = DATA_table[f]['lastMonth']['ranks_all']
             var idx_i = table.archetypes.indexOf(name)
  
+            // Rank dependend Winrates:
             if (idx_i == -1) {winrate = 0}
             else{ for (var j=0;j<archetypes.length;j++) {
 
@@ -157,9 +158,6 @@ function makeLadder(f,t) {
 
 
     
-
-  
-	// Create PlotLables
 	var rankLabels = ['L ']; 
     for (var i=1;i<hsRanks;i++) {
         if (i%5==0) {rankLabels.push(i+' ')}
@@ -170,7 +168,6 @@ function makeLadder(f,t) {
 		barmode: 'stack',
 		showlegend: false,
 		displayModeBar: false,
-		//autosize: false,
         width: 790,
 		hovermode: 'closest',
 		xaxis: {
@@ -209,7 +206,8 @@ function makeLadder(f,t) {
 
 
 
-
+function initLadder() {
+}
 
 
 
@@ -255,14 +253,11 @@ function smoothLadder(data) {
 // Plot
 
 function plotLadder(f,t) {
-
+    
     Plotly.newPlot('chart1',DATA_ladder[f][t].data, DATA_ladder[f][t].layout, {displayModeBar: false,})
     createLadderLegend(f,t)
     var windowInfo = document.querySelectorAll('#ladderWindow .windowInfo')[0]    
     windowInfo.innerHTML = f+" "+t+" <br/><span>("+DATA_ladder[f][t].totGames+")</span>"
-
-    ui.ladder.f = f
-    ui.ladder.t = t
     ui.ladder.plotted = true
 }
 
@@ -270,9 +265,6 @@ function plotClassLadder(f,t) {
     Plotly.newPlot('chart3',DATA_ladder[f][t].classData,DATA_ladder[f][t].layout,{displayModeBar: false,})
     var windowInfo = document.querySelectorAll('#classLadderWindow .windowInfo')[0]    
     windowInfo.innerHTML = f+" "+t+" <br/><span>("+DATA_ladder[f][t].totGames+")</span>"
-
-    ui.classLadder.f = f
-    ui.classLadder.t = t
     ui.classLadder.plotted = true
 }
 
@@ -378,6 +370,8 @@ function sortLadderBy(what,plot=true) {
     var f = ui.ladder.f
     var DATA = DATA_ladder[f][t]
     var numArch = DATA.numArch
+    ui.ladder.sortBy = what
+    DATA_ladder[f][t].sortBy = what
 
 
     for (var i=0;i<hsRanks;i++) {
@@ -454,6 +448,7 @@ function sortClassLadderBy(what) {
     var t = ui.classLadder.t
     var f = ui.classLadder.f
     ui.classLadder.sortBy = what
+    DATA_ladder[f][t].sortBy = what
 
     var DATA = DATA_ladder[f][t]
     var numArch = 9
@@ -492,13 +487,35 @@ function sortClassLadderBy(what) {
 
 
 function changeLadder(f,t) {
-    //console.log('change ladder to',f,t)
     
     if (ui.ladder.f == f && ui.ladder.t == t) {console.log('ladder already plotted');return}
+
+    ui.ladder.f = f
+    ui.ladder.t = t
+
+    if (ui.ladder.sortBy != DATA_ladder[f][t].sortBy) {sortLadderBy(ui.ladder.sortBy)}
     plotLadder(f,t)
 }
 
 function changeClassLadder(f,t) {
     if (ui.classLadder.f == f && ui.classLadder.t == t) {console.log('ladder already plotted');return}
+    ui.classLadder.f = f
+    ui.classLadder.t = t
+    if (ui.classLadder.sortBy != DATA_ladder[f][t].sortBy) {sortClassLadderBy(ui.classLadder.sortBy)}
     plotClassLadder(f,t)
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

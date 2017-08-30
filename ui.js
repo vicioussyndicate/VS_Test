@@ -57,7 +57,7 @@ var ui = {      // UI handler
 function showWindow(windowID) {
 
     // Todo: generalize the loading of windows
-    if (windowID == 'ladderWindow' && !ui.ladder.plotted) {plotLadder(ui.ladder.f, ui.ladder.t); console.log('plotting ladder')}
+    if (windowID == 'ladderWindow' && !ui.ladder.plotted) {plotLadder(ui.ladder.f, ui.ladder.t); sortLadderBy(ui.ladder.sortBy)}
     if (ui.windows.activeID == windowID && ui.fullyLoaded) {console.log('window already shown'); return}
 
     document.getElementById(ui.windows.activeID).style.display = 'none'
@@ -147,21 +147,21 @@ function toggleMainTabs(e) {
 function dropDownToggle(e) {
     if (!ui.fullyLoaded) {return}
 
-    var activeBtn = ui.options.activeBtn
-
-    console.log(e.target.parentElement.id, activeBtn)    
-    
-    if (activeBtn == null) {
-        toggleShow(e.target.parentElement.id)
-        return
-    }
-
     toggleShow(e.target.parentElement.id)
 
-    if (activeBtn.parentElement.id == e.target.parentElement.id) { ui.options.activeBtn = null }
-    else { toggleShow(activeBtn.parentElement.id); ui.options.activeBtn = e.target }
+    if (ui.options.activeBtn == null) {ui.options.activeBtn = e.target; return}
 
+    var parent_old = ui.options.activeBtn.parentElement
+    var parent_new = e.target.parentElement
+
+    if (parent_old == parent_new) {ui.options.activeBtn = null; return}
+    
+    toggleShow(parent_old.id)
+    ui.options.activeBtn = e.target
 }
+
+
+
 
 function toggleShow(ID) {
     const el = document.querySelector(`#${ID} .dropdown`)
@@ -177,14 +177,13 @@ function optionSelection(e) {
     
     const btnID = e.target.id
     var parentBtn = ui.options.activeBtn
-    if (parentBtn != null) {parentBtn.innerHTML = btnID}
+    if (parentBtn != null) {parentBtn.innerHTML = BtnIdToText[btnID]}
     
+    if (btnID == 'classes') {showWindow('classLadderWindow');   ui.windows.activeLadderID = 'classLadder'}
+    if (btnID == 'decks')   {showWindow('ladderWindow');        ui.windows.activeLadderID = 'ladder'}
 
 
     if (ui.windows.activeID == 'ladderWindow') {
-    
-        if (btnID == 'classes') {showWindow('classLadderWindow')}
-        if (btnID == 'decks')   {showWindow('ladderWindow')}
 
         if (btnID == 'Standard') {changeLadder('Standard',ui.ladder.t)}
         if (btnID == 'Wild')     {changeLadder('Wild',ui.ladder.t)}
@@ -200,9 +199,6 @@ function optionSelection(e) {
     }
 
     if (ui.windows.activeID == 'classLadderWindow') {
-
-        if (btnID == 'classes') {showWindow('classLadderWindow')}
-        if (btnID == 'decks')   {showWindow('ladderWindow')}
 
         if (btnID == 'Standard') {changeClassLadder('Standard',ui.ladder.t)}
         if (btnID == 'Wild')     {changeClassLadder('Wild',ui.ladder.t)}
@@ -243,7 +239,32 @@ function makeDecks() {
         src.appendChild(img);
     }
 
+const BtnIdToText = {
+    Standard: 'Standard',
+    Wild: 'Wild',
+    
+    ranks_all: 'All Ranks',
+    ranks_L_5: 'Ranks L-5',
+    ranks_6_15: 'Ranks 6-15',
 
+    lastDay: 'Last Day',
+    lastWeek: 'Last Week',
+    lastMonth: 'Last Month',
+
+    byClass: 'By Class',
+    byFreq: 'By Frequency',
+    byWR: 'By Winrate',
+    
+    frSubplot: 'Frequency',
+    wrSubplot: 'Winrate',
+
+    classes: 'Classes',
+    decks: 'Archetypes',
+
+
+
+
+}
 
 
 
