@@ -176,7 +176,7 @@ function optionSelection(e) {
     
     const btnID = e.target.id
     var parentBtn = ui.options.activeBtn
-    if (parentBtn != null) {parentBtn.innerHTML = BtnIdToText[btnID]}
+    if (parentBtn != null) {parentBtn.innerHTML = btnIdToText[btnID]}
     
     if (btnID == 'classes') {showWindow('classLadderWindow');   ui.windows.activeLadderID = 'classLadder'}
     if (btnID == 'decks')   {showWindow('ladderWindow');        ui.windows.activeLadderID = 'ladder'}
@@ -238,7 +238,7 @@ function makeDecks() {
         src.appendChild(img);
     }
 
-const BtnIdToText = {
+const btnIdToText = {
     Standard: 'Standard',
     Wild: 'Wild',
     

@@ -279,7 +279,7 @@ function plotLadder(f,t) {
     Plotly.newPlot('chart1',DATA_ladder[f][t].data, DATA_ladder[f][t].layout, {displayModeBar: false,})
     createLadderLegend(f,t)
     var windowInfo = document.querySelectorAll('#ladderWindow .windowInfo')[0]    
-    windowInfo.innerHTML = f+" "+t+" <br/><span>("+DATA_ladder[f][t].totGames+")</span>"
+    windowInfo.innerHTML = btnIdToText[f]+" "+btnIdToText[t]+" <br/><span>("+DATA_ladder[f][t].totGames+")</span>"
     ui.ladder.plotted = true
 }
 
@@ -296,7 +296,7 @@ function plotClassLadder(f,t) {
 // Create Plot Legends
 
 function createLadderLegend(f,t) {
-    return 
+     
     var contentFooter_ladder = document.querySelectorAll('#ladderWindow .content-footer')[0]
 
     while (contentFooter_ladder.firstChild) {contentFooter_ladder.removeChild(contentFooter_ladder.firstChild);}
@@ -305,17 +305,17 @@ function createLadderLegend(f,t) {
     var countElements = 0
     var DATA = DATA_ladder[f][t]
     var numArch = DATA.numArch
+    var vpr = DATA.visiblePerRank
     var rank = 16 // at what rank to sample archetypes?
     var xmin = 0.05
 
     var archetypes = DATA_table[f]['lastMonth']['ranks_all'].archetypesLadder // sorted by frequency
     for (var x=0;x<archetypes.length;x++) {
-        for (var i=0;i<numArch;i++) {
+        for (var i=0;i<vpr[0];i++) {
 
-            var arch = DATA.data[i+numArch*rank]
+            var arch = DATA.data[i+numArch]
 
             if (arch.name != archetypes[x]) {continue}
-            //if (arch.x < xmin) {continue}
 
             var legendDiv = document.createElement('div') // parent
             var colorSplash = document.createElement('div') // child 1
