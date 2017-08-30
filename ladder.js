@@ -1,3 +1,6 @@
+
+
+
 // ---------------------------- LADDER -------------------------------- // ------------------------------------ LADDE ------------------------- // 
 
 function makeLadder(f,t) {
@@ -5,23 +8,25 @@ function makeLadder(f,t) {
 	
     
     var archetypes = []
-    var classRankData = []
     var ARCHETYPES =    DATA_ladder[f][t].imported.archetypes
     var rankData =      DATA_ladder[f][t].imported.rankData // form : [rank0 = [ #games arch1, #games arch2, ...   ], ranks1 = [#games arch1, ....], ...]
+    var classRankData = []
     var rankSums =      DATA_ladder[f][t].imported.gamesPerRank
     var totGames = 0
-    
-    
-
     var numArch = ARCHETYPES.length
-    for (var arch of ARCHETYPES) {archetypes.push({C: arch[0], A: arch[1], color: randomColor()})}
+
+    for (var arch of ARCHETYPES) {archetypes.push({C: arch[0], A: arch[1], color: colorStringRange(hsColors[arch[0]],45)})}
    
-    
+
+
+
+    // Initialize classRankData, normalize and purify rankData -> rankData/rankSum and x > ladder_xmin
     for (var i=0;i<hsRanks;i++) {
-        totGames += rankSums[i]
         if (rankSums[i] == 0) {continue}
 
+        totGames += rankSums[i]
         var classRankRow = fillRange(0,9,0)
+
 
         for (var j=0;j<rankData[i].length;j++) {
 
@@ -39,7 +44,10 @@ function makeLadder(f,t) {
         }
         classRankData.push(classRankRow)
     }
-    
+
+
+
+    // normalize classRankData and purify 'Other' classes    
     for (var i=0;i<hsRanks;i++) {
         var tempSum = 0
         for (var j=0;j<9;j++) {
@@ -50,7 +58,6 @@ function makeLadder(f,t) {
                 rankData[i][j] = 0
             }
         }
-
         if (tempSum==0) {continue}
         for (var j=0;j<9;j++) {classRankData[i][j] /= tempSum}
     }
@@ -58,7 +65,7 @@ function makeLadder(f,t) {
 
 
     
-
+    // Initialize and add the traces to data and classData
 
     var data = []
     var classData = []
@@ -71,27 +78,37 @@ function makeLadder(f,t) {
         for (var i=0;i<archetypes.length;i++) {
             
             var arch = archetypes[i]
+            var name = arch.A+" "+arch.C.replace('§', '');
             var fr = rankData[rank][i]
-            var name = arch.A+" "+arch.C
-            var idx_table = DATA_table[f]['lastMonth']['ranks_all'].archetypes.indexOf(name)
-            var idx_class = hsClasses.indexOf(arch.C)
-
-            var winrate = 0.5
-            if (idx_table != -1) {winrate = DATA_table[f]['lastMonth']['ranks_all'].winrates[idx_table]}
-            else {winrate = 0}
-
-            if (idx_class >= 0) {
-                classCount[idx_class] += 1
-                classWR[idx_class] += winrate
-            }  
+            var text = `<b>${name}   </b><br>freq: ${(fr*100).toFixed(1)}%`
             
+            var winrate = 0
+            var totFR = 0
+            var table = DATA_table[f]['lastMonth']['ranks_all']
+            var idx_i = table.archetypes.indexOf(name)
+ 
+            if (idx_i == -1) {winrate = 0}
+            else{ for (var j=0;j<archetypes.length;j++) {
+
+                    var name_j = archetypes[j].A+" "+archetypes[j].C
+                    idx_j = table.archetypes.indexOf(name_j)
+
+                    if (idx_j != -1) {
+                        winrate += table.table[idx_i][idx_j] * rankData[rank][j]
+                        totFR += rankData[rank][j]
+                }}
+                winrate /= totFR
+                text += " wr: "+(winrate*100).toFixed(1)+"%"
+            }
+
+               
 
             var trace = {
                 visible: fr > 0,
                 x:[fr],
                 y:[rank],
                 name: name,
-                text: name+" "+winrate.toFixed(2),
+                text: text,
                 hoverinfo: 'text',
                 orientation: 'h',
                 marker: {color: arch.color,},
@@ -102,6 +119,12 @@ function makeLadder(f,t) {
                 hsArch: arch.A,
             }
             data.push(trace)
+
+            var idx_class = hsClasses.indexOf(arch.C)
+            if (idx_class >= 0) {
+                classCount[idx_class] += 1
+                classWR[idx_class] += winrate
+            }  
         }
 
         // push Class Data
@@ -229,7 +252,7 @@ function smoothLadder(data) {
 
 
 
-
+// Plot
 
 function plotLadder(f,t) {
 
@@ -240,18 +263,23 @@ function plotLadder(f,t) {
 
     ui.ladder.f = f
     ui.ladder.t = t
+    ui.ladder.plotted = true
 }
 
 function plotClassLadder(f,t) {
     Plotly.newPlot('chart3',DATA_ladder[f][t].classData,DATA_ladder[f][t].layout,{displayModeBar: false,})
     var windowInfo = document.querySelectorAll('#classLadderWindow .windowInfo')[0]    
     windowInfo.innerHTML = f+" "+t+" <br/><span>("+DATA_ladder[f][t].totGames+")</span>"
+
     ui.classLadder.f = f
     ui.classLadder.t = t
+    ui.classLadder.plotted = true
 }
 
 
 
+
+// Create Plot Legends
 
 function createLadderLegend(f,t) {
     var contentFooter_ladder = document.querySelectorAll('#ladderWindow .content-footer')[0]
@@ -302,6 +330,31 @@ function createLadderLegend(f,t) {
 
 
 
+function createClassLadderLegend() {
+
+    var contentFooter_classLadder = document.querySelectorAll('#classLadderWindow .content-footer')[0]
+
+    for (var i=0;i<9;i++) {
+        var hsClass = hsClasses[i]
+
+        var legendDiv =     document.createElement('div') // parent
+        var colorSplash =   document.createElement('div') // child 1
+        var className =     document.createElement('p') // child 2
+
+        legendDiv.className = 'classLadder-legend'
+        colorSplash.style = 'background-color:'+hsColors[hsClass]+';height:15px;width:30px;margin:0 auto;'
+        className.style.marginTop = '0.3em'
+        className.innerHTML = hsClass
+
+        legendDiv.appendChild(colorSplash)
+        legendDiv.appendChild(className)
+        contentFooter_classLadder.appendChild(legendDiv)
+    }
+}
+
+
+
+
 
 
 
@@ -328,21 +381,21 @@ function sortLadderBy(what,plot=true) {
 
 
     for (var i=0;i<hsRanks;i++) {
-        var DATA_ladder_rank = DATA.data.slice(i*numArch, (i+1)*numArch)
 
+        var DATA_ladder_rank = DATA.data.slice(i*numArch, (i+1)*numArch)
         var indices = getIndicesSortedBy(DATA_ladder_rank,what)
         
         if      (what == 'class')       {DATA_ladder_rank.sort(classSort)}
         else if (what == 'frequency')   {DATA_ladder_rank.sort(frSort)}
-        else if (what == 'winrate')     {DATA_ladder_rank.sort(wrSort)} 
+        else if (what == 'winrate')     {DATA_ladder_rank.sort(wrSort)}
 
         else {console.log("sortLadderBy() Error: 'what' invalid"); return}
+
 
         for (var j=0;j<indices.length;j++) {indices[j] += i*numArch}
 
         var DATA_ladder_below = DATA.data.slice(0,i*numArch).concat(DATA_ladder_rank)
         var DATA_ladder_above = DATA.data.slice((i+1)*numArch,DATA.data.length)
-
         DATA.data = DATA_ladder_below.concat(DATA_ladder_above)
         
         traceMoveTo = traceMoveTo.concat(indices)
@@ -364,8 +417,6 @@ function sortLadderBy(what,plot=true) {
 function wrSort(a,b) { return a.winrate < b.winrate ? -1 : a.winrate > b.winrate ? 1 : 0; }
 function frSort(a,b) { return a.x[0] < b.x[0] ? -1 : a.x[0] > b.x[0] ? 1 : 0; }
 function classSort(a,b) { return a.hsClass+a.hsArch < b.hsClass+b.hsArch ? -1 : a.hsClass+a.hsArch > b.hsClass+b.hsArch ? 1 : 0; }
-
-
 
 
 

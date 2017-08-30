@@ -7,8 +7,36 @@ INFO
 
 */
 
-
 var t0 = performance.now();
+
+
+
+
+
+// LOAD
+
+window.onload = function() {
+    
+    setupUI()
+    setupFirebase() // 1. setup table, 2. setup ladder 
+}
+
+
+
+// AFTER LOADING
+
+function finishedLoading() {
+
+    plotTable(ui.table.f,ui.table.t,ui.table.r)
+    plotClassLadder(ui.classLadder.f,ui.classLadder.t)
+
+    ui.fullyLoaded = true
+
+    console.log("App initializing took " + (performance.now() - t0) + " ms.")
+}
+
+
+
 
 // Global Variables
 var hsRanks = 21
@@ -34,7 +62,7 @@ var hsClasses = ["Druid","Hunter","Mage","Paladin","Priest","Rogue","Shaman","Wa
 //     Warlock: "#9482C9",
 //     Warrior: "#C79C6E"
 // }
-
+/*
 var hsColors = {
     Druid: "bc7700",
     Hunter: "1a7c3f",
@@ -44,7 +72,30 @@ var hsColors = {
     Rogue: "729172",
     Shaman: "306291",
     Warlock: "da269a",
-    Warrior: "880d05"}
+    Warrior: "880d05"}*/
+
+c_delta = 46
+hsColors = {
+    Druid:      colorRange(188,133,37,c_delta),
+    Hunter:     colorRange(155,195,34,c_delta),
+    Mage:       colorRange(32,172,213,c_delta),
+    Paladin:    colorRange(203,193,25,c_delta),
+    Priest:     colorRange(225,224,214,c_delta),
+    Rogue:      colorRange(82,92,84,c_delta),
+    Shaman:     colorRange(50,108,195,c_delta),
+    Warlock:    colorRange(136,52,189,c_delta),
+    Warrior:    colorRange(135,18,18,c_delta),
+    Other:      randomColor(),
+    '':         randomColor(),
+    '§':        randomColor(),
+}
+
+console.log('class Colors:',hsColors)
+
+// GOOD THEMES:
+// { Druid: "rgb(181,108,62)", Hunter: "rgb(145,229,0)", Mage: "rgb(18,200,203)", Paladin: "rgb(187,235,56)", Priest: "rgb(255,247,193)", Rogue: "rgb(83,74,61)", Shaman: "rgb(45,143,154)", Warlock: "rgb(99,19,232)", Warrior: "rgb(175,1,6)" }
+//{ Druid: "rgb(158,131,8)", Hunter: "rgb(160,210,13)", Mage: "rgb(24,199,208)", Paladin: "rgb(238,156,40)", Priest: "rgb(230,224,168)", Rogue: "rgb(41,80,77)", Shaman: "rgb(24,113,193)", Warlock: "rgb(150,75,185)", Warrior: "rgb(167,0,24)" }
+//{ Druid: "rgb(142,145,75)", Hunter: "rgb(196,231,0)", Mage: "rgb(29,139,191)", Paladin: "rgb(244,213,6)", Priest: "rgb(243,201,203)", Rogue: "rgb(100,131,107)", Shaman: "rgb(49,64,197)", Warlock: "rgb(109,82,168)", Warrior: "rgb(146,53,41)", Other: "rgb(39,233,133)", 2 more… }
 
 var colorscale_Table = [
     [0, '#3f0c03'],
@@ -60,386 +111,9 @@ var colorscale_Table = [
 
 
 
-window.onload = function() {
-    
-    setupUI()
-    setupFirebase() // 1. setup table, 2. setup ladder
-    
-        
-}
 
 
 
-function finishedLoading() {
-
-
-    plotTable(ui.table.f,ui.table.t,ui.table.r)
-    plotClassLadder(ui.classLadder.f,ui.classLadder.t)
-
-    ui.fullyLoaded = true
-
-    console.log("App initializing took " + (performance.now() - t0) + " ms.")
-}
-
-
-
-
-
-
-
-// ---------------------------- UI -------------------------------- // ------------------------------------ UI ------------------------- // 
-
-// Global Buttons
-var tabs = document.querySelectorAll('button.tab');
-var options = document.querySelectorAll('#options .option-toggle');
-var optionSelectionButtons = document.querySelectorAll('.optionSelBtn')
-
-
-var ui = {      // UI handler
-    fullyLoaded: false,
-    tabs: {
-        activeID: null,
-    },
-    options: {
-        activeID: null,
-    },
-    activeLadder: null,
-    ladder: {
-        f: 'Standard', 
-        t: 'lastDay',
-        plotted: false,
-        sortBy: 'class',
-    },
-    classLadder: {
-        f: 'Standard', 
-        t: 'lastDay',
-        sortBy: 'class',
-    },
-    table: {
-        f: 'Standard',
-        t: 'lastMonth',
-        r: 'ranks_all',
-        plotted: false,
-        zoomIn: false,
-        zoomArch: '',
-        sortBy: 'frequency',
-    }
-}
-
-
-
-
-
-
-// SETUP UI
-
-var ladderOptions = []    // to show when switch to ladder tab
-var tableOptions = [] 
-
-function setupUI() {
-    var initialID = 'classLadder'
-    document.getElementById(initialID).classList.add('highlighted')
-    document.getElementById(initialID+'Window').style.display = 'inline-block'
-    ui.tabs.activeID = initialID;
-
-    for(let i=0;i<tabs.length;i++) {    
-        tabs[i].addEventListener("click", toggleMainTabs);}
-    
-    for(let i=0;i<options.length;i++) { 
-        options[i].addEventListener("click", dropDownToggle);}
-
-    for (let i=0;i<optionSelectionButtons.length;i++) { 
-        optionSelectionButtons[i].addEventListener("click", optionSelection)}
-    
-    // Show/ hide Options
-    ladderOptions.push(document.querySelectorAll('#disp')[0])
-
-    tableOptions.push(document.querySelectorAll('#ranks')[0])
-    tableOptions.push(document.querySelectorAll('#subplots')[0])
-    
-
-    // Class Ladder Legend
-    var contentFooter_classLadder = document.querySelectorAll('#classLadderWindow .content-footer')[0]
-
-    for (var i=0;i<9;i++) {
-        var hsClass = hsClasses[i]
-
-        var legendDiv = document.createElement('div') // parent
-        var colorSplash = document.createElement('div') // child 1
-        var className = document.createElement('p') // child 2
-
-
-        legendDiv.className = 'classLadder-legend'
-        colorSplash.style = 'background-color:#'+hsColors[hsClass]+';height:15px;width:30px;margin:0 auto;'
-        className.style.marginTop = '0.3em'
-        className.innerHTML = hsClass
-
-        legendDiv.appendChild(colorSplash)
-        legendDiv.appendChild(className)
-        contentFooter_classLadder.appendChild(legendDiv)
-    }
-}
-
-
-
-// Tabs
-
-function toggleMainTabs(e) {
-    
-    if (!ui.fullyLoaded) {return}
-    if (ui.tabs.activeID != null) {
-        document.getElementById(ui.tabs.activeID+'Window').style.display = 'none'
-        document.getElementById(ui.tabs.activeID).classList.remove('highlighted')
-    }
-    const tabID = e.target.id;
-    
-    if (tabID == 'ladder') {switchToLadder()}
-
-    if (tabID == 'classLadder') {
-       
-switchToClassLadder()}
-
-    if (tabID == 'table') {
-        console.log('switch to table',tableOptions)
-        for (var i=0;i<ladderOptions.length;i++) {ladderOptions[i].style.display = 'none'}
-        for (var i=0;i<tableOptions.length;i++) {tableOptions[i].style.display = 'flex'}
-        document.getElementById('lastDay').style.display = 'none'
-    }    
-
-
-    
-    document.getElementById(e.target.id).classList.add('highlighted')
-    document.getElementById(tabID+'Window').style.display = 'inline-block'
-    ui.tabs.activeID = tabID;
-}
-
-
-
-
-
-
-
-// Options
-
-function dropDownToggle(e) {
-    if (!ui.fullyLoaded) {return}    
-    const targetParentID = e.target.parentElement.id;
-    toggleShow(targetParentID);
-}
-
-function toggleShow(ID) {
-    const el = document.querySelector(`#${ID} .dropdown`)
-    el.classList.toggle('hidden');
-}
-
-
-function initLadder() {
-    sortLadderBy(ui.ladder.sortBy,plot=false) // plot=false importan!
-    plotLadder(ui.ladder.f,ui.ladder.t)
-    ui.ladder.plotted = true
-}
-
-function switchToLadder () {
-
-    for (var i=0;i<ladderOptions.length;i++) {ladderOptions[i].style.display = 'flex'}
-    for (var i=0;i<tableOptions.length;i++) {tableOptions[i].style.display = 'none'}
-    document.getElementById('lastDay').style.display = 'block'
-
-    if (!ui.ladder.plotted) {initLadder()}
-    document.getElementById('classLadderWindow').style.display = 'none'
-    document.getElementById('ladderWindow').style.display = 'inline-block'
-    ui.acitveLadder = 'ladder'
-}
-
-function switchToClassLadder () {
-
-    for (var i=0;i<ladderOptions.length;i++) {ladderOptions[i].style.display = 'flex'}
-    for (var i=0;i<tableOptions.length;i++) {tableOptions[i].style.display = 'none'}
-    document.getElementById('lastDay').style.display = 'block'
-
-    document.getElementById('classLadderWindow').style.display = 'inline-block'
-    document.getElementById('ladderWindow').style.display = 'none'
-    ui.acitveLadder = 'classLadder'
-}
-
-
-
-// Option Triggers
-
-function optionSelection(e) {
-    
-    const btnID = e.target.id
-    if (ui.tabs.activeID == 'ladder') {
-    
-        if (btnID == 'classes') {switchToClassLadder()}
-        if (btnID == 'decks') {switchToLadder()}
-
-        if (btnID == 'standard') {changeLadder('Standard',ui.ladder.t)}
-        if (btnID == 'wild')     {changeLadder('Wild',ui.ladder.t)}
-        
-        if (btnID == 'lastD') {changeLadder(ui.ladder.f,'lastDay')}
-        if (btnID == 'lastW') {changeLadder(ui.ladder.f,'lastWeek')}
-        if (btnID == 'lastM') {changeLadder(ui.ladder.f,'lastMonth')}
-        
-        
-        if (btnID == 'byClass') {sortLadderBy('class')}
-        if (btnID == 'byFreq') {sortLadderBy('frequency')}
-        if (btnID == 'byWR') {sortLadderBy('winrate')}
-    }
-
-    if (ui.tabs.activeID == 'classLadder') {
-
-        if (btnID == 'classes') {switchToClassLadder()}
-        if (btnID == 'decks') {switchToLadder()}
-
-        if (btnID == 'standard') {changeClassLadder('Standard',ui.ladder.t)}
-        if (btnID == 'wild')     {changeClassLadder('Wild',ui.ladder.t)}
-        
-        if (btnID == 'lastD') {changeClassLadder(ui.ladder.f,'lastDay')}
-        if (btnID == 'lastW') {changeClassLadder(ui.ladder.f,'lastWeek')}
-        if (btnID == 'lastM') {changeClassLadder(ui.ladder.f,'lastMonth')}
-
-        if (btnID == 'byClass') {sortClassLadderBy('class')}
-        if (btnID == 'byFreq') {sortClassLadderBy('frequency')}
-        if (btnID == 'byWR') {sortClassLadderBy('winrate')}
-    }
-
-    if (ui.tabs.activeID == 'table') {
-        if (btnID == 'byClass') {sortTableBy('class')}
-        if (btnID == 'byFreq') {sortTableBy('frequency')}
-        if (btnID == 'byWR') {sortTableBy('winrate')}
-
-        if (btnID == 'lastW') {changeTable(ui.table.f,'lastWeek',ui.table.r)}
-        if (btnID == 'lastM') {changeTable(ui.table.f,'lastMonth',ui.table.r)}
-
-        if (btnID == 'standard') {changeTable('Standard',ui.table.t,ui.table.r)}
-        if (btnID == 'wild') {changeTable('Wild',ui.table.t,ui.table.r)}
-    }
-        
-}
-
-
-
-// ---------------------------- SETUP DATA -------------------------------- // ------------------------------------ SETUP DATA ------------------------- // 
-
-
-
-// Global Data
-var DATA_ladder = {}  // main data structs
-var DATA_table = {}
-
-var hsFormats =     ['Standard','Wild']
-var ladder_times =  ['lastDay','lastWeek','lastMonth']
-var table_times =   ['lastWeek','lastMonth']
-var table_ranks =   ['ranks_all'] //later: ['ranks_L_5','ranks_6_15','ranks_all']
-
-
-function setupTableData (data) {
-
-    var tableData = data.val()
-    
-    for (f of hsFormats) {
-        DATA_table[f] = {}
-        for (t of table_times) {
-            DATA_table[f][t] = {}
-            for (r of table_ranks) {
-                var key = Object.keys(tableData[f][t][r])[0]
-                DATA_table[f][t][r] = {
-                    imported: tableData[f][t][r][key],
-                    table: null,
-                    archetypes: null,
-                    archetypesLadder: null,
-                    winrates: null,
-                    frequency: null,
-                    classPlusArch: null,
-                    textTable: null,
-                    layout: null,
-                    freqPlotData: null,
-                    //wrPlotData: null,
-                    archetypes_sorted: null,
-                    table_sorted: null,
-                }
-                //if (f == ui.table.f && t == ui.table.t && r == ui.table.r) {
-                    makeTable(f,t,r)
-                //}
-            }
-        }
-    }
-}
-
-function setupLadderData (data) {
-    
-    var ladderData = data.val()
-    
-    for (f of hsFormats) {
-        DATA_ladder[f] = {}
-        for (t of ladder_times) {
-            var key = Object.keys(ladderData[f][t])[0]
-            DATA_ladder[f][t] = {
-                imported: ladderData[f][t][key],
-                data: null,
-                archetypes: null,
-                data_classes: null,
-            }
-            //if (f == ui.ladder.f && t == ui.ladder.t) {
-                makeLadder(f,t)
-            //}
-        } 
-    }
-
-    finishedLoading()
-}
-
-
-
-
-
-function setupFirebase() {
-    var config = {
-        apiKey: "AIzaSyCDn9U08D4Lzhrbfz2MSy2rws_D02eH3HA",
-        authDomain: "testproject-a0746.firebaseapp.com",
-        databaseURL: "https://testproject-a0746.firebaseio.com",
-        projectId: "testproject-a0746",
-        storageBucket: "testproject-a0746.appspot.com",
-        messagingSenderId: "826197220845"
-    };
-    firebase.initializeApp(config);
-    var database = firebase.database()
-
-    var refTable = database.ref('tableData')
-    refTable.on('value',setupTableData,errMsg)
-
-    var refLadder = database.ref('ladderData')
-    refLadder.on('value',setupLadderData,errMsg)
-}
-
-function errMsg() {print("failed to load Data")}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function makeDecks() {
-    
-        var img = document.createElement("img");
-        img.src = "Images/deck1.png";
-        var src = document.getElementById("chart3");
-        src.appendChild(img);
-    }
 
 
 
@@ -447,6 +121,7 @@ function makeDecks() {
 
 
 // Utility
+
 function choice(arr) {return arr[Math.floor(Math.random()*arr.length)]}
 function randint(min, max) {
   min = Math.ceil(min);
@@ -457,5 +132,69 @@ function print(stuff) {console.log(stuff)}
 function randomColor() {return 'rgb('+randint(0,255)+','+randint(0,255)+','+randint(0,255)+')'}
 function range(a,b) {var range = []; for (var i=a;i<b;i++) {range.push(i)}; return range}
 function fillRange(a,b,c) {var range = []; for (var i=a;i<b;i++) {range.push(c)}; return range}
+
+
+function colorRange(r,b,g,delta) {
+    var color = 'rgb('
+    for (c of [r,b,g]) {
+        var x = c+randint(-delta,delta)
+        if (x>255){x=255}
+        if (x<0){x=0}
+        color+=x+','
+    }
+    return color.slice(0,-1)+')'
+}
+
+function colorStringRange(rbg,delta) {
+    var color = 'rgb('
+    var color_old = getRGB(rbg)
+
+    for (c of color_old) {
+        var x = c+randint(-delta,delta)
+        if (x>255){x=255}
+        if (x<0){x=0}
+        color+=x+','
+    }
+    return color.slice(0,-1)+')'
+}
+
+function getRGB(str){
+  var match = str.match(/rgba?\((\d{1,3}), ?(\d{1,3}), ?(\d{1,3})\)?(?:, ?(\d(?:\.\d?))\))?/);
+  return match ? [
+    parseInt(match[1]),
+    parseInt(match[2]),
+    parseInt(match[3])
+  ] : [];
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

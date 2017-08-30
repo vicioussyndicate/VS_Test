@@ -33,17 +33,18 @@
 function makeTable(f,t,r) {
     
 
-    var numArch = numArch_table_std
+    
     
     var table = []
     var textTable = []
     var frequency = []
     var archetypes = []
     var classPlusArch = []
-    
 
+    var numArch = numArch_table_std
     if (f == 'Wild') {numArch = numArch_table_wild}
     
+
     for (var i=0;i<numArch;i++) {
         var row = []
         var textRow = []
@@ -175,12 +176,9 @@ function makeTable(f,t,r) {
     DATA_table[f][t][r].textTable = textTable
     DATA_table[f][t][r].archetypes = archetypes
     
-    
     DATA_table[f][t][r].frequency = frequency
     DATA_table[f][t][r].classPlusArch = classPlusArch
     DATA_table[f][t][r].winrates = winrates
-    
-    
     
     DATA_table[f][t][r].layout = layout
     DATA_table[f][t][r].freqPlotData = getFreqPlotData(frequency.slice(),archetypes.slice())
@@ -345,13 +343,8 @@ function subplotWR (f,t,r,idx) {
         hoverinfo:'text',
         marker: {
             color: '#2a9fc1',
-            // line: {
-            //     color: '#84d6ee',
-            //     width: 1.5
-            //   }
           },
     }
-    
     
     Plotly.restyle('chart2',wrPlotData,2)
 }
