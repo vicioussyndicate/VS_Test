@@ -27,9 +27,9 @@ window.onload = function() {
 
 function finishedLoading() {
     
-    plotTable(ui.table.f,ui.table.t,ui.table.r)
     plotClassLadder(ui.classLadder.f,ui.classLadder.t)
     sortClassLadderBy(ui.classLadder.sortBy) // ladder plotted in ui.js -> showWindow
+    sortTableBy('frequency')
 
     ui.fullyLoaded = true
 
@@ -42,7 +42,7 @@ function finishedLoading() {
 // Global Variables
 var hsRanks = 21
 var numArch_ladder = 0
-var numArch_table_std = 14      // top 14 archetype will be posted on the table
+var numArch_table_std = 20      // top 14 archetype will be posted on the table
 var numArch_table_wild = 9
 var ladder_xmin = 0.01         // minimal x value
 
@@ -74,7 +74,7 @@ var hsColors = {
     Shaman: "306291",
     Warlock: "da269a",
     Warrior: "880d05"}*/
-
+/*
 c_delta = 46
 hsColors = {
     Druid:      colorRange(188,133,37,c_delta),
@@ -92,24 +92,40 @@ hsColors = {
 }
 
 console.log('class Colors:',hsColors)
-
+*/
 // GOOD THEMES:
 // { Druid: "rgb(181,108,62)", Hunter: "rgb(145,229,0)", Mage: "rgb(18,200,203)", Paladin: "rgb(187,235,56)", Priest: "rgb(255,247,193)", Rogue: "rgb(83,74,61)", Shaman: "rgb(45,143,154)", Warlock: "rgb(99,19,232)", Warrior: "rgb(175,1,6)" }
 //{ Druid: "rgb(158,131,8)", Hunter: "rgb(160,210,13)", Mage: "rgb(24,199,208)", Paladin: "rgb(238,156,40)", Priest: "rgb(230,224,168)", Rogue: "rgb(41,80,77)", Shaman: "rgb(24,113,193)", Warlock: "rgb(150,75,185)", Warrior: "rgb(167,0,24)" }
 //{ Druid: "rgb(142,145,75)", Hunter: "rgb(196,231,0)", Mage: "rgb(29,139,191)", Paladin: "rgb(244,213,6)", Priest: "rgb(243,201,203)", Rogue: "rgb(100,131,107)", Shaman: "rgb(49,64,197)", Warlock: "rgb(109,82,168)", Warrior: "rgb(146,53,41)", Other: "rgb(39,233,133)", 2 more… }
 //{ Druid: "rgb(171,168,73)", Hunter: "rgb(111,183,56)", Mage: "rgb(0,155,231)", Paladin: "rgb(220,150,45)", Priest: "rgb(232,245,218)", Rogue: "rgb(98,77,91)", Shaman: "rgb(76,141,190)", Warlock: "rgb(134,60,190)", Warrior: "rgb(90,33,0)", Other: "rgb(72,209,219)", 2 more… }
+//{Druid: "rgb(183,134,80)", Hunter: "rgb(163,231,0)", Mage: "rgb(10,138,223)", Paladin: "rgb(232,162,23)", Priest: "rgb(248,255,206)", …}"": "rgb(4,63,137)"Druid: "rgb(183,134,80)"Hunter: "rgb(163,231,0)"Mage: "rgb(10,138,223)"Other: "rgb(26,216,36)"Paladin: "rgb(232,162,23)"Priest: "rgb(248,255,206)"Rogue: "rgb(114,77,125)"Shaman: "rgb(12,131,162)"Warlock: "rgb(120,63,184)"Warrior: "rgb(112,41,18)"§: "rgb(41,61,206)"__proto__: Object
+//{Druid: "rgb(191,101,45)", Hunter: "rgb(157,150,65)", Mage: "rgb(18,189,181)", Paladin: "rgb(243,202,47)", Priest: "rgb(200,255,238)", …}
+
 
 var colorscale_Table = [
-    [0, '#3f0c03'],
-    [0.3, '#872a19'],
+    [0, '#a04608'],
+    [0.3, '#d65900'],
     [0.5, '#FFFFFF'],
-    [0.7,'#7f9b31'],
-    [1, '#2e5307']
+    [0.7,'#00a2bc'],
+    [1, '#055c7a']
 ];
 
 
 
-
+var hsColors = {
+    Druid:      '#786530',
+    Hunter:     '#519e2e',
+    Mage:       '#72b1e8',
+    Paladin:    '#f8c100',
+    Priest:     '#fbf7f7',
+    Rogue:      '#335057',
+    Shaman:     '#3e59d5',
+    Warlock:    '#ac40ac',
+    Warrior:    '#88042d',
+    Other:      '#88042d',
+    '':         '#88042d',
+    '§':        '#88042d',
+}
 
 
 
@@ -147,9 +163,9 @@ function colorRange(r,b,g,delta) {
     return color.slice(0,-1)+')'
 }
 
-function colorStringRange(rbg,delta) {
+function colorStringRange(hex,delta) {
     var color = 'rgb('
-    var color_old = getRGB(rbg)
+    var color_old = hexToRgb(hex)
 
     for (c of color_old) {
         var x = c+randint(-delta,delta)
@@ -171,7 +187,14 @@ function getRGB(str){
 
 
 
-
+function hexToRgb(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? [
+        parseInt(result[1], 16),
+        parseInt(result[2], 16),
+        parseInt(result[3], 16)
+    ] : null;
+}
 
 
 

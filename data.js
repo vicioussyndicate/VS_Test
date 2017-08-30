@@ -55,8 +55,8 @@ function setupLadderData (data) {
                 imported: ladderData[f][t][key],
                 data: null,
                 archetypes: null,
-                data_classes: null,
-                sortedBy: null,
+                classData: null,
+                sortBy: null,
             }
             makeLadder(f,t)
         } 

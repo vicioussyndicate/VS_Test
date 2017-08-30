@@ -32,8 +32,6 @@
 
 function makeTable(f,t,r) {
     
-
-    
     
     var table = []
     var textTable = []
@@ -183,7 +181,7 @@ function makeTable(f,t,r) {
     DATA_table[f][t][r].layout = layout
     DATA_table[f][t][r].freqPlotData = getFreqPlotData(frequency.slice(),archetypes.slice())
     
-    sortTableBy('frequency',plot=false,ftr={f:f,t:t,r:r})   
+    //sortTableBy('frequency',plot=false,ftr={f:f,t:t,r:r})   
 }
 
 
@@ -214,7 +212,7 @@ function makeTable(f,t,r) {
 // -------------
 
 function plotTable(f,t,r) {
-
+    
     ui.table.f = f
     ui.table.t = t
     ui.table.r = r
@@ -313,6 +311,9 @@ function getFreqPlotData(freq,arch) {
         text: [text],
         visible:true,
         hoverinfo: 'text',
+        marker: {
+            color: '#a3a168',
+        },
     }
     return freqPlotData
 }
@@ -342,8 +343,8 @@ function subplotWR (f,t,r,idx) {
         visible: true,
         hoverinfo:'text',
         marker: {
-            color: '#2a9fc1',
-          },
+            color: '#222',
+        },
     }
     
     Plotly.restyle('chart2',wrPlotData,2)
@@ -448,28 +449,36 @@ function zoomOut (numArch) {
 // 5. Sort Table
 // -------------
 
-function sortTableBy(what,plot=true,ftr=null) {
-    if (ui.table.sortBy == what && ui.fullyLoaded) {console.log('already sorted by '+what);return}
+function sortTableBy(what,plot=true) {
+    //if (ui.table.sortBy == what && ui.fullyLoaded && !ui.table.zoomIn) {console.log('already sorted by '+what);return}
     
-    var f,t,r
-    if (ftr==null) {f = ui.table.f; t = ui.table.t; r = ui.table.r; ui.table.sortBy = what}
-    else {f = ftr.f; t = ftr.t; r = ftr.r;}
+    var f = ui.table.f
+    var t = ui.table.t
+    var r = ui.table.r    
     
-    
-
+    if (DATA_table[f][t][r].sortBy == what && !ui.table.zoomIn) {console.log('already sorted by '+what);return}
     
     var data = DATA_table[f][t][r]
 
     
     var numArch = data.archetypes.length
     var idxs = range(0,numArch)
-    
+    var zoomIdx
+
+    if (ui.table.zoomIn && what=='winrate') {
+        what='matchup'
+        zoomIdx = DATA_table[f][t][r].archetypes.indexOf(ui.table.zoomArch)
+        if (zoomIdx == -1) {what = 'winrate'}
+    }
+
+    var sortByMU = function (a,b) {return data.table[zoomIdx][a] > data.table[zoomIdx][b] ? -1: data.table[zoomIdx][a] < data.table[zoomIdx][b] ? 1 : 0 ;}
     var sortByWR = function (a, b) { return data.winrates[a] > data.winrates[b] ? -1 : data.winrates[a] < data.winrates[b] ? 1 : 0; }
     var sortByFR = function (a, b) { return data.frequency[a] > data.frequency[b] ? -1 : data.frequency[a] < data.frequency[b] ? 1 : 0; }
     var sortByClass = function (a, b) { return data.classPlusArch[a] < data.classPlusArch[b] ? -1 : data.classPlusArch[a] > data.classPlusArch[b] ? 1 : 0; }
 
 
     if (what == 'winrate') {idxs.sort(sortByWR)}
+    if (what == 'matchup') {idxs.sort(sortByMU)}
     if (what == 'frequency') {idxs.sort(sortByFR)}
     if (what == 'class') {idxs.sort(sortByClass)}
     
@@ -507,6 +516,9 @@ function sortTableBy(what,plot=true,ftr=null) {
     DATA_table[f][t][r].frequency  = frequency
     DATA_table[f][t][r].winrates  = winrates
     DATA_table[f][t][r].freqPlotData = getFreqPlotData(frequency,archetypes)
+    DATA_table[f][t][r].sortBy = what
+    ui.table.sortBy = what
+
 
     // Archetypes sorted by frequency stored for creating ladder plot legend
     if (what == 'frequency' && t == 'lastMonth' && DATA_table[f][t][r].archetypesLadder == null) {

@@ -24,22 +24,6 @@
           
 
           <div class="options" id="options">
-            <div class="option" id="disp">
-              <button class="optionBtn option-toggle">Classes</button>
-              <div class="dropdown hidden">
-                <button class="optionSelBtn" id="classes">Classes</button>
-                <button class="optionSelBtn" id="decks">Decks</button>
-              </div>
-            </div>
-
-             <div class="option" id="ranks">
-              <button class="optionBtn option-toggle">All Ranks</button>
-              <div class="dropdown hidden">
-                <button class="optionSelBtn" id="ranks_all">All Ranks</button>
-                <button class="optionSelBtn" id="ranks_L_5">Ranks L-5</button>
-                <button class="optionSelBtn" id="ranks_6_15">Ranks 6-15</button>
-              </div>
-            </div>
 
             <div class="option" id="format">
               <button class="optionBtn option-toggle">Standard</button>
@@ -67,13 +51,14 @@
               </div>
             </div>
 
-            <div class="option" id="subplots">
-              <button class="optionBtn option-toggle">Subplot</button>
-              <div class="dropdown hidden">
-                <button class="optionSelBtn" id="frSubplot">Frequency</button>
-                <button class="optionSelBtn" id="wrSubplot">Winrate</button>
+            <div class="option" id="ranks">
+                <button class="optionBtn option-toggle">All Ranks</button>
+                <div class="dropdown hidden">
+                  <button class="optionSelBtn" id="ranks_all">All Ranks</button>
+                  <button class="optionSelBtn" id="ranks_L_5">Ranks L-5</button>
+                  <button class="optionSelBtn" id="ranks_6_15">Ranks 6-15</button>
+                </div>
               </div>
-            </div>
             <button class="optionBtn" id="tooltips">i</button>
           </div>
         </nav>
@@ -82,7 +67,10 @@
 
             <div class="chart" id="classLadderWindow">
               <div class="content-header">
-                <p class="rankInfo"></p>
+                <div>
+                  <button class="optionSelBtn" id="classes">Classes</button>
+                  <button class="optionSelBtn" id="decks">Decks</button>
+                </div>
                 <p class="windowInfo"></p>
                 <p class="sortInfo"></p>
               </div>
@@ -92,7 +80,10 @@
 
             <div class="chart" id="ladderWindow">
               <div class="content-header">
-                <p class="rankInfo"></p>
+                <div>
+                  <button class="optionSelBtn" id="classes">Classes</button>
+                  <button class="optionSelBtn" id="decks">Decks</button>
+                </div>
                 <p class="windowInfo"></p>
                 <p class="sortInfo"></p>
               </div>

@@ -69,9 +69,8 @@ function showWindow(windowID) {
 function setupUI() {
 
     // Show/ hide Options
-    ladderOptions.push(document.querySelectorAll('#disp')[0])
     tableOptions.push(document.querySelectorAll('#ranks')[0])
-    tableOptions.push(document.querySelectorAll('#subplots')[0])
+    
 
     
     // Add Click Functions
