@@ -8,7 +8,7 @@ var DATA_table = {}
 var hsFormats =     ['Standard','Wild']
 var ladder_times =  ['lastDay','lastWeek','lastMonth']
 var table_times =   ['lastWeek','lastMonth']
-var table_ranks =   ['ranks_all'] //later: ['ranks_L_5','ranks_6_15','ranks_all']
+var table_ranks =   ['ranks_L_5','ranks_6_15','ranks_all']
 
 
 

@@ -66,6 +66,9 @@ function showWindow(windowID) {
     ui.windows.activeID = windowID
 }
 
+
+
+
 function setupUI() {
 
     // Show/ hide Options
@@ -83,7 +86,6 @@ function setupUI() {
     for (let i=0;i<optionSelectionButtons.length;i++) { 
         optionSelectionButtons[i].addEventListener("click", optionSelection)}
     
-    // init ladders
     createClassLadderLegend()
 
     toggleMainTabs()
@@ -127,7 +129,12 @@ function toggleMainTabs(e) {
         for (var i=0;i<tableOptions.length;i++) {tableOptions[i].style.display = 'flex'}
 
         showWindow('tableWindow')
-    }    
+    }
+
+    if (tabID == 'decks') {
+        document.getElementById('options').style.display = 'none'
+        showWindow('decksWindow')
+    }
 
     if (tabID == 'info') {
         document.getElementById('options').style.display = 'none'
@@ -212,6 +219,7 @@ function optionSelection(e) {
     }
 
     if (ui.tabs.activeID == 'table') {
+
         if (btnID == 'byClass') {sortTableBy('class')}
         if (btnID == 'byFreq') {sortTableBy('frequency')}
         if (btnID == 'byWR') {sortTableBy('winrate')}
@@ -221,6 +229,11 @@ function optionSelection(e) {
 
         if (btnID == 'Standard') {changeTable('Standard',ui.table.t,ui.table.r)}
         if (btnID == 'Wild') {changeTable('Wild',ui.table.t,ui.table.r)}
+
+        if (btnID == 'ranks_all') {changeTable(ui.table.f,ui.table.t,'ranks_all')}
+        if (btnID == 'ranks_L_5') {changeTable(ui.table.f,ui.table.t,'ranks_L_5')}
+        if (btnID == 'ranks_6_15') {changeTable(ui.table.f,ui.table.t,'ranks_6_15')}
+        
     }
         
 }

@@ -43,7 +43,7 @@ function finishedLoading() {
 var hsRanks = 21
 var numArch_ladder = 0
 var numArch_table_std = 20      // top 14 archetype will be posted on the table
-var numArch_table_wild = 9
+var numArch_table_wild = 20
 var ladder_xmin = 0.01         // minimal x value
 
 var table_default_sort = 'frequency'
