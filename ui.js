@@ -73,7 +73,7 @@ function setupUI() {
 
     // Show/ hide Options
     tableOptions.push(document.querySelectorAll('#ranks')[0])
-    
+    document.getElementById(ui.tabs.activeID).style.display = 'inline-block'
 
     
     // Add Click Functions
@@ -188,6 +188,8 @@ function optionSelection(e) {
     if (btnID == 'classes') {showWindow('classLadderWindow');   ui.windows.activeLadderID = 'classLadder'}
     if (btnID == 'decks')   {showWindow('ladderWindow');        ui.windows.activeLadderID = 'ladder'}
 
+    if (btnID == 'tooltips') {overlay()}
+
 
     if (ui.windows.activeID == 'ladderWindow') {
 
@@ -240,7 +242,9 @@ function optionSelection(e) {
 
 
 
-
+function overlay() {
+    
+}
 
 
 function makeDecks() {
@@ -249,7 +253,7 @@ function makeDecks() {
         img.src = "Images/deck1.png";
         var src = document.getElementById("chart3");
         src.appendChild(img);
-    }
+}
 
 const btnIdToText = {
     Standard: 'Standard',
@@ -272,10 +276,6 @@ const btnIdToText = {
 
     classes: 'Classes',
     decks: 'Archetypes',
-
-
-
-
 }
 
 
