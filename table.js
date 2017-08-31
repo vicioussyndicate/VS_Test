@@ -501,9 +501,10 @@ function sortTableBy(what,plot=true) {
         
         var tableRow = []
         var textTableRow = []
+
         for (var j=0;j<numArch;j++) {
-            tableRow.push(data.table[idx][idxs[j]])
-            textTableRow.push(data.textTable[idx][idxs[j]])
+            tableRow.push(        data.table[idx][idxs[j]] )
+            textTableRow.push(data.textTable[idx][idxs[j]] )
         }
         table.push(tableRow)
         textTable.push(textTableRow)
@@ -511,6 +512,7 @@ function sortTableBy(what,plot=true) {
     
    
     DATA_table[f][t][r].table = table
+    DATA_table[f][t][r].textTable = textTable
     DATA_table[f][t][r].archetypes = archetypes
     DATA_table[f][t][r].classPlusArch = classPlusArch
     DATA_table[f][t][r].frequency  = frequency
@@ -518,12 +520,6 @@ function sortTableBy(what,plot=true) {
     DATA_table[f][t][r].freqPlotData = getFreqPlotData(frequency,archetypes)
     DATA_table[f][t][r].sortBy = what
     ui.table.sortBy = what
-
-
-    // Archetypes sorted by frequency stored for creating ladder plot legend
-    if (what == 'frequency' && t == 'lastMonth' && DATA_table[f][t][r].archetypesLadder == null) {
-        DATA_table[f][t][r].archetypesLadder = archetypes.slice()
-    } 
     
     
     if (plot) { 
