@@ -94,6 +94,12 @@ body .main-wrapper .navbar .options button {
   font-weight: bold;
 }
 
+body #tooltips {
+  margin-left: 1em;
+  height: 2.5em;
+  width: 2.5em;
+}
+
 body .main-wrapper .navbar .options .option {
   display: -webkit-box;
   display: -webkit-flex;
@@ -212,21 +218,27 @@ body .main-wrapper .content-wrapper .content .chart .content-header {
 }
 
 body .classDeckBtn {
-  background: #fff;
-  color: black;
+  background: #222;
+  color: white;
   font-size: 1em;
   font-weight: bold;
-  border: 0.1rem solid #666;
+  border: 0.1rem solid white;
   border-radius: 5%;
   padding: 0.4rem;
   -webkit-transition: background 0.3s ease, color 0.3s ease;
   -o-transition: background 0.3s ease, color 0.3s ease;
   transition: background 0.3s ease, color 0.3s ease;
+  margin-left: 1em;
 }
 
-body .main-wrapper .content-wrapper .content .chart .content-header .rankInfo {
-  color: #a9a9a9;
-  margin-left: 1em;
+body .classDeckBtn:hover {
+  background: white;
+  color: #222;
+}
+
+body .classDeckBtn .highlighted {
+  background: white;
+  color: #222;
 }
 
 body .main-wrapper .content-wrapper .content .chart .content-header .windowInfo {

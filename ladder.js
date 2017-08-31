@@ -304,7 +304,7 @@ function createLadderLegend(f,t) {
     var legend = DATA_ladder[f][t].legend
     if (maxElements > legend.length) {maxElements = legend.length}
 
-    for (var i=maxElements-1;i>-1;i--) {
+    for (var i=0;i<maxElements;i++) {
 
         var l = legend[i]
 
