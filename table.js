@@ -158,7 +158,8 @@ function makeTable(f,t,r) {
             b: 30,
             t: 100
         },
-        width: 800,
+        width: 790,
+        height: 560,
 
         yaxis2: {
             visible: false,
@@ -265,6 +266,8 @@ function plotTable(f,t,r) {
     document.getElementById('chart2').on('plotly_click', zoomToggle)
 
     if (ui.table.zoomIn) {zoomIn(f,t,r,ui.table.zoomArch)}
+    
+    document.getElementById('loader').style.display = 'none'
 }
 
 
@@ -548,6 +551,7 @@ function sortTableBy(what,plot=true) {
 function changeTable(f,t,r) {
 
     if (ui.table.f == f && ui.table.t == t && ui.table.r == r) {console.log('already plotted');return}
+    document.getElementById('loader').style.display = 'fixed'
     
     ui.table.f = f
     ui.table.t = t

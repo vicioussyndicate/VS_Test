@@ -14,10 +14,11 @@ function makeLadder(f,t) {
     var totGames = 0
     var numArch = ARCHETYPES.length
     var visiblePerRank = fillRange(0,hsRanks,0)
+    var rankData = smoothLadder(rankData,rankSums.slice())
 
    
 
-    // Process RankData and ClassRankData
+    // Process RankData and ClassRankData  -> Should include classRankData in data file
     for (var i=0;i<hsRanks;i++) {
         if (rankSums[i] == 0) {continue}
 
@@ -25,8 +26,6 @@ function makeLadder(f,t) {
         var classRankRow = fillRange(0,9,0)
 
         for (var j=0;j<rankData[i].length;j++) {
-
-            rankData[i][j] /= rankSums[i]
 
             var idx_class = hsClasses.indexOf(ARCHETYPES[j][0])
             if (idx_class >= 0) {classRankRow[idx_class] += rankData[i][j]}
@@ -82,11 +81,8 @@ function makeLadder(f,t) {
             var idx_arch = archetypes.indexOf(arch)
             var text = `<b>${name}     </b><br>freq: ${(fr*100).toFixed(1)}%`
 
-            
             if (idx_arch == -1) {archetypes.push(arch); legend.push({name: name, fr:rankData[rank][i],color:color})}
             else {legend[idx_arch].fr += rankData[rank][i]; color = legend[idx_arch].color}
-
-            
             
             var trace = {
                 x:[fr],
@@ -97,30 +93,19 @@ function makeLadder(f,t) {
                 orientation: 'h',
                 marker: {color: color,},
                 type: 'bar',
-                
                 winrate: 0,
                 hsClass: ARCHETYPES[i][0],
-                //hsArch: ARCHETYPES[i][1],
             }
             data.push(trace)
-            
-            /*
-            var idx_class = hsClasses.indexOf(ARCHETYPES[i][0])
-            if (idx_class >= 0 && idx_class < 9) {
-                classCount[idx_class] += 1
-                classWR[idx_class] += winrate
-            }  */
         }
 
         // push Class Data
         for (var i=0;i<9;i++) {
             if (classCount[i] == 0) {classCount[i] = 1}
             var fr = classRankData[rank][i]
-            var wr = 0 //classWR[i]
             var name = hsClasses[i]
             var text = name+" "+(fr*100).toFixed(2)+"%"
-            var color = hsColors[name]
-
+            var color = hsColorScale(name,fr)
         
             var trace = {
                 x:[fr],
@@ -131,10 +116,8 @@ function makeLadder(f,t) {
                 orientation: 'h',
                 marker: {color: color},
                 type: 'bar',
-                
-                winrate: wr,
+                winrate: 0,
                 hsClass: name,
-                //hsArch: '',
             }
             classData.push(trace)
         }
@@ -151,7 +134,7 @@ function makeLadder(f,t) {
             var winrate = 0
             var totFR = 0
 
-            var table = DATA_table[f]['lastMonth']['ranks_all']
+            var table = DATA_table[f]['lastMonth']['ranks_all']  // once enough data -> adjust for time and rank
             var idx_i = table.archetypes.indexOf(arch) // idx on table
 
             if (idx_i != -1) { // check that arch exists on matchup table!
@@ -205,6 +188,7 @@ function makeLadder(f,t) {
             autorange: 'reversed',
 			color: 'white',
 		},
+        xaxis: {fixedrange: true},
 		plot_bgcolor: "#222",
         paper_bgcolor: "#222",
         margin: {l:35,r:0,b:0,t:0,},
@@ -227,35 +211,58 @@ function makeLadder(f,t) {
 
 
 
-function smoothLadder(data) {
+
+
+
+
+
+
+
+
+
+function smoothLadder(data,sums) {
+
+    var data_new = [data[0].slice()]
+    
+    if (sums[0] == 0) {sums[0] = 1}
+    if (sums[1] == 0) {sums[1] = 1}
+
 
     const w_rank = 3.5
-    var w_lower = 0 // weight of lower rank
-    var w_upper = 0 // weight of upper rank
+    var w_lower, w_upper
     
-    for (var i=1;i<data.length-1;i++) {
+    for (var rank=1; rank<hsRanks-1; rank++) {
 
-        var upperRank = data[i-1]
-        var lowerRank = data[i+1]
+        if (sums[rank+1] == 0) {sums[rank+1] = 1}
+        
+        w_upper = sums[rank-1]/sums[rank]
+        w_lower = sums[rank+1]/sums[rank]
+        if (w_upper > 2*w_rank) {w_upper = 2*w_rank}
+        if (w_lower > 2*w_rank) {w_lower = 2*w_rank}
 
-        if (data[i].sum > 0) {
-            w_upper = data[i-1].sum/data[i].sum
-            w_lower = data[i+1].sum/data[i].sum
-            // Limits:
-            if (w_upper > 2*w_rank) {w_upper = 2*w_rank}
-            if (w_lower > 2*w_rank) {w_lower = 2*w_rank}
-        } else {
-            w_upper = 1
-            w_lower = 1
-        }
+        if (rank%5 == 0) { w_lower = 0} // no smoothing across rank borders
+        if (rank%5 == 1) { w_upper = 0}
 
         var w_tot = w_rank + w_lower + w_upper
-        // weight data_chart
-        for (var j=0;j<9;j++) {
-            data[i].data_chart[j+1] = (data[i].data_chart[j+1]*w_rank + lowerRank[j+1]*w_lower + upperRank[j+1]*w_upper)/w_tot
+
+        var dataRow = []
+        for (var j=0; j<data[rank].length; j++) {
+
+            var d =         data[rank][j]/sums[rank]
+            var d_lower =   data[rank+1][j]/sums[rank+1]
+            var d_upper =   data[rank-1][j]/sums[rank-1]
+
+            dataRow.push( (d * w_rank + d_lower * w_lower + d_upper * w_upper) / w_tot ) 
         }
+        data_new.push(dataRow)
     }
-    return data
+
+    data_new.push(data[hsRanks-1].slice())
+    
+    for (var i=0;i<data_new[0].length;i++) { data_new[0][i] /= sums[0] }
+    for (var i=0;i<data[hsRanks-1].length;i++) {data_new[hsRanks-1][i] /= sums[hsRanks-1]}
+
+    return data_new
 }
 
 
@@ -275,6 +282,9 @@ function plotLadder(f,t) {
     var windowInfo = document.querySelectorAll('#ladderWindow .windowInfo')[0]    
     windowInfo.innerHTML = btnIdToText[f]+" - "+btnIdToText[t]+" <br/><span>("+DATA_ladder[f][t].totGames.toLocaleString()+" games)</span>"
     ui.ladder.plotted = true
+    document.getElementById('chart1').on('plotly_click', zoomToggle_Ladder)
+
+    hideLoader()
 }
 
 function plotClassLadder(f,t) {
@@ -282,6 +292,9 @@ function plotClassLadder(f,t) {
     var windowInfo = document.querySelectorAll('#classLadderWindow .windowInfo')[0]    
     windowInfo.innerHTML = btnIdToText[f]+" - "+btnIdToText[t]+" <br/><span>("+DATA_ladder[f][t].totGames.toLocaleString()+" games)</span>"
     ui.classLadder.plotted = true
+    document.getElementById('chart3').on('plotly_click', zoomToggle_Ladder)
+
+    hideLoader()
 }
 
 
@@ -362,6 +375,95 @@ function createClassLadderLegend() {
 
 
 
+// ZOOM
+
+function zoomToggle_Ladder(data) {
+    
+    var f = ui.ladder.f
+    var t = ui.ladder.t
+    
+    var rank = data.points[0].y
+    
+    if (ui.ladder.zoomIn == false) {zoomIn_Ladder(f,t,rank)}
+    else { zoomOut_Ladder()}
+}
+
+
+
+
+
+function zoomIn_Ladder(f,t,rank) {
+    console.log('zoomIn')
+    var y_low = rank-2.5
+    var y_up = rank + 2.5
+
+    if (y_low<0) {y_low = -0.5; y_up = 5.5}
+    if (y_up>hsRanks-1) {y_up = hsRanks-0.5; y_low = 14.5 }
+
+    var layout = {
+        yaxis: {range: [y_up,y_low],fixedrange:true,color:'white',dtick:1.0,},
+    }
+    if (ui.windows.activeID == 'ladderWindow') {Plotly.relayout('chart1',layout)}
+    if (ui.windows.activeID == 'classLadderWindow') {Plotly.relayout('chart3',layout)}
+    
+
+    ui.ladder.zoomIn = true
+    ui.ladder.zoomIdx = rank
+}
+
+
+
+
+
+
+
+
+function zoomOut_Ladder () {
+        console.log('zoomOut')
+
+    var rankLabels = ['L ']; 
+    for (var i=1;i<hsRanks;i++) {
+        if (i%5==0) {rankLabels.push(i+' ')}
+        else{rankLabels.push('')}
+    }
+    
+    var layout = {
+        yaxis:{	
+            range:[hsRanks-0.5,-0.5],
+            color: 'white',
+            fixedrange: true,
+            tickvals: range(0,hsRanks),
+			ticktext: rankLabels,
+			tickfont: {
+				family: 'Arial, bold',
+				size: 19,
+			},
+            
+        },
+    }
+    if (ui.windows.activeID == 'ladderWindow') {Plotly.relayout('chart1',layout)}
+    if (ui.windows.activeID == 'classLadderWindow') {Plotly.relayout('chart3',layout)}
+
+    ui.ladder.zoomIn = false
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -373,6 +475,7 @@ function createClassLadderLegend() {
 
 
 function sortLadderBy(what,plot=true) {
+        showLoader () 
     
     var traceMoveTo = []
     var t = ui.ladder.t
@@ -389,7 +492,6 @@ function sortLadderBy(what,plot=true) {
 
         var idx0 = vprSum
         var idx1 = vprSum + vpr[i]
-        //console.log('sortby',what,i,idx0,idx1,vprSum)
         vprSum += vpr[i]
 
         var DATA_ladder_rank = DATA.data.slice(idx0, idx1)
@@ -419,6 +521,7 @@ function sortLadderBy(what,plot=true) {
         var text = 'Highest '+what+"<br/><span>"+'▼'+"</span>"
         if (what == 'class') {text = ''}
         sortInfo.innerHTML = text
+        hideLoader()
     }
 }
 
@@ -460,6 +563,8 @@ function getIndicesSortedBy(arr,what) {
 
 function sortClassLadderBy(what) {
 
+        showLoader () 
+
     var traceMoveTo = []
     var t = ui.classLadder.t
     var f = ui.classLadder.f
@@ -488,6 +593,7 @@ function sortClassLadderBy(what) {
         traceMoveTo = traceMoveTo.concat(indices)
     }
     Plotly.moveTraces('chart3', range(0,21*numArch),traceMoveTo);
+    hideLoader()
 }
 
 
@@ -503,9 +609,9 @@ function sortClassLadderBy(what) {
 
 
 function changeLadder(f,t) {
-    
     if (ui.ladder.f == f && ui.ladder.t == t) {console.log('ladder already plotted');return}
 
+    showLoader () 
     ui.ladder.f = f
     ui.ladder.t = t
 
@@ -515,6 +621,8 @@ function changeLadder(f,t) {
 
 function changeClassLadder(f,t) {
     if (ui.classLadder.f == f && ui.classLadder.t == t) {console.log('ladder already plotted');return}
+
+    showLoader () 
     ui.classLadder.f = f
     ui.classLadder.t = t
     if (ui.classLadder.sortBy != DATA_ladder[f][t].sortBy) {sortClassLadderBy(ui.classLadder.sortBy)}

@@ -32,6 +32,8 @@ var ui = {      // UI handler
         f: 'Standard', 
         t: 'lastDay',
         plotted: false,
+        zoomIn: false,
+        zoomIdx: '',
         sortBy: 'class',
     },
 
@@ -39,6 +41,8 @@ var ui = {      // UI handler
         f: 'Standard', 
         t: 'lastDay',
         plotted: false,
+        zoomIn: false,
+        zoomIdx: '',
         sortBy: 'class',
     },
 
@@ -67,9 +71,13 @@ function showWindow(windowID) {
 }
 
 
+function hideLoader() {console.log('hideLoader');    document.getElementById('loader').style.display = 'none'}
+
+function showLoader () {console.log('showLoader'); document.getElementById('loader').style.display = 'block' }
 
 
 function setupUI() {
+    showLoader()
 
     // Show/ hide Options
     tableOptions.push(document.querySelectorAll('#ranks')[0])
@@ -147,8 +155,6 @@ function toggleMainTabs(e) {
 
 
 
-
-// Options Todo: Fix
 
 function dropDownToggle(e) {
     if (!ui.fullyLoaded) {return}
@@ -247,13 +253,7 @@ function overlay() {
 }
 
 
-function makeDecks() {
-    
-        var img = document.createElement("img");
-        img.src = "Images/deck1.png";
-        var src = document.getElementById("chart3");
-        src.appendChild(img);
-}
+
 
 const btnIdToText = {
     Standard: 'Standard',

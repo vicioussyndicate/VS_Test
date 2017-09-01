@@ -177,6 +177,35 @@ body .main-wrapper .content-wrapper {
   height: 700px;
 }
 
+
+#loader {
+    border-radius: 50%;
+    width: 5em;
+    height: 5em;
+    border: .5rem solid #666;
+    border-top-color: white;
+    animation: spin 0.5s infinite linear;
+    position: fixed;
+    display: none;
+    margin-left: 350px;
+    margin-top: 200px;
+    z-index: 10000;
+}
+
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+body .main-wrapper .content-wrapper{
+    height: 700px;
+}
+
 body .main-wrapper .content-wrapper .content {
   display: -webkit-box;
   display: -webkit-flex;
@@ -193,6 +222,11 @@ body .main-wrapper .content-wrapper .content {
 body .main-wrapper .content-wrapper .content .chart {
   background-color: #222;
   display: none;
+  height: 560px;
+}
+
+body #chart3 {
+    
 }
 
 body .main-wrapper .content-wrapper .content .chart .content-header {

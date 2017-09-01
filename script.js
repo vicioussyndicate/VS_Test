@@ -32,6 +32,7 @@ function finishedLoading() {
     sortTableBy('frequency')
 
     ui.fullyLoaded = true
+    hideLoader()
 
     console.log("App initializing took " + (performance.now() - t0) + " ms.")
 }
@@ -117,7 +118,7 @@ var hsColors = {
     Hunter:     '#519e2e',
     Mage:       '#72b1e8',
     Paladin:    '#f8c100',
-    Priest:     '#fbf7f7',
+    Priest:     '#e2d9d9',
     Rogue:      '#335057',
     Shaman:     '#3e59d5',
     Warlock:    '#ac40ac',
@@ -129,6 +130,21 @@ var hsColors = {
 
 
 
+
+var hsColors2 = {
+    Druid:      '#967928',
+    Hunter:     '#4ca026',
+    Mage:       '#95a5e2',
+    Paladin:    '#e2db71',
+    Priest:     '#ffffff',
+    Rogue:      '#4c6370',
+    Shaman:     '#238ee0',
+    Warlock:    '#fc3ffc',
+    Warrior:    '#d81753',
+    Other:      '#88042d',
+    '':         '#88042d',
+    '§':        '#88042d',
+}
 
 
 
@@ -197,6 +213,27 @@ function hexToRgb(hex) {
 }
 
 
+function hsColorScale(hsClass,x) {
+    x -= 0.05
+        if (x<0) {x=0}
+    const xMax = 0.3
+    x /= xMax
+    if (x>1) {x=1}
+
+
+    var c1 = hexToRgb(hsColors[hsClass])
+    var c2 = hexToRgb(hsColors2[hsClass])
+
+    var r, g, b
+
+    r = parseInt( c1[0] + (c2[0] - c1[0])*x )
+    g = parseInt( c1[1] + (c2[1] - c1[1])*x )
+    b = parseInt( c1[2] + (c2[2] - c1[2])*x )
+
+    var color = 'rgb('+r+','+g+','+b+')'
+    
+    return color
+}
 
 
 
