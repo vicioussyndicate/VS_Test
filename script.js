@@ -130,7 +130,6 @@ var hsColors = {
 
 
 
-
 var hsColors2 = {
     Druid:      '#967928',
     Hunter:     '#4ca026',
@@ -214,12 +213,16 @@ function hexToRgb(hex) {
 
 
 function hsColorScale(hsClass,x) {
-    x -= 0.05
-        if (x<0) {x=0}
-    const xMax = 0.3
-    x /= xMax
-    if (x>1) {x=1}
+    const xMax = 0.25
+    const xMin = 0.15
 
+    x -= xMin
+    if (x<0) {x = 0}
+    if (x>xMax-xMin) {x = xMax - xMin}
+
+    x /= xMax
+    
+    console.log('colorscale x:',x)
 
     var c1 = hexToRgb(hsColors[hsClass])
     var c2 = hexToRgb(hsColors2[hsClass])
