@@ -222,8 +222,6 @@ function hsColorScale(hsClass,x) {
 
     x /= xMax
     
-    console.log('colorscale x:',x)
-
     var c1 = hexToRgb(hsColors[hsClass])
     var c2 = hexToRgb(hsColors2[hsClass])
 

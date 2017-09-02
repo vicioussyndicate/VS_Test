@@ -176,6 +176,7 @@ function makeLadder(f,t) {
             showgrid: false,
             hoverformat: '.1%',
             color: 'transparent',
+            fixedrange: true,
         },
 		yaxis: {
 			showgrid: false,
@@ -186,9 +187,9 @@ function makeLadder(f,t) {
 				size: 19,
 			},
             autorange: 'reversed',
+            fixedrange: true,
 			color: 'white',
 		},
-        xaxis: {fixedrange: true},
 		plot_bgcolor: "#222",
         paper_bgcolor: "#222",
         margin: {l:35,r:0,b:0,t:0,},
@@ -485,6 +486,7 @@ function sortLadderBy(what,plot=true) {
     var vpr = DATA.visiblePerRank
     var vprSum = 0
     ui.ladder.sortBy = what
+    console.log('sort ladder by what',ui.ladder.sortBy)
     DATA_ladder[f][t].sortBy = what
 
 

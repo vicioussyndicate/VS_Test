@@ -27,7 +27,7 @@
           <div class="options" id="options">
 
             <div class="option" id="format">
-              <button class="optionBtn option-toggle">Standard</button>
+              <button class="optionBtn option-toggle" id="formatBtn">Standard</button>
               <div class="dropdown hidden">
                 <button class="optionSelBtn" id="Standard">Standard</button>
                 <button class="optionSelBtn" id="Wild">Wild</button>
@@ -35,7 +35,7 @@
             </div>
 
             <div class="option" id="time">
-              <button class="optionBtn option-toggle">Last Month</button>
+              <button class="optionBtn option-toggle" id="timeBtn">Last Month</button>
               <div class="dropdown hidden">
                 <button class="optionSelBtn" id="lastDay">Last Day</button>
                 <button class="optionSelBtn" id="lastWeek">Last Week</button>
@@ -44,16 +44,16 @@
             </div>
 
             <div class="option" id="sort">
-              <button class="optionBtn option-toggle">By Class</button>
+              <button class="optionBtn option-toggle" id="sortBtn">By Class</button>
               <div class="dropdown hidden">
-                <button class="optionSelBtn" id="byClass">By Class</button>
-                <button class="optionSelBtn" id="byFreq">By Frequency</button>
-                <button class="optionSelBtn" id="byWR">By Win Rate</button>
+                <button class="optionSelBtn" id="class">By Class</button>
+                <button class="optionSelBtn" id="frequency">By Frequency</button>
+                <button class="optionSelBtn" id="winrate">By Win Rate</button>
               </div>
             </div>
 
             <div class="option" id="ranks">
-                <button class="optionBtn option-toggle">All Ranks</button>
+                <button class="optionBtn option-toggle" id="ranksBtn">All Ranks</button>
                 <div class="dropdown hidden">
                   <button class="optionSelBtn" id="ranks_all">All Ranks</button>
                   <button class="optionSelBtn" id="ranks_L_5">Ranks L-5</button>
@@ -72,29 +72,32 @@
             </div> 
 
             <div class="chart" id="classLadderWindow">
-              <div class="content-footer"></div>
+                <div class="content-header">
+                    <div class="classDeck-wrapper">
+                      <button class="optionSelBtn classDeckBtn highlighted" id="classes">Classes</button>
+                      <button class="optionSelBtn classDeckBtn" id="decks">Decks</button>
+                    </div>
+                    <p class="windowInfo"></p>
+                    <p class="sortInfo"></p>
+                  </div>
+             
               <div id="chart3"></div>
-              <div class="content-header">
-                <div class="classDeck-wrapper">
-                  <button class="optionSelBtn classDeckBtn highlighted" id="classes">Classes</button>
-                  <button class="optionSelBtn classDeckBtn" id="decks">Decks</button>
-                </div>
-                <p class="windowInfo"></p>
-                <p class="sortInfo"></p>
-              </div>
+              <div class="content-footer"></div>
+              
             </div>
 
             <div class="chart" id="ladderWindow">
-              <div class="content-footer"></div>
+                <div class="content-header">
+                    <div class="classDeck-wrapper">
+                      <button class="optionSelBtn classDeckBtn" id="classes">Classes</button>
+                      <button class="optionSelBtn classDeckBtn highlighted" id="decks">Decks</button>
+                    </div>
+                    <p class="windowInfo"></p>
+                    <p class="sortInfo"></p>
+                  </div>
               <div id="chart1"></div>
-              <div class="content-header">
-                <div class="classDeck-wrapper">
-                  <button class="optionSelBtn classDeckBtn" id="classes">Classes</button>
-                  <button class="optionSelBtn classDeckBtn highlighted" id="decks">Decks</button>
-                </div>
-                <p class="windowInfo"></p>
-                <p class="sortInfo"></p>
-              </div>
+              <div class="content-footer"></div>
+              
               
             </div>
 
@@ -103,7 +106,17 @@
             </div>
 
             <div class="chart" id="decksWindow">
-              <div id="c5">Druid<br/>Hunter<br/>Mage<br/>Paladin<br/>Priest<br/>Rogue<br/>Shaman<br/>Warlock<br/>Warrior</div>
+              <div id="c5">
+                  <button>Druid</button>
+                  <button>Hunter</button>
+                  <button>Mage</button>
+                  <button>Paladin</button>
+                  <button>Priest</button>
+                  <button>Rogue</button>
+                  <button>Shaman</button>
+                  <button>Warlock</button>
+                  <button>Warrior</button>                
+              </div>
             </div>
             
             <div class="chart" id="infoWindow">

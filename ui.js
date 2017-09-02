@@ -71,9 +71,6 @@ function showWindow(windowID) {
 }
 
 
-function hideLoader() {console.log('hideLoader');    document.getElementById('loader').style.display = 'none'}
-
-function showLoader () {console.log('showLoader'); document.getElementById('loader').style.display = 'block' }
 
 
 function setupUI() {
@@ -148,6 +145,8 @@ function toggleMainTabs(e) {
         document.getElementById('options').style.display = 'none'
         showWindow('infoWindow')
     }
+
+    renderOptions()
 }
 
 
@@ -188,8 +187,8 @@ function toggleShow(ID) {
 function optionSelection(e) {
     
     const btnID = e.target.id
-    var parentBtn = ui.options.activeBtn
-    if (parentBtn != null) {parentBtn.innerHTML = btnIdToText[btnID]}
+    //var parentBtn = ui.options.activeBtn
+    //if (parentBtn != null) {parentBtn.innerHTML = btnIdToText[btnID]}
     
     if (btnID == 'classes') {showWindow('classLadderWindow');   ui.windows.activeLadderID = 'classLadder'}
     if (btnID == 'decks')   {showWindow('ladderWindow');        ui.windows.activeLadderID = 'ladder'}
@@ -207,9 +206,9 @@ function optionSelection(e) {
         if (btnID == 'lastMonth') {changeLadder(ui.ladder.f,'lastMonth')}
         
         
-        if (btnID == 'byClass') {sortLadderBy('class')}
-        if (btnID == 'byFreq') {sortLadderBy('frequency')}
-        if (btnID == 'byWR') {sortLadderBy('winrate')}
+        if (btnID == 'class') {sortLadderBy('class')}
+        if (btnID == 'frequency') {sortLadderBy('frequency')}
+        if (btnID == 'winrate') {sortLadderBy('winrate')}
     }
 
     if (ui.windows.activeID == 'classLadderWindow') {
@@ -221,16 +220,16 @@ function optionSelection(e) {
         if (btnID == 'lastWeek') {changeClassLadder(ui.ladder.f,'lastWeek')}
         if (btnID == 'lastMonth') {changeClassLadder(ui.ladder.f,'lastMonth')}
 
-        if (btnID == 'byClass') {sortClassLadderBy('class')}
-        if (btnID == 'byFreq') {sortClassLadderBy('frequency')}
-        if (btnID == 'byWR') {sortClassLadderBy('winrate')}
+        if (btnID == 'class') {sortClassLadderBy('class')}
+        if (btnID == 'frequency') {sortClassLadderBy('frequency')}
+        if (btnID == 'winrate') {sortClassLadderBy('winrate')}
     }
 
     if (ui.tabs.activeID == 'table') {
 
-        if (btnID == 'byClass') {sortTableBy('class')}
-        if (btnID == 'byFreq') {sortTableBy('frequency')}
-        if (btnID == 'byWR') {sortTableBy('winrate')}
+        if (btnID == 'class') {sortTableBy('class')}
+        if (btnID == 'frequency') {sortTableBy('frequency')}
+        if (btnID == 'winrate') {sortTableBy('winrate')}
 
         if (btnID == 'lastWeek') {changeTable(ui.table.f,'lastWeek',ui.table.r)}
         if (btnID == 'lastMonth') {changeTable(ui.table.f,'lastMonth',ui.table.r)}
@@ -243,7 +242,7 @@ function optionSelection(e) {
         if (btnID == 'ranks_6_15') {changeTable(ui.table.f,ui.table.t,'ranks_6_15')}
         
     }
-        
+    renderOptions()
 }
 
 
@@ -252,8 +251,34 @@ function overlay() {
     
 }
 
+function hideLoader() {console.log('hideLoader');    document.getElementById('loader').style.display = 'none'}
+function showLoader () {console.log('showLoader'); document.getElementById('loader').style.display = 'block' }
 
 
+
+
+
+function renderOptions() {
+    console.log("renderoptions",ui.ladder.sortBy)
+    if (ui.windows.activeID == 'ladderWindow') { 
+        document.getElementById("formatBtn").innerHTML =    btnIdToText[ui.ladder.f]
+        document.getElementById("timeBtn").innerHTML =      btnIdToText[ui.ladder.t]
+        document.getElementById("sortBtn").innerHTML =      btnIdToText[ui.ladder.sortBy]
+    }
+
+    if (ui.windows.activeID == 'classLadderWindow') { 
+        document.getElementById("formatBtn").innerHTML =    btnIdToText[ui.classLadder.f]
+        document.getElementById("timeBtn").innerHTML =      btnIdToText[ui.classLadder.t]
+        document.getElementById("sortBtn").innerHTML =      btnIdToText[ui.classLadder.sortBy]
+    }
+
+    if (ui.windows.activeID == 'tableWindow') { 
+        document.getElementById("formatBtn").innerHTML =    btnIdToText[ui.table.f]
+        document.getElementById("timeBtn").innerHTML =      btnIdToText[ui.table.t]
+        document.getElementById("ranksBtn").innerHTML =     btnIdToText[ui.table.r]
+        document.getElementById("sortBtn").innerHTML =      btnIdToText[ui.table.sortBy]
+    }
+}
 
 const btnIdToText = {
     Standard: 'Standard',
@@ -267,9 +292,9 @@ const btnIdToText = {
     lastWeek: 'Last Week',
     lastMonth: 'Last Month',
 
-    byClass: 'By Class',
-    byFreq: 'By Frequency',
-    byWR: 'By Winrate',
+    class: 'By Class',
+    frequency: 'By Frequency',
+    winrate: 'By Winrate',
     
     frSubplot: 'Frequency',
     wrSubplot: 'Winrate',
