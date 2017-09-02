@@ -23,6 +23,21 @@ body .main-wrapper {
   flex-direction: column;
 }
 
+#overlay {
+  position: fixed; /* Sit on top of the page content */
+  display: none; /* Hidden by default */
+  width: 800px; /* Full width (cover the whole page) */
+  height: 650px; /* Full height (cover the whole page) */
+  margin: 10px auto;
+  top: 0; 
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+  z-index: 10; /* Specify a stack order in case you're using a different order for other elements */
+  cursor: pointer; /* Add a pointer on hover */
+}
+
 body .main-wrapper .navbar {
   display: -webkit-box;
   display: -webkit-flex;
@@ -35,7 +50,7 @@ body .main-wrapper .navbar {
   -webkit-justify-content: start;
   -ms-flex-pack: start;
   justify-content: start;
-  z-index: 10000;
+  z-index: 2;
 }
 
 body .main-wrapper .navbar .tabs {
@@ -189,7 +204,7 @@ body .main-wrapper .content-wrapper {
     display: none;
     margin-left: 350px;
     margin-top: 200px;
-    z-index: 10000;
+    z-index: 2;
 }
 
 

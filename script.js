@@ -30,6 +30,7 @@ function finishedLoading() {
     plotClassLadder(ui.classLadder.f,ui.classLadder.t)
     sortClassLadderBy(ui.classLadder.sortBy) // ladder plotted in ui.js -> showWindow
     sortTableBy('frequency')
+    renderOptions()
 
     ui.fullyLoaded = true
     hideLoader()
@@ -114,14 +115,14 @@ var colorscale_Table = [
 
 
 var hsColors = {
-    Druid:      '#786530',
-    Hunter:     '#519e2e',
-    Mage:       '#72b1e8',
-    Paladin:    '#f8c100',
-    Priest:     '#e2d9d9',
+    Druid:      '#836353',
+    Hunter:     '#74a121',
+    Mage:       '#7dc0f1',
+    Paladin:    '#f3ba0c',
+    Priest:     '#fdfde3',
     Rogue:      '#335057',
-    Shaman:     '#3e59d5',
-    Warlock:    '#ac40ac',
+    Shaman:     '#3b5fcd',
+    Warlock:    '#a249a2',
     Warrior:    '#88042d',
     Other:      '#88042d',
     '':         '#88042d',
@@ -221,7 +222,7 @@ function hsColorScale(hsClass,x) {
     if (x>xMax-xMin) {x = xMax - xMin}
 
     x /= xMax
-    
+    x = 0
     var c1 = hexToRgb(hsColors[hsClass])
     var c2 = hexToRgb(hsColors2[hsClass])
 

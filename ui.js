@@ -13,6 +13,7 @@ var optionSelectionButtons = document.querySelectorAll('.optionSelBtn')
 
 var ui = {      // UI handler
     fullyLoaded: false,
+    overlay: false,
 
     tabs: {
         activeID: 'ladder',
@@ -187,14 +188,9 @@ function toggleShow(ID) {
 function optionSelection(e) {
     
     const btnID = e.target.id
-    //var parentBtn = ui.options.activeBtn
-    //if (parentBtn != null) {parentBtn.innerHTML = btnIdToText[btnID]}
     
     if (btnID == 'classes') {showWindow('classLadderWindow');   ui.windows.activeLadderID = 'classLadder'}
     if (btnID == 'decks')   {showWindow('ladderWindow');        ui.windows.activeLadderID = 'ladder'}
-
-    if (btnID == 'tooltips') {overlay()}
-
 
     if (ui.windows.activeID == 'ladderWindow') {
 
@@ -248,11 +244,13 @@ function optionSelection(e) {
 
 
 function overlay() {
+    if (ui.overlay) {document.getElementById("overlay").style.display = "none"; ui.overlay = false}
+    else {document.getElementById("overlay").style.display = "block"; ui.overlay = true}
     
 }
 
-function hideLoader() {console.log('hideLoader');    document.getElementById('loader').style.display = 'none'}
-function showLoader () {console.log('showLoader'); document.getElementById('loader').style.display = 'block' }
+function hideLoader() { document.getElementById('loader').style.display = 'none'}
+function showLoader () { document.getElementById('loader').style.display = 'block' }
 
 
 
