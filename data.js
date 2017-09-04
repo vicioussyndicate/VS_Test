@@ -53,17 +53,7 @@ function setupLadderData (data) {
         DATA_L[f] = {}
         for (t of ladder_times) {
             var key = Object.keys(ladderData[f][t])[0]
-            /*
-            DATA_ladder[f][t] = {
-                imported: ladderData[f][t][key],
-                data: null,
-                archetypes: null,
-                classData: null,
-                sortBy: null,
-            }
-            makeLadder(f,t)*/
             DATA_L[f][t] = new Ladder(ladderData[f][t][key],f,t)
-            
         } 
     }
 

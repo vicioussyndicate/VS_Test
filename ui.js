@@ -6,12 +6,12 @@
 var ladderOptions = []    // to show when switch to ladder tab
 var tableOptions = [] 
 var tabs = document.querySelectorAll('button.tab');
-var options = document.querySelectorAll('#options .option-toggle');
+var options = document.querySelectorAll('.option-toggle');
 var optionSelectionButtons = document.querySelectorAll('.optionSelBtn')
 
 
 
-var ui = {      // UI handler
+var ui = { 
     fullyLoaded: false,
     overlay: false,
 
@@ -20,8 +20,8 @@ var ui = {      // UI handler
     },
 
     windows: {
-        activeID: 'classLadderWindow',
-        activeLadderID: 'classLadder',
+        activeID: 'ladderWindow',
+        activeLadderID: 'ladder',
     },
 
     options: {
@@ -35,16 +35,8 @@ var ui = {      // UI handler
         plotted: false,
         zoomIn: false,
         zoomIdx: '',
-        sortBy: 'class',
-    },
-
-    classLadder: {
-        f: 'Standard', 
-        t: 'lastDay',
-        plotted: false,
-        zoomIn: false,
-        zoomIdx: '',
-        sortBy: 'class',
+        plotMode: 'bar', // bar line number
+        dispMode: 'classes', // classes decks
     },
 
     table: {
@@ -59,17 +51,8 @@ var ui = {      // UI handler
 }
 
 
-function showWindow(windowID) {
 
-    // Todo: generalize the loading of windows
-    if (windowID == 'ladderWindow' && !ui.ladder.plotted) {}//plotLadder(ui.ladder.f, ui.ladder.t); sortLadderBy(ui.ladder.sortBy)}
-    if (ui.windows.activeID == windowID && ui.fullyLoaded) {console.log('window already shown'); return}
 
-    document.getElementById(ui.windows.activeID).style.display = 'none'
-    document.getElementById(windowID).style.display = 'inline-block'
-
-    ui.windows.activeID = windowID
-}
 
 
 
@@ -79,7 +62,7 @@ function setupUI() {
 
     // Show/ hide Options
     tableOptions.push(document.querySelector('#ranks'))
-    ladderOptions.push(document.querySelector('#sort'))
+    ladderOptions.push(document.getElementById('sort'))
     document.getElementById(ui.tabs.activeID).style.display = 'inline-block'
 
     
@@ -92,8 +75,6 @@ function setupUI() {
 
     for (let i=0;i<optionSelectionButtons.length;i++) { 
         optionSelectionButtons[i].addEventListener("click", optionSelection)}
-    
-    createClassLadderLegend()
 
     toggleMainTabs()
 }
@@ -122,11 +103,10 @@ function toggleMainTabs(e) {
     // Hide/ Show Options
     if (tabID == 'ladder') {
         document.getElementById('options').style.display = 'flex'
-        //document.getElementById('lastDay').style.display = 'block'
         for (var i=0;i<ladderOptions.length;i++) {ladderOptions[i].style.display = 'flex'}
         for (var i=0;i<tableOptions.length;i++) {tableOptions[i].style.display = 'none'}
-        
-        showWindow(ui.windows.activeLadderID + 'Window')
+        document.getElementById('sort').style.display = 'none'
+        showWindow('ladderWindow')
     }
 
     if (tabID == 'table') {
@@ -134,7 +114,7 @@ function toggleMainTabs(e) {
         document.getElementById('lastDay').style.display = 'none'
         for (var i=0;i<ladderOptions.length;i++) {ladderOptions[i].style.display = 'none'}
         for (var i=0;i<tableOptions.length;i++) {tableOptions[i].style.display = 'flex'}
-
+                document.getElementById('sort').style.display = 'flex'
         showWindow('tableWindow')
     }
 
@@ -152,6 +132,18 @@ function toggleMainTabs(e) {
 }
 
 
+
+
+function showWindow(windowID) {
+    console.log(windowID)
+    
+    if (ui.windows.activeID == windowID && ui.fullyLoaded) {console.log('window already shown'); return}
+
+    document.getElementById(ui.windows.activeID).style.display = 'none'
+    document.getElementById(windowID).style.display = 'inline-block'
+
+    ui.windows.activeID = windowID
+}
 
 
 
@@ -190,37 +182,27 @@ function optionSelection(e) {
     
     const btnID = e.target.id
     
-    if (btnID == 'classes') {showWindow('classLadderWindow');   ui.windows.activeLadderID = 'classLadder'}
-    if (btnID == 'decks')   {showWindow('ladderWindow');        ui.windows.activeLadderID = 'ladder'}
+    
 
     if (ui.windows.activeID == 'ladderWindow') {
+  
+        if (btnID == 'classes')     {ui.ladder.dispMode = 'classes'}
+        if (btnID == 'decks')       {ui.ladder.dispMode = 'decks'}
 
-        if (btnID == 'Standard') {changeLadder('Standard',ui.ladder.t)}
-        if (btnID == 'Wild')     {changeLadder('Wild',ui.ladder.t)}
+        if (btnID == 'Standard')    {ui.ladder.f = 'Standard'}
+        if (btnID == 'Wild')        {ui.ladder.f = 'Wild'}
         
-        if (btnID == 'lastDay') {changeLadder(ui.ladder.f,'lastDay')}
-        if (btnID == 'lastWeek') {changeLadder(ui.ladder.f,'lastWeek')}
-        if (btnID == 'lastMonth') {changeLadder(ui.ladder.f,'lastMonth')}
-        
-        
-        if (btnID == 'class') {sortLadderBy('class')}
-        if (btnID == 'frequency') {sortLadderBy('frequency')}
-        if (btnID == 'winrate') {sortLadderBy('winrate')}
+        if (btnID == 'lastDay')     {ui.ladder.t = 'lastDay'}
+        if (btnID == 'lastWeek')    {ui.ladder.t = 'lastWeek'}
+        if (btnID == 'lastMonth')   {ui.ladder.t = 'lastMonth'}
+
+        if (btnID == 'bar')         {ui.ladder.plotMode = 'bar'}
+        if (btnID == 'line')        {ui.ladder.plotMode = 'line'}
+        if (btnID == 'number')      {ui.ladder.plotMode = 'number'}
+
+        DATA_L[ui.ladder.f][ui.ladder.t].plot()
     }
 
-    if (ui.windows.activeID == 'classLadderWindow') {
-
-        if (btnID == 'Standard') {changeClassLadder('Standard',ui.ladder.t)}
-        if (btnID == 'Wild')     {changeClassLadder('Wild',ui.ladder.t)}
-        
-        if (btnID == 'lastDay') {changeClassLadder(ui.ladder.f,'lastDay')}
-        if (btnID == 'lastWeek') {changeClassLadder(ui.ladder.f,'lastWeek')}
-        if (btnID == 'lastMonth') {changeClassLadder(ui.ladder.f,'lastMonth')}
-
-        if (btnID == 'class') {sortClassLadderBy('class')}
-        if (btnID == 'frequency') {sortClassLadderBy('frequency')}
-        if (btnID == 'winrate') {sortClassLadderBy('winrate')}
-    }
 
     if (ui.tabs.activeID == 'table') {
 
@@ -244,6 +226,40 @@ function optionSelection(e) {
 
 
 
+
+
+function renderOptions() {
+    console.log("renderoptions",ui.ladder.sortBy)
+    if (ui.windows.activeID == 'ladderWindow') { 
+        document.getElementById("formatBtn").innerHTML =    btnIdToText[ui.ladder.f]
+        document.getElementById("timeBtn").innerHTML =      btnIdToText[ui.ladder.t]
+    }
+
+    if (ui.windows.activeID == 'tableWindow') { 
+        document.getElementById("formatBtn").innerHTML =    btnIdToText[ui.table.f]
+        document.getElementById("timeBtn").innerHTML =      btnIdToText[ui.table.t]
+        document.getElementById("ranksBtn").innerHTML =     btnIdToText[ui.table.r]
+        document.getElementById("sortBtn").innerHTML =      btnIdToText[ui.table.sortBy]
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function overlay() {
     if (ui.overlay) {document.getElementById("overlay").style.display = "none"; ui.overlay = false}
     else {document.getElementById("overlay").style.display = "block"; ui.overlay = true}
@@ -257,27 +273,16 @@ function showLoader () { document.getElementById('loader').style.display = 'bloc
 
 
 
-function renderOptions() {
-    console.log("renderoptions",ui.ladder.sortBy)
-    if (ui.windows.activeID == 'ladderWindow') { 
-        document.getElementById("formatBtn").innerHTML =    btnIdToText[ui.ladder.f]
-        document.getElementById("timeBtn").innerHTML =      btnIdToText[ui.ladder.t]
-        document.getElementById("sortBtn").innerHTML =      btnIdToText[ui.ladder.sortBy]
-    }
 
-    if (ui.windows.activeID == 'classLadderWindow') { 
-        document.getElementById("formatBtn").innerHTML =    btnIdToText[ui.classLadder.f]
-        document.getElementById("timeBtn").innerHTML =      btnIdToText[ui.classLadder.t]
-        document.getElementById("sortBtn").innerHTML =      btnIdToText[ui.classLadder.sortBy]
-    }
 
-    if (ui.windows.activeID == 'tableWindow') { 
-        document.getElementById("formatBtn").innerHTML =    btnIdToText[ui.table.f]
-        document.getElementById("timeBtn").innerHTML =      btnIdToText[ui.table.t]
-        document.getElementById("ranksBtn").innerHTML =     btnIdToText[ui.table.r]
-        document.getElementById("sortBtn").innerHTML =      btnIdToText[ui.table.sortBy]
-    }
-}
+
+
+
+
+
+
+
+
 
 const btnIdToText = {
     Standard: 'Standard',

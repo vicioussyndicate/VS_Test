@@ -15,10 +15,19 @@ class Ladder {
         this.f = f
         this.t = t
 
-        this.archTraces = []
-        this.classTraces = []
-        this.a_numTraces = []
-        this.c_numTraces = []
+        this.zoomIn = false
+        this.zoomIdx = null
+
+        this.archetypes = []
+
+        this.a_data = {} // to display in the table
+        this.c_data = {}
+
+        this.traces_arch_bar = []
+        this.traces_class_bar = []
+
+        this.traces_arch_line = []
+        this.traces_class_line = []
         
         this.archLegend = []
         this.classLegend = []
@@ -27,7 +36,7 @@ class Ladder {
 
         var ARCHETYPES =    DATA.archetypes
         var rankSums =      DATA.gamesPerRank
-        var rankData = smoothLadder(DATA.rankData,rankSums.slice())
+        var rankData =      this.smoothLadder(DATA.rankData,rankSums.slice())
         this.rankLabels = []
         var classRankData = []
         
@@ -69,9 +78,10 @@ class Ladder {
             }
             fr_avg /= hsRanks
             
+
             var color = colorStringRange(hsColors[ARCHETYPES[i][0]],45)
 
-            var archTrace = {
+            var arch_bar = {
                 x:range(0,hsRanks),
                 y:archFR,
                 name: archName,
@@ -83,7 +93,7 @@ class Ladder {
                 hsClass: ARCHETYPES[i][0]+ARCHETYPES[i][1],
             }
             
-            var a_numTrace = {
+            var arch_line = {
                 x: range(0,hsRanks),
                 y: archFR,
                 name: archName,
@@ -97,9 +107,12 @@ class Ladder {
                 fr: fr_avg,
             }
 
-            this.archTraces.push(archTrace)
-            this.a_numTraces.push(a_numTrace)
+            this.traces_arch_bar.push(arch_bar)
+            this.traces_arch_line.push(arch_line)
             this.archLegend.push({name: archName, color: color, fr: fr_avg})
+            this.a_data[archName] = archFR
+            this.archetypes.push({name:archName,fr:fr_avg, data: archFR})
+
         } // close for ARCHETYPES
                 
 
@@ -119,8 +132,9 @@ class Ladder {
             }
             
             fr_avg /= hsRanks
+            this.c_data[hsClass] = classFR.slice()
 
-            var classTrace = {
+            var class_bar = {
                 x: range(0,hsRanks),
                 y: classFR,
                 name: hsClass,
@@ -132,9 +146,9 @@ class Ladder {
                 hsClass: hsClass,
              }
 
-            var c_numTrace = {
-                x:classFR,
-                y:range(0,hsRanks),
+            var class_line = {
+                x:range(0,hsRanks),
+                y:classFR,
                 name: hsClass,
                 text: classTxt,
                 hoverinfo: 'text',
@@ -145,15 +159,15 @@ class Ladder {
                 fr: fr_avg,
              }
 
-            this.classTraces.push(classTrace)
-            this.c_numTraces.push(c_numTrace)
+            this.traces_class_bar.push(class_bar)
+            this.traces_class_line.push(class_line)
             this.classLegend.push({name:hsClass, color: hsColors[hsClass]})
         }// close for Classes
         
 
 
 
-        this.layout = {
+        this.layout_bar = {
 		    barmode: 'stack',
 		    showlegend: false,
 		    displayModeBar: false,
@@ -184,7 +198,7 @@ class Ladder {
 	    }
 
 
-        this.layout_num = {
+        this.layout_line = {
             //barmode: 'stack',
 		    showlegend: false,
 		    displayModeBar: false,
@@ -216,19 +230,23 @@ class Ladder {
        
         var classSort = function (a, b) { return a.hsClass < b.hsClass ? -1 : a.hsClass > b.hsClass ? 1 : 0; }
         var freqSort = function (a,b) { return a.fr > b.fr ? -1 : a.fr < b.fr ? 1 : 0;}
-        this.archTraces.sort(classSort)
-        this.classTraces.sort(classSort)
-        this.a_numTraces.sort(freqSort)
-        this.c_numTraces.sort(freqSort)
-        this.a_numTraces.splice(this.maxLines)
-        this.c_numTraces.splice(this.maxLines)        
+
+        this.traces_class_bar.sort(classSort)
+        this.traces_class_line.sort(freqSort)
+        this.traces_class_line.splice(this.maxLines)
+        
+        this.traces_arch_bar.sort(classSort)
+        this.traces_arch_line.sort(freqSort)
+        this.traces_arch_line.splice(this.maxLines)
+        
         this.archLegend.sort(freqSort)
+        this.archetypes.sort(freqSort)
     }// close constructor
 
     
 
     // Smooth Data
-    smoothLadder (data) {
+    smoothLadder (data,sums) {
             
         var data_new = [data[0].slice()]
         
@@ -276,32 +294,129 @@ class Ladder {
 
 
 
-    plotArchLadder () {
 
-        Plotly.newPlot('chart1',this.archTraces, this.layout, {displayModeBar: false,})
-        //Plotly.newPlot('chart1',this.a_numTraces, this.layout_num, {displayModeBar: false,})
+
+
+
+
+
+
+
+    plot() {
+        document.getElementById('chart1').innerHTML = ""
+        var data, layout
+
+        if (ui.ladder.plotMode == 'number') {
+            if (ui.ladder.dispMode = 'decks') {this.createArchTable(); return}
+            if (ui.ladder.dispMode = 'classes') {this.createClassTable(); return}
+        }
+
+        if (ui.ladder.plotMode == 'bar') {
+            layout = this.layout_bar
+            if (ui.ladder.dispMode == 'decks') {data = this.traces_arch_bar}
+            if (ui.ladder.dispMode == 'classes') {data = this.traces_class_bar}
+        }
+
+        if (ui.ladder.plotMode == 'line') {
+            layout = this.layout_line
+            if (ui.ladder.dispMode == 'decks') {data = this.traces_arch_line}
+            if (ui.ladder.dispMode == 'classes') {data = this.traces_class_line}
+        }
+
+        Plotly.newPlot('chart1',data, layout, {displayModeBar: false,})
+
         var windowInfo = document.querySelectorAll('#ladderWindow .windowInfo')[0]    
         windowInfo.innerHTML = btnIdToText[this.f]+" - "+btnIdToText[this.t]+" <br/><span>("+this.totGames.toLocaleString()+" games)</span>"
-        ui.ladder.plotted = true
-        document.getElementById('chart1').on('plotly_click', zoomToggle_Ladder)
-        this.createArchLegend()
 
-        hideLoader()
+        if (ui.ladder.dispMode == 'decks') {this.createArchLegend()}
+        if (ui.ladder.dispMode == 'classes') {this.createClassLegend()}
+        document.getElementById('chart1').on('plotly_click', this.zoomToggle)
     }
 
-    plotClassLadder () {
 
-        Plotly.newPlot('chart3',this.classTraces, this.layout, {displayModeBar: false,})
 
-        var windowInfo = document.querySelectorAll('#classLadderWindow .windowInfo')[0]    
-        windowInfo.innerHTML = btnIdToText[this.f]+" - "+btnIdToText[this.t]+" <br/><span>("+this.totGames.toLocaleString()+" games)</span>"
-        ui.classLadder.plotted = true
-        document.getElementById('chart3').on('plotly_click', zoomToggle_Ladder)
 
-        hideLoader()
+    createClassTable () { 
+        
+        document.getElementById('chart1').innerHTML = ""
+        
+        var table = `<table style="width:100%">`
+        table += `<tr><th></th>`
+
+        for (var i=20;i>0;i--) {table += `<th>${i}</th>`}
+        table += `<th>L</th></tr>`
+
+
+        for (var j=0; j<9; j++) {
+
+            table += `<tr><td>${hsClasses[j]}</td>`
+
+            for (var i=0;i<hsRanks;i++) {
+                table += `<td>${randint(0,100)}</td>`
+            }
+            table += `</tr>`
+        }
+
+        table += `</table>`
+
+        console.log(table)
+        document.getElementById('chart1').innerHTML = table
     }
+
+
+
+
+
+
+
+    createArchTable () {
+
+        var maxArch = 20
+        if (this.archetypes.length < maxArch) {maxArch = this.archetypes.length}
+
+        document.getElementById('chart1').innerHTML = ""
+        
+        var table = `<table style="width:100%">`
+        table += `<tr><th>Rank -></th>`
+
+        for (var i=20;i>0;i--) {table += `<th>${i}</th>`}
+        table += `<th>L</th></tr>`
+
+
+        for (var j=0; j<maxArch; j++) {
+            var arch = this.archetypes[j]
+            table += `<tr><td>${arch.name}</td>`
+            for (var i=20;i>-1;i--) {table += `<td>${(arch.data[i]*100).toFixed(0)}</td>`}
+            table += `</tr>`
+        }
+
+        table += `</table>`
+        document.getElementById('chart1').innerHTML = table
+    }
+
 
     createClassLegend() {
+        var contentFooter_ladder = document.querySelectorAll('#ladderWindow .content-footer')[0]
+        while (contentFooter_ladder.firstChild) {contentFooter_ladder.removeChild(contentFooter_ladder.firstChild);}
+
+        for (var i=0;i<9;i++) {
+            
+            var hsClass = hsClasses[i]
+
+            var legendDiv = document.createElement('div')   
+            var colorSplash = document.createElement('div') 
+            var archName = document.createElement('l')     
+
+            legendDiv.className = 'ladder-legend'
+            legendDiv.style.fontSize = '0.8em'
+            colorSplash.style = 'background-color:'+hsColors[hsClass]+';height:15px;width:30px;margin:0 auto 0.7em auto;'
+            archName.innerHTML = hsClass
+
+            legendDiv.appendChild(colorSplash)
+            legendDiv.appendChild(archName)
+
+            contentFooter_ladder.appendChild(legendDiv)        
+        }
     }
 
     createArchLegend() {
@@ -333,11 +448,20 @@ class Ladder {
         }
     }
 
+
+
+
+    zoomToggle (data) {
+        var hsClass = data.points[0].data.hsClass
+    }
+
 }// class Ladder
 
 
 
-
+function zoomToggle(data) {
+    console.log(data)
+}
 
 
 
