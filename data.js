@@ -4,6 +4,7 @@
 // Global Data
 var DATA_ladder = {}  // main data structs
 var DATA_table = {}
+var DATA_L = {}
 
 var hsFormats =     ['Standard','Wild']
 var ladder_times =  ['lastDay','lastWeek','lastMonth']
@@ -49,8 +50,10 @@ function setupLadderData (data) {
     
     for (f of hsFormats) {
         DATA_ladder[f] = {}
+        DATA_L[f] = {}
         for (t of ladder_times) {
             var key = Object.keys(ladderData[f][t])[0]
+            /*
             DATA_ladder[f][t] = {
                 imported: ladderData[f][t][key],
                 data: null,
@@ -58,7 +61,9 @@ function setupLadderData (data) {
                 classData: null,
                 sortBy: null,
             }
-            makeLadder(f,t)
+            makeLadder(f,t)*/
+            DATA_L[f][t] = new Ladder(ladderData[f][t][key],f,t)
+            
         } 
     }
 

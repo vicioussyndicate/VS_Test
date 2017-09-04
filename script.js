@@ -27,8 +27,10 @@ window.onload = function() {
 
 function finishedLoading() {
     
-    plotClassLadder(ui.classLadder.f,ui.classLadder.t)
-    sortClassLadderBy(ui.classLadder.sortBy) // ladder plotted in ui.js -> showWindow
+    //plotClassLadder(ui.classLadder.f,ui.classLadder.t)
+    DATA_L[ui.classLadder.f][ui.classLadder.t].plotClassLadder()
+    DATA_L[ui.ladder.f][ui.ladder.t].plotArchLadder()
+    //sortClassLadderBy(ui.classLadder.sortBy) // ladder plotted in ui.js -> showWindow
     sortTableBy('frequency')
     renderOptions()
 

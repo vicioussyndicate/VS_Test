@@ -62,7 +62,7 @@ var ui = {      // UI handler
 function showWindow(windowID) {
 
     // Todo: generalize the loading of windows
-    if (windowID == 'ladderWindow' && !ui.ladder.plotted) {plotLadder(ui.ladder.f, ui.ladder.t); sortLadderBy(ui.ladder.sortBy)}
+    if (windowID == 'ladderWindow' && !ui.ladder.plotted) {}//plotLadder(ui.ladder.f, ui.ladder.t); sortLadderBy(ui.ladder.sortBy)}
     if (ui.windows.activeID == windowID && ui.fullyLoaded) {console.log('window already shown'); return}
 
     document.getElementById(ui.windows.activeID).style.display = 'none'
@@ -78,7 +78,8 @@ function setupUI() {
     showLoader()
 
     // Show/ hide Options
-    tableOptions.push(document.querySelectorAll('#ranks')[0])
+    tableOptions.push(document.querySelector('#ranks'))
+    ladderOptions.push(document.querySelector('#sort'))
     document.getElementById(ui.tabs.activeID).style.display = 'inline-block'
 
     
@@ -121,7 +122,7 @@ function toggleMainTabs(e) {
     // Hide/ Show Options
     if (tabID == 'ladder') {
         document.getElementById('options').style.display = 'flex'
-        document.getElementById('lastDay').style.display = 'block'
+        //document.getElementById('lastDay').style.display = 'block'
         for (var i=0;i<ladderOptions.length;i++) {ladderOptions[i].style.display = 'flex'}
         for (var i=0;i<tableOptions.length;i++) {tableOptions[i].style.display = 'none'}
         
