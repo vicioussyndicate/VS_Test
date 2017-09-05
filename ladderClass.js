@@ -7,7 +7,6 @@ class Ladder {
 
     constructor (DATA,f,t) {
 
-        this.plotWidth = 790
         this.maxLegendEntries = 9
         this.maxLines = 10
 
@@ -171,7 +170,7 @@ class Ladder {
 		    barmode: 'stack',
 		    showlegend: false,
 		    displayModeBar: false,
-            width: this.plotWidth,
+            autosize: true,
 		    hovermode: 'closest',
 		    xaxis: {
                 visible: true, 
@@ -188,7 +187,6 @@ class Ladder {
 				    family: 'Arial, bold',
 				    size: 19,
 			    },
-                //autorange: 'reversed',
                 fixedrange: true,
 			    color: 'white',
 		    },
@@ -199,10 +197,9 @@ class Ladder {
 
 
         this.layout_line = {
-            //barmode: 'stack',
 		    showlegend: false,
 		    displayModeBar: false,
-            width: this.plotWidth,
+            autosie: true,
 		    hovermode: 'closest',
 		    xaxis: {
                 visible: true, 
@@ -213,7 +210,6 @@ class Ladder {
                 autorange: 'reversed',
             },
 		    yaxis: {
-			    //showgrid: false,
 			    tickfont: {
 				    family: 'Arial, bold',
 				    size: 19,
@@ -307,8 +303,8 @@ class Ladder {
         var data, layout
 
         if (ui.ladder.plotMode == 'number') {
-            if (ui.ladder.dispMode = 'decks') {this.createArchTable(); return}
-            if (ui.ladder.dispMode = 'classes') {this.createClassTable(); return}
+            if (ui.ladder.dispMode == 'decks') {this.createTable('decks'); return}
+            if (ui.ladder.dispMode == 'classes') {this.createTable('classes'); return}
         }
 
         if (ui.ladder.plotMode == 'bar') {
@@ -325,8 +321,8 @@ class Ladder {
 
         Plotly.newPlot('chart1',data, layout, {displayModeBar: false,})
 
-        var windowInfo = document.querySelectorAll('#ladderWindow .windowInfo')[0]    
-        windowInfo.innerHTML = btnIdToText[this.f]+" - "+btnIdToText[this.t]+" <br/><span>("+this.totGames.toLocaleString()+" games)</span>"
+        //var windowInfo = document.querySelectorAll('#ladderWindow .windowInfo')[0]    
+        //windowInfo.innerHTML = btnIdToText[this.f]+" - "+btnIdToText[this.t]+" <br/><span>("+this.totGames.toLocaleString()+" games)</span>"
 
         if (ui.ladder.dispMode == 'decks') {this.createArchLegend()}
         if (ui.ladder.dispMode == 'classes') {this.createClassLegend()}
@@ -334,42 +330,22 @@ class Ladder {
     }
 
 
+    colorScale(x) {
+        var c1 = [255,255,255]
+        var c2 = [87, 125, 186]
 
+        x /= 0.15
 
-    createClassTable () { 
+        var c3 = []
+        c3.push(c1[0]+(c2[0]-c1[0])*x)
+        c3.push(c1[1]+(c2[1]-c1[1])*x)
+        c3.push(c1[2]+(c2[2]-c1[2])*x)
         
-        document.getElementById('chart1').innerHTML = ""
-        
-        var table = `<table style="width:100%">`
-        table += `<tr><th></th>`
-
-        for (var i=20;i>0;i--) {table += `<th>${i}</th>`}
-        table += `<th>L</th></tr>`
-
-
-        for (var j=0; j<9; j++) {
-
-            table += `<tr><td>${hsClasses[j]}</td>`
-
-            for (var i=0;i<hsRanks;i++) {
-                table += `<td>${randint(0,100)}</td>`
-            }
-            table += `</tr>`
-        }
-
-        table += `</table>`
-
-        console.log(table)
-        document.getElementById('chart1').innerHTML = table
+        return 'rgb('+c3[0]+','+c3[1]+','+c3[2]+')'
     }
 
 
-
-
-
-
-
-    createArchTable () {
+    createTable (mode) {
 
         var maxArch = 20
         if (this.archetypes.length < maxArch) {maxArch = this.archetypes.length}
@@ -377,22 +353,37 @@ class Ladder {
         document.getElementById('chart1').innerHTML = ""
         
         var table = `<table style="width:100%">`
-        table += `<tr><th>Rank -></th>`
+        table += `<tr><th class="pivot">Rank -></th>`
 
         for (var i=20;i>0;i--) {table += `<th>${i}</th>`}
         table += `<th>L</th></tr>`
 
-
-        for (var j=0; j<maxArch; j++) {
-            var arch = this.archetypes[j]
-            table += `<tr><td>${arch.name}</td>`
-            for (var i=20;i>-1;i--) {table += `<td>${(arch.data[i]*100).toFixed(0)}</td>`}
-            table += `</tr>`
+        if (mode == 'decks') {
+            for (var j=0; j<maxArch; j++) {
+                var arch = this.archetypes[j]
+                table += `<tr><td class="pivot">${arch.name}</td>`
+                for (var i=hsRanks-1;i>-1;i--) {table += `<td style="background-color:${this.colorScale(arch.data[i])};">${arch.data[i].toFixed(3)}</td>`}
+                table += `</tr>`
+            }
+        } 
+        else {
+            for (var j=0; j<9; j++) {
+                var hsClass = hsClasses[j]
+                var data = this.c_data[hsClass]
+                table += `<tr><td class="pivot">${hsClass}</td>`
+                for (var i=hsRanks-1;i>-1;i--) {
+                    
+                    table += `<td style="background-color:${this.colorScale(data[i])};">${data[i].toFixed(2)}</td>`
+                }
+                table += `</tr>`
+            }   
         }
 
         table += `</table>`
         document.getElementById('chart1').innerHTML = table
     }
+
+
 
 
     createClassLegend() {

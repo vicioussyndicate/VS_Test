@@ -3,12 +3,6 @@
 
 // SETUP UI
 
-var ladderOptions = []    // to show when switch to ladder tab
-var tableOptions = [] 
-var tabs = document.querySelectorAll('button.tab');
-var options = document.querySelectorAll('.option-toggle');
-var optionSelectionButtons = document.querySelectorAll('.optionSelBtn')
-
 
 
 var ui = { 
@@ -17,16 +11,18 @@ var ui = {
 
     tabs: {
         activeID: 'ladder',
+        buttons: [],
     },
 
     windows: {
-        activeID: 'ladderWindow',
-        activeLadderID: 'ladder',
+        activeWindow: null,
+        list: [],
     },
 
     options: {
-        activeID: null,
-        activeBtn: null,
+        openFolder: null,
+        buttons: [],
+        folderButtons: [],
     },
 
     ladder: {
@@ -58,134 +54,96 @@ var ui = {
 
 
 function setupUI() {
+    
+ 
     showLoader()
 
-    // Show/ hide Options
-    tableOptions.push(document.querySelector('#ranks'))
-    ladderOptions.push(document.getElementById('sort'))
-    document.getElementById(ui.tabs.activeID).style.display = 'inline-block'
+    var tabs = document.querySelectorAll('button.tab');
+    var windows = document.querySelectorAll('.tabWindow');
+    var folderButtons = document.querySelectorAll('.folder-toggle');
+    var optionButtons = document.querySelectorAll('.optionBtn')
 
+    ui.tabs.buttons = tabs
+    ui.windows.list = windows
+    ui.options.buttons = optionButtons
+    ui.options.folderButtons = folderButtons
     
-    // Add Click Functions
+    ui.tabs.activeTab = document.querySelector('.tab#ladder')
+    ui.windows.activeWindow = document.querySelector('#ladderWindow')
+
+    renderWindows()
+     
+
     for(let i=0;i<tabs.length;i++) {    
         tabs[i].addEventListener("click", toggleMainTabs);}
-    
-    for(let i=0;i<options.length;i++) { 
-        options[i].addEventListener("click", dropDownToggle);}
 
-    for (let i=0;i<optionSelectionButtons.length;i++) { 
-        optionSelectionButtons[i].addEventListener("click", optionSelection)}
+    for(let i=0;i<folderButtons.length;i++) { 
+        folderButtons[i].addEventListener("click", toggleDropDown);}
 
-    toggleMainTabs()
+    for (let i=0;i<optionButtons.length;i++) { 
+        optionButtons[i].addEventListener("click", buttonTrigger)}
+
 }
 
 
 
 
 
-// Tabs
+
+
+
+function renderTabs() {
+
+    for (tab of ui.tabs.buttons) {
+        if (tab != ui.tabs.activeTab) {tab.classList.remove('highlighted')}
+        else {tab.classList.add('highlighted')}
+    }
+}
+
+function renderWindows() {
+    for (tabWindow of ui.windows.list) {
+        if (tabWindow != ui.windows.activeWindow) {tabWindow.style.display = 'none'}
+        else {tabWindow.style.display = 'inline-block'}
+    }
+}
+
 
 function toggleMainTabs(e) {
 
-    var tabID
-    if (e != undefined) {tabID = e.target.id}
-    else {tabID = ui.tabs.activeID}
-    
- 
-    document.getElementById(ui.tabs.activeID).classList.remove('highlighted')
-    document.getElementById(tabID).classList.add('highlighted')
+    ui.tabs.activeTab = e.target
+    ui.windows.activeWindow = document.getElementById(e.target.id+'Window')
 
-
-    ui.tabs.activeID = tabID
-    var windowID = tabID
-
-
-    // Hide/ Show Options
-    if (tabID == 'ladder') {
-        document.getElementById('options').style.display = 'flex'
-        for (var i=0;i<ladderOptions.length;i++) {ladderOptions[i].style.display = 'flex'}
-        for (var i=0;i<tableOptions.length;i++) {tableOptions[i].style.display = 'none'}
-        document.getElementById('sort').style.display = 'none'
-        showWindow('ladderWindow')
-    }
-
-    if (tabID == 'table') {
-        document.getElementById('options').style.display = 'flex'
-        document.getElementById('lastDay').style.display = 'none'
-        for (var i=0;i<ladderOptions.length;i++) {ladderOptions[i].style.display = 'none'}
-        for (var i=0;i<tableOptions.length;i++) {tableOptions[i].style.display = 'flex'}
-                document.getElementById('sort').style.display = 'flex'
-        showWindow('tableWindow')
-    }
-
-    if (tabID == 'decks') {
-        document.getElementById('options').style.display = 'none'
-        showWindow('decksWindow')
-    }
-
-    if (tabID == 'info') {
-        document.getElementById('options').style.display = 'none'
-        showWindow('infoWindow')
-    }
-
-    renderOptions()
+    renderTabs()
+    renderWindows()
 }
 
 
-
-
-function showWindow(windowID) {
-    console.log(windowID)
+function toggleDropDown(e) {
     
-    if (ui.windows.activeID == windowID && ui.fullyLoaded) {console.log('window already shown'); return}
+    
+    var siblings = e.target.parentElement.childNodes
+    var dd_folder = siblings[3] // !!
 
-    document.getElementById(ui.windows.activeID).style.display = 'none'
-    document.getElementById(windowID).style.display = 'inline-block'
+    //for (s of siblings) { if (s.class = 'dropdown' || s.class == 'dropdown hidden') {dd_folder = s; break} }
+    
+    if (dd_folder == ui.options.openFolder) {ui.options.openFolder = null}
+    else if (ui.options.openFolder != null) {
+        ui.options.openFolder.classList.toggle('hidden');
+        ui.options.openFolder = dd_folder
+    }
 
-    ui.windows.activeID = windowID
+    dd_folder.classList.toggle('hidden')
 }
 
 
 
 
 
-function dropDownToggle(e) {
-    if (!ui.fullyLoaded) {return}
+function buttonTrigger(e) {
 
-    toggleShow(e.target.parentElement.id)
-
-    if (ui.options.activeBtn == null) {ui.options.activeBtn = e.target; return}
-
-    var parent_old = ui.options.activeBtn.parentElement
-    var parent_new = e.target.parentElement
-
-    if (parent_old == parent_new) {ui.options.activeBtn = null; return}
-    
-    toggleShow(parent_old.id)
-    ui.options.activeBtn = e.target
-}
-
-
-
-
-function toggleShow(ID) {
-    const el = document.querySelector(`#${ID} .dropdown`)
-    el.classList.toggle('hidden');
-}
-
-
-
-
-// Option Triggers Todo: simplify
-
-function optionSelection(e) {
-    
     const btnID = e.target.id
     
-    
-
-    if (ui.windows.activeID == 'ladderWindow') {
-  
+    if (ui.windows.activeWindow.id == 'ladderWindow') {
         if (btnID == 'classes')     {ui.ladder.dispMode = 'classes'}
         if (btnID == 'decks')       {ui.ladder.dispMode = 'decks'}
 
@@ -203,8 +161,7 @@ function optionSelection(e) {
         DATA_L[ui.ladder.f][ui.ladder.t].plot()
     }
 
-
-    if (ui.tabs.activeID == 'table') {
+     if (ui.windows.activeWindow.id == 'tableWindow') {
 
         if (btnID == 'class') {sortTableBy('class')}
         if (btnID == 'frequency') {sortTableBy('frequency')}
@@ -221,21 +178,21 @@ function optionSelection(e) {
         if (btnID == 'ranks_6_15') {changeTable(ui.table.f,ui.table.t,'ranks_6_15')}
         
     }
+
     renderOptions()
 }
 
 
 
 
-
 function renderOptions() {
-    console.log("renderoptions",ui.ladder.sortBy)
-    if (ui.windows.activeID == 'ladderWindow') { 
+
+    if (ui.windows.activeWindow.id == 'ladderWindow') { 
         document.getElementById("formatBtn").innerHTML =    btnIdToText[ui.ladder.f]
         document.getElementById("timeBtn").innerHTML =      btnIdToText[ui.ladder.t]
     }
 
-    if (ui.windows.activeID == 'tableWindow') { 
+    if (ui.windows.activeWindow.id == 'tableWindow') { 
         document.getElementById("formatBtn").innerHTML =    btnIdToText[ui.table.f]
         document.getElementById("timeBtn").innerHTML =      btnIdToText[ui.table.t]
         document.getElementById("ranksBtn").innerHTML =     btnIdToText[ui.table.r]

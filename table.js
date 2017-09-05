@@ -160,6 +160,7 @@ function makeTable(f,t,r) {
         },
         width: 790,
         height: 560,
+        //autosize: true,
 
         yaxis2: {
             visible: false,

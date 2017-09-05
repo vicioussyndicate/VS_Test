@@ -1,0 +1,91 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    meta(http-equiv='X-UA-Compatible', content='ie=edge')
+    script(src='https://www.gstatic.com/firebasejs/4.3.0/firebase.js')
+    script(src='https://cdn.plot.ly/plotly-latest.min.js')
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css')
+    link(rel='stylesheet', href='reset.css')
+    link(rel='stylesheet', href='styles_new.css')
+    title VS
+  body
+    .main-wrapper
+      #overlay(onclick='overlay()')
+      nav.navbar
+        .tabs
+          button#ladder.tab Ranks
+          button#power.tab Tiers
+          button#table.tab Matchups
+          button#timeline.tab Timeline
+          button#decks.tab Decks
+          button#info.tab info
+      //button#tooltips.optionBtn(onclick='overlay()') i
+        
+        
+      .content-wrapper
+        #loader
+        #ladderWindow.chart
+          .content-header
+            .classDeck-wrapper
+              button#classes.optionSelBtn.classDeckBtn Classes
+              button#decks.optionSelBtn.classDeckBtn.highlighted Decks
+            p.windowInfo Info
+            #options.options
+                #format.option
+                  button#formatBtn.optionBtn.option-toggle Standard
+                  .dropdown.hidden
+                    button#Standard.optionSelBtn Standard
+                    button#Wild.optionSelBtn Wild
+                #time.option
+                  button#timeBtn.optionBtn.option-toggle Last Month
+                  .dropdown.hidden
+                    button#lastDay.optionSelBtn Last Day
+                    button#lastWeek.optionSelBtn Last Week
+                    button#lastMonth.optionSelBtn Last Month
+                #sort.option
+                  button#sortBtn.optionBtn.option-toggle By Class
+                  .dropdown.hidden
+                    button#class.optionSelBtn By Class
+                    button#frequency.optionSelBtn By Frequency
+                    button#winrate.optionSelBtn By Win Rate
+                #ranks.option
+                  button#ranksBtn.optionBtn.option-toggle All Ranks
+                  .dropdown.hidden
+                    button#ranks_all.optionSelBtn All Ranks
+                    button#ranks_L_5.optionSelBtn Ranks L-5
+                    button#ranks_6_15.optionSelBtn Ranks 6-15
+                    .graphOptions
+                      button#bar.optionSelBtn.classDeckBtn Bar
+                      button#line.optionSelBtn.classDeckBtn Line
+                      button#number.optionSelBtn.classDeckBtn Numbers
+            .content
+              #chart1
+            .content-footer
+          #powerWindow.chart
+            div
+          #timelineWindow.chart
+            div
+          #tableWindow.chart
+            #chart2
+          #decksWindow.chart
+            div
+              button Druid
+              button Hunter
+              button Mage
+              button Paladin
+              button Priest
+              button Rogue
+              button Shaman
+              button Warlock
+              button Warrior
+          #infoWindow.chart
+            div
+              | VS Live is a Vicious Syndicate service that provides in depth information about the 
+    script(src='script.js')
+    script(src='ui.js')
+    script(src='data.js')
+    script(src='ladderClass.js')
+    script(src='table.js')
+

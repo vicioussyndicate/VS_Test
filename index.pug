@@ -1,0 +1,136 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    meta(http-equiv='X-UA-Compatible', content='ie=edge')
+    script(src='https://www.gstatic.com/firebasejs/4.3.0/firebase.js')
+    script(src='https://cdn.plot.ly/plotly-latest.min.js')
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css')
+    link(rel='stylesheet', href='reset.css')
+    link(rel='stylesheet', href='styles_new.css')
+    title VS
+  body
+    .main-wrapper
+      #overlay(onclick='overlay()')
+      nav.navbar
+        .tabs
+          button#ladder.tab Ranks
+          button#power.tab Tiers
+          button#table.tab Matchups
+          button#timeline.tab Timeline
+          button#decks.tab Decks
+          button#info.tab info
+        #options.options
+          #format.option
+            button#formatBtn.optionBtn.option-toggle Standard
+            .dropdown.hidden
+              button#Standard.optionSelBtn Standard
+              button#Wild.optionSelBtn Wild
+          #time.option
+            button#timeBtn.optionBtn.option-toggle Last Month
+            .dropdown.hidden
+              button#lastDay.optionSelBtn Last Day
+              button#lastWeek.optionSelBtn Last Week
+              button#lastMonth.optionSelBtn Last Month
+          #sort.option
+            button#sortBtn.optionBtn.option-toggle By Class
+            .dropdown.hidden
+              button#class.optionSelBtn By Class
+              button#frequency.optionSelBtn By Frequency
+              button#winrate.optionSelBtn By Win Rate
+          #ranks.option
+            button#ranksBtn.optionBtn.option-toggle All Ranks
+            .dropdown.hidden
+              button#ranks_all.optionSelBtn All Ranks
+              button#ranks_L_5.optionSelBtn Ranks L-5
+              button#ranks_6_15.optionSelBtn Ranks 6-15
+        button#tooltips.optionBtn(onclick='overlay()') i
+      .content-wrapper
+        #charts.content
+          #loader
+          #ladderWindow.chart
+            .content-header
+              .classDeck-wrapper
+                button#classes.optionSelBtn.classDeckBtn Classes
+                button#decks.optionSelBtn.classDeckBtn.highlighted Decks
+              p.windowInfo
+              .graphOptions
+                button#bar.optionSelBtn.classDeckBtn Bar
+                button#line.optionSelBtn.classDeckBtn Line
+                button#number.optionSelBtn.classDeckBtn Numbers
+            #chart1
+            .content-footer
+          #powerWindow.chart
+            div
+          #timelineWindow.chart
+          #tableWindow.chart
+            #chart2
+          #decksWindow.chart
+            #c5
+              button Druid
+              button Hunter
+              button Mage
+              button Paladin
+              button Priest
+              button Rogue
+              button Shaman
+              button Warlock
+              button Warrior
+          #infoWindow.chart
+            #chart4
+              | VS Live is a Vicious Syndicate service that provides in depth information about the current state of
+              br
+              |                 the Hearthstone ladder and meta. Use the [i] button to get a starter guide to the app.
+              br
+              br
+              |                 We are relying on game data provided by players of all ranks and skills. More data allows us to improve our accuracy
+              br
+              |                 and provides you with more in depth game analysis. Signing up on VS also unlocks additional app functionality such
+              br
+              |                 as more archetypes shown in the Table section or filtering by ranks. Signing up is easy and free.
+              br
+              br
+              |                 [Sign up here]
+              br
+              br
+              |                 [Already signed up? Login here]
+              br
+              br
+              |                 Vicious Syndicate has pioneered rigorous data collection procedures and data analytics in Hearthstone. Our
+              br
+              |                 weekly Data Reaper Report was launched in May 2016, and has been published on a consistent basis since then.
+              br
+              |                 Our goal is to engage the community by collaborating on both collecting game data as well as analyzing it,
+              br
+              |                 producing high-quality rigorous articles. Our content is meant for increasing the community’s collective 
+              br
+              |                 knowledge about Hearthstone.
+              br
+              br
+              |                 For more about how we collect and analyze data [check out our FAQ].
+              br
+              br
+              br
+              |                 This app is currently in Alpha and would appreciate your feedback.
+              br
+              br
+              |                 Implementation pending:
+              br
+              br
+              |                 - Decks tab
+              br
+              |                 - Overlay with starter guide
+              br
+              |                 - Display of how the graphs are currently sorted
+              br
+              |                 - Automatically sorting when changing Formats/ times
+              br
+              |                 - Interface clean up
+              br
+    script(src='script.js')
+    script(src='ui.js')
+    script(src='data.js')
+    script(src='ladderClass.js')
+    script(src='table.js')
+
