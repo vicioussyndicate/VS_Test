@@ -72,6 +72,7 @@ function setupUI() {
     ui.windows.activeWindow = document.querySelector('#ladderWindow')
 
     renderWindows()
+    renderTabs()
      
 
     for(let i=0;i<tabs.length;i++) {    
@@ -188,26 +189,34 @@ function buttonTrigger(e) {
         if (btnID == 'bar')         {ui.ladder.plotMode = 'bar'}
         if (btnID == 'line')        {ui.ladder.plotMode = 'line'}
         if (btnID == 'number')      {ui.ladder.plotMode = 'number'}
+        if (btnID == 'timeline')    {ui.ladder.plotMode = 'timeline'}
 
         DATA_L[ui.ladder.f][ui.ladder.t].plot()
     }
 
      if (ui.windows.activeWindow.id == 'tableWindow') {
 
-        if (btnID == 'class') {sortTableBy('class')}
-        if (btnID == 'frequency') {sortTableBy('frequency')}
-        if (btnID == 'winrate') {sortTableBy('winrate')}
+        // if (btnID == 'class') {sortTableBy('class')}
+        // if (btnID == 'frequency') {sortTableBy('frequency')}
+        // if (btnID == 'winrate') {sortTableBy('winrate')}
+        var data = DATA_T[ui.table.f][ui.table.t][ui.table.r]
 
-        if (btnID == 'lastWeek') {changeTable(ui.table.f,'lastWeek',ui.table.r)}
-        if (btnID == 'lastMonth') {changeTable(ui.table.f,'lastMonth',ui.table.r)}
 
-        if (btnID == 'Standard') {changeTable('Standard',ui.table.t,ui.table.r)}
-        if (btnID == 'Wild') {changeTable('Wild',ui.table.t,ui.table.r)}
+        if (btnID == 'class')       {data.sortTableBy('class'); return}
+        if (btnID == 'frequency')   {data.sortTableBy('frequency');return}
+        if (btnID == 'winrate')     {data.sortTableBy('winrate');return}
 
-        if (btnID == 'ranks_all') {changeTable(ui.table.f,ui.table.t,'ranks_all')}
-        if (btnID == 'ranks_L_5') {changeTable(ui.table.f,ui.table.t,'ranks_L_5')}
-        if (btnID == 'ranks_6_15') {changeTable(ui.table.f,ui.table.t,'ranks_6_15')}
+        if (btnID == 'lastWeek')    {ui.table.t = 'lastWeek'}
+        if (btnID == 'lastMonth')   {ui.table.t = 'lastMonth'}
+
+        if (btnID == 'Standard')    {ui.table.f = 'Standard'}
+        if (btnID == 'Wild')        {ui.table.f = 'Wild'}
+
+        if (btnID == 'ranks_all')   {ui.table.r = 'ranks_all'}
+        if (btnID == 'ranks_L_5')   {ui.table.r = 'ranks_L_5'}
+        if (btnID == 'ranks_6_15')  {ui.table.r = 'ranks_6_15'}
         
+        DATA_T[ui.table.f][ui.table.t][ui.table.r].plot()
     }
 
     renderOptions()
@@ -279,6 +288,7 @@ const btnIdToText = {
 
     classes: 'Classes',
     decks: 'Archetypes',
+    matchup: 'Matchup',
 }
 
 

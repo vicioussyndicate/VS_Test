@@ -2,9 +2,9 @@
 
 
 // Global Data
-var DATA_ladder = {}  // main data structs
 var DATA_table = {}
 var DATA_L = {}
+var DATA_T = {}
 
 var hsFormats =     ['Standard','Wild']
 var ladder_times =  ['lastDay','lastWeek','lastMonth']
@@ -21,24 +21,27 @@ function setupTableData (data) {
     
     for (f of hsFormats) {
         DATA_table[f] = {}
+        DATA_T[f] = {}
         for (t of table_times) {
             DATA_table[f][t] = {}
+            DATA_T[f][t] = {}
             for (r of table_ranks) {
                 var key = Object.keys(tableData[f][t][r])[0]
                 DATA_table[f][t][r] = {
                     imported: tableData[f][t][r][key],
                     table: null,
                     archetypes: null,
-                    archetypesLadder: null,
+                    //archetypesLadder: null,
                     winrates: null,
                     frequency: null,
-                    classPlusArch: null,
+                    //classPlusArch: null,
                     textTable: null,
                     layout: null,
                     freqPlotData: null,
                     sortBy: null,
                 }
-                makeTable(f,t,r)
+                DATA_T[f][t][r] = new Table(tableData[f][t][r][key],f,t,r)
+                //makeTable(f,t,r)
             }
         }
     }
@@ -49,7 +52,6 @@ function setupLadderData (data) {
     var ladderData = data.val()
     
     for (f of hsFormats) {
-        DATA_ladder[f] = {}
         DATA_L[f] = {}
         for (t of ladder_times) {
             var key = Object.keys(ladderData[f][t])[0]

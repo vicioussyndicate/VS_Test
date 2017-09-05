@@ -1,19 +1,7 @@
-/*
 
-
-INFO
-
-
-
-*/
 
 var t0 = performance.now();
 
-
-
-
-
-// LOAD
 
 window.onload = function() {
     
@@ -28,8 +16,9 @@ window.onload = function() {
 function finishedLoading() {
     
     DATA_L[ui.ladder.f][ui.ladder.t].plot()
-
-    sortTableBy('frequency')
+    DATA_T[ui.table.f][ui.table.t][ui.table.r].plot()
+    //sortTableBy('frequency')
+    
     renderOptions()
 
     ui.fullyLoaded = true

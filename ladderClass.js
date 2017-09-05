@@ -8,11 +8,21 @@ class Ladder {
     constructor (DATA,f,t) {
 
         this.maxLegendEntries = 9
-        this.maxLines = 10
+        this.maxLines = 10 // max archetypes shown for the line chart
+
+        this.backgroundColor = '#444'//"#555",
 
         this.DATA = DATA
         this.f = f
         this.t = t
+        this.days
+
+
+        switch (t) {
+            case 'lastDay': this.days = 24; break;
+            case 'lastWeek': this.days = 7; break;
+            case 'lastMonth': this.days = 30; break;
+        }
 
         this.zoomIn = false
         this.zoomIdx = null
@@ -28,6 +38,9 @@ class Ladder {
         this.traces_arch_line = []
         this.traces_class_line = []
         
+        this.traces_arch_time = []
+        this.traces_class_time = []
+
         this.archLegend = []
         this.classLegend = []
         this.totGames = 0
@@ -78,6 +91,11 @@ class Ladder {
             fr_avg /= hsRanks
             
 
+            //archtime
+            var archT = []
+            for (var j=0; j<this.days;j++) { archT.push(Math.random()) }
+
+
             var color = colorStringRange(hsColors[ARCHETYPES[i][0]],45)
 
             var arch_bar = {
@@ -106,8 +124,23 @@ class Ladder {
                 fr: fr_avg,
             }
 
+            var arch_time = {
+                x: range(0,this.days),
+                y: archT,
+                name: archName,
+                //text: 'name+x',
+                hoverinfo: 'name+x',
+                orientation: 'h',
+                marker: {color: color,},
+                type: 'scatter',
+                winrate: 0,
+                hsClass: ARCHETYPES[i][0]+ARCHETYPES[i][1],
+                fr: fr_avg,
+            }
+
             this.traces_arch_bar.push(arch_bar)
             this.traces_arch_line.push(arch_line)
+            this.traces_arch_time.push(arch_time)
             this.archLegend.push({name: archName, color: color, fr: fr_avg})
             this.a_data[archName] = archFR
             this.archetypes.push({name:archName,fr:fr_avg, data: archFR})
@@ -132,6 +165,11 @@ class Ladder {
             
             fr_avg /= hsRanks
             this.c_data[hsClass] = classFR.slice()
+
+             //classTime
+             var classT = []
+             for (var j=0; j<this.days;j++) { classT.push(Math.random()) }
+
 
             var class_bar = {
                 x: range(0,hsRanks),
@@ -158,24 +196,37 @@ class Ladder {
                 fr: fr_avg,
              }
 
+             var class_time = {
+                x: range(0,this.days),
+                y: classT,
+                name: hsClass,
+                hoverinfo: 'name+x',
+                orientation: 'h',
+                marker: {color: hsColors[hsClass],},
+                type: 'scatter',
+                winrate: 0,
+                hsClass: hsClass,
+                fr: fr_avg,
+            }
+
             this.traces_class_bar.push(class_bar)
             this.traces_class_line.push(class_line)
+            this.traces_class_time.push(class_time)
             this.classLegend.push({name:hsClass, color: hsColors[hsClass]})
         }// close for Classes
         
 
 
 
+
+
+        // LAYOUT BAR
         this.layout_bar = {
 		    barmode: 'stack',
 		    showlegend: false,
 		    displayModeBar: false,
-            //autosize: true,
-            //width: '50%',
-            //heigth: 100,
 		    hovermode: 'closest',
 		    xaxis: {
-                //title: 'Rank',
                 tickfont: {
 				    family: 'Arial, bold',
 				    size: 15,
@@ -195,6 +246,7 @@ class Ladder {
                 autorange: 'reversed',
             },
 		    yaxis: {
+                title: '[ % ]  of  Meta',
 			    showgrid: false,
 			    tickfont: {
 				    family: 'Arial, bold',
@@ -202,34 +254,31 @@ class Ladder {
 			    },
                 ticklen: 5,
                 tickcolor: 'transparent',
+                showticklabels: false,
                 fixedrange: true,
                 zeroline: false,
 			    color: '#999',
                 tickformat: ',.0%',
 		    },
             
-		    plot_bgcolor: "#555",
-            paper_bgcolor: "#555",
+		    plot_bgcolor: this.backgroundColor,
+            paper_bgcolor: this.backgroundColor,
             margin: {l:60,r:30,b:35,t:0,},
 	    }
 
 
 
-
-
-
-
-
+        // LAYOUT LINE
         this.layout_line = {
+            title: 'Class Frequency per Rank',
 		    showlegend: false,
 		    displayModeBar: false,
             autosize: true,
 		    hovermode: 'closest',
 		    xaxis: {
-                //title: 'Rank',
                 tickfont: {
 				    family: 'Arial, bold',
-				    size: 12,
+				    size: 15,
                     color: '#999',
 			    },
                 visible: true, 
@@ -256,8 +305,48 @@ class Ladder {
                 //zeroline: false,
 			    color: '#999',
 		    },
-		    plot_bgcolor: "#555",
-            paper_bgcolor: "#555",
+		    plot_bgcolor: this.backgroundColor, 
+            paper_bgcolor: this.backgroundColor,
+            margin: {l:70,r:20,b:30,t:0,},
+        }
+
+
+
+        // LAYOUT TIME
+        this.layout_time = {
+            title: 'Class Frequency over the last 14 days',
+		    showlegend: false,
+		    displayModeBar: false,
+            autosize: true,
+		    hovermode: 'closest',
+		    xaxis: {
+                tickfont: {
+				    family: 'Arial, bold',
+				    size: 15,
+                    color: '#999',
+                },
+                tickcolor: 'transparent',
+                visible: true, 
+                showgrid: true,
+                hoverformat: '.1%',
+                color: 'white',
+                fixedrange: true,
+                zeroline: false,
+                autorange: 'reversed',
+            },
+		    yaxis: {
+			    tickfont: {
+				    family: 'Arial, bold',
+				    size: 19,
+			    },
+                ticklen: 12,
+                tickcolor: 'transparent',
+                tickformat: ',.0%',
+                fixedrange: true,
+			    color: '#999',
+		    },
+		    plot_bgcolor: this.backgroundColor, 
+            paper_bgcolor: this.backgroundColor,
             margin: {l:70,r:20,b:30,t:0,},
         }
 
@@ -341,6 +430,12 @@ class Ladder {
         document.getElementById('chart1').innerHTML = ""
         var data, layout
 
+        if (ui.ladder.plotMode == 'timeline') {
+            layout = this.layout_time
+            if (ui.ladder.dispMode == 'decks') {data = this.traces_arch_time}
+            if (ui.ladder.dispMode == 'classes') {data = this.traces_class_time}
+        }
+
         if (ui.ladder.plotMode == 'number') {
             if (ui.ladder.dispMode == 'decks') {this.createTable('decks'); return}
             if (ui.ladder.dispMode == 'classes') {this.createTable('classes'); return}
@@ -360,8 +455,10 @@ class Ladder {
 
         Plotly.newPlot('chart1',data, layout, {displayModeBar: false,})
 
-        //var windowInfo = document.querySelectorAll('#ladderWindow .windowInfo')[0]    
-        //windowInfo.innerHTML = btnIdToText[this.f]+" - "+btnIdToText[this.t]+" <br/><span>("+this.totGames.toLocaleString()+" games)</span>"
+
+
+        var windowInfo = document.querySelector('#ladderWindow .nrGames')    
+        windowInfo.innerHTML = this.totGames.toLocaleString()+" games"
 
         if (ui.ladder.dispMode == 'decks') {this.createArchLegend()}
         if (ui.ladder.dispMode == 'classes') {this.createClassLegend()}
@@ -372,14 +469,11 @@ class Ladder {
     colorScale(x) {
         var c1 = [255,255,255]
         var c2 = [87, 125, 186]
+        var c3 = []
 
         x /= 0.15
 
-        var c3 = []
-        c3.push(c1[0]+(c2[0]-c1[0])*x)
-        c3.push(c1[1]+(c2[1]-c1[1])*x)
-        c3.push(c1[2]+(c2[2]-c1[2])*x)
-        
+        for (var i=0;i<3;i++) {c3.push((c1[i]+(c2[i]-c1[i])*x).toFixed(0))}
         return 'rgb('+c3[0]+','+c3[1]+','+c3[2]+')'
     }
 
@@ -405,19 +499,16 @@ class Ladder {
                 table += `</tr>`
             }
         } 
+
         else {
             for (var j=0; j<9; j++) {
                 var hsClass = hsClasses[j]
                 var data = this.c_data[hsClass]
                 table += `<tr><td class="pivot">${hsClass}</td>`
-                for (var i=hsRanks-1;i>-1;i--) {
-                    
-                    table += `<td style="background-color:${this.colorScale(data[i])};">${data[i].toFixed(2)}</td>`
-                }
+                for (var i=hsRanks-1;i>-1;i--) { table += `<td style="background-color:${this.colorScale(data[i])};">${data[i].toFixed(3)}</td>` }
                 table += `</tr>`
             }   
         }
-
         table += `</table>`
         document.getElementById('chart1').innerHTML = table
     }

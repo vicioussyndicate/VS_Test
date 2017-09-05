@@ -18,6 +18,7 @@ table
         white-space nowrap
         overflow hidden
         width 1rem
+        color #333
     th
         background-color #999
         font-weight bold
@@ -75,9 +76,6 @@ body
                 display flex
                 flex-direction column
                 height 450px
-                #chart1
-                    height 100%
-                    width 100%
             .content-footer
                 background-color #222
                 color #fff
@@ -104,9 +102,17 @@ body
                 justify-content space-between
                 font-family Tahoma
                 font-weight bold
+                .ftrOptions
+                    //font-size: 1.1em
                 .optionBar
                     display flex
                     flex-direction row
+                    margin-right: 1em
+                    .nrGames
+                        font-size: 0.8em
+                        color #888
+                        margin-left: 1em
+                        margin-top: 1em
                     .optionBtn
                         background #222
                         color #dbdbdb
@@ -129,6 +135,7 @@ body
                         .folder-toggle
                             background #fff
                             color #666
+                            font-weight: bold
                             border 0.1rem solid #fff
                             border-radius 5%
                             padding 0.4rem
@@ -148,6 +155,7 @@ body
                             button
                                 transition margin 0.1s ease
                                 background-color #444
+                                border: none
                                 margin: 0
                                 &:hover
                                     background #fff
@@ -189,5 +197,8 @@ body
     margin-top 200px
     z-index 2
 
-
+@keyframes spin {
+  	0%{ -webkit-transform: rotate(0deg); tranform: rotate(0deg);}
+	100%{ -webkit-transform: rotate(360deg); tranform: rotate(360deg);}
+}
     
