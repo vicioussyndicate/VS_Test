@@ -13,12 +13,14 @@ class Table {
         this.r = r
         this.sortBy = ''
         this.numArch = (f == 'Standard') ? 20 : 20;
+        this.backgroundColor = '#444'//"#555",
         this.table = []
         this.textTable = []
         this.frequency = []
         this.archetypes = []
         this.classPlusArch = [] // needed for Class Sort
         this.winrates = []
+        this.totGames = 0
         
         
         for (var i=0;i<this.numArch;i++) {
@@ -77,6 +79,7 @@ class Table {
                     
                 this.table[i][j] = wr
                 this.table[j][i] = 1-wr
+                this.totGames += totGames
                 this.textTable[i][j] =`${hero}<br><b>vs:</b> ${opp}<br><b>wr:</b>  ${(wr*100).toFixed(0)}%  (${totGames})`           
                 this.textTable[j][i] =`${opp}<br><b>vs:</b> ${hero}<br><b>wr:</b>  ${((1-wr)*100).toFixed(0)}%  (${totGames})` 
         
@@ -113,7 +116,7 @@ class Table {
                 fixedrange: true,
             },
             plot_bgcolor: "transparent",
-            paper_bgcolor: "#222",
+            paper_bgcolor: this.backgroundColor,
             margin: {l: 120, r: 30, b: 30, t: 100 },
             width: 790,
             height: 560,
@@ -209,6 +212,8 @@ class Table {
 
         if (ui.table.zoomIn) {this.zoomIn(f,t,r,ui.table.zoomArch)}
         document.getElementById('loader').style.display = 'none'
+        var windowInfo = document.querySelector('#tableWindow .nrGames')    
+        windowInfo.innerHTML = this.totGames.toLocaleString()+" games"
     }
 
 
