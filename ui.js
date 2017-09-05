@@ -88,26 +88,6 @@ function setupUI() {
 
 
 
-
-
-
-
-function renderTabs() {
-
-    for (tab of ui.tabs.buttons) {
-        if (tab != ui.tabs.activeTab) {tab.classList.remove('highlighted')}
-        else {tab.classList.add('highlighted')}
-    }
-}
-
-function renderWindows() {
-    for (tabWindow of ui.windows.list) {
-        if (tabWindow != ui.windows.activeWindow) {tabWindow.style.display = 'none'}
-        else {tabWindow.style.display = 'inline-block'}
-    }
-}
-
-
 function toggleMainTabs(e) {
 
     ui.tabs.activeTab = e.target
@@ -134,6 +114,57 @@ function toggleDropDown(e) {
 
     dd_folder.classList.toggle('hidden')
 }
+
+
+
+
+
+
+
+
+
+
+function renderTabs() {
+
+    for (tab of ui.tabs.buttons) {
+        if (tab != ui.tabs.activeTab) {tab.classList.remove('highlighted')}
+        else {tab.classList.add('highlighted')}
+    }
+}
+
+function renderWindows() {
+    for (tabWindow of ui.windows.list) {
+        if (tabWindow != ui.windows.activeWindow) {tabWindow.style.display = 'none'}
+        else {tabWindow.style.display = 'inline-block'}
+    }
+}
+
+
+function renderOptions() {
+
+    if (ui.windows.activeWindow.id == 'ladderWindow') { 
+        document.getElementById("formatBtn").innerHTML =    btnIdToText[ui.ladder.f]
+        document.getElementById("timeBtn").innerHTML =      btnIdToText[ui.ladder.t]
+        /*
+        if (ui.ladder.dispMode == 'classes') {
+            document.getElementById('classes').classList.add('highlighted')
+            document.getElementById('decks').classList.remove('highlighted')
+        }
+
+        if (ui.ladder.dispMode == 'decks') {
+            document.getElementById('decks').classList.add('highlighted')
+            document.getElementById('classes').classList.remove('highlighted')
+        }*/
+    }
+
+    if (ui.windows.activeWindow.id == 'tableWindow') { 
+        document.getElementById("formatBtn").innerHTML =    btnIdToText[ui.table.f]
+        document.getElementById("timeBtn").innerHTML =      btnIdToText[ui.table.t]
+        document.getElementById("ranksBtn").innerHTML =     btnIdToText[ui.table.r]
+        document.getElementById("sortBtn").innerHTML =      btnIdToText[ui.table.sortBy]
+    }
+}
+
 
 
 
@@ -185,20 +216,6 @@ function buttonTrigger(e) {
 
 
 
-function renderOptions() {
-
-    if (ui.windows.activeWindow.id == 'ladderWindow') { 
-        document.getElementById("formatBtn").innerHTML =    btnIdToText[ui.ladder.f]
-        document.getElementById("timeBtn").innerHTML =      btnIdToText[ui.ladder.t]
-    }
-
-    if (ui.windows.activeWindow.id == 'tableWindow') { 
-        document.getElementById("formatBtn").innerHTML =    btnIdToText[ui.table.f]
-        document.getElementById("timeBtn").innerHTML =      btnIdToText[ui.table.t]
-        document.getElementById("ranksBtn").innerHTML =     btnIdToText[ui.table.r]
-        document.getElementById("sortBtn").innerHTML =      btnIdToText[ui.table.sortBy]
-    }
-}
 
 
 

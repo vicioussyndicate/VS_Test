@@ -18,7 +18,7 @@ html(lang='en')
           button#ladder.tab Ranks
           button#power.tab Tiers
           button#table.tab Matchups
-          button#timeline.tab Timeline
+          //button#timeline.tab Timeline
           button#decks.tab Decks
           button#info.tab info
       //button#tooltips.optionBtn(onclick='overlay()') i
@@ -44,9 +44,10 @@ html(lang='en')
                   button#lastWeek.optionBtn.folderBtn Last Week
                   button#lastMonth.optionBtn.folderBtn Last Month
             .graphOptions.optionBar
-              button#bar.optionBtn Bar
-              button#line.optionBtn Line
-              button#number.optionBtn Numbers
+              button#bar.optionBtn.fa.fa-bar-chart
+              button#line.optionBtn.fa.fa-line-chart
+              button#number.optionBtn.fa.fa-percent
+              button#timeline.optionBtn.fa.fa-clock-o 
           .content
             #chart1
           .content-footer

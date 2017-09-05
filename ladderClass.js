@@ -20,7 +20,7 @@ class Ladder {
         this.archetypes = []
 
         this.a_data = {} // to display in the table
-        this.c_data = {}
+        this.c_data = {} // !! rename archetypes c_data
 
         this.traces_arch_bar = []
         this.traces_class_bar = []
@@ -170,43 +170,77 @@ class Ladder {
 		    barmode: 'stack',
 		    showlegend: false,
 		    displayModeBar: false,
-            autosize: true,
+            //autosize: true,
+            //width: '50%',
+            //heigth: 100,
 		    hovermode: 'closest',
 		    xaxis: {
+                //title: 'Rank',
+                tickfont: {
+				    family: 'Arial, bold',
+				    size: 15,
+                    color: 'white',
+			    },
                 visible: true, 
                 showgrid: false,
                 tickvals: range(0,hsRanks),
 			    ticktext: this.rankLabels,
+                ticklen: 5,
+                tickcolor: 'transparent',
                 hoverformat: '.1%',
-                color: 'transparent',
+                range: [21,-1],
+                color: 'white',
                 fixedrange: true,
+                zeroline: false,
+                autorange: 'reversed',
             },
 		    yaxis: {
 			    showgrid: false,
 			    tickfont: {
 				    family: 'Arial, bold',
-				    size: 19,
+				    size: 16,
 			    },
+                ticklen: 5,
+                tickcolor: 'transparent',
                 fixedrange: true,
-			    color: 'white',
+                zeroline: false,
+			    color: '#999',
+                tickformat: ',.0%',
 		    },
+            
 		    plot_bgcolor: "#555",
             paper_bgcolor: "#555",
-            margin: {l:35,r:0,b:15,t:0,},
+            margin: {l:60,r:30,b:35,t:0,},
 	    }
+
+
+
+
+
+
 
 
         this.layout_line = {
 		    showlegend: false,
 		    displayModeBar: false,
-            autosie: true,
+            autosize: true,
 		    hovermode: 'closest',
 		    xaxis: {
+                //title: 'Rank',
+                tickfont: {
+				    family: 'Arial, bold',
+				    size: 12,
+                    color: '#999',
+			    },
                 visible: true, 
                 showgrid: true,
+                tickvals: range(0,hsRanks),
+			    ticktext: this.rankLabels,
                 hoverformat: '.1%',
+                range: [21,-1],
                 color: 'white',
                 fixedrange: true,
+                zeroline: false,
                 autorange: 'reversed',
             },
 		    yaxis: {
@@ -214,12 +248,17 @@ class Ladder {
 				    family: 'Arial, bold',
 				    size: 19,
 			    },
+                ticklen: 12,
+                tickcolor: 'transparent',
+                tickformat: ',.0%',
                 fixedrange: true,
-			    color: 'white',
+
+                //zeroline: false,
+			    color: '#999',
 		    },
 		    plot_bgcolor: "#555",
             paper_bgcolor: "#555",
-            margin: {l:35,r:0,b:0,t:0,},
+            margin: {l:70,r:20,b:30,t:0,},
         }
 
 
@@ -423,9 +462,9 @@ class Ladder {
 
             var l = legend[i]
 
-            var legendDiv = document.createElement('div')   // parent
-            var colorSplash = document.createElement('div') // child 1
-            var archName = document.createElement('l')      // child 2
+            var legendDiv = document.createElement('div')   
+            var colorSplash = document.createElement('div')
+            var archName = document.createElement('l')     
 
             legendDiv.className = 'ladder-legend'
             legendDiv.style.fontSize = '0.8em'
