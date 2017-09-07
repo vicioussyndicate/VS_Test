@@ -79,7 +79,7 @@ body
 
                 .content
                     display grid
-                    grid-template-columns 8rem 10rem auto
+                    grid-template-columns 8rem auto 10rem
                     grid-auto-flow: column
                     grid-gap 1rem
                     padding 1rem
@@ -88,12 +88,15 @@ body
                         color white
                         button
                             display inline
+                            margin 0 auto
                         p
                             display inline
                             margin 0 auto
                     .deckList
+                        margin-top 0.5rem
                         height 22rem
                         overflow-y scroll
+                        overflow-x hidden
                     .explanation
                         color white
                     .copy
@@ -113,6 +116,8 @@ body
                     text-size 10
                     padding 2rem
                     background-color #555
+            #infoWindow
+                color white
             .content
                 background-color #222
                 display flex
@@ -148,7 +153,7 @@ body
                     display flex
                     flex-direction row
                     margin-right 1em
-                    .nrGames
+                    p
                         font-size 0.8em
                         color #888
                         margin-left 1em

@@ -10,7 +10,7 @@ var ui = {
     overlay: false,
 
     tabs: {
-        activeID: 'ladder',
+        activeTab: null,
         buttons: [],
     },
 

@@ -2,13 +2,13 @@
 
 
 
-class Decks {
+class DecksWindow {
 
     constructor (DATA) {
         this.archIndex = 0
         this.deckIndex = 0
         this.hsClass = 'Druid'
-
+        /*
 
         // out of DATA
         this.archetypes = {
@@ -44,7 +44,7 @@ class Decks {
         this.loadClass(this.hsClass)
         this.loadArchetype('Token Druid')
         
-        
+        */
     }// close constructor
 
     loadArchetype(hsClass, index) {
@@ -58,10 +58,19 @@ class Decks {
 } // close Decks
 
 
+
+
+
+
+
+
+
+
+
 function setupDecks () {
 
 
-    setDeckExplanation('Druid','Druid, for the most part, has settled into two major archetypes; Jade Druid, and Aggro-Token Druid. The class continues to dominate higher levels of play, with nearly 40% representation at legend and likely a higher number at the top legend ranks. Both Jade and Aggro-Token Druid have found what seems to be working for them fairly quickly, since both archetypes had a solid base to go off of from the last expansion.')
+    setDeckExplanation('Druid >> Token Druid','As one of, if not the only, deck with a favorable matchup against Jade Druid, Aggro-Token Druid has risen up in its play rate. Druid of the Swarm and Crypt Lord seem to be staples in the archetype, with many people opting to run Crazed Alchemists to turn the huge taunts into a burst of damage for a finishing blow. Crazed Alchemist also helps get through taunts with high health and low attack, and one shots Doomsayer, a fairly popular card in the current meta.')
 
     insertArchetype('Token Druid')
     insertArchetype('Jade Druid')
@@ -70,6 +79,7 @@ function setupDecks () {
     for (var i=0;i<30;i++) {
         insertCard('0:  Innervate  x1 '+i)
     }
+
 
 }
 

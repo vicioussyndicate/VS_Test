@@ -99,7 +99,7 @@ body .main-wrapper .content-wrapper #decksWindow .content-header .classOptions {
 
 body .main-wrapper .content-wrapper #decksWindow .content {
 	display: grid;
-	grid-template-columns: 8rem 10rem auto;
+	grid-template-columns: 8rem auto 10rem;
 	grid-auto-flow: column;
 	grid-gap: 1rem;
 	padding: 1rem;
@@ -124,6 +124,7 @@ body .main-wrapper .content-wrapper #decksWindow .content .deckList {
 	margin-top: 0.5rem;
 	height: 22rem;
 	overflow-y: scroll;
+	overflow-x: hidden;
 }
 
 body .main-wrapper .content-wrapper #decksWindow .content .explanation {
@@ -147,6 +148,10 @@ body .main-wrapper .content-wrapper #powerWindow #powerGrid {
 	text-size: 10;
 	padding: 2rem;
 	background-color: #555;
+}
+
+body .main-wrapper .content-wrapper #infoWindow {
+	color: #fff;
 }
 
 body .main-wrapper .content-wrapper .content {

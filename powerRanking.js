@@ -26,11 +26,14 @@ function createPowerRanking () {
         innerHtml += `<div style="background-color: grey; padding: 0.2rem;">${ranks[i]}</div>`
 
         for (var j=0;j<nrPower;j++) {
-            innerHtml += `<div style="background-color: ${randomColor()}; padding: 0.2rem;">Token Druid</div>`
+            var hsArch = "Token Druid"
+            innerHtml += `<button onclick="clickbutton('${hsArch}')" style="background-color: ${randomColor()}; padding: 0.2rem;">Token Druid</button>`
             innerHtml += `<div style="padding: 0.2rem;">${randint(45,60)}%</div>`
         }
     }
     el.innerHTML = innerHtml
 }
 
-
+function clickbutton (e) {
+    toggleMainTabs({target:document.querySelector('#decks.tab')})
+}
