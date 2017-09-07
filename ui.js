@@ -146,16 +146,16 @@ function renderOptions() {
     if (ui.windows.activeWindow.id == 'ladderWindow') { 
         document.getElementById("formatBtn").innerHTML =    btnIdToText[ui.ladder.f]
         document.getElementById("timeBtn").innerHTML =      btnIdToText[ui.ladder.t]
-        /*
+
         if (ui.ladder.dispMode == 'classes') {
-            document.getElementById('classes').classList.add('highlighted')
-            document.getElementById('decks').classList.remove('highlighted')
+            document.querySelector('#ladderWindow .optionBar #classes').classList.add('highlighted')
+            document.querySelector('#ladderWindow .optionBar #decks').classList.remove('highlighted')
         }
 
         if (ui.ladder.dispMode == 'decks') {
-            document.getElementById('decks').classList.add('highlighted')
-            document.getElementById('classes').classList.remove('highlighted')
-        }*/
+            document.querySelector('#ladderWindow .optionBar #classes').classList.remove('highlighted')
+            document.querySelector('#ladderWindow .optionBar #decks').classList.add('highlighted')
+        }
     }
 
     if (ui.windows.activeWindow.id == 'tableWindow') { 

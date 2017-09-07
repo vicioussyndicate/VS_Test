@@ -2,7 +2,7 @@
 
 function createPowerRanking () {
 
-    var nrPower = 6
+    var nrPower = 5
     var ranks = range(0,hsRanks)
     ranks[0] = 'L'
 
@@ -14,21 +14,21 @@ function createPowerRanking () {
     el.style.gridTemplateRows = 'auto'
 
 
-    var innerHtml = '<div style="background-color: grey; padding: 0.2rem;">Rank</div>'
+    var innerHtml = '<div class="header" >Rank</div>'
 
     //Header
     for (var i=0;i<nrPower;i++) {
-        innerHtml += `<div style="grid-column-end: span 2; background-color: grey; padding: 0.2rem;">Top ${i+1}</div>`
+        innerHtml += `<div class="header columnTitle">Top ${i+1}</div>`
     }
 
 
     for (var i=0;i<hsRanks;i++) {
-        innerHtml += `<div style="background-color: grey; padding: 0.2rem;">${ranks[i]}</div>`
+        innerHtml += `<div class="pivot" style="">${ranks[i]}</div>`
 
         for (var j=0;j<nrPower;j++) {
             var hsArch = "Token Druid"
-            innerHtml += `<button onclick="clickbutton('${hsArch}')" style="background-color: ${randomColor()}; padding: 0.2rem;">Token Druid</button>`
-            innerHtml += `<div style="padding: 0.2rem;">${randint(45,60)}%</div>`
+            innerHtml += `<button title='${hsArch}' onclick="clickbutton('${hsArch}')" style="background-color: ${randomColor()};" class="archBtn">Token Druid</button>`
+            innerHtml += `<div class="winrate">${randint(45,60)}%</div>`
         }
     }
     el.innerHTML = innerHtml

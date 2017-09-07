@@ -64,10 +64,16 @@
           <div class="content-footer"></div>
         </div>
         <div class="tabWindow" id="powerWindow">
+          <div class="content-header">
+            <div class="formatOptions optionBar">
+              <button class="optionBtn" id="Standard">Standard</button>
+              <button class="optionBtn" id="Wild">Wild</button>
+            </div>
+            <div class="expandOptions optionBar">
+              <button class="optionBtn" id="expand">Expand</button>
+            </div>
+          </div>
           <div id="powerGrid"></div>
-        </div>
-        <div class="tabWindow" id="timelineWindow">
-          <div></div>
         </div>
         <div class="tabWindow" id="tableWindow">
           <div class="content-header">
@@ -116,10 +122,17 @@
         </div>
         <div class="tabWindow" id="decksWindow">
           <div class="content-header">
+            <div class="ftrOptions optionBar">
+              <div class="option-folder">
+                <button class="folder-toggle" id="formatBtn">Standard</button>
+                <div class="dropdown hidden">
+                  <button class="optionBtn folderBtn" id="Standard">Standard</button>
+                  <button class="optionBtn folderBtn" id="Wild">Wild</button>
+                </div>
+              </div>
+            </div>
             <div class="classOptions optionBar">
-              <button class="optionBtn" id="druid">Druid 
-                <div class="fa fa-beer"></div>
-              </button>
+              <button class="optionBtn" id="druid">Druid </button>
               <button class="optionBtn" id="hunter">Hunter </button>
               <button class="optionBtn" id="mage">Mage</button>
               <button class="optionBtn" id="paladin">Paladin</button>
@@ -131,9 +144,13 @@
             </div>
           </div>
           <div class="content">
-            <div class="archetypes"></div>
+            <div class="archetypes">
+              <p class="title description">Description</p>
+              <p class="title">Archetypes</p>
+            </div>
             <div class="explanationBox">
               <div class="explanation"></div>
+              <div class="video"></div>
             </div>
             <div class="deckLists">
               <div class="deckCreators">
@@ -148,7 +165,7 @@
           </div>
         </div>
         <div class="tabWindow" id="infoWindow">
-          <div>VS Live is a Vicious Syndicate service that provides in depth information about the </div>
+          <p>VS Live is a Vicious Syndicate service that provides in depth information about the </p>
         </div>
       </div>
     </div>

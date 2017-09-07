@@ -69,12 +69,14 @@ class DecksWindow {
 
 function setupDecks () {
 
-
+    var description = document.querySelector('#decksWindow .content .description')
+    description.style.display = 'none'
     setDeckExplanation('Druid >> Token Druid','As one of, if not the only, deck with a favorable matchup against Jade Druid, Aggro-Token Druid has risen up in its play rate. Druid of the Swarm and Crypt Lord seem to be staples in the archetype, with many people opting to run Crazed Alchemists to turn the huge taunts into a burst of damage for a finishing blow. Crazed Alchemist also helps get through taunts with high health and low attack, and one shots Doomsayer, a fairly popular card in the current meta.')
 
     insertArchetype('Token Druid')
     insertArchetype('Jade Druid')
     insertArchetype('Ramp Druid')
+    
     
     for (var i=0;i<30;i++) {
         insertCard('0:  Innervate  x1 '+i)
@@ -85,12 +87,13 @@ function setupDecks () {
 
 
 
-
 function setDeckExplanation(title, text) {
 
-    var el = document.querySelector('#decksWindow .content .explanation') 
-    el.innerHTML = '<b>'+title+'</b><br><br>'+text
+    var explanation = document.querySelector('#decksWindow .content .explanation') 
+    explanation.innerHTML = '<p class="title">'+title+'</p><p class="text">'+text+'</p>'
 
+    //var video = document.querySelector('#decksWindow .content .video')
+    //video.innerHTML = `<object style="width:100%;height:100%; float: none; clear: both; margin: 2px auto;" data="https://www.youtube.com/embed/WTChO0cNQbI"></object>`
 }
 
 
@@ -106,6 +109,7 @@ function insertArchetype (text) {
     btn.innerHTML = text
     btn.style.padding = '0.2rem'
     btn.style.marginTop = '0.2rem'
+    btn.classList.add('archBtn')
     
 
     el.appendChild(btn)

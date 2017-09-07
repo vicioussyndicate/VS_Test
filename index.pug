@@ -53,10 +53,14 @@ html(lang='en')
             #chart1
           .content-footer
         #powerWindow.tabWindow
+          .content-header
+            .formatOptions.optionBar
+              button#Standard.optionBtn Standard
+              button#Wild.optionBtn Wild
+            .expandOptions.optionBar
+              button#expand.optionBtn Expand
           #powerGrid
             
-        #timelineWindow.tabWindow
-          div
         #tableWindow.tabWindow
           .content-header
             .ftrOptions.optionBar
@@ -91,9 +95,14 @@ html(lang='en')
             #chart2
         #decksWindow.tabWindow
           .content-header
+            .ftrOptions.optionBar
+              .option-folder
+                button#formatBtn.folder-toggle Standard
+                .dropdown.hidden
+                  button#Standard.optionBtn.folderBtn Standard
+                  button#Wild.optionBtn.folderBtn Wild
             .classOptions.optionBar
               button#druid.optionBtn Druid 
-                .fa.fa-beer
               button#hunter.optionBtn Hunter 
               button#mage.optionBtn Mage
               button#paladin.optionBtn Paladin
@@ -104,8 +113,11 @@ html(lang='en')
               button#warrior.optionBtn Warrior
           .content
             .archetypes
+              p.title.description Description
+              p.title Archetypes
             .explanationBox
               .explanation
+              .video
             .deckLists
               .deckCreators
                 button.left <
@@ -117,7 +129,7 @@ html(lang='en')
             
           
         #infoWindow.tabWindow
-          div VS Live is a Vicious Syndicate service that provides in depth information about the 
+          p VS Live is a Vicious Syndicate service that provides in depth information about the 
     script(src='script.js')
     script(src='ui.js')
     script(src='data.js')
@@ -125,3 +137,5 @@ html(lang='en')
     script(src='tableClass.js')
     script(src='powerRanking.js')
     script(src='decks.js')
+
+

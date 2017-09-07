@@ -511,6 +511,8 @@ class Ladder {
         }
         table += `</table>`
         document.getElementById('chart1').innerHTML = table
+
+        this.createNumbersFooter()
     }
 
 
@@ -569,7 +571,26 @@ class Ladder {
         }
     }
 
+    createNumbersFooter() {
+        var contentFooter_ladder = document.querySelector('#ladderWindow .content-footer')
+        while (contentFooter_ladder.firstChild) {contentFooter_ladder.removeChild(contentFooter_ladder.firstChild);}
 
+        var div = document.createElement('div')
+        var csvBtn = document.createElement('button')
+        var clipboardBtn = document.createElement('button')
+
+        clipboardBtn.innerHTML = "Copy to Clipboard <div class='fa fa-clipboard'></div>"
+        clipboardBtn.style = "background-color:#92fc64;color: black; padding:0.2rem;margin:0.2rem;font-size:0.8rem;text-align:center;"
+        csvBtn.innerHTML = "Download as csv <div class='fa fa-cloud-download'></div>"
+        csvBtn.style = "background-color:#57a1c1; padding:0.2rem;font-size:0.8rem;text-align:center;"
+
+        div.style = "font-size:2rem;"
+
+        div.appendChild(csvBtn)
+        div.appendChild(clipboardBtn)
+
+        contentFooter_ladder.appendChild(div)
+    }
 
 
     zoomToggle (data) {
