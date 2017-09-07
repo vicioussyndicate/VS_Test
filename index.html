@@ -63,8 +63,8 @@
           </div>
           <div class="content-footer"></div>
         </div>
-        <div class="window" id="powerWindow">
-          <div> </div>
+        <div class="tabWindow" id="powerWindow">
+          <div id="powerGrid"></div>
         </div>
         <div class="tabWindow" id="timelineWindow">
           <div></div>
@@ -113,16 +113,27 @@
           </div>
         </div>
         <div class="tabWindow" id="decksWindow">
-          <div>
-            <button>Druid</button>
-            <button>Hunter</button>
-            <button>Mage</button>
-            <button>Paladin</button>
-            <button>Priest</button>
-            <button>Rogue</button>
-            <button>Shaman</button>
-            <button>Warlock</button>
-            <button>Warrior</button>
+          <div class="content-header">
+            <div class="classOptions optionBar">
+              <button class="optionBtn" id="druid">Druid</button>
+              <button class="optionBtn" id="hunter">Hunter</button>
+              <button class="optionBtn" id="mage">Mage</button>
+              <button class="optionBtn" id="paladin">Paladin</button>
+              <button class="optionBtn" id="priest">Priest</button>
+              <button class="optionBtn" id="rogue">Rogue</button>
+              <button class="optionBtn" id="shaman">Shaman</button>
+              <button class="optionBtn" id="warlock">Warlock</button>
+              <button class="optionBtn" id="warrior">Warrior</button>
+            </div>
+          </div>
+          <div class="content">
+            <div class="archetypes"></div>
+            <div class="decks"></div>
+            <div class="deckImg"></div>
+            <div class="explanationBox">
+              <div class="explanation"></div>
+              <button class="copy">Copy To Clipboard</button>
+            </div>
           </div>
         </div>
         <div class="tabWindow" id="infoWindow">
@@ -135,6 +146,7 @@
     <script src="data.js"></script>
     <script src="ladderClass.js"></script>
     <script src="tableClass.js"></script>
-    <!--script(src='table.js')-->
+    <script src="powerRanking.js"></script>
+    <script src="decks.js"></script>
   </body>
 </html>

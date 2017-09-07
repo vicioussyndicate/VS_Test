@@ -4,9 +4,11 @@ var t0 = performance.now();
 
 
 window.onload = function() {
-    
+    createPowerRanking()
     setupUI()
-    setupFirebase() // 1. setup table, 2. setup ladder 
+    setupFirebase()
+    createPowerRanking()
+    setupDecks()
 }
 
 
@@ -17,7 +19,6 @@ function finishedLoading() {
     
     DATA_L[ui.ladder.f][ui.ladder.t].plot()
     DATA_T[ui.table.f][ui.table.t][ui.table.r].plot()
-    //sortTableBy('frequency')
     
     renderOptions()
 

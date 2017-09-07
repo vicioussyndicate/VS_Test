@@ -208,10 +208,12 @@ class Table {
         var data = [trace_Table,trace_FR,trace_WR]
 
         Plotly.newPlot('chart2',data,this.layout,{displayModeBar: false})
-        document.getElementById('chart2').on('plotly_click', this.zoomToggle)
+        document.getElementById('chart2').on('plotly_click', this.zoomToggle.bind(this))
 
-        if (ui.table.zoomIn) {this.zoomIn(f,t,r,ui.table.zoomArch)}
+
+        if (ui.table.zoomIn) {this.zoomIn()}
         document.getElementById('loader').style.display = 'none'
+
         var windowInfo = document.querySelector('#tableWindow .nrGames')    
         windowInfo.innerHTML = this.totGames.toLocaleString()+" games"
     }
@@ -219,8 +221,7 @@ class Table {
 
     subPlotFR() { Plotly.restyle('chart2',this.freqPlotData,1) }
 
-    subplotWR (idx) {
-        console.log('subplotWr',this)
+    subPlotWR (idx) {
         var wr
     
         if (idx == -1 || idx >= this.numArch) {wr = this.winrates}
@@ -247,20 +248,19 @@ class Table {
     }
 
     zoomToggle (data) {
-        var self = DATA_T[ui.table.f][ui.table.t][ui.table.r]
+        //var self = this //DATA_T[ui.table.f][ui.table.t][ui.table.r]
         var arch = data.points[0].y
-        if (ui.table.zoomIn == false) { self.zoomIn(arch) }
-        else { self.zoomOut()}
+        if (ui.table.zoomIn == false) { this.zoomIn(arch) }
+        else { this.zoomOut()}
     }
 
     
 
     zoomIn (arch) {
-        var self = DATA_T[ui.table.f][ui.table.t][ui.table.r]
-        var idx = self.archetypes.indexOf(arch)
+        var idx = this.archetypes.indexOf(arch)
     
-        if (arch == 'Overall')  {idx = self.numArch}
-        if (idx == -1)          {self.zoomOut(self.numArch); return}
+        if (arch == 'Overall')  {idx = this.numArch}
+        if (idx == -1)          {self.zoomOut(this.numArch); return}
     
         var layout = {
             yaxis: {range: [idx-0.5, idx+0.5],fixedrange:true,color:'white',tickcolor:'white'},
@@ -272,8 +272,8 @@ class Table {
         }
     
         Plotly.relayout('chart2',layout)
-        self.subPlotFR()
-        //self.subPlotWR(idx)
+        this.subPlotFR()
+        this.subPlotWR(idx)
     
         ui.table.zoomIn = true
         ui.table.zoomArch = arch
