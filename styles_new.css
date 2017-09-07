@@ -93,13 +93,37 @@ body .main-wrapper .content-wrapper {
 	background-color: #222;
 }
 
+body .main-wrapper .content-wrapper #decksWindow .content-header .classOptions {
+	justify-content: space-between;
+}
+
 body .main-wrapper .content-wrapper #decksWindow .content {
 	display: grid;
-	grid-template-columns: 10rem 10rem auto;
+	grid-template-columns: 8rem 10rem auto;
 	grid-auto-flow: column;
 	grid-gap: 1rem;
 	padding: 1rem;
 	background-color: #444;
+}
+
+body .main-wrapper .content-wrapper #decksWindow .content .deckCreators {
+	color: #fff;
+}
+
+body .main-wrapper .content-wrapper #decksWindow .content .deckCreators button {
+	display: inline;
+	margin: 0 auto;
+}
+
+body .main-wrapper .content-wrapper #decksWindow .content .deckCreators p {
+	display: inline;
+	margin: 0 auto;
+}
+
+body .main-wrapper .content-wrapper #decksWindow .content .deckList {
+	margin-top: 0.5rem;
+	height: 22rem;
+	overflow-y: scroll;
 }
 
 body .main-wrapper .content-wrapper #decksWindow .content .explanation {
@@ -109,7 +133,7 @@ body .main-wrapper .content-wrapper #decksWindow .content .explanation {
 body .main-wrapper .content-wrapper #decksWindow .content .copy {
 	color: #000;
 	background-color: #92fc64;
-	padding: 0.1rem;
+	padding: 0.2rem;
 	margin-top: 1rem;
 }
 
@@ -170,7 +194,7 @@ body .main-wrapper .content-wrapper .content-header .optionBar {
 	margin-right: 1em;
 }
 
-body .main-wrapper .content-wrapper .content-header .optionBar .nrGames {
+body .main-wrapper .content-wrapper .content-header .optionBar p {
 	font-size: 0.8em;
 	color: #888;
 	margin-left: 1em;

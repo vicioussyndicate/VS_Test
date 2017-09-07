@@ -98,12 +98,14 @@
               <p class="nrGames"></p>
             </div>
             <div class="graphOptions optionBar">
+              <p>Sort by </p>
               <div class="option-folder">
                 <button class="folder-toggle" id="sortBtn">Sort</button>
                 <div class="dropdown hidden">
                   <button class="optionBtn folderBtn" id="class">By Class</button>
                   <button class="optionBtn folderBtn" id="frequency">By Frequency</button>
-                  <button class="optionBtn folderBtn" id="winrate">By Win Rate</button>
+                  <button class="optionBtn folderBtn" id="winrate">By Winrate</button>
+                  <button class="optionBtn folderBtn" id="matchup">By Matchup</button>
                 </div>
               </div>
             </div>
@@ -115,8 +117,10 @@
         <div class="tabWindow" id="decksWindow">
           <div class="content-header">
             <div class="classOptions optionBar">
-              <button class="optionBtn" id="druid">Druid</button>
-              <button class="optionBtn" id="hunter">Hunter</button>
+              <button class="optionBtn" id="druid">Druid 
+                <div class="fa fa-beer"></div>
+              </button>
+              <button class="optionBtn" id="hunter">Hunter </button>
               <button class="optionBtn" id="mage">Mage</button>
               <button class="optionBtn" id="paladin">Paladin</button>
               <button class="optionBtn" id="priest">Priest</button>
@@ -128,11 +132,19 @@
           </div>
           <div class="content">
             <div class="archetypes"></div>
-            <div class="decks"></div>
-            <div class="deckImg"></div>
+            <div class="deckLists">
+              <div class="deckCreators">
+                <button class="left"><</button>
+                <p class="title">Zalae Jade</p>
+                <button class="right">></button>
+                <!--p.deckIndex <br> ...-->
+              </div>
+              <div class="deckList"></div>
+              <button class="copy">Copy To Clipboard</button>
+            </div>
             <div class="explanationBox">
               <div class="explanation"></div>
-              <button class="copy">Copy To Clipboard</button>
+              <!--button.copy Copy To Clipboard-->
             </div>
           </div>
         </div>

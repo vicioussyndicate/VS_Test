@@ -7,7 +7,7 @@ function createPowerRanking () {
     ranks[0] = 'L'
 
     var columnTemplate = '1fr '
-    for (var i=0;i<nrPower;i++) {columnTemplate += '3fr 1fr '}
+    for (var i=0;i<nrPower;i++) {columnTemplate += '4fr 1fr '}
 
     var el = document.getElementById('powerGrid')
     el.style.gridTemplateColumns = columnTemplate

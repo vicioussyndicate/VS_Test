@@ -196,15 +196,13 @@ function buttonTrigger(e) {
 
      if (ui.windows.activeWindow.id == 'tableWindow') {
 
-        // if (btnID == 'class') {sortTableBy('class')}
-        // if (btnID == 'frequency') {sortTableBy('frequency')}
-        // if (btnID == 'winrate') {sortTableBy('winrate')}
         var data = DATA_T[ui.table.f][ui.table.t][ui.table.r]
 
 
         if (btnID == 'class')       {data.sortTableBy('class'); return}
         if (btnID == 'frequency')   {data.sortTableBy('frequency');return}
         if (btnID == 'winrate')     {data.sortTableBy('winrate');return}
+        if (btnID == 'matchup')     {data.sortTableBy('matchup');return}
 
         if (btnID == 'lastWeek')    {ui.table.t = 'lastWeek'}
         if (btnID == 'lastMonth')   {ui.table.t = 'lastMonth'}

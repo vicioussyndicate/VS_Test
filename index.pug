@@ -79,19 +79,22 @@ html(lang='en')
                   button#ranks_6_15.optionBtn.folderBtn Ranks 6-15
               p.nrGames
             .graphOptions.optionBar
+              p Sort by 
               .option-folder
                 button#sortBtn.folder-toggle Sort
                 .dropdown.hidden
                   button#class.optionBtn.folderBtn By Class
                   button#frequency.optionBtn.folderBtn By Frequency
-                  button#winrate.optionBtn.folderBtn By Win Rate
+                  button#winrate.optionBtn.folderBtn By Winrate
+                  button#matchup.optionBtn.folderBtn By Matchup
           .content
             #chart2
         #decksWindow.tabWindow
           .content-header
             .classOptions.optionBar
-              button#druid.optionBtn Druid
-              button#hunter.optionBtn Hunter
+              button#druid.optionBtn Druid 
+                .fa.fa-beer
+              button#hunter.optionBtn Hunter 
               button#mage.optionBtn Mage
               button#paladin.optionBtn Paladin
               button#priest.optionBtn Priest
@@ -101,11 +104,17 @@ html(lang='en')
               button#warrior.optionBtn Warrior
           .content
             .archetypes
-            .decks
-            .deckImg
+            .deckLists
+              .deckCreators
+                button.left <
+                p.title Zalae Jade
+                button.right >
+                //p.deckIndex <br> ...
+              .deckList
+              button.copy Copy To Clipboard
             .explanationBox
               .explanation
-              button.copy Copy To Clipboard
+              //button.copy Copy To Clipboard
           
         #infoWindow.tabWindow
           div VS Live is a Vicious Syndicate service that provides in depth information about the 

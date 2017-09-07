@@ -73,19 +73,33 @@ body
             background-color #222;
             
             #decksWindow
+                .content-header
+                    .classOptions
+                        justify-content space-between
+
                 .content
                     display grid
-                    grid-template-columns 10rem 10rem auto
+                    grid-template-columns 8rem 10rem auto
                     grid-auto-flow: column
                     grid-gap 1rem
                     padding 1rem
                     background-color #444
+                    .deckCreators
+                        color white
+                        button
+                            display inline
+                        p
+                            display inline
+                            margin 0 auto
+                    .deckList
+                        height 22rem
+                        overflow-y scroll
                     .explanation
                         color white
                     .copy
                         color black
                         background-color #92fc64
-                        padding 0.1rem
+                        padding 0.2rem
                         margin-top 1rem
             #powerWindow
                 //max-height 560px not working!

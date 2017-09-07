@@ -14,6 +14,7 @@ class Table {
         this.sortBy = ''
         this.numArch = (f == 'Standard') ? 20 : 20;
         this.backgroundColor = '#444'//"#555",
+        this.subplotRatio = 0.6
         this.table = []
         this.textTable = []
         this.frequency = []
@@ -211,12 +212,14 @@ class Table {
         document.getElementById('chart2').on('plotly_click', this.zoomToggle.bind(this))
 
 
-        if (ui.table.zoomIn) {this.zoomIn()}
+        if (ui.table.zoomIn) {this.zoomIn(ui.table.zoomArch)}
         document.getElementById('loader').style.display = 'none'
 
         var windowInfo = document.querySelector('#tableWindow .nrGames')    
         windowInfo.innerHTML = this.totGames.toLocaleString()+" games"
     }
+
+
 
 
     subPlotFR() { Plotly.restyle('chart2',this.freqPlotData,1) }
@@ -260,12 +263,12 @@ class Table {
         var idx = this.archetypes.indexOf(arch)
     
         if (arch == 'Overall')  {idx = this.numArch}
-        if (idx == -1)          {self.zoomOut(this.numArch); return}
+        if (idx == -1)          {this.zoomOut(); return}
     
         var layout = {
             yaxis: {range: [idx-0.5, idx+0.5],fixedrange:true,color:'white',tickcolor:'white'},
             yaxis2: {
-                domain: [0, 0.5],
+                domain: [0, this.subplotRatio],
                 visible: false,
                 fixedrange: true,
             },
@@ -274,6 +277,11 @@ class Table {
         Plotly.relayout('chart2',layout)
         this.subPlotFR()
         this.subPlotWR(idx)
+
+        var OptMU = document.querySelector('#tableWindow #matchup')
+        var OptWR = document.querySelector('#tableWindow #winrate')
+        OptMU.style.display = 'inline-block'
+        OptWR.style.display = 'none'
     
         ui.table.zoomIn = true
         ui.table.zoomArch = arch
@@ -293,6 +301,11 @@ class Table {
         }
         Plotly.relayout('chart2',layout_zoomOut);
         Plotly.restyle('chart2',{visible:false},[1,2])
+
+        var OptMU = document.querySelector('#tableWindow #matchup')
+        var OptWR = document.querySelector('#tableWindow #winrate')
+        OptMU.style.display = 'none'
+        OptWR.style.display = 'inline-block'
             
         ui.table.zoomIn = false
     }
@@ -319,7 +332,6 @@ class Table {
         var sortByFR = function (a, b) { return self.frequency[a] > self.frequency[b] ? -1 : self.frequency[a] < self.frequency[b] ? 1 : 0; }
         var sortByClass = function (a, b) { return self.classPlusArch[a] < self.classPlusArch[b] ? -1 : self.classPlusArch[a] > self.classPlusArch[b] ? 1 : 0; }
 
-        console.log('sort error?',idxs,self)
         if (what == 'winrate') {idxs.sort(sortByWR)}
         if (what == 'matchup') {idxs.sort(sortByMU)}
         if (what == 'frequency') {idxs.sort(sortByFR)}
@@ -353,6 +365,8 @@ class Table {
             textTable.push(textTableRow)
         }
         
+        var el = document.querySelector('#tableWindow .content-header #sortBtn')
+        el.innerHTML = what
     
         this.table = table
         this.textTable = textTable
