@@ -13,7 +13,7 @@ class Table {
         this.r = r
         this.sortBy = ''
         this.numArch = (f == 'Standard') ? 20 : 20;
-        this.backgroundColor = '#444'//"#555",
+        this.backgroundColor = '#555'//"#555",
         this.subplotRatio = 0.6
         this.table = []
         this.textTable = []

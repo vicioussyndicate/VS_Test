@@ -10,7 +10,7 @@ class Ladder {
         this.maxLegendEntries = 9
         this.maxLines = 10 // max archetypes shown for the line chart
 
-        this.backgroundColor = '#444'//"#555",
+        this.backgroundColor = '#555'//"#555",
 
         this.DATA = DATA
         this.f = f
@@ -460,8 +460,8 @@ class Ladder {
         var windowInfo = document.querySelector('#ladderWindow .nrGames')    
         windowInfo.innerHTML = this.totGames.toLocaleString()+" games"
 
-        if (ui.ladder.dispMode == 'decks') {this.createArchLegend()}
-        if (ui.ladder.dispMode == 'classes') {this.createClassLegend()}
+        if (ui.ladder.dispMode == 'decks') {this.createLegend('decks')}
+        if (ui.ladder.dispMode == 'classes') {this.createLegend('classes')}
         document.getElementById('chart1').on('plotly_click', this.zoomToggle)
     }
 
@@ -472,6 +472,7 @@ class Ladder {
         var c3 = []
 
         x /= 0.15
+        if (x>1) {x = 1}
 
         for (var i=0;i<3;i++) {c3.push((c1[i]+(c2[i]-c1[i])*x).toFixed(0))}
         return 'rgb('+c3[0]+','+c3[1]+','+c3[2]+')'
@@ -495,7 +496,7 @@ class Ladder {
             for (var j=0; j<maxArch; j++) {
                 var arch = this.archetypes[j]
                 table += `<tr><td class="pivot">${arch.name}</td>`
-                for (var i=hsRanks-1;i>-1;i--) {table += `<td style="background-color:${this.colorScale(arch.data[i])};">${arch.data[i].toFixed(3)}</td>`}
+                for (var i=hsRanks-1;i>-1;i--) {table += `<td style="background-color:${this.colorScale(arch.data[i])};">${arch.data[i].toFixed(2)}</td>`}
                 table += `</tr>`
             }
         } 
@@ -505,7 +506,7 @@ class Ladder {
                 var hsClass = hsClasses[j]
                 var data = this.c_data[hsClass]
                 table += `<tr><td class="pivot">${hsClass}</td>`
-                for (var i=hsRanks-1;i>-1;i--) { table += `<td style="background-color:${this.colorScale(data[i])};">${data[i].toFixed(3)}</td>` }
+                for (var i=hsRanks-1;i>-1;i--) { table += `<td style="background-color:${this.colorScale(data[i])};">${data[i].toFixed(2)}</td>` }
                 table += `</tr>`
             }   
         }
@@ -516,44 +517,19 @@ class Ladder {
     }
 
 
-
-
-    createClassLegend() {
-        var contentFooter_ladder = document.querySelectorAll('#ladderWindow .content-footer')[0]
+    createLegend(mode) {
+        var contentFooter_ladder = document.querySelector('#ladderWindow .content-footer')
         while (contentFooter_ladder.firstChild) {contentFooter_ladder.removeChild(contentFooter_ladder.firstChild);}
-
-        for (var i=0;i<9;i++) {
-            
-            var hsClass = hsClasses[i]
-
-            var legendDiv = document.createElement('div')   
-            var colorSplash = document.createElement('div') 
-            var archName = document.createElement('l')     
-
-            legendDiv.className = 'ladder-legend'
-            legendDiv.style.fontSize = '0.8em'
-            colorSplash.style = 'background-color:'+hsColors[hsClass]+';height:15px;width:30px;margin:0 auto 0.7em auto;'
-            archName.innerHTML = hsClass
-
-            legendDiv.appendChild(colorSplash)
-            legendDiv.appendChild(archName)
-
-            contentFooter_ladder.appendChild(legendDiv)        
-        }
-    }
-
-    createArchLegend() {
-
-        var contentFooter_ladder = document.querySelectorAll('#ladderWindow .content-footer')[0]
-        while (contentFooter_ladder.firstChild) {contentFooter_ladder.removeChild(contentFooter_ladder.firstChild);}
-
-        var maxElements = this.maxLegendEntries
+        
+        var maxElements
         var legend = this.archLegend
-        if (maxElements > legend.length) {maxElements = legend.length}
+        if (mode=='classes') {maxElements = 9}
+        if (mode=='decks') {
+            maxElements = this.maxLegendEntries;
+            if (maxElements > legend.length) {maxElements = legend.length}
+        }
 
         for (var i=0;i<maxElements;i++) {
-
-            var l = legend[i]
 
             var legendDiv = document.createElement('div')   
             var colorSplash = document.createElement('div')
@@ -561,15 +537,35 @@ class Ladder {
 
             legendDiv.className = 'ladder-legend'
             legendDiv.style.fontSize = '0.8em'
-            colorSplash.style = 'background-color:'+l.color+';height:15px;width:30px;margin:0 auto 0.7em auto;'
-            archName.innerHTML = l.name
+        
+            if (mode=='classes') {
+
+                var hsClass = hsClasses[i]
+                colorSplash.style = 'background-color:'+hsColors[hsClass]+';height:15px;width:30px;margin:0 auto 0.7em auto;'
+                archName.innerHTML = hsClass
+                legendDiv.id = hsClass
+                legendDiv.onclick = function(e) { toggleMainTabs({target:document.querySelector('#decks.tab')}); console.log(e) }
+            }
+
+            if (mode=='decks') {
+
+                var l = legend[i]
+                colorSplash.style = 'background-color:'+l.color+';height:15px;width:30px;margin:0 auto 0.7em auto;'
+                archName.innerHTML = l.name
+                legendDiv.id = l.name
+                legendDiv.onclick = function(e) { toggleMainTabs({target:document.querySelector('#decks.tab')}); console.log(e) }
+            }
 
             legendDiv.appendChild(colorSplash)
             legendDiv.appendChild(archName)
+            
 
-            contentFooter_ladder.appendChild(legendDiv)        
+            contentFooter_ladder.appendChild(legendDiv)
+
         }
     }
+
+
 
     createNumbersFooter() {
         var contentFooter_ladder = document.querySelector('#ladderWindow .content-footer')

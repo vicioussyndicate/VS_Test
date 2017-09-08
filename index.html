@@ -52,10 +52,10 @@
               <p class="nrGames"></p>
             </div>
             <div class="graphOptions optionBar">
-              <button class="optionBtn fa fa-bar-chart" id="bar"></button>
-              <button class="optionBtn fa fa-line-chart" id="line"></button>
-              <button class="optionBtn fa fa-percent" id="number"></button>
-              <button class="optionBtn fa fa-clock-o" id="timeline"> </button>
+              <button class="optionBtn fa fa-bar-chart tooltip" id="bar"><span class="tooltipText">Show Bar Chart</span></button>
+              <button class="optionBtn fa fa-line-chart tooltip" id="line"><span class="tooltipText">Show Line Chart</span></button>
+              <button class="optionBtn fa fa-percent tooltip" id="number"><span class="tooltipText">Show Numbers</span></button>
+              <button class="optionBtn fa fa-clock-o tooltip" id="timeline"><span class="tooltipText">Show Timeline</span></button>
             </div>
           </div>
           <div class="content">
@@ -132,15 +132,20 @@
               </div>
             </div>
             <div class="classOptions optionBar">
-              <button class="optionBtn" id="druid">Druid </button>
-              <button class="optionBtn" id="hunter">Hunter </button>
-              <button class="optionBtn" id="mage">Mage</button>
-              <button class="optionBtn" id="paladin">Paladin</button>
-              <button class="optionBtn" id="priest">Priest</button>
-              <button class="optionBtn" id="rogue">Rogue</button>
-              <button class="optionBtn" id="shaman">Shaman</button>
-              <button class="optionBtn" id="warlock">Warlock</button>
-              <button class="optionBtn" id="warrior">Warrior</button>
+              <div class="option-folder">
+                <button class="folder-toggle" id="classBtn">Druid</button>
+                <div class="dropdown hidden">
+                  <button class="optionBtn folderBtn" id="druid">Druid </button>
+                  <button class="optionBtn folderBtn" id="hunter">Hunter </button>
+                  <button class="optionBtn folderBtn" id="mage">Mage</button>
+                  <button class="optionBtn folderBtn" id="paladin">Paladin</button>
+                  <button class="optionBtn folderBtn" id="priest">Priest</button>
+                  <button class="optionBtn folderBtn" id="rogue">Rogue</button>
+                  <button class="optionBtn folderBtn" id="shaman">Shaman</button>
+                  <button class="optionBtn folderBtn" id="warlock">Warlock</button>
+                  <button class="optionBtn folderBtn" id="warrior">Warrior</button>
+                </div>
+              </div>
             </div>
           </div>
           <div class="content">
@@ -154,10 +159,14 @@
             </div>
             <div class="deckLists">
               <div class="deckCreators">
-                <button class="left"><</button>
-                <p class="title">Zalae Jade</p>
-                <button class="right">></button>
-                <!--p.deckIndex <br> ...-->
+                <div class="option-folder">
+                  <button class="folder-toggle" id="deckBtn">Zalae Jade Druid</button>
+                  <div class="dropdown hidden">
+                    <button class="optionBtn folderBtn" id="zalae">Zalae Jade Druid</button>
+                    <button class="optionBtn folderBtn" id="vs">Vicious DL</button>
+                    <button class="optionBtn folderBtn" id="toast">Disguised Toast DL</button>
+                  </div>
+                </div>
               </div>
               <div class="deckList"></div>
               <button class="copy">Copy To Clipboard</button>
@@ -165,7 +174,7 @@
           </div>
         </div>
         <div class="tabWindow" id="infoWindow">
-          <p>The VS Live Web App is currently in Alpha.<br><br>The app is currently not updated with live data. Many of the feature implementations are placeholder.<br><br>Please leave a feedback (suggestions, bugs, comments etc.) in the reddit thread linked below:</p><a href="https://www.reddit.com/r/ViciousSyndicate/comments/6yqj62/vs_live_web_app_feedback_thread/"><img src="redditLogo.png"></a>
+          <p>The VS Live Web App is currently in Alpha.<br><br>The app is currently not updated with live data. Many of the feature implementations are placeholder.<br><br>Please leave a feedback (suggestions, bugs, comments etc.) in the reddit thread linked below:</p><a href="https://www.reddit.com/r/ViciousSyndicate/comments/6yqj62/vs_live_web_app_feedback_thread/" target="_blank"><img src="redditLogo.png"></a>
         </div>
       </div>
     </div>

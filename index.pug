@@ -45,10 +45,14 @@ html(lang='en')
                   button#lastMonth.optionBtn.folderBtn Last Month
               p.nrGames
             .graphOptions.optionBar
-              button#bar.optionBtn.fa.fa-bar-chart
-              button#line.optionBtn.fa.fa-line-chart
-              button#number.optionBtn.fa.fa-percent
-              button#timeline.optionBtn.fa.fa-clock-o 
+              button#bar.optionBtn.fa.fa-bar-chart.tooltip
+                span.tooltipText Show Bar Chart
+              button#line.optionBtn.fa.fa-line-chart.tooltip
+                  span.tooltipText Show Line Chart
+              button#number.optionBtn.fa.fa-percent.tooltip
+                  span.tooltipText Show Numbers
+              button#timeline.optionBtn.fa.fa-clock-o.tooltip
+                  span.tooltipText Show Timeline
           .content
             #chart1
           .content-footer
@@ -102,15 +106,18 @@ html(lang='en')
                   button#Standard.optionBtn.folderBtn Standard
                   button#Wild.optionBtn.folderBtn Wild
             .classOptions.optionBar
-              button#druid.optionBtn Druid 
-              button#hunter.optionBtn Hunter 
-              button#mage.optionBtn Mage
-              button#paladin.optionBtn Paladin
-              button#priest.optionBtn Priest
-              button#rogue.optionBtn Rogue
-              button#shaman.optionBtn Shaman
-              button#warlock.optionBtn Warlock
-              button#warrior.optionBtn Warrior
+              .option-folder
+                button#classBtn.folder-toggle Druid
+                .dropdown.hidden
+                  button#druid.optionBtn.folderBtn Druid 
+                  button#hunter.optionBtn.folderBtn Hunter 
+                  button#mage.optionBtn.folderBtn Mage
+                  button#paladin.optionBtn.folderBtn Paladin
+                  button#priest.optionBtn.folderBtn Priest
+                  button#rogue.optionBtn.folderBtn Rogue
+                  button#shaman.optionBtn.folderBtn Shaman
+                  button#warlock.optionBtn.folderBtn Warlock
+                  button#warrior.optionBtn.folderBtn Warrior
           .content
             .archetypes
               p.title.description Description
@@ -120,10 +127,13 @@ html(lang='en')
               .video
             .deckLists
               .deckCreators
-                button.left <
-                p.title Zalae Jade
-                button.right >
-                //p.deckIndex <br> ...
+                .option-folder
+                  button#deckBtn.folder-toggle Zalae Jade Druid
+                  .dropdown.hidden
+                    button#zalae.optionBtn.folderBtn Zalae Jade Druid
+                    button#vs.optionBtn.folderBtn Vicious DL
+                    button#toast.optionBtn.folderBtn Disguised Toast DL
+                
               .deckList
               button.copy Copy To Clipboard
             
@@ -131,7 +141,7 @@ html(lang='en')
         #infoWindow.tabWindow
           p The VS Live Web App is currently in Alpha.<br><br>The app is currently not updated with live data. Many of the feature implementations are placeholder.<br><br>Please leave a feedback (suggestions, bugs, comments etc.) in the reddit thread linked below:
           
-          a(href="https://www.reddit.com/r/ViciousSyndicate/comments/6yqj62/vs_live_web_app_feedback_thread/")
+          a(href="https://www.reddit.com/r/ViciousSyndicate/comments/6yqj62/vs_live_web_app_feedback_thread/" target="_blank")
             img(src='redditLogo.png')
     script(src='script.js')
     script(src='ui.js')
