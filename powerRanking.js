@@ -10,20 +10,50 @@ class PowerWindow {
         this.top = 5
         this.grid = document.querySelector('#powerGrid')
 
-        this.data = [] // [rank0=[{name: druid, wr: x, fr: x}]]
-        for (var rank=0; rank<hsRanks;rank++) {this.data.push([])}
+        this.data = {Standard:[], Wild:[]} // [rank0=[{name: druid, wr: x, fr: x}]]
+        for (var rank=0; rank<hsRanks;rank++) {this.data['Standard'].push([])}
+        for (var rank=0; rank<hsRanks;rank++) {this.data['Wild'].push([])}
 
-        var ladder_std = DATA_L['Standard'][this.t_ladder].archetypes
-        var ladder_wild = DATA_L['Wild'][this.t_table].archetypes
-        var table_std = DATA_T['Standard'][this.t_table]['ranks_all']
-        var table_wild = DATA_T['Wild'][this.t_table]['ranks_all']
+        this.tierData = {}
+        this.tiers = [
+            {name:'All Ranks',
+            start:0,
+            end: 15},
+            {name:'L',
+            start: 0,
+            end: 0},
+            {name:'1-5',
+            start: 1,
+            end: 5},
+            {name:'6-15',
+            start: 6,
+            end: 15},
+        ]
+        this.maxTierElements = 20
+        for (var f of ['Standard','Wild']) {
+            this.tierData[f] = {}
+            for (var tier of this.tiers) {
+                this.tierData[f][tier.name] = []
+            }
+        }
+
+        this.addData('Standard')
+        this.addData('Wild')
+        //this.plotTop('Standard')
+        this.plotTiers('Standard')
+        
+    }// close constructor
 
 
+    addData (f) {
 
+        var ladder = DATA_L[f][this.t_ladder].archetypes
+        var table = DATA_T[f][this.t_table]['ranks_all']
+        
 
-        for (var arch of ladder_std) {
+        for (var arch of ladder) {
 
-            var idx = table_std.archetypes.indexOf(arch.name)
+            var idx = table.archetypes.indexOf(arch.name)
             if (idx == -1) {continue}
 
             for (var rank=0; rank<hsRanks;rank++) {
@@ -31,14 +61,13 @@ class PowerWindow {
                 var totFreq = 0
                 var totWr = 0
 
-                for (var opp of ladder_std) {
+                for (var opp of ladder) {
 
-                    var idxOpp = table_std.archetypes.indexOf(opp.name)
+                    var idxOpp = table.archetypes.indexOf(opp.name)
                     if (idxOpp == -1) {continue}
 
                     var freqOpp = opp.data[rank]
-                    var mu = table_std.table[idx][idxOpp]
-
+                    var mu = table.table[idx][idxOpp]
                     totFreq += freqOpp
                     totWr += freqOpp * mu                
                 }
@@ -46,20 +75,39 @@ class PowerWindow {
                 if (totFreq != 0) {totWr /= totFreq}
                 else {totWr = 0}
 
-                this.data[rank].push({name:arch.name, wr:totWr, fr:arch.data[rank], color: arch.color})
+                this.data[f][rank].push({name:arch.name, wr:totWr, fr:arch.data[rank], color: arch.color})
+
+                for (var tier of this.tiers) {
+                    var data = this.tierData[f][tier.name]
+                    if (rank == tier.start) {data.push({name:arch.name, wr:totWr, fr:arch.data[rank], color: arch.color})}
+                    if (rank > tier.start && rank <= tier.end) { data[data.length-1].wr += totWr }
+                    if (rank == tier.end) { data[data.length-1].wr /= (tier.end - tier.start +1) }
+                }
+
+
             } // close for ranks
         } // close for arch
 
 
         var sortByWr = function (a,b) { return a.wr > b.wr ? -1 : a.wr < b.wr ? 1 : 0; }
-        for (var rank=0;rank<hsRanks;rank++) { this.data[rank].sort(sortByWr) }
+        for (var rank=0;rank<hsRanks;rank++) { this.data[f][rank].sort(sortByWr) }
+        for (var tier of this.tiers) { this.tierData[f][tier.name].sort(sortByWr) }
+    } // close add Data
 
 
+    plot() {
 
+        var f = ui.power.f
+        var mode = ui.power.dispMode
 
+        if (mode == 'top') {this.plotTop(f)}
+        if (mode == 'tiers') {this.plotTiers(f)}
+    }
 
+    plotTop (f) {
 
-
+        while (this.grid.firstChild) {this.grid.removeChild(this.grid.firstChild);}
+        
         var ranks = range(0,hsRanks)
         ranks[0] = 'L'
     
@@ -68,6 +116,7 @@ class PowerWindow {
 
         this.grid.style.gridTemplateColumns = columnTemplate
         this.grid.style.gridTemplateRows = 'auto'
+        this.grid.style.gridGap = '0.1rem'
 
 
         var div = document.createElement('div')
@@ -94,9 +143,9 @@ class PowerWindow {
 
 
             for (var j=0;j<this.top;j++) {
-                var archName = this.data[i][j].name
-                var wr = (100*this.data[i][j].wr).toFixed(1)+ '%'
-                var color = this.data[i][j].color
+                var archName = this.data[f][i][j].name
+                var wr = (100*this.data[f][i][j].wr).toFixed(1)+ '%'
+                var color = this.data[f][i][j].color
 
                 var div = document.createElement('div')
                 var btn = document.createElement('button')
@@ -115,27 +164,76 @@ class PowerWindow {
             }
         }
         //this.grid.innerHTML = gridHTML
+    }// close plotTop
 
-    }// close Constructor
+
+
+
+
+
+    plotTiers (f) {
+    
+        while (this.grid.firstChild) {this.grid.removeChild(this.grid.firstChild);}
+        
+        var ranks = range(0,hsRanks)
+        ranks[0] = 'L'
+    
+        var columnTemplate = ''
+        for (var i=0;i<this.tiers.length;i++) {columnTemplate += '4fr 1fr '}
+
+        this.grid.style.gridTemplateColumns = columnTemplate
+        this.grid.style.gridTemplateRows = 'auto'
+        this.grid.style.gridGap = '0.3rem'
+
+        //Header
+        for (var tier of this.tiers) { 
+            var div = document.createElement('div')
+            div.className = 'header columnTitle'
+            div.innerHTML = tier.name
+            this.grid.appendChild(div)
+        }
+
+
+        for (var i=0;i<this.maxTierElements;i++) {
+
+            for (var tier of this.tiers) {
+                
+                var arch = this.tierData[f][tier.name][i]
+                if (arch == undefined) {
+                    this.grid.appendChild(document.createElement('div'))
+                    this.grid.appendChild(document.createElement('div'))
+                    continue
+                }
+
+                var wr = (100*arch.wr).toFixed(1)+ '%'
+                var color = arch.color
+
+                var div = document.createElement('div')
+                var btn = document.createElement('button')
+
+                btn.className = 'archBtn'
+                btn.id = arch.name
+                btn.style.backgroundColor = color
+                btn.style.marginLeft = '0.5rem'
+                btn.innerHTML = arch.name
+                btn.onclick = this.pressButton.bind(this)
+
+                div.className = 'winrate'
+                div.innerHTML = wr
+
+                this.grid.appendChild(btn)
+                this.grid.appendChild(div)
+            }
+        }
+        //this.grid.innerHTML = gridHTML
+    } // close plot Tiers
+
+
 
     pressButton(e) {
         console.log('pressed button',e)
+        toggleMainTabs({target:document.querySelector('#decks.tab')})
     }
-
-
-    plotTop() {
-
-    }
-
-    plotTiers() {
-
-    }
-
 
 } // close PowerRanking class
 
-
-
-function clickbutton (e) {
-    toggleMainTabs({target:document.querySelector('#decks.tab')})
-}

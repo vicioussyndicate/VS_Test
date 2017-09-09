@@ -43,7 +43,13 @@ var ui = {
         zoomIn: false,
         zoomArch: '',
         sortBy: 'frequency',
+    },
+
+    power: {
+        f: 'Standard',
+        dispMode: 'tiers' // tiers or top
     }
+
 }
 
 
@@ -194,7 +200,7 @@ function buttonTrigger(e) {
         DATA_L[ui.ladder.f][ui.ladder.t].plot()
     }
 
-     if (ui.windows.activeWindow.id == 'tableWindow') {
+    if (ui.windows.activeWindow.id == 'tableWindow') {
 
         var data = DATA_T[ui.table.f][ui.table.t][ui.table.r]
 
@@ -215,6 +221,17 @@ function buttonTrigger(e) {
         if (btnID == 'ranks_6_15')  {ui.table.r = 'ranks_6_15'}
         
         DATA_T[ui.table.f][ui.table.t][ui.table.r].plot()
+    }
+
+    if (ui.windows.activeWindow.id == 'powerWindow') {
+
+        if (btnID == 'Standard')    {ui.power.f = 'Standard'}
+        if (btnID == 'Wild')        {ui.power.f = 'Wild'}
+
+        if (btnID == 'top')         {ui.power.dispMode = 'top'}
+        if (btnID == 'tiers')       {ui.power.dispMode = 'tiers'}
+        
+        powerWindow.plot()
     }
 
     renderOptions()
