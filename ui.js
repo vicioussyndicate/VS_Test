@@ -90,6 +90,16 @@ function setupUI() {
     for (let i=0;i<optionButtons.length;i++) { 
         optionButtons[i].addEventListener("click", buttonTrigger)}
 
+
+    new Clipboard('.copyDL', {
+        text: function(trigger) {
+            return dragonPriest 
+        }
+    });
+
+
+        
+
 }
 
 

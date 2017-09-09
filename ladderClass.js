@@ -575,6 +575,7 @@ class Ladder {
 
         clipboardBtn.innerHTML = "Copy to Clipboard <div class='fa fa-clipboard'></div>"
         clipboardBtn.style = "background-color:#92fc64;color: black; padding:0.2rem;margin:0.2rem;font-size:0.8rem;text-align:center;"
+        clipboardBtn.className = 'copyNumbers'
         csvBtn.innerHTML = "Download as csv <div class='fa fa-cloud-download'></div>"
         csvBtn.style = "background-color:#57a1c1; padding:0.2rem;font-size:0.8rem;text-align:center;"
 
@@ -584,6 +585,12 @@ class Ladder {
         div.appendChild(clipboardBtn)
 
         contentFooter_ladder.appendChild(div)
+
+        new Clipboard('.copyNumbers', {
+            text: function(trigger) {
+                return 'hello'
+            }
+        });
     }
 
 
