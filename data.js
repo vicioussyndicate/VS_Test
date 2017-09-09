@@ -4,6 +4,10 @@
 // Global Data
 var DATA_L = {}
 var DATA_T = {}
+
+// Windows
+var powerWindow
+
 //var decksWindow = new DecksWindow(0)
 
 var hsFormats =     ['Standard','Wild']
@@ -45,7 +49,7 @@ function setupLadderData (data) {
             DATA_L[f][t] = new Ladder(ladderData[f][t][key],f,t)
         } 
     }
-
+    
     finishedLoading()
 }
 

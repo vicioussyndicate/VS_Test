@@ -4,10 +4,9 @@ var t0 = performance.now();
 
 
 window.onload = function() {
-    createPowerRanking()
     setupUI()
     setupFirebase()
-    createPowerRanking()
+    
     setupDecks()
 }
 
@@ -19,6 +18,8 @@ function finishedLoading() {
     
     DATA_L[ui.ladder.f][ui.ladder.t].plot()
     DATA_T[ui.table.f][ui.table.t][ui.table.r].plot()
+
+    powerWindow = new PowerWindow()
     
     renderOptions()
 

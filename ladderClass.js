@@ -28,9 +28,7 @@ class Ladder {
         this.zoomIdx = null
 
         this.archetypes = []
-
-        this.a_data = {} // to display in the table
-        this.c_data = {} // !! rename archetypes c_data
+        this.c_data = {}
 
         this.traces_arch_bar = []
         this.traces_class_bar = []
@@ -45,11 +43,12 @@ class Ladder {
         this.classLegend = []
         this.totGames = 0
 
+        this.rankLabels = []
+
 
         var ARCHETYPES =    DATA.archetypes
         var rankSums =      DATA.gamesPerRank
         var rankData =      this.smoothLadder(DATA.rankData,rankSums.slice())
-        this.rankLabels = []
         var classRankData = []
         
 
@@ -91,7 +90,7 @@ class Ladder {
             fr_avg /= hsRanks
             
 
-            //archtime
+            //archtimeline
             var archT = []
             for (var j=0; j<this.days;j++) { archT.push(Math.random()) }
 
@@ -142,8 +141,7 @@ class Ladder {
             this.traces_arch_line.push(arch_line)
             this.traces_arch_time.push(arch_time)
             this.archLegend.push({name: archName, color: color, fr: fr_avg})
-            this.a_data[archName] = archFR
-            this.archetypes.push({name:archName,fr:fr_avg, data: archFR})
+            this.archetypes.push({name:archName,fr:fr_avg, data: archFR, color: color})
 
         } // close for ARCHETYPES
                 
