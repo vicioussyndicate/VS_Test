@@ -34,17 +34,8 @@ function finishedLoading() {
 
 // Global Variables
 var hsRanks = 21
-var numArch_ladder = 0
-var numArch_table_std = 20      // top 14 archetype will be posted on the table
-var numArch_table_wild = 20
-var ladder_xmin = 0.01         // minimal x value
-
-var table_default_sort = 'frequency'
-var table_default_time = 'lastWeek'
-var table_default_format = 'Standard'
-
-
 var hsClasses = ["Druid","Hunter","Mage","Paladin","Priest","Rogue","Shaman","Warlock","Warrior"]
+var hsFormats = ['Standard','Wild']
 
 
 var colorscale_Table = [

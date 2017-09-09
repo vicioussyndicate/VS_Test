@@ -5,9 +5,29 @@
 class DecksWindow {
 
     constructor (DATA) {
-        this.archIndex = 0
-        this.deckIndex = 0
-        this.hsClass = 'Druid'
+
+        this.DATA = DATA
+
+        this.data = {
+            Standard: {},
+            Wild: {}
+        }
+        
+        for (f of hsFormats) {
+            this.data[f] = {}
+            for (var hsClass of hsClasses) {
+                this.data[f][hsClass] = {}
+                this.data[f][hsClass].archetypes = []
+
+                var key = Object.keys(DATA[f][hsClass].text)[0]
+                this.data[f][hsClass].text = DATA[f][hsClass].text[key]
+
+
+                var keys = Object.keys(DATA[f][hsClass].archetypes)
+                for (var key of keys) {this.data[f][hsClass].archetypes.push(DATA[f][hsClass].archetypes[key])}
+            }
+        }
+
         /*
 
         // out of DATA
@@ -89,7 +109,7 @@ function setupDecks () {
 
 function setDeckExplanation(title, text) {
 
-    var explanation = document.querySelector('#decksWindow .content .explanation') 
+    var explanation = document.querySelector('#decksWindow .content .description') 
     explanation.innerHTML = '<p class="title">'+title+'</p><p class="text">'+text+'</p>'
 
     //var video = document.querySelector('#decksWindow .content .video')
@@ -119,7 +139,7 @@ function insertArchetype (text) {
 
 function insertCard(card) {
 
-    var el = document.querySelector('#decksWindow .content .deckList')
+    var el = document.querySelector('#decksWindow .content .deckLists')
     var div = document.createElement('div')
 
     div.style.backgroundColor = 'grey'
@@ -133,8 +153,8 @@ function insertCard(card) {
 
 function setDeckCreator(title) {
 
-    var el = document.querySelector('#decksWindow .content .deckCreators .title')
-    el.innerHTML = title
+    //var el = document.querySelector('#decksWindow .content .deckCreators .title')
+    //el.innerHTML = title
 }
 
 

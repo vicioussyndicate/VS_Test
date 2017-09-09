@@ -7,6 +7,7 @@ var DATA_T = {}
 
 // Windows
 var powerWindow
+var decksWindow
 
 //var decksWindow = new DecksWindow(0)
 
@@ -49,12 +50,14 @@ function setupLadderData (data) {
             DATA_L[f][t] = new Ladder(ladderData[f][t][key],f,t)
         } 
     }
-    
+
     finishedLoading()
 }
 
 
-
+function setupDeckData (data) {
+    decksWindow = new DecksWindow(data.val())
+}
 
 
 function setupFirebase() {
@@ -74,6 +77,9 @@ function setupFirebase() {
 
     var refLadder = database.ref('ladderData')
     refLadder.on('value',setupLadderData,errMsg)
+
+    var refDecks = database.ref('deckData')
+    refDecks.on('value',setupDeckData,errMsg)
 }
 
 function errMsg() {print("failed to load Data")}

@@ -120,24 +120,19 @@ html(lang='en')
                   button#shaman.optionBtn.folderBtn Shaman
                   button#warlock.optionBtn.folderBtn Warlock
                   button#warrior.optionBtn.folderBtn Warrior
+            .displayOptions.optionBar
+              button#description.optionBtn Description
+              button#decklists.optionBtn Deck Lists
           .content
             .archetypes
               p.title.description Description
               p.title Archetypes
-            .explanationBox
-              .explanation
+            .descriptionBox
+              .description
               .video
-            .deckLists
-              .deckCreators
-                .option-folder
-                  button#deckBtn.folder-toggle Zalae Jade Druid
-                  .dropdown.hidden
-                    button#zalae.optionBtn.folderBtn Zalae Jade Druid
-                    button#vs.optionBtn.folderBtn Vicious DL
-                    button#toast.optionBtn.folderBtn Disguised Toast DL
-                
-              .deckList
-              button.copyDL Copy To Clipboard
+            .deckLists 
+              //.deckList
+              //button.copyDL Copy To Clipboard
             
           
         #infoWindow.tabWindow
