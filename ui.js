@@ -93,7 +93,7 @@ function setupUI() {
 
     new Clipboard('.copyDL', {
         text: function(trigger) {
-            return dragonPriest 
+            return 'text' 
         }
     });
 
@@ -120,6 +120,7 @@ function toggleDropDown(e) {
     
     var siblings = e.target.parentElement.childNodes
     var dd_folder = siblings[3] // !!
+    console.log(dd_folder)
 
     //for (s of siblings) { if (s.class = 'dropdown' || s.class == 'dropdown hidden') {dd_folder = s; break} }
     

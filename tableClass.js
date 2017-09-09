@@ -227,7 +227,7 @@ class Table {
     subPlotWR (idx) {
         var wr
     
-        if (idx == -1 || idx >= this.numArch) {wr = this.winrates}
+        if (idx == -1 || idx >= this.numArch) {wr = this.winrates.slice()}
         else {wr = this.table[idx].slice()}
             
         if (idx > this.numArch) {return}
