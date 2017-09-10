@@ -23,4 +23,5 @@
 # 
 AAECAfe5AgSRvAKUvQK2ywLrzwINgQTlB/AH+qoC+6oCoLYCh7wCz7wC0bwC9r0C+b8Cm8IC68ICAA==
 # 
+# Archetype: Evolve Shaman
 # To use this deck, copy it to your clipboard and create a new deck in Hearthstone

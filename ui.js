@@ -120,8 +120,7 @@ function toggleDropDown(e) {
     
     var siblings = e.target.parentElement.childNodes
     var dd_folder = siblings[3] // !!
-    console.log(dd_folder)
-
+    
     //for (s of siblings) { if (s.class = 'dropdown' || s.class == 'dropdown hidden') {dd_folder = s; break} }
     
     if (dd_folder == ui.options.openFolder) {ui.options.openFolder = null}
@@ -243,6 +242,24 @@ function buttonTrigger(e) {
         if (btnID == 'tiers')       {ui.power.dispMode = 'tiers'}
         
         powerWindow.plot()
+    }
+
+    if (ui.windows.activeWindow.id == 'decksWindow') {
+        if (btnID == 'druid')       {decksWindow.loadClass('Druid')}
+        if (btnID == 'hunter')      {decksWindow.loadClass('Hunter')}
+        if (btnID == 'mage')        {decksWindow.loadClass('Mage')}
+        if (btnID == 'paladin')     {decksWindow.loadClass('Paladin')}
+        if (btnID == 'priest')      {decksWindow.loadClass('Priest')}
+        if (btnID == 'rogue')       {decksWindow.loadClass('Rogue')}
+        if (btnID == 'shaman')      {decksWindow.loadClass('Shaman')}
+        if (btnID == 'warlock')     {decksWindow.loadClass('Warlock')}
+        if (btnID == 'warrior')     {decksWindow.loadClass('Warrior')}
+
+        if (btnID == 'decklists')   {decksWindow.loadDecklists()}
+        if (btnID == 'description') {decksWindow.loadDescription()}
+
+        if (btnID == 'Standard')    {decksWindow.loadFormat('Standard')}
+        if (btnID == 'Wild')        {decksWindow.loadFormat('Wild')}
     }
 
     renderOptions()

@@ -6,7 +6,7 @@ import csv
 from datetime import *
 import json
 import glob, os
-
+import random
 
 
 
@@ -14,20 +14,12 @@ path = 'Sources/'
 hsClasses = ['Druid','Hunter','Mage','Paladin','Priest','Rogue','Shaman','Warlock','Warrior']
 hsFormats = ['Standard', 'Wild']
 
-# Link up firebase
-
-
-
-
-# f = open("Druid.txt")
-
-# text = f.read()
-# print(text)
 
 def readDeckCode(file):
 
     title = ''
     deckCode = ''
+    archetype = ''
     cards = []
     readingCards = 'waiting'
     count = 0
@@ -48,19 +40,18 @@ def readDeckCode(file):
             continue
         if '# Format: Wild' in row:
             print('not ok?')
+        if '# Archetype:' in row:
+            archetype = row[13:-1]
 
         if readingCards == 'reading':
-            print(len(row),row)
             quantity = row[2]
             manaCost = row[6]
             name = row[9:-1]
-
-            print(quantity,manaCost,name)
             cards.append({'name':name,'manaCost':manaCost,'quantity':quantity})
 
         count += 1
 
-    return {'title':title, 'cards':cards, 'deckCode': deckCode}
+    return {'name':title, 'cards':cards, 'deckCode': deckCode, 'color': 'rgb(0,0,0)'}, archetype
 
 
 
@@ -91,10 +82,11 @@ for hsClass in hsClasses:
 
         f = open(file)
         text = f.readlines()
-        arch = readDeckCode(text)
+        decklist, arch = readDeckCode(text)
 
-        if arch != 0:
-            firePath = '/deckData/'+hsFormat+'/'+hsClass+'/archetypes'
-            firebase.post(firePath,arch)
+        if decklist != 0:
+            firePath = '/deckData/'+hsFormat+'/'+hsClass+'/archetypes/'+arch
+            firebase.post(firePath,decklist)
+            print(hsClass,arch,decklist)
     os.chdir('..')
     os.chdir('..')

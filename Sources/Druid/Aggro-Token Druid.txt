@@ -23,4 +23,5 @@
 AAECAZICApG8AqEGDv4B5Qe2swLrwgLNuwLZB5vNAsGrAvcDkdAC5gWfwgKvwgKGwQIA
 #
 # To use this deck, copy it to your clipboard and create a new deck in Hearthstone
+# Archetype: Aggro-Token Druid
 # https://www.vicioussyndicate.com/deck-library/druid-decks/token-druid/standard-aggro-token-druid/

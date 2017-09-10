@@ -23,4 +23,5 @@
 # 
 AAECAYO6AgSyAq8EkbwClNACDbQBjALtAtQFiAfdCPKwApK2AvjBAoHCAuvCApvIAtjNAgA=
 # 
+# Archetype: Tempo Rogue
 # To use this deck, copy it to your clipboard and create a new deck in Hearthstone

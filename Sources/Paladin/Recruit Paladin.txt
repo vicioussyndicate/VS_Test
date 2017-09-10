@@ -24,4 +24,5 @@
 # 
 AAEBAYsWCNwDpwX6BooH2a4CvL0Cs8ECucECC/QF9QWxCOoP7A/tD7uvAv+vApvCArjHAtnHAgA=
 # 
+# Archetype: Recruit Paladin
 # To use this deck, copy it to your clipboard and create a new deck in Hearthstone

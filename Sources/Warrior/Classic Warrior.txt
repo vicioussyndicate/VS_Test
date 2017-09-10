@@ -22,4 +22,5 @@
 # 
 AAEBAQcEtAKQA+AEucMCDRYcnQKwApED/ASOBYAGkQaWBv8Hgwn7DAA=
 # 
+# Archetype: Control Warrior
 # To use this deck, copy it to your clipboard and create a new deck in Hearthstone

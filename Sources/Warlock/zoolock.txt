@@ -23,4 +23,5 @@
 # 
 AAEBAf0GBjCvBPcE+g3PFvauAgzyAfsFzgbOB9kHsQjCCPUN3Q/wEdSzAry2AgA=
 # 
+# Archetype: Zoolock
 # To use this deck, copy it to your clipboard and create a new deck in Hearthstone

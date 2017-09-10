@@ -24,4 +24,5 @@
 # 
 AAECAZ8FBvoGjwm8vQLjvgK5wQKW6AIM2wOvB6cI06oC2a4C07wCs8ECncICscICiMcC48sCps4CAA==
 # 
+# Archetype: Murloc Paladin
 # To use this deck, copy it to your clipboard and create a new deck in Hearthstone

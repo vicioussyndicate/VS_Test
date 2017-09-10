@@ -7,6 +7,15 @@ class DecksWindow {
     constructor (DATA) {
 
         this.DATA = DATA
+        this.descriptionBox = document.querySelector('#decksWindow .content .descriptionBox')
+        this.decklists = document.querySelector('#decksWindow .content .decklists')
+        this.description = document.querySelector('#decksWindow .content .descriptionBox .description')
+
+        this.hsFormat = 'Standard'
+        this.hsClass = 'Druid'
+        this.hsArchetype = ''
+        this.display = 'description'
+
 
         this.data = {
             Standard: {},
@@ -24,54 +33,86 @@ class DecksWindow {
 
 
                 var keys = Object.keys(DATA[f][hsClass].archetypes)
-                for (var key of keys) {this.data[f][hsClass].archetypes.push(DATA[f][hsClass].archetypes[key])}
+                for (var key of keys) {
+                    
+                    this.data[f][hsClass].archetypes.push({name:key, decklists:[]})
+                    var idx = this.data[f][hsClass].archetypes.length -1
+
+                    var arch = DATA[f][hsClass].archetypes[key]
+                    var deckKeys = Object.keys(arch)
+                    for (var deckKey of deckKeys) {
+                        var decklist = arch[deckKey]
+                        this.data[f][hsClass].archetypes[idx].decklists.push(arch[deckKey])
+                    }
+                }
             }
         }
-
-        /*
-
-        // out of DATA
-        this.archetypes = {
-            Druid: ['Token Druid', 'Ramp Druid', 'Aggro-Token Druid', 'Jade Druid'],
-            Hunter: ['Secret Hunter'],
-            Mage: ['Secret Mage'],
-            Paladin: ['Midrange Paladin'],
-            Priest: ['Shadow Priest'],
-            Rogue: ['Shadow Rogue'],
-            Shaman: ['Totem Shaman'],
-            Warlock: ['Zoolock'],
-            Warrior: ['Control Warrior', 'Pirate Warrior']
-        }
-
-
-        var jadeCards = []
-        for (var i=0;i<30;i++){
-            jadeCards.push({name:'Innervate',cost:'0',quantity:'1'})
-        }
-
-        this.decklists = {}
-        this.decklists['Token Druid'] = [{
-
-            name: 'Zalaes Token Druid',
-            cards: jadeCards,
-            note: 'Note: Has removed 2 Innervates for 2 Tinyfins',
-
-        }]
-
-        this.setDeckExplanation('Druid','Druid, for the most part, has settled into two major archetypes; Jade Druid, and Aggro-Token Druid. The class continues to dominate higher levels of play, with nearly 40% representation at legend and likely a higher number at the top legend ranks. Both Jade and Aggro-Token Druid have found what seems to be working for them fairly quickly, since both archetypes had a solid base to go off of from the last expansion.')
-
-
-        this.loadClass(this.hsClass)
-        this.loadArchetype('Token Druid')
-        
-        */
+        this.loadClass('Druid')
     }// close constructor
 
-    loadArchetype(hsClass, index) {
 
-        var arch = {name:'Token Druid',explanation:'',color:randomColor()} //this.archetypes[hsClass][index]
-        this.setDeckExplanation(arch.name, arch.explanation)
-        this.set
+    loadFormat(hsFormat) {
+        this.hsFormat = hsFormat
+        this.loadClass(this.hsClass)
+    }
+
+    loadClass(hsClass) {
+
+        this.hsClass = hsClass
+        if (this.display == 'description') {this.loadDescription()}
+        if (this.display == 'decklists') {this.loadDecklists()}
+
+        var archDiv = document.querySelector('#decksWindow .content .archetypes .archetypeList')
+        archDiv.innerHTML = ''
+        var archetypes = this.data[this.hsFormat][this.hsClass].archetypes
+        //console.log(archetypes)
+        for (var arch of archetypes) {
+            this.insertArchetype(arch)
+        }
+    }
+
+    loadDescription() {
+        var d = this.data[this.hsFormat][this.hsClass]
+        this.insertDescription(this.hsClass,d.text)
+        this.descriptionBox.style.display = 'inline'
+        this.decklists.style.display = 'none'
+    }
+
+    loadDecklists() {
+        //var d = this.data[this.hsFormat][this.hsClass]
+        //this.insertDescription(this.hsClass,d.text)
+        this.insertDecklist('')
+        this.descriptionBox.style.display = 'none'
+        this.decklists.style.display = 'inline'
+    }
+
+    insertDescription(title,text) {
+        //console.log('insert description', this.description)
+        this.description.innerHTML = '<p class="title">'+title+'</p><p class="text">'+text+'</p>'
+    }
+
+    insertArchetype(arch) {
+        var archDiv = document.querySelector('#decksWindow .content .archetypes .archetypeList')
+
+        var btn = document.createElement('button')
+        
+        btn.style.backgroundColor = randomColor()
+        btn.innerHTML = arch.name
+        btn.style.padding = '0.2rem'
+        btn.style.marginTop = '0.2rem'
+        btn.className = 'archBtn'
+
+        archDiv.appendChild(btn)
+
+    }
+
+
+    insertDecklist(dl) {
+
+        var div = document.createElement('div')
+        div.innerHTML = 'TEST TEXT'
+
+        this.decklists.appendChild(div)
     }
 
 
@@ -88,7 +129,7 @@ class DecksWindow {
 
 
 function setupDecks () {
-
+    return
     var description = document.querySelector('#decksWindow .content .description')
     description.style.display = 'none'
     setDeckExplanation('Druid >> Token Druid','As one of, if not the only, deck with a favorable matchup against Jade Druid, Aggro-Token Druid has risen up in its play rate. Druid of the Swarm and Crypt Lord seem to be staples in the archetype, with many people opting to run Crazed Alchemists to turn the huge taunts into a burst of damage for a finishing blow. Crazed Alchemist also helps get through taunts with high health and low attack, and one shots Doomsayer, a fairly popular card in the current meta.')

@@ -23,4 +23,5 @@
 # 
 AAEBAa0GBskG0wrXCoUX0cEC2cECDOUEuQbyDO4R6RKJFKQUgrUCtbsCursC6r8C2MECAA==
 # 
+# Archetype: Dragon Priest
 # To use this deck, copy it to your clipboard and create a new deck in Hearthstone
