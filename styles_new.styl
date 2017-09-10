@@ -164,37 +164,42 @@ body
                             width 100%
                     .decklists
                         display: none
-                        .deckCreators
-                            color white
-                            button
-                                color #dbdbdb
+                        .deckBox
+                            .deckTitle
+                                color white
                                 display inline
-                                margin 0.5rem
-                                //background-color: grey
+                                padding: 0.5rem
                                 &:hover
-                                    color white
-                            
-                        .deckList
-                            margin-top 0.5rem
-                            height 22.1rem
-                            overflow-y scroll
-                            overflow-x hidden
-                        .copyDL
-                            color black
-                            background-color #92fc64
-                            font-size: 1rem
-                            font-weight: bold
-                            padding 0.3rem
-                            margin-top 1rem
-                            border 0.1rem solid #92fc64
-                            border-radius 3%
-                            &:hover
-                                background-color: #b7ff54
-                                border-color: #b7ff54
+                                    background-color:  white
+                                    color black
+                            .decklist
+                                height 22.1rem
+                                margin-top: 1rem
+                                margin-bottom: 1rem
+                                overflow-y scroll
+                                overflow-x hidden
+                                background-color: white
+                                .card
+                                    padding: 0.15rem
+                                    margin-top 0.2rem
+                            .copyDL
+                                color black
+                                background-color #92fc64
+                                font-size: 1rem
+                                font-weight: bold
+                                padding 0.3rem
+                                margin-top 3rem
+                                border 0.1rem solid #92fc64
+                                border-radius 3%
+                                &:hover
+                                    background-color: #b7ff54
+                                    border-color: #b7ff54
+                                    cursor:  pointer
                     .descriptionBox
                         background-color white
-                        height 100%
+                        height 25rem
                         .description
+                            background-color white
                             color black
                             height: 100%
                             padding 1rem
@@ -203,7 +208,7 @@ body
                             font-weight: normal
                             font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
                             text-indent: 20px;
-                            overflow-y: scroll
+                            overflow-y: auto
                             .text
                                 &::first-letter
                                     font-size: 200%

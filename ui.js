@@ -90,16 +90,6 @@ function setupUI() {
     for (let i=0;i<optionButtons.length;i++) { 
         optionButtons[i].addEventListener("click", buttonTrigger)}
 
-
-    new Clipboard('.copyDL', {
-        text: function(trigger) {
-            return 'text' 
-        }
-    });
-
-
-        
-
 }
 
 
@@ -120,7 +110,7 @@ function toggleDropDown(e) {
     
     var siblings = e.target.parentElement.childNodes
     var dd_folder = siblings[3] // !!
-    
+
     //for (s of siblings) { if (s.class = 'dropdown' || s.class == 'dropdown hidden') {dd_folder = s; break} }
     
     if (dd_folder == ui.options.openFolder) {ui.options.openFolder = null}

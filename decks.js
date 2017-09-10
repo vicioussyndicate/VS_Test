@@ -13,7 +13,7 @@ class DecksWindow {
 
         this.hsFormat = 'Standard'
         this.hsClass = 'Druid'
-        this.hsArchetype = ''
+        this.hsArchetypeIdx = 0
         this.display = 'description'
 
 
@@ -78,12 +78,27 @@ class DecksWindow {
         this.decklists.style.display = 'none'
     }
 
+
+
+
     loadDecklists() {
-        //var d = this.data[this.hsFormat][this.hsClass]
-        //this.insertDescription(this.hsClass,d.text)
-        this.insertDecklist('')
+        var deckWidth = '12rem'
+
+        var deckDiv = document.querySelector('#decksWindow .content .decklists')
+        deckDiv.innerHTML = ''
+        
+        var arch = this.data[this.hsFormat][this.hsClass].archetypes[this.hsArchetypeIdx]
+        
+        var gridTemplateColumns = ''
+        for (var dl of arch.decklists) {
+            gridTemplateColumns += deckWidth + ' '
+            this.insertDecklist(dl)
+        }
+        
         this.descriptionBox.style.display = 'none'
-        this.decklists.style.display = 'inline'
+        this.decklists.style.display = 'grid'
+        deckDiv.style.gridTemplateColumns = gridTemplateColumns
+        deckDiv.style.gridGap = '0.5rem'
     }
 
     insertDescription(title,text) {
@@ -109,10 +124,42 @@ class DecksWindow {
 
     insertDecklist(dl) {
 
-        var div = document.createElement('div')
-        div.innerHTML = 'TEST TEXT'
+        var deckDiv = document.querySelector('#decksWindow .content .decklists')
 
-        this.decklists.appendChild(div)
+        var deckBox = document.createElement('div')
+        deckBox.className = 'deckBox'
+
+        var deckTitle = document.createElement('div')
+        deckTitle.className = 'deckTitle'
+        deckTitle.innerHTML = dl.name
+
+        var decklist = document.createElement('div')
+        decklist.className = 'decklist'
+
+        for (var card of dl.cards) {
+            var cardDiv = document.createElement('div')
+            cardDiv.className = 'card'
+            cardDiv.innerHTML = card.manaCost+' '+card.name+' '+card.quantity
+            cardDiv.style.display = 'block'
+            decklist.appendChild(cardDiv)
+        }
+
+        var copyBtn = document.createElement('buttton')
+        copyBtn.innerHTML = 'Copy To Clipboard'
+        copyBtn.className = 'copyDL'
+        copyBtn.id = 'dl'+randint(0,100000)
+        
+        
+        deckBox.appendChild(deckTitle)
+        deckBox.appendChild(decklist)
+        deckBox.appendChild(copyBtn)
+        deckDiv.appendChild(deckBox)
+
+        new Clipboard('#'+copyBtn.id, {
+            text: function(trigger) {
+                return dl.deckCode 
+            }
+        });
     }
 
 
@@ -127,113 +174,3 @@ class DecksWindow {
 
 
 
-
-function setupDecks () {
-    return
-    var description = document.querySelector('#decksWindow .content .description')
-    description.style.display = 'none'
-    setDeckExplanation('Druid >> Token Druid','As one of, if not the only, deck with a favorable matchup against Jade Druid, Aggro-Token Druid has risen up in its play rate. Druid of the Swarm and Crypt Lord seem to be staples in the archetype, with many people opting to run Crazed Alchemists to turn the huge taunts into a burst of damage for a finishing blow. Crazed Alchemist also helps get through taunts with high health and low attack, and one shots Doomsayer, a fairly popular card in the current meta.')
-
-    insertArchetype('Token Druid')
-    insertArchetype('Jade Druid')
-    insertArchetype('Ramp Druid')
-    
-    
-    for (var i=0;i<30;i++) {
-        insertCard('0:  Innervate  x1 '+i)
-    }
-
-
-}
-
-
-
-function setDeckExplanation(title, text) {
-
-    var explanation = document.querySelector('#decksWindow .content .description') 
-    explanation.innerHTML = '<p class="title">'+title+'</p><p class="text">'+text+'</p>'
-
-    //var video = document.querySelector('#decksWindow .content .video')
-    //video.innerHTML = `<object style="width:100%;height:100%; float: none; clear: both; margin: 2px auto;" data="https://www.youtube.com/embed/WTChO0cNQbI"></object>`
-}
-
-
-function insertArchetype (text) {
-
-
-
-
-    var el = document.querySelector('#decksWindow .content .archetypes')
-    var btn = document.createElement('button')
-
-    btn.style.backgroundColor = randomColor()
-    btn.innerHTML = text
-    btn.style.padding = '0.2rem'
-    btn.style.marginTop = '0.2rem'
-    btn.classList.add('archBtn')
-    
-
-    el.appendChild(btn)
-
-
-}
-
-function insertCard(card) {
-
-    var el = document.querySelector('#decksWindow .content .deckLists')
-    var div = document.createElement('div')
-
-    div.style.backgroundColor = 'grey'
-    div.innerHTML = card
-    div.style.padding = '0.1rem'
-
-    el.appendChild(div)
-
-}
-
-
-function setDeckCreator(title) {
-
-    //var el = document.querySelector('#decksWindow .content .deckCreators .title')
-    //el.innerHTML = title
-}
-
-
-
-
-
-
-
-
-
-
-
-
-var dragonPriest =
-`
-### Capilano's Dragon Priest
-# Class: Priest
-# Format: Wild
-#
-# 2x (1) Northshire Cleric
-# 2x (1) Potion of Madness
-# 2x (1) Power Word: Shield
-# 2x (1) Twilight Whelp
-# 2x (2) Netherspite Historian
-# 2x (2) Radiant Elemental
-# 2x (2) Shadow Visions
-# 1x (2) Shadow Word: Pain
-# 2x (2) Wyrmrest Agent
-# 1x (3) Brann Bronzebeard
-# 2x (3) Curious Glimmerroot
-# 1x (3) Shadow Word: Death
-# 2x (4) Twilight Guardian
-# 2x (5) Azure Drake
-# 2x (5) Blackwing Corruptor
-# 2x (5) Drakonid Operative
-# 1x (5) Holy Nova
-#
-AAEBAa0GBMkG0wrXCoUXDeUEuQbyDO4R6RKJFKQUgrUCtbsCursC0cEC2MEC2cECAA==
-#
-# To use this deck, copy it to your clipboard and create a new deck in Hearthstone
-# https://www.vicioussyndicate.com/capilanos-dragon-priest/`

@@ -6,8 +6,6 @@ var t0 = performance.now();
 window.onload = function() {
     setupUI()
     setupFirebase()
-    
-    setupDecks()
 }
 
 
