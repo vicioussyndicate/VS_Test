@@ -434,6 +434,12 @@ class Ladder {
             if (ui.ladder.dispMode == 'classes') {data = this.traces_class_time}
         }
 
+        if (ui.ladder.plotMode == 'pie') {
+            layout = this.layout_bar
+            if (ui.ladder.dispMode == 'decks') {data = this.traces_arch_bar}
+            if (ui.ladder.dispMode == 'classes') {data = this.traces_class_bar}
+        }
+
         if (ui.ladder.plotMode == 'number') {
             if (ui.ladder.dispMode == 'decks') {this.createTable('decks'); return}
             if (ui.ladder.dispMode == 'classes') {this.createTable('classes'); return}
@@ -600,11 +606,6 @@ class Ladder {
 
 }// class Ladder
 
-
-
-function zoomToggle(data) {
-    console.log(data)
-}
 
 
 

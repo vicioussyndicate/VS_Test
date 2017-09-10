@@ -31,10 +31,6 @@
         <div id="loader"></div>
         <div class="tabWindow" id="ladderWindow">
           <div class="content-header">
-            <div class="classDeckOptions optionBar">
-              <button class="optionBtn" id="classes">Classes</button>
-              <button class="optionBtn" id="decks">Decks</button>
-            </div>
             <div class="ftrOptions optionBar">
               <div class="option-folder">
                 <button class="folder-toggle" id="formatBtn">Standard</button>
@@ -44,7 +40,7 @@
                 </div>
               </div>
               <div class="option-folder">
-                <button class="folder-toggle" id="timeBtn">Last Month</button>
+                <button class="folder-toggle" id="timeBtn">Last Day</button>
                 <div class="dropdown hidden">
                   <button class="optionBtn folderBtn" id="lastDay">Last Day</button>
                   <button class="optionBtn folderBtn" id="lastWeek">Last Week</button>
@@ -53,9 +49,14 @@
               </div>
               <p class="nrGames"></p>
             </div>
+            <div class="classDeckOptions optionBar">
+              <button class="optionBtn" id="classes">Classes</button>
+              <button class="optionBtn" id="decks">Decks</button>
+            </div>
             <div class="graphOptions optionBar">
               <button class="optionBtn fa fa-bar-chart tooltip" id="bar"><span class="tooltipText">Show Bar Chart</span></button>
               <button class="optionBtn fa fa-line-chart tooltip" id="line"><span class="tooltipText">Show Line Chart</span></button>
+              <button class="optionBtn fa fa-pie-chart tooltip" id="pie"><span class="tooltipText">Show Pie Chart</span></button>
               <button class="optionBtn fa fa-percent tooltip" id="number"><span class="tooltipText">Show Numbers</span></button>
               <button class="optionBtn fa fa-clock-o tooltip" id="timeline"><span class="tooltipText">Show Timeline</span></button>
             </div>
