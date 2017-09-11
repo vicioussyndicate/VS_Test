@@ -35,6 +35,8 @@ class Ladder {
 
         this.traces_arch_line = []
         this.traces_class_line = []
+
+        this.traces_pie = {classes: {}, decks:{}}
         
         this.traces_arch_time = []
         this.traces_class_time = []
@@ -44,6 +46,70 @@ class Ladder {
         this.totGames = 0
 
         this.rankLabels = []
+
+        this.tiers = [
+            {name:'All Ranks',
+            buttonId: 'ranks_all',
+            start:0,
+            end: 15},
+            {name:'L',
+            buttonId: 'ranks_L',
+            start: 0,
+            end: 0},
+            {name:'1-5',
+            buttonId: 'ranks_1_5',
+            start: 1,
+            end: 5},
+            {name:'6-15',
+            buttonId: 'ranks_6_15',
+            start: 6,
+            end: 15},
+        ]
+        this.tier = this.tiers[0]
+        this.rankFolder = document.querySelector('#ladderWindow .content-header #rankBtn')
+        this.rankFolder.style.display = 'none'
+        this.dropdownDiv = document.querySelector('#ladderWindow .content-header #rankDropdown')
+        this.dropdownDiv.innerHTML = ''
+
+        for (var tier of this.tiers) {
+
+            var button = document.createElement('button')
+            var clickButton = function () {this.tier = tier; this.plot()}
+            button.className = 'button#'+tier.buttonId+'.optionBtn.folderBtn'
+            button.onclick = clickButton.bind(this)
+
+            this.dropdownDiv.appendChild(button)
+            
+
+            var trace_decks = {
+                values: [],
+                labels:[],
+                marker: {colors: []},
+                hoverinfo: 'label+percent',
+                insidetextfont: {color:'white'},
+                outsidetextfont: {color:'transparent'},
+                text: [],
+                type:'pie',
+            }
+
+            var color_classes = []
+            for (hsClass of hsClasses) { color_classes.push(hsColors[hsClass]) }
+
+            var trace_classes =  {
+                values: fillRange(0,hsClasses.length,0),
+                labels: hsClasses.slice(),
+                marker: {colors:color_classes},
+                hoverinfo: 'label+percent',
+                insidetextfont: {color:'black'},
+                outsidetextfont: {color:'white'},
+                text: hsClasses.slice(),
+                type: 'pie',
+            }
+
+            this.traces_pie['decks'][tier.name] = [trace_decks]
+            this.traces_pie['classes'][tier.name] = [trace_classes]
+            
+        }
 
 
         var ARCHETYPES =    DATA.archetypes
@@ -80,12 +146,34 @@ class Ladder {
             var archTxt = []
             var fr_avg = 0
             var archName = ARCHETYPES[i][1] + " " + ARCHETYPES[i][0].replace('§', '');
+            //var classIdx = hsClasses.indexOf(ARCHETYPES[i][0])
+            var color = colorStringRange(hsColors[ARCHETYPES[i][0]],45)
 
             for (var rank=0;rank<hsRanks;rank++) {
                 var fr = rankData[rank][i]
                 archTxt.push(`<b>${archName}     </b><br>freq: ${(fr*100).toFixed(1)}%`)
                 archFR.push(fr)
                 fr_avg += fr
+
+                for (var tier of this.tiers) {
+         
+                    if (rank == tier.start) {
+                        
+                        this.traces_pie['decks'][tier.name][0].values.push(fr)
+                        this.traces_pie['decks'][tier.name][0].labels.push(archName)
+                        this.traces_pie['decks'][tier.name][0].marker.colors.push(color)
+
+                    }
+
+                    if (rank > tier.start && rank <= tier.end) {
+                        this.traces_pie['decks'][tier.name][0].values[i] += fr
+                    }
+                    
+                    if (rank == tier.end) {
+                        this.traces_pie['decks'][tier.name][0].values[i] /= (tier.end - tier.start + 1)
+                        this.traces_pie['decks'][tier.name][0].text.push(archName)
+                    }
+                }
             }
             fr_avg /= hsRanks
             
@@ -93,9 +181,6 @@ class Ladder {
             //archtimeline
             var archT = []
             for (var j=0; j<this.days;j++) { archT.push(Math.random()) }
-
-
-            var color = colorStringRange(hsColors[ARCHETYPES[i][0]],45)
 
             var arch_bar = {
                 x:range(0,hsRanks),
@@ -159,6 +244,11 @@ class Ladder {
                 classFR.push(fr)
                 classTxt.push(hsClass+" "+(fr*100).toFixed(2)+"%")
                 fr_avg += fr
+
+                for (var tier of this.tiers) {
+                    if (rank >= tier.start && rank <= tier.end) { this.traces_pie['classes'][tier.name][0].values[i] += fr }
+                    if (rank == tier.end) { this.traces_pie['classes'][tier.name][0].values[i] /= (tier.end-tier.start +1) }
+                }
             }
             
             fr_avg /= hsRanks
@@ -348,6 +438,22 @@ class Ladder {
             margin: {l:70,r:20,b:30,t:0,},
         }
 
+        // LAYOUT Pie
+        this.layout_pie = {
+            //title: 'Class Frequency over the last 14 days',
+		    showlegend: false,
+		    displayModeBar: false,
+            autosize: true,
+            textinfo: 'label+percent',
+            
+		    hovermode: 'closest',
+            
+		    
+		    plot_bgcolor: this.backgroundColor, 
+            paper_bgcolor: this.backgroundColor,
+            margin: {l:70,r:20,b:30,t:30,},
+        }
+
 
        
         var classSort = function (a, b) { return a.hsClass < b.hsClass ? -1 : a.hsClass > b.hsClass ? 1 : 0; }
@@ -427,6 +533,7 @@ class Ladder {
     plot() {
         document.getElementById('chart1').innerHTML = ""
         var data, layout
+        this.rankFolder.style.display = 'none'
 
         if (ui.ladder.plotMode == 'timeline') {
             layout = this.layout_time
@@ -435,9 +542,9 @@ class Ladder {
         }
 
         if (ui.ladder.plotMode == 'pie') {
-            layout = this.layout_bar
-            if (ui.ladder.dispMode == 'decks') {data = this.traces_arch_bar}
-            if (ui.ladder.dispMode == 'classes') {data = this.traces_class_bar}
+            this.rankFolder.style.display = 'inline'
+            layout = this.layout_pie
+            data = this.traces_pie[ui.ladder.dispMode][this.tier.name]
         }
 
         if (ui.ladder.plotMode == 'number') {
@@ -466,7 +573,7 @@ class Ladder {
 
         if (ui.ladder.dispMode == 'decks') {this.createLegend('decks')}
         if (ui.ladder.dispMode == 'classes') {this.createLegend('classes')}
-        document.getElementById('chart1').on('plotly_click', this.zoomToggle)
+        //document.getElementById('chart1').on('plotly_click', this.zoomToggle.bind(this))
     }
 
 

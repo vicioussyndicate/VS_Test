@@ -20,10 +20,9 @@ html(lang='en')
           button#ladder.tab Ladder
           button#power.tab Tiers
           button#table.tab Matchups
-          //button#timeline.tab Timeline
           button#decks.tab Decks
           button#info.tab info
-      //button#tooltips.optionBtn(onclick='overlay()') i
+      button#overlayBtn.optionBtn(onclick='overlay()') i
         
         
       .content-wrapper
@@ -42,6 +41,12 @@ html(lang='en')
                   button#lastDay.optionBtn.folderBtn Last Day
                   button#lastWeek.optionBtn.folderBtn Last Week
                   button#lastMonth.optionBtn.folderBtn Last Month
+              .option-folder
+                button#rankBtn.folder-toggle All Ranks
+                .dropdown#rankDropdown.hidden
+                  //button#lastDay.optionBtn.folderBtn Last Day
+                  //button#lastWeek.optionBtn.folderBtn Last Week
+                  //button#lastMonth.optionBtn.folderBtn Last Month
               p.nrGames
             .classDeckOptions.optionBar
               button#classes.optionBtn Classes

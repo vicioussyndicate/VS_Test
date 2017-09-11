@@ -21,12 +21,11 @@
           <button class="tab" id="ladder">Ladder</button>
           <button class="tab" id="power">Tiers</button>
           <button class="tab" id="table">Matchups</button>
-          <!--button#timeline.tab Timeline-->
           <button class="tab" id="decks">Decks</button>
           <button class="tab" id="info">info</button>
         </div>
       </nav>
-      <!--button#tooltips.optionBtn(onclick='overlay()') i-->
+      <button class="optionBtn" id="overlayBtn" onclick="overlay()">i</button>
       <div class="content-wrapper">
         <div id="loader"></div>
         <div class="tabWindow" id="ladderWindow">
@@ -45,6 +44,14 @@
                   <button class="optionBtn folderBtn" id="lastDay">Last Day</button>
                   <button class="optionBtn folderBtn" id="lastWeek">Last Week</button>
                   <button class="optionBtn folderBtn" id="lastMonth">Last Month</button>
+                </div>
+              </div>
+              <div class="option-folder">
+                <button class="folder-toggle" id="rankBtn">All Ranks</button>
+                <div class="dropdown hidden" id="rankDropdown">
+                  <!--button#lastDay.optionBtn.folderBtn Last Day-->
+                  <!--button#lastWeek.optionBtn.folderBtn Last Week-->
+                  <!--button#lastMonth.optionBtn.folderBtn Last Month-->
                 </div>
               </div>
               <p class="nrGames"></p>

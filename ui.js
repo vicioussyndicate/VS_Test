@@ -1,6 +1,21 @@
 
 
 
+
+class UI {
+
+    constructor () {
+
+
+
+    } // close constructor
+
+
+
+} // close UI
+
+
+
 // SETUP UI
 
 
@@ -194,6 +209,7 @@ function buttonTrigger(e) {
 
         if (btnID == 'bar')         {ui.ladder.plotMode = 'bar'}
         if (btnID == 'line')        {ui.ladder.plotMode = 'line'}
+        if (btnID == 'pie')         {ui.ladder.plotMode = 'pie'}
         if (btnID == 'number')      {ui.ladder.plotMode = 'number'}
         if (btnID == 'timeline')    {ui.ladder.plotMode = 'timeline'}
 

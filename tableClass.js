@@ -6,15 +6,18 @@
 class Table {
 
     constructor(DATA,f,t,r) {
-
+       
         this.DATA = DATA
         this.f = f
         this.t = t
         this.r = r
         this.sortBy = ''
         this.numArch = (f == 'Standard') ? 20 : 20;
-        this.backgroundColor = '#555'//"#555",
+        this.backgroundColor = '#555'
         this.subplotRatio = 0.6
+        this.width = document.querySelector('.main-wrapper').offsetWidth -9
+        this.height = 560
+
         this.table = []
         this.textTable = []
         this.frequency = []
@@ -22,6 +25,7 @@ class Table {
         this.classPlusArch = [] // needed for Class Sort
         this.winrates = []
         this.totGames = 0
+
         
         
         for (var i=0;i<this.numArch;i++) {
@@ -119,8 +123,8 @@ class Table {
             plot_bgcolor: "transparent",
             paper_bgcolor: this.backgroundColor,
             margin: {l: 120, r: 30, b: 30, t: 100 },
-            width: 790,
-            height: 560,
+            width: this.width,
+            height: this.height,
             //autosize: true,
 
             yaxis2: {
