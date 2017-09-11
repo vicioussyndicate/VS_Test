@@ -4,12 +4,16 @@
 
 class DecksWindow {
 
-    constructor (DATA) {
+    constructor (hsFormats) {
 
-        this.DATA = DATA
+        //this.DATA = DATA
+        this.hsFormats = hsFormats
+
+
         this.descriptionBox = document.querySelector('#decksWindow .content .descriptionBox')
         this.decklists = document.querySelector('#decksWindow .content .decklists')
         this.description = document.querySelector('#decksWindow .content .descriptionBox .description')
+        this.optionButtons = null
 
         this.hsFormat = 'Standard'
         this.hsClass = 'Druid'
@@ -17,16 +21,76 @@ class DecksWindow {
         this.display = 'description'
 
 
-        this.data = {
-            Standard: {},
-            Wild: {}
-        }
+        this.data = {}
         
-        for (f of hsFormats) {
+        for (var f of this.hsFormats) {
             this.data[f] = {}
             for (var hsClass of hsClasses) {
                 this.data[f][hsClass] = {}
                 this.data[f][hsClass].archetypes = []
+                this.data[f][hsClass].text = ''
+        }}
+
+        this.loadData()
+        this.loadClass('Druid')
+    }// close constructor
+
+
+
+
+
+    setupUI() {
+
+        this.optionButtons = document.querySelectorAll('#decksWindow .optionBtn')
+        for (let i=0;i<this.optionButtons.length;i++) { this.optionButtons[i].addEventListener("click", this.buttonTrigger.bind(this)) }
+
+    } // setup UI
+
+
+
+    buttonTrigger(e) {
+
+        var btnID = e.target.id
+
+        if (btnID == 'druid')       {this.loadClass('Druid')}
+        if (btnID == 'hunter')      {this.loadClass('Hunter')}
+        if (btnID == 'mage')        {this.loadClass('Mage')}
+        if (btnID == 'paladin')     {this.loadClass('Paladin')}
+        if (btnID == 'priest')      {this.loadClass('Priest')}
+        if (btnID == 'rogue')       {this.loadClass('Rogue')}
+        if (btnID == 'shaman')      {this.loadClass('Shaman')}
+        if (btnID == 'warlock')     {this.loadClass('Warlock')}
+        if (btnID == 'warrior')     {this.loadClass('Warrior')}
+
+        if (btnID == 'decklists')   {this.loadDecklists()}
+        if (btnID == 'description') {this.loadDescription()}
+
+        if (btnID == 'Standard')    {this.loadFormat('Standard')}
+        if (btnID == 'Wild')        {this.loadFormat('Wild')}
+        
+    }// button Handler
+
+
+
+
+
+
+
+    loadData() {
+
+        var ref = DATABASE.ref('deckData')
+        ref.on('value',this.addData.bind(this), function () {console.log('Could not load Ladder Data')})
+
+    } // load Data
+
+
+
+    addData(DATA) {
+
+        var DATA = DATA.val()
+        
+        for (var f of hsFormats) {
+            for (var hsClass of hsClasses) {
 
                 var key = Object.keys(DATA[f][hsClass].text)[0]
                 this.data[f][hsClass].text = DATA[f][hsClass].text[key]
@@ -43,12 +107,16 @@ class DecksWindow {
                     for (var deckKey of deckKeys) {
                         var decklist = arch[deckKey]
                         this.data[f][hsClass].archetypes[idx].decklists.push(arch[deckKey])
-                    }
-                }
-            }
-        }
-        this.loadClass('Druid')
-    }// close constructor
+        }}}}
+
+    }// add Data
+
+
+
+
+
+
+
 
 
     loadFormat(hsFormat) {
@@ -102,7 +170,6 @@ class DecksWindow {
     }
 
     insertDescription(title,text) {
-        //console.log('insert description', this.description)
         this.description.innerHTML = '<p class="title">'+title+'</p><p class="text">'+text+'</p>'
     }
 

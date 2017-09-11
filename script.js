@@ -3,9 +3,37 @@
 var t0 = performance.now();
 
 
+
+// Global Data
+var DATABASE
+var DATA_L = {}
+var DATA_T = {}
+
+// Windows
+var powerWindow
+var decksWindow
+var tableWindow
+var ladderWindow
+
+
+//var decksWindow = new DecksWindow(0)
+
+var hsFormats =     ['Standard','Wild']
+var ladder_times =  ['lastDay','lastWeek','lastMonth']
+var ladder_ranks =  ['ranks_L_5','ranks_6_15','ranks_all']
+var table_times =   ['lastWeek','lastMonth']
+var table_ranks =   ['ranks_L_5','ranks_6_15','ranks_all']
+
+
+
+
+
 window.onload = function() {
-    setupUI()
-    setupFirebase()
+    setupUI() // ui = new UI()
+    setupFirebase() // move to script.js
+
+    tableWindow = new TableWindow(hsFormats, table_times, table_ranks)
+    ladderWindow = new LadderWindow(hsFormats, ladder_times, ladder_ranks)
 }
 
 

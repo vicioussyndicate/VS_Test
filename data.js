@@ -1,26 +1,11 @@
 
 
 
-// Global Data
-var DATA_L = {}
-var DATA_T = {}
-
-// Windows
-var powerWindow
-var decksWindow
-
-//var decksWindow = new DecksWindow(0)
-
-var hsFormats =     ['Standard','Wild']
-var ladder_times =  ['lastDay','lastWeek','lastMonth']
-var table_times =   ['lastWeek','lastMonth']
-var table_ranks =   ['ranks_L_5','ranks_6_15','ranks_all']
-
-
-
 
 
 function setupTableData (data) {
+
+    
 
     var tableData = data.val()
     
@@ -40,7 +25,9 @@ function setupTableData (data) {
 
 
 function setupLadderData (data) {
+
     
+
     var ladderData = data.val()
     
     for (f of hsFormats) {
@@ -71,6 +58,7 @@ function setupFirebase() {
     };
     firebase.initializeApp(config);
     var database = firebase.database()
+    DATABASE = database
 
     var refTable = database.ref('tableData')
     refTable.on('value',setupTableData,errMsg)
@@ -78,8 +66,7 @@ function setupFirebase() {
     var refLadder = database.ref('ladderData')
     refLadder.on('value',setupLadderData,errMsg)
 
-    var refDecks = database.ref('deckData')
-    refDecks.on('value',setupDeckData,errMsg)
+    decksWindow = new DecksWindow(hsFormats)
 }
 
 function errMsg() {print("failed to load Data")}

@@ -5,7 +5,7 @@
 
 class Ladder {
 
-    constructor (DATA,f,t) {
+    constructor (DATA,f,t,window=null) {
 
         this.maxLegendEntries = 9
         this.maxLines = 10 // max archetypes shown for the line chart
@@ -15,6 +15,7 @@ class Ladder {
         this.DATA = DATA
         this.f = f
         this.t = t
+        this.window = window
         this.days
 
 

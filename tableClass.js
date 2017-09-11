@@ -5,12 +5,14 @@
 
 class Table {
 
-    constructor(DATA,f,t,r) {
+    constructor(DATA,f,t,r,window=null) {
        
         this.DATA = DATA
         this.f = f
         this.t = t
         this.r = r
+        this.window = window
+
         this.sortBy = ''
         this.numArch = (f == 'Standard') ? 20 : 20;
         this.backgroundColor = '#555'
@@ -255,7 +257,6 @@ class Table {
     }
 
     zoomToggle (data) {
-        //var self = this //DATA_T[ui.table.f][ui.table.t][ui.table.r]
         var arch = data.points[0].y
         if (ui.table.zoomIn == false) { this.zoomIn(arch) }
         else { this.zoomOut()}
