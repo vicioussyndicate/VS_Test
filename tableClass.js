@@ -286,7 +286,7 @@ class Table {
         var OptMU = document.querySelector('#tableWindow #matchup')
         var OptWR = document.querySelector('#tableWindow #winrate')
         OptMU.style.display = 'inline-block'
-        OptWR.style.display = 'none'
+        if (arch == 'Overall') { OptWR.style.display = 'none' }
     
         ui.table.zoomIn = true
         ui.table.zoomArch = arch
@@ -326,11 +326,11 @@ class Table {
         var idxs = range(0,this.numArch)
         var zoomIdx = this.archetypes.indexOf(ui.table.zoomArch)
         
-
+        /*
         if (ui.table.zoomIn && what=='winrate') {
             what='matchup'
             if (zoomIdx == -1) {what = 'winrate'}
-        }
+        }*/
 
         var sortByMU = function (a,b) {return self.table[zoomIdx][a] > self.table[zoomIdx][b] ? -1: self.table[zoomIdx][a] < self.table[zoomIdx][b] ? 1 : 0 ;}
         var sortByWR = function (a, b) { return self.winrates[a] > self.winrates[b] ? -1 : self.winrates[a] < self.winrates[b] ? 1 : 0; }

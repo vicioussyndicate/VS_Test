@@ -20,7 +20,7 @@ class TableWindow {
 
         this.f = 'Standard'
         this.t = 'lastWeek'
-        this.r = 'all ranks'
+        this.r = 'ranks_all'
         this.sortBy = 'class' // class, frequency, winrate, matchup
         this.zoomIn = false
         this.zoomArch = null
