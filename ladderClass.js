@@ -536,13 +536,14 @@ class Ladder {
         this.rankFolder.style.display = 'none'
 
         if (ui.ladder.plotMode == 'timeline') {
+            this.rankFolder.style.display = 'flex'
             layout = this.layout_time
             if (ui.ladder.dispMode == 'decks') {data = this.traces_arch_time}
             if (ui.ladder.dispMode == 'classes') {data = this.traces_class_time}
         }
 
         if (ui.ladder.plotMode == 'pie') {
-            this.rankFolder.style.display = 'inline'
+            this.rankFolder.style.display = 'flex'
             layout = this.layout_pie
             data = this.traces_pie[ui.ladder.dispMode][this.tier.name]
         }
