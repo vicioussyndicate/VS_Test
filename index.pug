@@ -10,7 +10,7 @@ html(lang='en')
     script(src='https://cdn.jsdelivr.net/npm/clipboard@1/dist/clipboard.min.js')
     link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css')
     link(rel='stylesheet', href='reset.css')
-    link(rel='stylesheet', href='styles_new.css')
+    link(rel='stylesheet', href='styles_01.css')
     title VS
   body
     .main-wrapper
@@ -60,7 +60,7 @@ html(lang='en')
               button#timeline.optionBtn.fa.fa-clock-o.tooltip
                   span.tooltipText Show Timeline
           .content
-            #chart1
+            #chart1.chart
           .content-footer
         #powerWindow.tabWindow
           .content-header
@@ -70,7 +70,7 @@ html(lang='en')
             .dispOptions.optionBar
               button#top.optionBtn Top 5
               button#tiers.optionBtn Tier Lists
-          #powerGrid
+          #powerGrid.chart
             
         #tableWindow.tabWindow
           .content-header
@@ -103,7 +103,7 @@ html(lang='en')
                   button#winrate.optionBtn.folderBtn By Winrate
                   button#matchup.optionBtn.folderBtn By Matchup
           .content
-            #chart2
+            #chart2.chart
         #decksWindow.tabWindow
           .content-header
             .ftrOptions.optionBar

@@ -90,6 +90,22 @@ var colorscale_Table = [
 
 
 var hsColors = {
+    Druid:      '#9e3d22',
+    Hunter:     '#24693d',
+    Mage:       '#7ec8e1',
+    Paladin:    '#f4d166',
+    Priest:     '#758087',
+    Rogue:      '#1c1626',
+    Shaman:     '#1f77b4',
+    Warlock:    '#9467bd',
+    Warrior:    '#c11a3b',
+    Other:      '#88042d',
+    '':         '#88042d',
+    '§':        '#88042d',
+}
+
+/*
+var hsColors = {
     Druid:      '#836353',
     Hunter:     '#74a121',
     Mage:       '#7dc0f1',
@@ -103,6 +119,7 @@ var hsColors = {
     '':         '#88042d',
     '§':        '#88042d',
 }
+*/
 
 
 

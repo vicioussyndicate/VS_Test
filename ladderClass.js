@@ -10,8 +10,7 @@ class Ladder {
         this.maxLegendEntries = 9
         this.maxLines = 10 // max archetypes shown for the line chart
 
-        this.bgColor1 = 'white'
-        this.bgColor2 = '#929625'
+        this.bgColor = 'transparent'
 
         this.DATA = DATA
         this.f = f
@@ -351,8 +350,8 @@ class Ladder {
                 tickformat: ',.0%',
 		    },
             
-		    plot_bgcolor: this.backgroundColor,
-            paper_bgcolor: this.backgroundColor,
+		    plot_bgcolor: this.bgColor,
+            paper_bgcolor: this.bgColor,
             margin: {l:60,r:30,b:35,t:0,},
 	    }
 
@@ -396,7 +395,7 @@ class Ladder {
 			    color: '#999',
 		    },
 		    //plot_bgcolor: 'black',//this.bgColor1, 
-            paper_bgcolor: 'white',//this.bgColor2,
+            paper_bgcolor: this.bgColor,//this.bgColor2,
             margin: {l:70,r:20,b:30,t:0,},
         }
 
@@ -435,8 +434,8 @@ class Ladder {
                 fixedrange: true,
 			    color: '#999',
 		    },
-		    plot_bgcolor: this.backgroundColor, 
-            paper_bgcolor: this.backgroundColor,
+		    plot_bgcolor: this.bgColor, 
+            paper_bgcolor: this.bgColor,
             margin: {l:70,r:20,b:30,t:0,},
         }
 
@@ -451,8 +450,8 @@ class Ladder {
 		    hovermode: 'closest',
             
 		    
-		    plot_bgcolor: this.backgroundColor, 
-            paper_bgcolor: this.backgroundColor,
+		    plot_bgcolor: this.bgColor, 
+            paper_bgcolor: this.bgColor,
             margin: {l:70,r:20,b:30,t:30,},
         }
 

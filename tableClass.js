@@ -15,9 +15,10 @@ class Table {
 
         this.sortBy = ''
         this.numArch = (f == 'Standard') ? 20 : 20;
-        this.backgroundColor = '#555'
+        this.bgColor = 'transparent'
+        this.fontColor = '#22222'
         this.subplotRatio = 0.6
-        this.width = document.querySelector('.main-wrapper').offsetWidth -9
+        this.width = document.querySelector('.main-wrapper').offsetWidth -40
         this.height = 560
 
         this.table = []
@@ -110,20 +111,20 @@ class Table {
             showlegend: false,
             xaxis: {side: 'top',
                 showgrid: false,
-                tickcolor: 'white',
-                color: 'white',
-                gridcolor:'white',
+                tickcolor: this.fontColor,
+                color: this.fontColor,
+                gridcolor:this.fontColor,
                 fixedrange: true,
             },
             yaxis: {
                 autorange: 'reversed',
-                tickcolor: 'white', 
-                color:'white', 
-                gridcolor:'white',
+                tickcolor: this.fontColor, 
+                color:this.fontColor, 
+                gridcolor:this.fontColor,
                 fixedrange: true,
             },
             plot_bgcolor: "transparent",
-            paper_bgcolor: this.backgroundColor,
+            paper_bgcolor: this.bgColor,
             margin: {l: 120, r: 30, b: 30, t: 100 },
             width: this.width,
             height: this.height,
