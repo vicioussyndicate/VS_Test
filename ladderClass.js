@@ -18,6 +18,7 @@ class Ladder {
         this.t = t
         this.window = window
         this.days
+        this.fr_min = 0.03
 
 
         switch (t) {
@@ -32,15 +33,15 @@ class Ladder {
         this.archetypes = []
         this.c_data = {}
 
-        this.traces_arch_bar = []
+        this.traces_bar = {classes: [], decks:[]}
         this.traces_class_bar = []
 
-        this.traces_arch_line = []
+        this.traces_line = {classes: [], decks:[]}
         this.traces_class_line = []
 
         this.traces_pie = {classes: {}, decks:{}}
         
-        this.traces_arch_time = []
+        this.traces_time = {classes: [], decks:[]}
         this.traces_class_time = []
 
         this.archLegend = []
@@ -145,40 +146,56 @@ class Ladder {
         for (var i=0;i<ARCHETYPES.length;i++) {
 
             var archFR = []
+            var archFR_line = [] // without merging 
             var archTxt = []
             var fr_avg = 0
             var archName = ARCHETYPES[i][1] + " " + ARCHETYPES[i][0].replace('§', '');
-            //var classIdx = hsClasses.indexOf(ARCHETYPES[i][0])
+            var classIdx = hsClasses.indexOf(ARCHETYPES[i][0])
             var color = colorStringRange(hsColors[ARCHETYPES[i][0]],45)
 
             for (var rank=0;rank<hsRanks;rank++) {
                 var fr = rankData[rank][i]
+                archFR_line.push(fr)                
                 archTxt.push(`<b>${archName}     </b><br>freq: ${(fr*100).toFixed(1)}%`)
-                archFR.push(fr)
+
+                // Merge
+                if (fr < this.fr_min && i>9) {
+                    this.traces_bar.decks[classIdx].y[rank] += fr
+                    fr = 0
+                }
+                
                 fr_avg += fr
+                archFR.push(fr)
+             
+                
+                
 
                 for (var tier of this.tiers) {
-         
                     if (rank == tier.start) {
                         
                         this.traces_pie['decks'][tier.name][0].values.push(fr)
                         this.traces_pie['decks'][tier.name][0].labels.push(archName)
                         this.traces_pie['decks'][tier.name][0].marker.colors.push(color)
-
                     }
-
                     if (rank > tier.start && rank <= tier.end) {
                         this.traces_pie['decks'][tier.name][0].values[i] += fr
                     }
-                    
                     if (rank == tier.end) {
-                        this.traces_pie['decks'][tier.name][0].values[i] /= (tier.end - tier.start + 1)
+                        this.traces_pie.decks[tier.name][0].values[i] /= (tier.end - tier.start + 1)
                         this.traces_pie['decks'][tier.name][0].text.push(archName)
+
+                        // Merge Pie
+                        var fr_pie = this.traces_pie.decks[tier.name][0].values[i]
+                        if (fr_pie <this.fr_min && i>9) {
+                            this.traces_pie.decks[tier.name][0].values[i] = 0
+                            this.traces_pie.decks[tier.name][0].values[classIdx] += fr_pie
+                        } 
                     }
                 }
-            }
+            } // for ranks
+
             fr_avg /= hsRanks
-            
+
 
             //archtimeline
             var archT = []
@@ -186,7 +203,7 @@ class Ladder {
 
             var arch_bar = {
                 x:range(0,hsRanks),
-                y:archFR,
+                y:archFR.slice(),
                 name: archName,
                 text: archTxt,
                 hoverinfo: 'text',
@@ -198,7 +215,7 @@ class Ladder {
             
             var arch_line = {
                 x: range(0,hsRanks),
-                y: archFR,
+                y: archFR_line.slice(),
                 name: archName,
                 text: archTxt,
                 hoverinfo: 'text',
@@ -224,15 +241,20 @@ class Ladder {
                 fr: fr_avg,
             }
 
-            this.traces_arch_bar.push(arch_bar)
-            this.traces_arch_line.push(arch_line)
-            this.traces_arch_time.push(arch_time)
+            this.traces_bar.decks.push(arch_bar)
+            this.traces_line.decks.push(arch_line)
+            this.traces_time.decks.push(arch_time)
+
             this.archLegend.push({name: archName, color: color, fr: fr_avg})
             this.archetypes.push({name:archName,fr:fr_avg, data: archFR, color: color})
 
         } // close for ARCHETYPES
                 
-
+        
+        // Where is the fr loss?
+        var frSum = 0
+        for (var tr of this.traces_bar.decks) {frSum += tr.y[0]}
+        console.log('freq Sum = ',frSum)
 
         // Class Traces
         for (var i=0;i<9;i++) {
@@ -299,6 +321,10 @@ class Ladder {
                 fr: fr_avg,
             }
 
+            this.traces_bar.classes.push(arch_bar)
+            this.traces_line.classes.push(arch_line)
+            this.traces_time.classes.push(arch_time)
+
             this.traces_class_bar.push(class_bar)
             this.traces_class_line.push(class_line)
             this.traces_class_time.push(class_time)
@@ -360,7 +386,7 @@ class Ladder {
 
         // LAYOUT LINE
         this.layout_line = {
-            title: 'Class Frequency per Rank',
+            //title: 'Class Frequency per Rank',
 		    showlegend: false,
 		    displayModeBar: false,
             autosize: true,
@@ -387,6 +413,7 @@ class Ladder {
 				    family: 'Arial, bold',
 				    size: 19,
 			    },
+                showgrid: true,
                 ticklen: 12,
                 tickcolor: 'transparent',
                 tickformat: ',.0%',
@@ -395,7 +422,7 @@ class Ladder {
                 //zeroline: false,
 			    color: this.fontColor,
 		    },
-		    //plot_bgcolor: 'black',//this.bgColor1, 
+		    plot_bgcolor: this.bgColor,
             paper_bgcolor: this.bgColor,//this.bgColor2,
             margin: {l:70,r:20,b:30,t:0,},
         }
@@ -442,7 +469,6 @@ class Ladder {
 
         // LAYOUT Pie
         this.layout_pie = {
-            //title: 'Class Frequency over the last 14 days',
 		    showlegend: false,
 		    displayModeBar: false,
             autosize: true,
@@ -464,10 +490,10 @@ class Ladder {
         this.traces_class_bar.sort(classSort)
         this.traces_class_line.sort(freqSort)
         this.traces_class_line.splice(this.maxLines)
-        
-        this.traces_arch_bar.sort(classSort)
-        this.traces_arch_line.sort(freqSort)
-        this.traces_arch_line.splice(this.maxLines)
+
+        this.traces_bar.decks.sort(classSort)
+        this.traces_line.decks.sort(freqSort)
+        this.traces_line.decks.splice(this.maxLines)
         
         this.archLegend.sort(freqSort)
         this.archetypes.sort(freqSort)
@@ -541,7 +567,7 @@ class Ladder {
         if (this.window.plotType == 'timeline') {
             this.rankFolder.style.display = 'flex'
             layout = this.layout_time
-            if (this.window.mode == 'decks') {data = this.traces_arch_time}
+            if (this.window.mode == 'decks') {data = this.traces_time.decks }//this.traces_arch_time}
             if (this.window.mode == 'classes') {data = this.traces_class_time}
         }
 
@@ -558,13 +584,13 @@ class Ladder {
 
         if (this.window.plotType == 'bar') {
             layout = this.layout_bar
-            if (this.window.mode == 'decks') {data = this.traces_arch_bar}
+            if (this.window.mode == 'decks') {data = this.traces_bar.decks }//this.traces_arch_bar}
             if (this.window.mode == 'classes') {data = this.traces_class_bar}
         }
 
         if (this.window.plotType == 'line') {
             layout = this.layout_line
-            if (this.window.mode == 'decks') {data = this.traces_arch_line}
+            if (this.window.mode == 'decks') {data = this.traces_line.decks }//this.traces_arch_line}
             if (this.window.mode == 'classes') {data = this.traces_class_line}
         }
 
@@ -594,6 +620,8 @@ class Ladder {
     }
 
 
+
+
     createTable (mode) {
 
         var maxArch = 20
@@ -610,8 +638,8 @@ class Ladder {
         if (mode == 'decks') {
             for (var j=0; j<maxArch; j++) {
                 var arch = this.archetypes[j]
-                table += `<tr><td class="pivot">${arch.name}</td>`
-                for (var i=hsRanks-1;i>-1;i--) {table += `<td style="background-color:${this.colorScale(arch.data[i])};">${arch.data[i].toFixed(2)}</td>`}
+                table += `<tr><td class="pivot" style="background-color:${arch.color}">${arch.name}</td>`
+                for (var i=hsRanks-1;i>-1;i--) {table += `<td style="background-color:${this.colorScale(arch.data[i])};">${(arch.data[i]*100).toFixed(1)}%</td>`}
                 table += `</tr>`
             }
         } 
@@ -620,8 +648,8 @@ class Ladder {
             for (var j=0; j<9; j++) {
                 var hsClass = hsClasses[j]
                 var data = this.c_data[hsClass]
-                table += `<tr><td class="pivot">${hsClass}</td>`
-                for (var i=hsRanks-1;i>-1;i--) { table += `<td style="background-color:${this.colorScale(data[i])};">${data[i].toFixed(2)}</td>` }
+                table += `<tr><td class="pivot" style="background-color:${hsColors[hsClass]}">${hsClass}</td>`
+                for (var i=hsRanks-1;i>-1;i--) { table += `<td style="background-color:${this.colorScale(data[i])};">${(data[i]*100).toFixed(1)}%</td>` }
                 table += `</tr>`
             }   
         }

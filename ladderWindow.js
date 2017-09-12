@@ -33,7 +33,7 @@ class LadderWindow {
 
         this.loadData()
         for (var btn of this.optionButtons) { btn.addEventListener("click", this.buttonTrigger.bind(this)) }        
-        //this.renderOptions()
+        this.renderOptions()
     } // close Constructor
 
 
@@ -42,6 +42,7 @@ class LadderWindow {
 
         var btnID = e.target.id
 
+        if (btnID == 'lastDay')     {this.t = 'lastDay'}
         if (btnID == 'lastWeek')    {this.t = 'lastWeek'}
         if (btnID == 'lastMonth')   {this.t = 'lastMonth'}
 
@@ -66,6 +67,8 @@ class LadderWindow {
     }// button Handler
 
 
+
+
     renderOptions() {
 
         for (var btn of this.optionButtons) { 
@@ -74,8 +77,6 @@ class LadderWindow {
             if (btn.id == this.mode) {btn.classList.add('highlighted')}
             if (btn.id == this.plotType) {btn.classList.add('highlighted')}
         }
-
-
         document.querySelector("#ladderWindow #formatBtn").innerHTML =    btnIdToText[this.f]
         document.querySelector("#ladderWindow #timeBtn").innerHTML =      btnIdToText[this.t]
     }
@@ -84,11 +85,9 @@ class LadderWindow {
 
 
     loadData() {
-
         var ref = DATABASE.ref('ladderData')
         ref.on('value',this.addData.bind(this), function () {console.log('Could not load Ladder Data')})
-
-    } // load Data
+    }
 
 
 
@@ -104,10 +103,11 @@ class LadderWindow {
         this.fullyLoaded = true
         console.log('ladder loaded: '+ (performance.now()-t0).toFixed(2)+' ms')
         finishedLoading()
-    }// add Data
+    }
 
 
-    plot () { this.data[this.f][this.t].plot() }
+
+    plot () { this.data[this.f][this.t].plot();}
 
 } // close LadderWindow
 

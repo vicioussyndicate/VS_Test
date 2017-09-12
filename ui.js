@@ -65,6 +65,7 @@ class UI {
     }
 
     showLoader() { this.loader.style.display = 'block' }
+
     hideLoader() { this.loader.style.display = 'none' }
 
 } // close UI
@@ -84,53 +85,7 @@ class UI {
 
 
 
-function overlay() {
-    if (ui.overlay) {document.getElementById("overlay").style.display = "none"; ui.overlay = false}
-    else {document.getElementById("overlay").style.display = "block"; ui.overlay = true}
-    
-}
 
-function hideLoader() { document.getElementById('loader').style.display = 'none'}
-function showLoader () { document.getElementById('loader').style.display = 'block' }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-const btnIdToText = {
-    Standard: 'Standard',
-    Wild: 'Wild',
-    
-    ranks_all: 'All Ranks',
-    ranks_L_5: 'Ranks L-5',
-    ranks_6_15: 'Ranks 6-15',
-
-    lastDay: 'Last Day',
-    lastWeek: 'Last Week',
-    lastMonth: 'Last Month',
-
-    class: 'By Class',
-    frequency: 'By Frequency',
-    winrate: 'By Winrate',
-    
-    frSubplot: 'Frequency',
-    wrSubplot: 'Winrate',
-
-    classes: 'Classes',
-    decks: 'Archetypes',
-    matchup: 'Matchup',
-}
 
 
 

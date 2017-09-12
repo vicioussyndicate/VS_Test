@@ -21,8 +21,8 @@ html(lang='en')
           button#power.tab Tier List
           button#table.tab Matchups
           button#decks.tab Decks
-          button#info.tab.fa.fa-vimeo
-      button#overlayBtn.optionBtn(onclick='overlay()') i
+          button#info.tab.fa.fa-info
+      button#overlayBtn.optionBtn(onclick='overlay()').fa.fa-info
         
         
       .content-wrapper
@@ -68,9 +68,10 @@ html(lang='en')
               button#Standard.optionBtn Standard
               button#Wild.optionBtn Wild
             .dispOptions.optionBar
-              button#top.optionBtn Top 5
               button#tiers.optionBtn Tier Lists
+              button#top.optionBtn Suggestions
           #powerGrid.chart
+          .content-footer
             
         #tableWindow.tabWindow
           .content-header
@@ -104,6 +105,7 @@ html(lang='en')
                   button#matchup.optionBtn.folderBtn By Matchup
           .content
             #chart2.chart
+          .content-footer
         #decksWindow.tabWindow
           .content-header
             .ftrOptions.optionBar
@@ -115,19 +117,19 @@ html(lang='en')
               .option-folder
                 button#classBtn.folder-toggle Druid
                 .dropdown.hidden
-                  button#druid.optionBtn.folderBtn Druid 
-                  button#hunter.optionBtn.folderBtn Hunter 
-                  button#mage.optionBtn.folderBtn Mage
-                  button#paladin.optionBtn.folderBtn Paladin
-                  button#priest.optionBtn.folderBtn Priest
-                  button#rogue.optionBtn.folderBtn Rogue
-                  button#shaman.optionBtn.folderBtn Shaman
-                  button#warlock.optionBtn.folderBtn Warlock
-                  button#warrior.optionBtn.folderBtn Warrior
+                  button#Druid.optionBtn.folderBtn Druid 
+                  button#Hunter.optionBtn.folderBtn Hunter 
+                  button#Mage.optionBtn.folderBtn Mage
+                  button#Paladin.optionBtn.folderBtn Paladin
+                  button#Priest.optionBtn.folderBtn Priest
+                  button#Rogue.optionBtn.folderBtn Rogue
+                  button#Shaman.optionBtn.folderBtn Shaman
+                  button#Warlock.optionBtn.folderBtn Warlock
+                  button#Warrior.optionBtn.folderBtn Warrior
             .displayOptions.optionBar
               button#description.optionBtn Description
               button#decklists.optionBtn Deck Lists
-              button#classRadar.optionBtn Class Radar
+              //button#classRadar.optionBtn Class Radar
           .content
             .archetypes
               p.title Archetypes
@@ -139,6 +141,7 @@ html(lang='en')
             
           
         #infoWindow.tabWindow
+          .content-header
           p The VS Live Web App is currently in Alpha.<br><br>The app is currently not updated with live data. Many of the feature implementations are placeholder.<br><br>Please leave a feedback (suggestions, bugs, comments etc.) in the reddit thread linked below:
           
           a(href="https://www.reddit.com/r/ViciousSyndicate/comments/6yqj62/vs_live_web_app_feedback_thread/" target="_blank")

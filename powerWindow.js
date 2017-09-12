@@ -47,8 +47,8 @@ class PowerWindow {
 
         this.addData('Standard')
         this.addData('Wild')
-        this.plotTiers('Standard')
-        
+
+        this.renderOptions()
     }// close constructor
 
 
@@ -65,8 +65,20 @@ class PowerWindow {
         if (btnID == 'tiers')       {this.mode = 'tiers'}
         
         this.plot()
+        this.renderOptions()
     }// button Handler
 
+    pressButton(e) { ui.toggleTabs({target:document.querySelector('#decks.tab')}) }
+
+
+    renderOptions() {
+        for (var btn of this.optionButtons) { 
+            btn.classList.remove('highlighted')
+
+            if (btn.id == this.mode) {btn.classList.add('highlighted')}
+            if (btn.id == this.f) {btn.classList.add('highlighted')}
+        }
+    }
 
 
 
@@ -126,12 +138,8 @@ class PowerWindow {
 
 
     plot() {
-
-        var f = ui.power.f
-        var mode = ui.power.dispMode
-
-        if (mode == 'top') {this.plotTop(f)}
-        if (mode == 'tiers') {this.plotTiers(f)}
+        if (this.mode == 'top') {this.plotTop(this.f)}
+        if (this.mode == 'tiers') {this.plotTiers(this.f)}
     }
 
     plotTop (f) {
@@ -260,10 +268,7 @@ class PowerWindow {
 
 
 
-    pressButton(e) {
-        console.log('pressed button',e)
-        toggleMainTabs({target:document.querySelector('#decks.tab')})
-    }
+    
 
 } // close PowerRanking class
 

@@ -19,19 +19,19 @@ button:hover {
 }
 
 .option-folder .folder-toggle {
-	background: #e8fcfc;
-	color: #1f3044;
+	background: #ebebeb;
+	color: #454c57;
 	font-weight: bold;
 	border-radius: 5%;
-	padding: 0.4rem;
+	padding: 0.4rem 0.4rem 0.2rem 0.4rem;
 	margin-left: 0.5em;
 	transition: background 0.3s ease, color 0.3s ease;
 }
 
 .option-folder .folder-toggle:hover {
 	cursor: pointer;
-	background: #1f3044;
-	color: #e8fcfc;
+	background: #454c57;
+	color: #ebebeb;
 }
 
 .option-folder .dropdown {
@@ -100,7 +100,7 @@ table {
 }
 
 table th {
-	background-color: #999;
+	background-color: transparent;
 	font-weight: bold;
 }
 
@@ -147,13 +147,13 @@ body .main-wrapper .navbar .tabs {
 	align-content: center;
 	align-items: center;
 	justify-content: center;
-	background: #759cce;
-	color: #e8fcfc;
+	background: #aca78a;
+	color: #ebebeb;
 }
 
 body .main-wrapper .navbar .tabs .tab {
-	background-color: #759cce;
-	color: #e8fcfc;
+	background-color: #aca78a;
+	color: #ebebeb;
 	padding: 0.4rem;
 	font-size: 1.5rem;
 	font-weight: bold;
@@ -166,8 +166,8 @@ body .main-wrapper .navbar .tabs .tab:hover {
 }
 
 body .main-wrapper .navbar .tabs .tab.highlighted {
-	background-color: #1f3044;
-	color: #e8fcfc;
+	background-color: #454c57;
+	color: #ebebeb;
 }
 
 body .main-wrapper .content-wrapper {
@@ -175,7 +175,7 @@ body .main-wrapper .content-wrapper {
 	width: 100%;
 	display: flex;
 	flex-direction: column;
-	background-color: #e8fcfc;
+	background-color: #fffeea;
 }
 
 body .main-wrapper .content-wrapper #decksWindow .content-header .classOptions {
@@ -195,7 +195,7 @@ body .main-wrapper .content-wrapper #decksWindow .content .archetypes .title {
 	margin-top: 1rem;
 	font-weight: bold;
 	font-size: 1.1rem;
-	color: #fff;
+	color: #454c57;
 }
 
 body .main-wrapper .content-wrapper #decksWindow .content .archetypes .archBtn {
@@ -208,28 +208,33 @@ body .main-wrapper .content-wrapper #decksWindow .content .decklists {
 }
 
 body .main-wrapper .content-wrapper #decksWindow .content .decklists .deckBox .deckTitle {
-	color: #fff;
-	display: inline;
-	padding: 0.5rem;
+	display: inline-block;
+	background-color: #aca78a;
+	width: 100%;
+}
+
+body .main-wrapper .content-wrapper #decksWindow .content .decklists .deckBox .deckTitle p {
+	padding: 0.3rem;
+	color: #454c57;
+	display: inline-block;
 }
 
 body .main-wrapper .content-wrapper #decksWindow .content .decklists .deckBox .deckTitle:hover {
-	background-color: #fff;
-	color: #000;
+	background-color: #c7de7b;
+	color: #454c57;
 }
 
 body .main-wrapper .content-wrapper #decksWindow .content .decklists .deckBox .decklist {
-	height: 22.1rem;
+	height: 25rem;
 	margin-top: 1rem;
 	margin-bottom: 1rem;
-	overflow-y: scroll;
+	overflow-y: auto;
 	overflow-x: hidden;
 	background-color: #fff;
 }
 
 body .main-wrapper .content-wrapper #decksWindow .content .decklists .deckBox .decklist .card {
 	padding: 0.15rem;
-	margin-top: 0.2rem;
 }
 
 body .main-wrapper .content-wrapper #decksWindow .content .decklists .deckBox .copyDL {
@@ -238,7 +243,7 @@ body .main-wrapper .content-wrapper #decksWindow .content .decklists .deckBox .c
 	font-size: 1rem;
 	font-weight: bold;
 	padding: 0.3rem;
-	margin-top: 3rem;
+	margin: 0 auto;
 	border: 0.1rem solid #92fc64;
 	border-radius: 3%;
 }
@@ -298,14 +303,15 @@ body .main-wrapper .content-wrapper #powerWindow #powerGrid {
 }
 
 body .main-wrapper .content-wrapper #powerWindow #powerGrid .pivot {
-	background-color: #808080;
+	background-color: transparent;
+	color: #454c57;
 	padding: 0.2rem;
 	margin-right: 0.5rem;
 }
 
 body .main-wrapper .content-wrapper #powerWindow #powerGrid .header {
-	background-color: #fff;
-	color: #222;
+	background-color: #aca78a;
+	color: #ebebeb;
 	padding: 0.2rem;
 	margin-bottom: 0.4rem;
 	font-weight: bold;
@@ -321,7 +327,7 @@ body .main-wrapper .content-wrapper #powerWindow #powerGrid .archBtn:hover {
 }
 
 body .main-wrapper .content-wrapper #powerWindow #powerGrid .winrate {
-	color: #c4c4c4;
+	color: #454c57;
 	font-weight: normal;
 	padding: 0.2rem;
 }
@@ -331,7 +337,7 @@ body .main-wrapper .content-wrapper #powerWindow #powerGrid .columnTitle {
 }
 
 body .main-wrapper .content-wrapper #infoWindow {
-	color: #fff;
+	color: #454c57;
 }
 
 body .main-wrapper .content-wrapper #infoWindow p {
@@ -358,19 +364,19 @@ body .main-wrapper .content-wrapper #tableWindow .content-header .graphOptions #
 }
 
 body .main-wrapper .content-wrapper .content {
-	background-color: #e8fcfc;
+	background-color: #fffeea;
 	display: flex;
 	flex-direction: column;
 }
 
 body .main-wrapper .content-wrapper .content .chart {
-	background-color: #e8fcfc;
+	background-color: #fffeea;
 	margin: 20px;
 }
 
 body .main-wrapper .content-wrapper .content-footer {
-	background-color: #1f3044;
-	color: #e8fcfc;
+	background-color: #454c57;
+	color: #ebebeb;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
@@ -387,8 +393,8 @@ body .main-wrapper .content-wrapper .content-header {
 	height: 1.78rem;
 	padding: 0.6rem 0 0.6rem 0;
 	font-size: 1em;
-	background-color: #1f3044;
-	color: #e8fcfc;
+	background-color: #454c57;
+	color: #ebebeb;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
@@ -404,17 +410,16 @@ body .main-wrapper .content-wrapper .content-header .optionBar {
 
 body .main-wrapper .content-wrapper .content-header .optionBar p {
 	font-size: 0.8em;
-	color: #e8fcfc;
+	color: #ebebeb;
 	margin-left: 1em;
 	margin-top: 1em;
 }
 
 body .main-wrapper .content-wrapper .content-header .optionBtn {
-	background: #1f3044;
-	color: #e8fcfc;
+	background: #454c57;
+	color: #ebebeb;
 	font-size: 1em;
-	font-weight: bold;
-	border: 0.1rem solid #e8fcfc;
+	border: 0.1rem solid #ebebeb;
 	font-size: 0.8em;
 	border-radius: 5%;
 	padding: 0.4rem;
@@ -423,32 +428,32 @@ body .main-wrapper .content-wrapper .content-header .optionBtn {
 }
 
 body .main-wrapper .content-wrapper .content-header .optionBtn:hover {
-	background: #9bf7ff;
-	color: #1f3044;
-	border: 0.1rem solid #9bf7ff;
+	background: #c7de7b;
+	color: #454c57;
+	border: 0.1rem solid #c7de7b;
 }
 
 body .main-wrapper .content-wrapper .content-header .optionBtn.highlighted {
-	background: #9bf7ff;
-	color: #1f3044;
-	border: 0.1rem solid #9bf7ff;
+	background: #c7de7b;
+	color: #454c57;
+	border: 0.1rem solid #c7de7b;
 }
 
 body .main-wrapper .content-wrapper .content-header .option-folder .folder-toggle {
-	background: #e8fcfc;
-	color: #1f3044;
+	background: #ebebeb;
+	color: #454c57;
 	font-weight: bold;
-	border: 0.1rem solid #e8fcfc;
+	border: 0.1rem solid #ebebeb;
 	border-radius: 5%;
-	padding: 0.4rem;
+	padding: 0.4rem 0.4rem 0.2rem 0.4rem;
 	margin-left: 0.5em;
 	transition: background 0.3s ease, color 0.3s ease;
 }
 
 body .main-wrapper .content-wrapper .content-header .option-folder .folder-toggle:hover {
 	cursor: pointer;
-	background: #1f3044;
-	color: #e8fcfc;
+	background: #454c57;
+	color: #ebebeb;
 }
 
 body .main-wrapper .content-wrapper .content-header .option-folder .dropdown {

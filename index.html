@@ -22,10 +22,10 @@
           <button class="tab" id="power">Tier List</button>
           <button class="tab" id="table">Matchups</button>
           <button class="tab" id="decks">Decks</button>
-          <button class="tab fa fa-vimeo" id="info"></button>
+          <button class="tab fa fa-info" id="info"></button>
         </div>
       </nav>
-      <button class="optionBtn" id="overlayBtn" onclick="overlay()">i</button>
+      <button class="optionBtn fa fa-info" id="overlayBtn" onclick="overlay()"></button>
       <div class="content-wrapper">
         <div id="loader"></div>
         <div class="tabWindow" id="ladderWindow">
@@ -76,11 +76,12 @@
               <button class="optionBtn" id="Wild">Wild</button>
             </div>
             <div class="dispOptions optionBar">
-              <button class="optionBtn" id="top">Top 5</button>
               <button class="optionBtn" id="tiers">Tier Lists</button>
+              <button class="optionBtn" id="top">Suggestions</button>
             </div>
           </div>
           <div class="chart" id="powerGrid"></div>
+          <div class="content-footer"></div>
         </div>
         <div class="tabWindow" id="tableWindow">
           <div class="content-header">
@@ -126,6 +127,7 @@
           <div class="content">
             <div class="chart" id="chart2"></div>
           </div>
+          <div class="content-footer"></div>
         </div>
         <div class="tabWindow" id="decksWindow">
           <div class="content-header">
@@ -140,22 +142,22 @@
               <div class="option-folder">
                 <button class="folder-toggle" id="classBtn">Druid</button>
                 <div class="dropdown hidden">
-                  <button class="optionBtn folderBtn" id="druid">Druid </button>
-                  <button class="optionBtn folderBtn" id="hunter">Hunter </button>
-                  <button class="optionBtn folderBtn" id="mage">Mage</button>
-                  <button class="optionBtn folderBtn" id="paladin">Paladin</button>
-                  <button class="optionBtn folderBtn" id="priest">Priest</button>
-                  <button class="optionBtn folderBtn" id="rogue">Rogue</button>
-                  <button class="optionBtn folderBtn" id="shaman">Shaman</button>
-                  <button class="optionBtn folderBtn" id="warlock">Warlock</button>
-                  <button class="optionBtn folderBtn" id="warrior">Warrior</button>
+                  <button class="optionBtn folderBtn" id="Druid">Druid </button>
+                  <button class="optionBtn folderBtn" id="Hunter">Hunter </button>
+                  <button class="optionBtn folderBtn" id="Mage">Mage</button>
+                  <button class="optionBtn folderBtn" id="Paladin">Paladin</button>
+                  <button class="optionBtn folderBtn" id="Priest">Priest</button>
+                  <button class="optionBtn folderBtn" id="Rogue">Rogue</button>
+                  <button class="optionBtn folderBtn" id="Shaman">Shaman</button>
+                  <button class="optionBtn folderBtn" id="Warlock">Warlock</button>
+                  <button class="optionBtn folderBtn" id="Warrior">Warrior</button>
                 </div>
               </div>
             </div>
             <div class="displayOptions optionBar">
               <button class="optionBtn" id="description">Description</button>
               <button class="optionBtn" id="decklists">Deck Lists</button>
-              <button class="optionBtn" id="classRadar">Class Radar</button>
+              <!--button#classRadar.optionBtn Class Radar-->
             </div>
           </div>
           <div class="content">
@@ -171,6 +173,7 @@
           </div>
         </div>
         <div class="tabWindow" id="infoWindow">
+          <div class="content-header"></div>
           <p>The VS Live Web App is currently in Alpha.<br><br>The app is currently not updated with live data. Many of the feature implementations are placeholder.<br><br>Please leave a feedback (suggestions, bugs, comments etc.) in the reddit thread linked below:</p><a href="https://www.reddit.com/r/ViciousSyndicate/comments/6yqj62/vs_live_web_app_feedback_thread/" target="_blank"><img src="redditLogo.png"></a>
         </div>
       </div>

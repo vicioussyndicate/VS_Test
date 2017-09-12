@@ -41,6 +41,7 @@ class TableWindow {
         this.loadData()
 
         for (let i=0;i<this.optionButtons.length;i++) { this.optionButtons[i].addEventListener("click", this.buttonTrigger.bind(this)) }
+        this.renderOptions()
     } // close Constructor
 
 
@@ -68,10 +69,18 @@ class TableWindow {
         if (btnID == 'matchup')     {data.sortTableBy('matchup');return}
         
         data.plot()
+        this.renderOptions()
     }// button Handler
 
-    plot () { this.data[this.f][this.t][this.r] }
+    plot () { this.data[this.f][this.t][this.r].plot(); console.log('plot table')}
+    
+    renderOptions() {
         
+        document.querySelector("#tableWindow #formatBtn").innerHTML =    btnIdToText[this.f]
+        document.querySelector("#tableWindow #timeBtn").innerHTML =      btnIdToText[this.t]
+        document.querySelector("#tableWindow #ranksBtn").innerHTML =     btnIdToText[this.r]
+        document.querySelector("#tableWindow #sortBtn").innerHTML =      btnIdToText[this.sortBy]
+    }
 
     loadData() {
 

@@ -6,8 +6,6 @@ var t0 = performance.now();
 
 // Global Data
 var DATABASE
-//var DATA_L = {}
-//var DATA_T = {}
 
 // Windows
 var powerWindow
@@ -29,10 +27,9 @@ var table_ranks =   ['ranks_L_5','ranks_6_15','ranks_all']
 
 
 window.onload = function() {
-    //setupUI() // ui = new UI()
     ui = new UI()
-    setupFirebase() // move to script.js
-
+    ui.showLoader()
+    setupFirebase()
 }
 
 function setupFirebase() {
@@ -51,27 +48,38 @@ function setupFirebase() {
     ladderWindow = new LadderWindow(hsFormats, ladder_times, ladder_ranks, finishedLoading)
     decksWindow = new DecksWindow(hsFormats, finishedLoading)
 
-    //while (!tableWindow.fullyLoaded || !ladderWindow.fullyLoaded || !decksWindow.fullyLoaded) {sleep(100); console.log('sleep')}
-    finishedLoading()
 }
 
 
 
 function finishedLoading() {
-    console.log(tableWindow.fullyLoaded, ladderWindow.fullyLoaded, decksWindow.fullyLoaded, (performance.now()-t0).toFixed(2))
+
     if (!(tableWindow.fullyLoaded && ladderWindow.fullyLoaded && decksWindow.fullyLoaded)) {return}
     
 
     powerWindow = new PowerWindow()
-
+    powerWindow.plot()
     ladderWindow.plot()
     tableWindow.plot()
+    decksWindow.plot()
 
     ui.fullyLoaded = true
-    hideLoader()
-
+    ui.hideLoader()
     console.log("App initializing took " + (performance.now() - t0) + " ms.")
 }
+
+
+
+
+
+
+function overlay() {
+    if (ui.overlay) {document.getElementById("overlay").style.display = "none"; ui.overlay = false}
+    else {document.getElementById("overlay").style.display = "block"; ui.overlay = true}
+    
+}
+
+
 
 
 
@@ -87,8 +95,8 @@ var colorscale_Table = [
     [1, '#055c7a']
 ];
 
-
-
+/*
+// VS Colors
 var hsColors = {
     Druid:      '#9e3d22',
     Hunter:     '#24693d',
@@ -103,42 +111,47 @@ var hsColors = {
     '':         '#88042d',
     '§':        '#88042d',
 }
+*/
 
-/*
 var hsColors = {
-    Druid:      '#836353',
-    Hunter:     '#74a121',
+    Druid:      '#9f8868',//'#836353',
+    Hunter:     '#6fbe24',//'#74a121',
     Mage:       '#7dc0f1',
     Paladin:    '#f3ba0c',
-    Priest:     '#fdfde3',
+    Priest:     '#d8e1e6',//'#fdfde3',
     Rogue:      '#335057',
     Shaman:     '#3b5fcd',
-    Warlock:    '#a249a2',
+    Warlock:    '#b25bba',//'#a249a2',
     Warrior:    '#88042d',
     Other:      '#88042d',
     '':         '#88042d',
     '§':        '#88042d',
 }
-*/
 
 
+const btnIdToText = {
+    Standard: 'Standard',
+    Wild: 'Wild',
+    
+    ranks_all: 'All Ranks',
+    ranks_L_5: 'Ranks L-5',
+    ranks_6_15: 'Ranks 6-15',
 
-var hsColors2 = {
-    Druid:      '#967928',
-    Hunter:     '#4ca026',
-    Mage:       '#95a5e2',
-    Paladin:    '#e2db71',
-    Priest:     '#ffffff',
-    Rogue:      '#4c6370',
-    Shaman:     '#238ee0',
-    Warlock:    '#fc3ffc',
-    Warrior:    '#d81753',
-    Other:      '#88042d',
-    '':         '#88042d',
-    '§':        '#88042d',
+    lastDay: 'Last Day',
+    lastWeek: 'Last Week',
+    lastMonth: 'Last Month',
+
+    class: 'By Class',
+    frequency: 'By Frequency',
+    winrate: 'By Winrate',
+    
+    frSubplot: 'Frequency',
+    wrSubplot: 'Winrate',
+
+    classes: 'Classes',
+    decks: 'Archetypes',
+    matchup: 'Matchup',
 }
-
-
 
 
 
