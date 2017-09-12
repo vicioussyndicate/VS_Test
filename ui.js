@@ -50,6 +50,14 @@ class UI {
 
     }
 
+    deckLink(arch, hsFormat) {
+        this.activeTab = document.querySelector('.navbar #decks')
+        this.activeWindow = document.getElementById('decksWindow')
+        this.renderTabs()
+        this.renderWindows()        
+        decksWindow.deckLink(arch, hsFormat)
+    }
+
     renderTabs() {
         for (var tab of this.tabs) {
             if (tab != this.activeTab) {tab.classList.remove('highlighted')}

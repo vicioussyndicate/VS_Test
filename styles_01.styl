@@ -176,6 +176,7 @@ body
     font-size: 20
     .main-wrapper
         max-width 50vw
+        min-width 510px
         height 800px
         margin 10px auto
         display flex
@@ -230,6 +231,7 @@ body
                     display grid
                     grid-template-columns 7rem auto
                     grid-auto-flow: column
+                    overflow-x: auto
                     grid-gap 1rem
                     padding 1rem
                     .archetypes
@@ -376,6 +378,29 @@ body
                         #matchup
                             display: none
                         margin-right: 2rem
+                .content-footer
+                    button
+                        color black
+                        font-size: 1rem
+                        font-weight: bold
+                        padding 0.3rem
+                        margin 0 auto
+                        border 0.1rem solid #92fc64
+                        border-radius 3%
+                        &:hover
+                            cursor:  pointer
+                    .copyTable
+                        background-color #92fc64
+                        &:hover
+                            background-color: #b7ff54
+                            border-color: #b7ff54
+                    .downloadTable
+                        border 0.1rem solid rgb(87, 161, 193)
+                        background-color rgb(87, 161, 193)
+                        color $lightColor
+                        &:hover
+                            background-color: rgb(100, 170, 200)
+                            border-color: rgb(100, 170, 200)
             .content
                 background-color $content_bgColor
                 display flex

@@ -68,7 +68,7 @@ class PowerWindow {
         this.renderOptions()
     }// button Handler
 
-    pressButton(e) { ui.toggleTabs({target:document.querySelector('#decks.tab')}) }
+    pressButton(e) {ui.deckLink(e.target.id, this.f) }
 
 
     renderOptions() {

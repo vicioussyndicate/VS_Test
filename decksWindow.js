@@ -14,11 +14,13 @@ class DecksWindow {
         this.decklists = document.querySelector('#decksWindow .content .decklists')
         this.description = document.querySelector('#decksWindow .content .descriptionBox .description')
         this.optionButtons = document.querySelectorAll('#decksWindow .optionBtn')
-        for (let i=0;i<this.optionButtons.length;i++) { this.optionButtons[i].addEventListener("click", this.buttonTrigger.bind(this)) }
+        this.archButtons = document.querySelectorAll('#decksWindow .archButton')
+        for (var aBtn of this.archButtons)   { aBtn.addEventListener("click", this.buttonTrigger.bind(this)) }
+        for (var oBtn of this.optionButtons) { oBtn.addEventListener("click", this.buttonTrigger.bind(this)) }
 
         this.f = 'Standard'
         this.hsClass = 'Druid'
-        this.hsArchetypeIdx = 0
+        this.archIdx = 0
         this.display = 'description'
         this.fullyLoaded = false
 
@@ -41,6 +43,8 @@ class DecksWindow {
 
 
     buttonTrigger(e) {
+        // Check if e.classList contains 'archBtn'
+        // loadArchetype(arch)
 
         var btnID = e.target.id
 
@@ -117,7 +121,29 @@ class DecksWindow {
 
 
 
+    deckLink(archName, hsFormat = 'Standard') {
+        var hsClass
+        var archIdx
 
+        console.log('decklink:',archName,hsFormat)
+
+        for (var c of hsClasses) {
+            if (archName.indexOf(c) != -1) {hsClass = c}
+            var archetypes = this.data[hsFormat][c].archetypes
+            for (var i=0; i<archetypes.length;i++) {
+                if (archetypes[i].name == archName) { hsClass = c; archIdx = i; break } 
+        }}
+        
+        if (archIdx == undefined) { archIdx = 0}
+        if (hsClass == undefined) { hsClass = 'Druid'} 
+        
+        this.hsClass = hsClass
+        this.archIdx = archIdx
+
+        this.loadClass(hsClass)
+        this.loadDecklists()
+        this.renderOptions()
+    }
 
 
 
@@ -137,7 +163,7 @@ class DecksWindow {
         var archDiv = document.querySelector('#decksWindow .content .archetypes .archetypeList')
         archDiv.innerHTML = ''
         var archetypes = this.data[this.f][this.hsClass].archetypes
-        //console.log(archetypes)
+
         for (var arch of archetypes) {
             this.insertArchetype(arch)
         }
@@ -160,7 +186,7 @@ class DecksWindow {
 
         this.decklists.innerHTML = ''
         
-        var arch = this.data[this.f][this.hsClass].archetypes[this.hsArchetypeIdx]
+        var arch = this.data[this.f][this.hsClass].archetypes[this.archIdx]
         
         var gridTemplateColumns = ''
         for (var dl of arch.decklists) {

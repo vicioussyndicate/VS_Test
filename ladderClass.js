@@ -687,8 +687,10 @@ class Ladder {
                 var hsClass = hsClasses[i]
                 colorSplash.style = 'background-color:'+hsColors[hsClass]+';height:15px;width:30px;margin:0 auto 0.7em auto;'
                 archName.innerHTML = hsClass
+                colorSplash.id = hsClass
+                archName.id = hsClass
                 legendDiv.id = hsClass
-                legendDiv.onclick = function(e) { ui.toggleTabs({target:document.querySelector('#decks.tab')}); console.log(e) }
+                legendDiv.onclick = function(e) { ui.deckLink(e.target.id,this.f);  }
             }
 
             if (mode=='decks') {
@@ -697,7 +699,9 @@ class Ladder {
                 colorSplash.style = 'background-color:'+l.color+';height:15px;width:30px;margin:0 auto 0.7em auto;'
                 archName.innerHTML = l.name
                 legendDiv.id = l.name
-                legendDiv.onclick = function(e) { ui.toggleTabs({target:document.querySelector('#decks.tab')}); console.log(e) }
+                colorSplash.id = l.name
+                archName.id = l.name
+                legendDiv.onclick = function(e) { ui.deckLink(e.target.id,this.f);  }
             }
 
             legendDiv.appendChild(colorSplash)

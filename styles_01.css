@@ -128,6 +128,7 @@ body {
 
 body .main-wrapper {
 	max-width: 50vw;
+	min-width: 510px;
 	height: 800px;
 	margin: 10px auto;
 	display: flex;
@@ -186,6 +187,7 @@ body .main-wrapper .content-wrapper #decksWindow .content {
 	display: grid;
 	grid-template-columns: 7rem auto;
 	grid-auto-flow: column;
+	overflow-x: auto;
 	grid-gap: 1rem;
 	padding: 1rem;
 }
@@ -313,7 +315,7 @@ body .main-wrapper .content-wrapper #powerWindow #powerGrid .header {
 	background-color: transparent;
 	color: #454c57;
 	padding: 0.2rem;
-	margin-bottom: 1.5rem;
+	margin-bottom: 1rem;
 	font-weight: bold;
 }
 
@@ -361,6 +363,40 @@ body .main-wrapper .content-wrapper #tableWindow .content-header .graphOptions {
 
 body .main-wrapper .content-wrapper #tableWindow .content-header .graphOptions #matchup {
 	display: none;
+}
+
+body .main-wrapper .content-wrapper #tableWindow .content-footer button {
+	color: #000;
+	font-size: 1rem;
+	font-weight: bold;
+	padding: 0.3rem;
+	margin: 0 auto;
+	border: 0.1rem solid #92fc64;
+	border-radius: 3%;
+}
+
+body .main-wrapper .content-wrapper #tableWindow .content-footer button:hover {
+	cursor: pointer;
+}
+
+body .main-wrapper .content-wrapper #tableWindow .content-footer .copyTable {
+	background-color: #92fc64;
+}
+
+body .main-wrapper .content-wrapper #tableWindow .content-footer .copyTable:hover {
+	background-color: #b7ff54;
+	border-color: #b7ff54;
+}
+
+body .main-wrapper .content-wrapper #tableWindow .content-footer .downloadTable {
+	border: 0.1rem solid #57a1c1;
+	background-color: #57a1c1;
+	color: #ebebeb;
+}
+
+body .main-wrapper .content-wrapper #tableWindow .content-footer .downloadTable:hover {
+	background-color: #64aac8;
+	border-color: #64aac8;
 }
 
 body .main-wrapper .content-wrapper .content {
