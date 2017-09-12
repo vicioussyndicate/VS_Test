@@ -343,6 +343,7 @@ class Ladder {
 		    displayModeBar: false,
 		    hovermode: 'closest',
 		    xaxis: {
+                //title: 'Ranks',
                 tickfont: {
 				    family: 'Arial, bold',
 				    size: 15,
@@ -687,7 +688,7 @@ class Ladder {
                 colorSplash.style = 'background-color:'+hsColors[hsClass]+';height:15px;width:30px;margin:0 auto 0.7em auto;'
                 archName.innerHTML = hsClass
                 legendDiv.id = hsClass
-                legendDiv.onclick = function(e) { toggleMainTabs({target:document.querySelector('#decks.tab')}); console.log(e) }
+                legendDiv.onclick = function(e) { ui.toggleTabs({target:document.querySelector('#decks.tab')}); console.log(e) }
             }
 
             if (mode=='decks') {
@@ -696,7 +697,7 @@ class Ladder {
                 colorSplash.style = 'background-color:'+l.color+';height:15px;width:30px;margin:0 auto 0.7em auto;'
                 archName.innerHTML = l.name
                 legendDiv.id = l.name
-                legendDiv.onclick = function(e) { toggleMainTabs({target:document.querySelector('#decks.tab')}); console.log(e) }
+                legendDiv.onclick = function(e) { ui.toggleTabs({target:document.querySelector('#decks.tab')}); console.log(e) }
             }
 
             legendDiv.appendChild(colorSplash)

@@ -144,13 +144,13 @@ const btnIdToText = {
     class: 'By Class',
     frequency: 'By Frequency',
     winrate: 'By Winrate',
+    matchup: 'By Matchup',
     
     frSubplot: 'Frequency',
     wrSubplot: 'Winrate',
 
     classes: 'Classes',
     decks: 'Archetypes',
-    matchup: 'Matchup',
 }
 
 

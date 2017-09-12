@@ -144,6 +144,7 @@ class DecksWindow {
     }
 
     loadDescription() {
+        this.display = 'description'
         var d = this.data[this.f][this.hsClass]
         this.insertDescription(this.hsClass,d.text)
         this.descriptionBox.style.display = 'inline'
@@ -154,23 +155,25 @@ class DecksWindow {
 
 
     loadDecklists() {
+        this.display = 'decklists'
         var deckWidth = '12rem'
 
-        var deckDiv = document.querySelector('#decksWindow .content .decklists')
-        deckDiv.innerHTML = ''
+        this.decklists.innerHTML = ''
         
         var arch = this.data[this.f][this.hsClass].archetypes[this.hsArchetypeIdx]
         
         var gridTemplateColumns = ''
         for (var dl of arch.decklists) {
-            gridTemplateColumns += deckWidth + ' '
-            this.insertDecklist(dl)
+            for (var i=0;i<4;i++) {
+                gridTemplateColumns += deckWidth + ' '
+                this.insertDecklist(dl)
+            }
         }
         
         this.descriptionBox.style.display = 'none'
         this.decklists.style.display = 'grid'
-        deckDiv.style.gridTemplateColumns = gridTemplateColumns
-        deckDiv.style.gridGap = '0.5rem'
+        this.decklists.style.gridTemplateColumns = gridTemplateColumns
+        this.decklists.style.gridGap = '0.5rem'
     }
 
     insertDescription(title,text) {

@@ -175,7 +175,7 @@ body .main-wrapper .content-wrapper {
 	width: 100%;
 	display: flex;
 	flex-direction: column;
-	background-color: #fffeea;
+	background-color: #fff;
 }
 
 body .main-wrapper .content-wrapper #decksWindow .content-header .classOptions {
@@ -310,10 +310,10 @@ body .main-wrapper .content-wrapper #powerWindow #powerGrid .pivot {
 }
 
 body .main-wrapper .content-wrapper #powerWindow #powerGrid .header {
-	background-color: #aca78a;
-	color: #ebebeb;
+	background-color: transparent;
+	color: #454c57;
 	padding: 0.2rem;
-	margin-bottom: 0.4rem;
+	margin-bottom: 1.5rem;
 	font-weight: bold;
 }
 
@@ -364,13 +364,13 @@ body .main-wrapper .content-wrapper #tableWindow .content-header .graphOptions #
 }
 
 body .main-wrapper .content-wrapper .content {
-	background-color: #fffeea;
+	background-color: #fff;
 	display: flex;
 	flex-direction: column;
 }
 
 body .main-wrapper .content-wrapper .content .chart {
-	background-color: #fffeea;
+	background-color: #fff;
 	margin: 20px;
 }
 

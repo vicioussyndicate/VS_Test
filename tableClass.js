@@ -271,7 +271,7 @@ class Table {
         if (idx == -1)          {this.zoomOut(); return}
     
         var layout = {
-            yaxis: {range: [idx-0.5, idx+0.5],fixedrange:true,color:'white',tickcolor:'white'},
+            yaxis: {range: [idx-0.5, idx+0.5],fixedrange:true,color:this.fontColor,tickcolor:this.fontColor},
             yaxis2: {
                 domain: [0, this.subplotRatio],
                 visible: false,
@@ -298,8 +298,8 @@ class Table {
         var layout_zoomOut = {
             yaxis:{	
                 range:[this.numArch+0.5,-0.5],
-                color: 'white',
-                tickcolor: 'white',
+                color: this.fontColor,
+                tickcolor: this.fontColor,
                 fixedrange: true,
             },
             yaxis2: {domain: [0, 0.01], visible: false, fixedrange:true},
@@ -364,8 +364,6 @@ class Table {
             textTable.push(textTableRow)
         }
         
-        var el = document.querySelector('#tableWindow .content-header #sortBtn')
-        el.innerHTML = what
     
         this.table = table
         this.textTable = textTable
@@ -376,6 +374,7 @@ class Table {
         this.sortBy = what
         this.window.sortBy = what
         this.getFreqPlotData()
+        this.window.renderOptions()
         
         if (plot) { this.plot() }
     } // close SortBy    
