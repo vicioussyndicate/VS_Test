@@ -19,7 +19,7 @@ button:hover {
 }
 
 .option-folder .folder-toggle {
-	background: #bed1e8;
+	background: #e8fcfc;
 	color: #1f3044;
 	font-weight: bold;
 	border-radius: 5%;
@@ -31,7 +31,7 @@ button:hover {
 .option-folder .folder-toggle:hover {
 	cursor: pointer;
 	background: #1f3044;
-	color: #bed1e8;
+	color: #e8fcfc;
 }
 
 .option-folder .dropdown {
@@ -148,12 +148,12 @@ body .main-wrapper .navbar .tabs {
 	align-items: center;
 	justify-content: center;
 	background: #759cce;
-	color: #bed1e8;
+	color: #e8fcfc;
 }
 
 body .main-wrapper .navbar .tabs .tab {
 	background-color: #759cce;
-	color: #bed1e8;
+	color: #e8fcfc;
 	padding: 0.4rem;
 	font-size: 1.5rem;
 	font-weight: bold;
@@ -166,8 +166,8 @@ body .main-wrapper .navbar .tabs .tab:hover {
 }
 
 body .main-wrapper .navbar .tabs .tab.highlighted {
-	background-color: #bed1e8;
-	color: #1f3044;
+	background-color: #1f3044;
+	color: #e8fcfc;
 }
 
 body .main-wrapper .content-wrapper {
@@ -175,7 +175,7 @@ body .main-wrapper .content-wrapper {
 	width: 100%;
 	display: flex;
 	flex-direction: column;
-	background-color: #1f5ea8;
+	background-color: #e8fcfc;
 }
 
 body .main-wrapper .content-wrapper #decksWindow .content-header .classOptions {
@@ -358,23 +358,22 @@ body .main-wrapper .content-wrapper #tableWindow .content-header .graphOptions #
 }
 
 body .main-wrapper .content-wrapper .content {
-	background-color: #1f5ea8;
+	background-color: #e8fcfc;
 	display: flex;
 	flex-direction: column;
 }
 
 body .main-wrapper .content-wrapper .content .chart {
-	background-color: #fff;
+	background-color: #e8fcfc;
 	margin: 20px;
 }
 
 body .main-wrapper .content-wrapper .content-footer {
-	background-color: #222;
-	color: #fff;
+	background-color: #1f3044;
+	color: #e8fcfc;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
-	font-family: Tahoma;
 	font-weight: bold;
 }
 
@@ -388,8 +387,8 @@ body .main-wrapper .content-wrapper .content-header {
 	height: 1.78rem;
 	padding: 0.6rem 0 0.6rem 0;
 	font-size: 1em;
-	background-color: #303e4f;
-	color: #fff;
+	background-color: #1f3044;
+	color: #e8fcfc;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
@@ -405,17 +404,17 @@ body .main-wrapper .content-wrapper .content-header .optionBar {
 
 body .main-wrapper .content-wrapper .content-header .optionBar p {
 	font-size: 0.8em;
-	color: #fff;
+	color: #e8fcfc;
 	margin-left: 1em;
 	margin-top: 1em;
 }
 
 body .main-wrapper .content-wrapper .content-header .optionBtn {
 	background: #1f3044;
-	color: #bed1e8;
+	color: #e8fcfc;
 	font-size: 1em;
 	font-weight: bold;
-	border: 0.1rem solid #fff;
+	border: 0.1rem solid #e8fcfc;
 	font-size: 0.8em;
 	border-radius: 5%;
 	padding: 0.4rem;
@@ -424,22 +423,22 @@ body .main-wrapper .content-wrapper .content-header .optionBtn {
 }
 
 body .main-wrapper .content-wrapper .content-header .optionBtn:hover {
-	background: #ffa500;
+	background: #9bf7ff;
 	color: #1f3044;
-	border: 0.1rem solid #ffa500;
+	border: 0.1rem solid #9bf7ff;
 }
 
 body .main-wrapper .content-wrapper .content-header .optionBtn.highlighted {
-	background: #ffa500;
+	background: #9bf7ff;
 	color: #1f3044;
-	border: 0.1rem solid #ffa500;
+	border: 0.1rem solid #9bf7ff;
 }
 
 body .main-wrapper .content-wrapper .content-header .option-folder .folder-toggle {
-	background: #bed1e8;
+	background: #e8fcfc;
 	color: #1f3044;
 	font-weight: bold;
-	border: 0.1rem solid #bed1e8;
+	border: 0.1rem solid #e8fcfc;
 	border-radius: 5%;
 	padding: 0.4rem;
 	margin-left: 0.5em;
@@ -449,7 +448,7 @@ body .main-wrapper .content-wrapper .content-header .option-folder .folder-toggl
 body .main-wrapper .content-wrapper .content-header .option-folder .folder-toggle:hover {
 	cursor: pointer;
 	background: #1f3044;
-	color: #bed1e8;
+	color: #e8fcfc;
 }
 
 body .main-wrapper .content-wrapper .content-header .option-folder .dropdown {

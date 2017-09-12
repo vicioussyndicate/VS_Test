@@ -1,37 +1,46 @@
 
 
-$nav_bgColor = #759cce
-$nav_fColor = #bed1e8
-$nav_hi_bgColor = #bed1e8
-$nav_hi_fColor = #1f3044
+$lightColor = #e8fcfc
+$midColor = #759cce
+$darkColor = #1f3044
+$accentColor = #9bf7ff
+$chartColors = #e8fcfc
 
-$header_bgColor = #303e4f
-$header_fColor = white
+$nav_bgColor = $midColor
+$nav_fColor = $lightColor
+$nav_hi_bgColor = $darkColor
+$nav_hi_fColor = $lightColor
 
-$header_btn_bgColor = #1f3044
-$header_btn_fColor = #bed1e8
-$header_btn_borderColor = white
-$header_btn_hi_bgColor = orange
-$header_btn_hi_fColor = #1f3044
-$header_btn_hi_borderColor = orange
+$header_bgColor = $darkColor
+$header_fColor = $lightColor
 
-$header_hi_bgColor = #bed1e8
-$header_hi_fColor = #1f3044
-$header_btn_borderColor = white
-$header_folder_bgColor = #bed1e8
-$header_folder_fColor = #1f3044
-$header_folder_hi_bgColor = #1f3044
-$header_folder_hi_fColor = #bed1e8
+$header_btn_bgColor = $darkColor
+$header_btn_fColor = $lightColor
+$header_btn_borderColor = $lightColor
+$header_btn_hi_bgColor = $accentColor
+$header_btn_hi_fColor = $darkColor
+$header_btn_hi_borderColor = $accentColor
 
-$content_bgColor = #1f5ea8
+$header_hi_bgColor = $accentColor
+$header_hi_fColor = $darkColor
+$header_btn_borderColor = $lightColor
+$header_folder_bgColor = $lightColor
+$header_folder_fColor = $darkColor
+$header_folder_hi_bgColor = $darkColor
+$header_folder_hi_fColor = $lightColor
+
+$content_bgColor = $chartColors
 $content_fColor = green
 
-$chart_bgColor = white
+$chart_bgColor = $chartColors
+
+$footer_bgColor = $darkColor
+$footer_fColor = $lightColor
 
 html
     //font-size: 1em !important;
     //color: #000 !important;
-    font-family: Arial, Helvetica, sans-serif
+    font-family: Arial, Helvetica, sans-serif !important
 
 button
     border 0
@@ -165,7 +174,7 @@ body
                     padding 0.4rem
                     //margin 0.25rem
                     font-size 1.5rem
-                    font-family Tahoma
+                    //font-family Tahoma
                     font-weight bold
                     letter-spacing 2px
                     transition background 0.3s ease, color 0.3s ease
@@ -342,12 +351,12 @@ body
                     background-color $chart_bgColor
                     margin 20px
             .content-footer
-                background-color #222
-                color #fff
+                background-color $footer_bgColor
+                color $footer_fColor
                 display flex
                 flex-direction row
                 justify-content space-between
-                font-family Tahoma
+                //font-family Tahoma
                 font-weight bold
                 div
                     margin-top 0.6em

@@ -11,6 +11,7 @@ class Ladder {
         this.maxLines = 10 // max archetypes shown for the line chart
 
         this.bgColor = 'transparent'
+        this.fontColor = '#222'
 
         this.DATA = DATA
         this.f = f
@@ -319,7 +320,7 @@ class Ladder {
                 tickfont: {
 				    family: 'Arial, bold',
 				    size: 15,
-                    color: 'white',
+                    color: this.fontColor,
 			    },
                 visible: true, 
                 showgrid: false,
@@ -329,7 +330,7 @@ class Ladder {
                 tickcolor: 'transparent',
                 hoverformat: '.1%',
                 range: [21,-1],
-                color: 'white',
+                color: this.fontColor,
                 fixedrange: true,
                 zeroline: false,
                 autorange: 'reversed',
@@ -346,7 +347,7 @@ class Ladder {
                 showticklabels: false,
                 fixedrange: true,
                 zeroline: false,
-			    color: '#999',
+			    color: this.fontColor,
                 tickformat: ',.0%',
 		    },
             
@@ -368,7 +369,7 @@ class Ladder {
                 tickfont: {
 				    family: 'Arial, bold',
 				    size: 15,
-                    color: '#999',
+                    color: this.fontColor,
 			    },
                 visible: true, 
                 showgrid: true,
@@ -376,7 +377,7 @@ class Ladder {
 			    ticktext: this.rankLabels,
                 hoverformat: '.1%',
                 range: [21,-1],
-                color: 'white',
+                color: this.fontColor,
                 fixedrange: true,
                 zeroline: false,
                 autorange: 'reversed',
@@ -392,7 +393,7 @@ class Ladder {
                 fixedrange: true,
 
                 //zeroline: false,
-			    color: '#999',
+			    color: this.fontColor,
 		    },
 		    //plot_bgcolor: 'black',//this.bgColor1, 
             paper_bgcolor: this.bgColor,//this.bgColor2,
@@ -412,13 +413,13 @@ class Ladder {
                 tickfont: {
 				    family: 'Arial, bold',
 				    size: 15,
-                    color: '#999',
+                    color: this.fontColor,
                 },
                 tickcolor: 'transparent',
                 visible: true, 
                 showgrid: true,
                 hoverformat: '.1%',
-                color: 'white',
+                color: this.fontColor,
                 fixedrange: true,
                 zeroline: false,
                 autorange: 'reversed',
@@ -432,7 +433,7 @@ class Ladder {
                 tickcolor: 'transparent',
                 tickformat: ',.0%',
                 fixedrange: true,
-			    color: '#999',
+			    color: this.fontColor,
 		    },
 		    plot_bgcolor: this.bgColor, 
             paper_bgcolor: this.bgColor,
