@@ -7,6 +7,7 @@ class TableWindow {
     constructor(hsFormats, hsTimes, table_ranks) {
 
         this.window = document.querySelector('#ladderWindow')
+        this.optionButtons = document.querySelectorAll('#tableWindow .optionBtn')
         this.data = {}
         this.hsFormats = hsFormats
         this.hsTimes = hsTimes
@@ -24,6 +25,7 @@ class TableWindow {
         this.sortBy = 'class' // class, frequency, winrate, matchup
         this.zoomIn = false
         this.zoomArch = null
+        this.fullyLoaded = false
 
 
         for (var f of this.hsFormats) {
@@ -34,24 +36,14 @@ class TableWindow {
                     this.data[f][t][r] = null
         }}}
 
+        
 
         this.loadData()
-        this.setupUI()
 
+        for (let i=0;i<this.optionButtons.length;i++) { this.optionButtons[i].addEventListener("click", this.buttonTrigger.bind(this)) }
     } // close Constructor
 
 
-
-
-
-
-
-    setupUI() {
-
-        this.optionButtons = document.querySelectorAll('#tableWindow .optionBtn')
-        for (let i=0;i<this.optionButtons.length;i++) { this.optionButtons[i].addEventListener("click", this.buttonTrigger.bind(this)) }
-
-    } // setup UI
 
 
     buttonTrigger(e) {
@@ -78,7 +70,8 @@ class TableWindow {
         data.plot()
     }// button Handler
 
-
+    plot () { this.data[this.f][this.t][this.r] }
+        
 
     loadData() {
 
@@ -97,8 +90,11 @@ class TableWindow {
             for (var t of this.hsTimes) {
                 for (var r of this.ranks) {
                     var key = Object.keys(tableData[f][t][r])[0]
-                    this.data[f][t][r] = new Table(tableData[f][t][r][key],f,t,this)
+                    this.data[f][t][r] = new Table(tableData[f][t][r][key],f,t,r,this)
         }}}
+        this.fullyLoaded = true
+        console.log('table loaded: '+ (performance.now()-t0).toFixed(2)+' ms')
+        finishedLoading()
     }// add Data
 
 } // close LadderWindow

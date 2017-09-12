@@ -6,18 +6,19 @@ var t0 = performance.now();
 
 // Global Data
 var DATABASE
-var DATA_L = {}
-var DATA_T = {}
+//var DATA_L = {}
+//var DATA_T = {}
 
 // Windows
 var powerWindow
 var decksWindow
 var tableWindow
 var ladderWindow
+var ui
 
-
-//var decksWindow = new DecksWindow(0)
-
+// Global Variables
+var hsRanks =       21
+var hsClasses =     ["Druid","Hunter","Mage","Paladin","Priest","Rogue","Shaman","Warlock","Warrior"]
 var hsFormats =     ['Standard','Wild']
 var ladder_times =  ['lastDay','lastWeek','lastMonth']
 var ladder_ranks =  ['ranks_L_5','ranks_6_15','ranks_all']
@@ -27,27 +28,44 @@ var table_ranks =   ['ranks_L_5','ranks_6_15','ranks_all']
 
 
 
-
 window.onload = function() {
-    setupUI() // ui = new UI()
+    //setupUI() // ui = new UI()
+    ui = new UI()
     setupFirebase() // move to script.js
 
-    tableWindow = new TableWindow(hsFormats, table_times, table_ranks)
-    ladderWindow = new LadderWindow(hsFormats, ladder_times, ladder_ranks)
+}
+
+function setupFirebase() {
+    var config = {
+        apiKey: "AIzaSyCDn9U08D4Lzhrbfz2MSy2rws_D02eH3HA",
+        authDomain: "testproject-a0746.firebaseapp.com",
+        databaseURL: "https://testproject-a0746.firebaseio.com",
+        projectId: "testproject-a0746",
+        storageBucket: "testproject-a0746.appspot.com",
+        messagingSenderId: "826197220845"
+    };
+    firebase.initializeApp(config);
+    DATABASE = firebase.database()
+
+    tableWindow = new TableWindow(hsFormats, table_times, table_ranks, finishedLoading)
+    ladderWindow = new LadderWindow(hsFormats, ladder_times, ladder_ranks, finishedLoading)
+    decksWindow = new DecksWindow(hsFormats, finishedLoading)
+
+    //while (!tableWindow.fullyLoaded || !ladderWindow.fullyLoaded || !decksWindow.fullyLoaded) {sleep(100); console.log('sleep')}
+    finishedLoading()
 }
 
 
 
-// AFTER LOADING
-
 function finishedLoading() {
+    console.log(tableWindow.fullyLoaded, ladderWindow.fullyLoaded, decksWindow.fullyLoaded, (performance.now()-t0).toFixed(2))
+    if (!(tableWindow.fullyLoaded && ladderWindow.fullyLoaded && decksWindow.fullyLoaded)) {return}
     
-    DATA_L[ui.ladder.f][ui.ladder.t].plot()
-    DATA_T[ui.table.f][ui.table.t][ui.table.r].plot()
 
     powerWindow = new PowerWindow()
-    
-    renderOptions()
+
+    ladderWindow.plot()
+    tableWindow.plot()
 
     ui.fullyLoaded = true
     hideLoader()
@@ -58,10 +76,7 @@ function finishedLoading() {
 
 
 
-// Global Variables
-var hsRanks = 21
-var hsClasses = ["Druid","Hunter","Mage","Paladin","Priest","Rogue","Shaman","Warlock","Warrior"]
-var hsFormats = ['Standard','Wild']
+
 
 
 var colorscale_Table = [

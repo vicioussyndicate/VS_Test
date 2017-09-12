@@ -5,8 +5,10 @@ class PowerWindow {
 
     constructor () {
 
-
+        console.log('construct power')
         this.grid = document.querySelector('#powerGrid')
+        this.optionButtons = document.querySelectorAll('#powerWindow .optionBtn')
+        
 
         this.f = 'Standard'
         this.mode = 'tiers'
@@ -18,6 +20,7 @@ class PowerWindow {
         this.data = {Standard:[], Wild:[]} // [rank0=[{name: druid, wr: x, fr: x}]]
         for (var rank=0; rank<hsRanks;rank++) {this.data['Standard'].push([])}
         for (var rank=0; rank<hsRanks;rank++) {this.data['Wild'].push([])}
+        for (let i=0;i<this.optionButtons.length;i++) { this.optionButtons[i].addEventListener("click", this.buttonTrigger.bind(this)) }
 
         this.tierData = {}
         this.tiers = [
@@ -44,20 +47,10 @@ class PowerWindow {
 
         this.addData('Standard')
         this.addData('Wild')
-        //this.setupUI()
         this.plotTiers('Standard')
         
     }// close constructor
 
-
-
-
-    setupUI() {
-
-        this.optionButtons = document.querySelectorAll('#powerWindow .optionBtn')
-        for (let i=0;i<this.optionButtons.length;i++) { this.optionButtons[i].addEventListener("click", this.buttonTrigger.bind(this)) }
-
-    } // setup UI
 
 
 
@@ -79,9 +72,9 @@ class PowerWindow {
 
 
     addData (f) {
-
-        var ladder = DATA_L[f][this.t_ladder].archetypes
-        var table = DATA_T[f][this.t_table]['ranks_all']
+        //console.log(ladderWindow.data, f, this.t_ladder,ladderWindow.data[f][this.t_ladder] )
+        var ladder = ladderWindow.data[f][this.t_ladder].archetypes
+        var table = tableWindow.data[f][this.t_table]['ranks_all']
         
 
         for (var arch of ladder) {

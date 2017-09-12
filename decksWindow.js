@@ -13,12 +13,14 @@ class DecksWindow {
         this.descriptionBox = document.querySelector('#decksWindow .content .descriptionBox')
         this.decklists = document.querySelector('#decksWindow .content .decklists')
         this.description = document.querySelector('#decksWindow .content .descriptionBox .description')
-        this.optionButtons = null
+        this.optionButtons = document.querySelectorAll('#decksWindow .optionBtn')
+        for (let i=0;i<this.optionButtons.length;i++) { this.optionButtons[i].addEventListener("click", this.buttonTrigger.bind(this)) }
 
         this.hsFormat = 'Standard'
         this.hsClass = 'Druid'
         this.hsArchetypeIdx = 0
         this.display = 'description'
+        this.fullyLoaded = false
 
 
         this.data = {}
@@ -35,16 +37,6 @@ class DecksWindow {
         this.loadClass('Druid')
     }// close constructor
 
-
-
-
-
-    setupUI() {
-
-        this.optionButtons = document.querySelectorAll('#decksWindow .optionBtn')
-        for (let i=0;i<this.optionButtons.length;i++) { this.optionButtons[i].addEventListener("click", this.buttonTrigger.bind(this)) }
-
-    } // setup UI
 
 
 
@@ -108,7 +100,9 @@ class DecksWindow {
                         var decklist = arch[deckKey]
                         this.data[f][hsClass].archetypes[idx].decklists.push(arch[deckKey])
         }}}}
-
+        this.fullyLoaded = true
+        console.log('decks loaded: '+ (performance.now()-t0).toFixed(2)+' ms')
+        finishedLoading()
     }// add Data
 
 

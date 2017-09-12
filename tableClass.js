@@ -5,7 +5,7 @@
 
 class Table {
 
-    constructor(DATA,f,t,r,window=null) {
+    constructor(DATA,f,t,r,window) {
        
         this.DATA = DATA
         this.f = f
@@ -217,8 +217,7 @@ class Table {
         Plotly.newPlot('chart2',data,this.layout,{displayModeBar: false})
         document.getElementById('chart2').on('plotly_click', this.zoomToggle.bind(this))
 
-
-        if (ui.table.zoomIn) {this.zoomIn(ui.table.zoomArch)}
+        if (this.window.zoomIn) {this.zoomIn(this.window.zoomArch)}
         document.getElementById('loader').style.display = 'none'
 
         var windowInfo = document.querySelector('#tableWindow .nrGames')    
@@ -258,7 +257,7 @@ class Table {
 
     zoomToggle (data) {
         var arch = data.points[0].y
-        if (ui.table.zoomIn == false) { this.zoomIn(arch) }
+        if (this.window.zoomIn == false) { this.zoomIn(arch) }
         else { this.zoomOut()}
     }
 
@@ -288,8 +287,8 @@ class Table {
         OptMU.style.display = 'inline-block'
         if (arch == 'Overall') { OptWR.style.display = 'none' }
     
-        ui.table.zoomIn = true
-        ui.table.zoomArch = arch
+        this.window.zoomIn = true
+        this.window.zoomArch = arch
     }
 
 
@@ -312,7 +311,7 @@ class Table {
         OptMU.style.display = 'none'
         OptWR.style.display = 'inline-block'
             
-        ui.table.zoomIn = false
+        this.window.zoomIn = false
     }
 
 
@@ -321,16 +320,10 @@ class Table {
     sortTableBy (what, plot=true) {        
         var self = this
 
-        if (this.sortBy == what && !ui.table.zoomIn) {console.log('already sorted by '+what);return}
+        if (this.sortBy == what && !this.window.zoomIn) {console.log('already sorted by '+what);return}
         
         var idxs = range(0,this.numArch)
-        var zoomIdx = this.archetypes.indexOf(ui.table.zoomArch)
-        
-        /*
-        if (ui.table.zoomIn && what=='winrate') {
-            what='matchup'
-            if (zoomIdx == -1) {what = 'winrate'}
-        }*/
+        var zoomIdx = this.archetypes.indexOf(this.window.zoomArch)
 
         var sortByMU = function (a,b) {return self.table[zoomIdx][a] > self.table[zoomIdx][b] ? -1: self.table[zoomIdx][a] < self.table[zoomIdx][b] ? 1 : 0 ;}
         var sortByWR = function (a, b) { return self.winrates[a] > self.winrates[b] ? -1 : self.winrates[a] < self.winrates[b] ? 1 : 0; }
@@ -380,7 +373,7 @@ class Table {
         this.frequency  = frequency
         this.winrates  = winrates
         this.sortBy = what
-        ui.table.sortBy = what
+        this.window.sortBy = what
         this.getFreqPlotData()
         
         if (plot) { this.plot() }

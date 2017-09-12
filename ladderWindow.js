@@ -14,7 +14,6 @@ class LadderWindow {
         this.hsTimes = hsTimes
         this.ranks = ladder_ranks
 
-
         // Defaults
 
         this.f = 'Standard'
@@ -22,6 +21,7 @@ class LadderWindow {
         this.r = 'ranks_all'
         this.plotType = 'bar' // bar, line, pie, number, timeline
         this.mode = 'classes' // classes, decks
+        this.fullyLoaded = false
 
 
         for (var f of this.hsFormats) {
@@ -99,11 +99,15 @@ class LadderWindow {
         for (var f of this.hsFormats) {
             for (var t of this.hsTimes) {
                 var key = Object.keys(ladderData[f][t])[0]
-                this.data[f][t] = new Ladder(ladderData[f][t][key],f,t,this)
-            } 
-        }
-
+                this.data[f][t] = new Ladder(ladderData[f][t][key],f,t,this) 
+        }}
+        this.fullyLoaded = true
+        console.log('ladder loaded: '+ (performance.now()-t0).toFixed(2)+' ms')
+        finishedLoading()
     }// add Data
+
+
+    plot () { this.data[this.f][this.t].plot() }
 
 } // close LadderWindow
 

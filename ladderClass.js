@@ -5,12 +5,13 @@
 
 class Ladder {
 
-    constructor (DATA,f,t,window=null) {
+    constructor (DATA,f,t,window) {
 
         this.maxLegendEntries = 9
         this.maxLines = 10 // max archetypes shown for the line chart
 
-        this.backgroundColor = '#555'//"#555",
+        this.bgColor1 = 'white'
+        this.bgColor2 = '#929625'
 
         this.DATA = DATA
         this.f = f
@@ -394,8 +395,8 @@ class Ladder {
                 //zeroline: false,
 			    color: '#999',
 		    },
-		    plot_bgcolor: this.backgroundColor, 
-            paper_bgcolor: this.backgroundColor,
+		    //plot_bgcolor: 'black',//this.bgColor1, 
+            paper_bgcolor: 'white',//this.bgColor2,
             margin: {l:70,r:20,b:30,t:0,},
         }
 
@@ -532,38 +533,39 @@ class Ladder {
 
 
     plot() {
+        console.log('plot ladder')
         document.getElementById('chart1').innerHTML = ""
         var data, layout
         this.rankFolder.style.display = 'none'
 
-        if (ui.ladder.plotMode == 'timeline') {
+        if (this.window.plotType == 'timeline') {
             this.rankFolder.style.display = 'flex'
             layout = this.layout_time
-            if (ui.ladder.dispMode == 'decks') {data = this.traces_arch_time}
-            if (ui.ladder.dispMode == 'classes') {data = this.traces_class_time}
+            if (this.window.mode == 'decks') {data = this.traces_arch_time}
+            if (this.window.mode == 'classes') {data = this.traces_class_time}
         }
 
-        if (ui.ladder.plotMode == 'pie') {
+        if (this.window.plotType == 'pie') {
             this.rankFolder.style.display = 'flex'
             layout = this.layout_pie
-            data = this.traces_pie[ui.ladder.dispMode][this.tier.name]
+            data = this.traces_pie[this.window.mode][this.tier.name]
         }
 
-        if (ui.ladder.plotMode == 'number') {
-            if (ui.ladder.dispMode == 'decks') {this.createTable('decks'); return}
-            if (ui.ladder.dispMode == 'classes') {this.createTable('classes'); return}
+        if (this.window.plotType == 'number') {
+            if (this.window.mode == 'decks') {this.createTable('decks'); return}
+            if (this.window.mode == 'classes') {this.createTable('classes'); return}
         }
 
-        if (ui.ladder.plotMode == 'bar') {
+        if (this.window.plotType == 'bar') {
             layout = this.layout_bar
-            if (ui.ladder.dispMode == 'decks') {data = this.traces_arch_bar}
-            if (ui.ladder.dispMode == 'classes') {data = this.traces_class_bar}
+            if (this.window.mode == 'decks') {data = this.traces_arch_bar}
+            if (this.window.mode == 'classes') {data = this.traces_class_bar}
         }
 
-        if (ui.ladder.plotMode == 'line') {
+        if (this.window.plotType == 'line') {
             layout = this.layout_line
-            if (ui.ladder.dispMode == 'decks') {data = this.traces_arch_line}
-            if (ui.ladder.dispMode == 'classes') {data = this.traces_class_line}
+            if (this.window.mode == 'decks') {data = this.traces_arch_line}
+            if (this.window.mode == 'classes') {data = this.traces_class_line}
         }
 
         Plotly.newPlot('chart1',data, layout, {displayModeBar: false,})
@@ -573,8 +575,8 @@ class Ladder {
         var windowInfo = document.querySelector('#ladderWindow .nrGames')    
         windowInfo.innerHTML = this.totGames.toLocaleString()+" games"
 
-        if (ui.ladder.dispMode == 'decks') {this.createLegend('decks')}
-        if (ui.ladder.dispMode == 'classes') {this.createLegend('classes')}
+        if (this.window.mode == 'decks') {this.createLegend('decks')}
+        if (this.window.mode == 'classes') {this.createLegend('classes')}
         //document.getElementById('chart1').on('plotly_click', this.zoomToggle.bind(this))
     }
 
