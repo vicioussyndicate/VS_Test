@@ -64,6 +64,12 @@ $chart_bgColor = $chartColors
 $footer_bgColor = $darkColor
 $footer_fColor = $lightColor
 
+
+$contentHeight = 600px
+$contentWidth = 1000px
+$footerHeight = 30px
+
+
 html
     //font-size: 1em !important;
     //color: #000 !important;
@@ -86,7 +92,6 @@ button
         background $header_folder_bgColor
         color $header_folder_fColor
         font-weight bold
-        //border 0.1rem solid $header_btn_borderColor
         border-radius 5%
         padding 0.4rem 0.4rem 0.2rem 0.4rem
         margin-left 0.5em
@@ -110,7 +115,6 @@ button
             &:hover
                 background #fff
                 color #222
-                //border 1px solid #222
         &.hidden
             button
                 margin-top -2000px
@@ -149,7 +153,7 @@ table
     font-size 0.8rem
     table-layout fixed
     th
-        background-color transparent //#999
+        background-color transparent
         font-weight bold
     .pivot
         font-family "Times New Roman", Georgia, Serif
@@ -181,7 +185,6 @@ body
         margin 10px auto
         display flex
         flex-direction column
-        //font-family Tahoma
         .navbar
             display flex
             align-content center
@@ -202,16 +205,26 @@ body
                     padding 0.4rem
                     //margin 0.25rem
                     font-size 1.5rem
-                    //font-family Tahoma
                     font-weight bold
                     letter-spacing 2px
                     transition background 0.3s ease, color 0.3s ease
-                    //border-radius 2%
+                    box-shadow 8px 3px 0 rgba(12, 23, 56, 0.5)
                     &:hover
                         cursor pointer
                     &.highlighted
                         background-color $nav_hi_bgColor
                         color $nav_hi_fColor
+                        z-index 29
+                #ladder
+                    z-index 25
+                #power
+                    z-index 24
+                #table
+                    z-index 23
+                #decks
+                    z-index 22
+                #info
+                    z-index 21
         .content-wrapper
             //margin 1% 0% 0% 1%
             height 450px
@@ -220,7 +233,7 @@ body
             flex-direction column
             background-color $content_bgColor
             
-
+            
             // Decks Window
             #decksWindow
                 .content-header
@@ -233,8 +246,10 @@ body
                     grid-auto-flow: column
                     overflow-x: auto
                     grid-gap 1rem
-                    padding 1rem
+                    //padding 1rem
                     .archetypes
+                        margin-left 0.5rem
+                        margin-top 1rem
                         .title
                             margin-bottom: 1rem
                             margin-top: 1rem
@@ -244,8 +259,12 @@ body
                         .archBtn
                             font-size: 1rem
                             width 100%
+                            &.highlighted
+                                font-weight bold
+                                margin-left 0.5rem
                     .decklists
                         display: none
+                        margin-top 2.5rem
                         .deckBox
                             .deckTitle
                                 display inline-block
@@ -307,8 +326,6 @@ body
                                 font-weight: bold
                                 //font-size: 1.1rem
                                 margin-bottom: 1rem
-                        .video
-                            margin-top: 2rem
                     
 
             
@@ -357,11 +374,22 @@ body
                 color $darkColor
                 p
                     margin 3rem
-                img
-                    width 9rem
-                    height 9rem
+                a
                     display block
                     margin 0 auto
+                    img
+                        width 9rem
+                        height 9rem
+                .login
+                    width 60%
+                    margin 0 auto
+                    margin-top 3rem
+                    button
+                        display inline-block
+                        &.hidden
+                            display none
+                    #errorMsg
+                        color red
 
             // Ladder Window
             #ladderWindow
@@ -405,29 +433,31 @@ body
                 background-color $content_bgColor
                 display flex
                 flex-direction column
-                //height 100%
+                height $contentHeight
+                
                 .chart
+                    height 100%
                     background-color $chart_bgColor
                     margin 20px
             .content-footer
                 background-color $footer_bgColor
                 color $footer_fColor
+                height $footerHeight
                 display flex
                 flex-direction row
                 justify-content space-between
                 //font-family Tahoma
                 font-weight bold
                 div
-                    margin-top 0.6em
-                    margin-bottom 0.6em
+                    margin-top 0.3em
+                    margin-bottom 0.3em
                 //     margin-left 1.5em
                 //     margin-right 1.5em
                     
             .content-header
                 width 100%
                 height 1.78rem
-                //margin-top 0.6rem
-                //margin-bottom 0.6rem
+                z-index 30
                 padding 0.6rem 0 0.6rem 0
                 font-size 1em
                 background-color $header_bgColor

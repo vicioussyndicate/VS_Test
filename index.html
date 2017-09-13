@@ -80,7 +80,9 @@
               <button class="optionBtn" id="top">Suggestions</button>
             </div>
           </div>
-          <div class="chart" id="powerGrid"></div>
+          <div class="content">
+            <div class="chart" id="powerGrid"></div>
+          </div>
           <div class="content-footer"></div>
         </div>
         <div class="tabWindow" id="tableWindow">
@@ -176,10 +178,23 @@
             </div>
             <div class="decklists"> </div>
           </div>
+          <div class="content-footer"></div>
         </div>
         <div class="tabWindow" id="infoWindow">
           <div class="content-header"></div>
-          <p>The VS Live Web App is currently in Alpha.<br><br>The app is currently not updated with live data. Many of the feature implementations are placeholder.<br><br>Please leave a feedback (suggestions, bugs, comments etc.) in the reddit thread linked below:</p><a href="https://www.reddit.com/r/ViciousSyndicate/comments/6yqj62/vs_live_web_app_feedback_thread/" target="_blank"><img src="redditLogo.png"></a>
+          <div class="content">
+            <p>The VS Live Web App is currently in Alpha.<br><br>The app is currently not updated with live data. Many of the feature implementations are placeholder.<br><br>Please leave a feedback (suggestions, bugs, comments etc.) in the reddit thread linked below:</p><a href="https://www.reddit.com/r/ViciousSyndicate/comments/6yqj62/vs_live_web_app_feedback_thread/" target="_blank"><img src="redditLogo.png"></a>
+            <div class="login">
+              <p>Login in with your VS account:</p>
+              <input id="emailInput" placeholder="Email">
+              <input id="passwordInput" placeholder="Password">
+              <button id="loginBtn">Login</button>
+              <button class="hidden" id="logOutBtn">Logout</button>
+              <button id="signUpBtn">Sign Up</button>
+              <p id="loginErrorMsg"></p>
+            </div>
+          </div>
+          <div class="content-footer"></div>
         </div>
       </div>
     </div>

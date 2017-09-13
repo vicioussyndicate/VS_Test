@@ -6,6 +6,7 @@ var t0 = performance.now();
 
 // Global Data
 var DATABASE
+var auth
 
 // Windows
 var powerWindow
@@ -43,6 +44,61 @@ function setupFirebase() {
     };
     firebase.initializeApp(config);
     DATABASE = firebase.database()
+    
+
+
+    const emailTxt = document.getElementById('emailInput')
+    const passwordTxt = document.getElementById('passwordInput')
+    const loginBtn = document.getElementById('loginBtn')
+    const logOutBtn = document.getElementById('logOutBtn')
+    const signupBtn = document.getElementById('signUpBtn')
+    const errorMsg = document.getElementById('loginErrorMsg')
+
+
+
+
+    loginBtn.addEventListener('click', e => {
+        const email = emailTxt.value
+        const password = passwordTxt.value
+        auth = firebase.auth()
+
+        const promise = auth.signInWithEmailAndPassword(email,password);
+        promise.catch(e => {console.log(e.message); errorMsg.innerHTML = 'Username or Password incorrect'})
+    });
+
+
+
+    signUpBtn.addEventListener('click', e => {
+        const email = emailTxt.value
+        const password = passwordTxt.value
+        auth = firebase.auth()
+
+        const promise = auth.createUserWithEmailAndPassword(email,password);
+        promise.catch(e => {console.log(e.message); errorMsg.innerHTML = 'invalid email'})
+    });
+
+    logOutBtn.addEventListener('click', e => {
+        firebase.auth().signOut()
+
+    });
+
+    firebase.auth().onAuthStateChanged(firebaseUser => {
+
+        if (firebaseUser) {
+            console.log('user logged in:',firebaseUser)
+            logOutBtn.classList.remove('hidden')
+            signUpBtn.classList.add('hidden')
+            loginBtn.classList.add('hidden')
+            errorMsg.innerHTML = ''
+        } else {
+            console.log('not logged in')
+            logOutBtn.classList.add('hidden')
+            loginBtn.classList.remove('hidden')
+            signUpBtn.classList.remove('hidden')
+        }
+    })
+
+
 
     tableWindow = new TableWindow(hsFormats, table_times, table_ranks, finishedLoading)
     ladderWindow = new LadderWindow(hsFormats, ladder_times, ladder_ranks, finishedLoading)

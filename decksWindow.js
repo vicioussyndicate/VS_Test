@@ -9,19 +9,23 @@ class DecksWindow {
         //this.DATA = DATA
         this.hsFormats = hsFormats
 
-
+        this.archDiv = document.querySelector('#decksWindow .content .archetypes .archetypeList')
         this.descriptionBox = document.querySelector('#decksWindow .content .descriptionBox')
-        this.decklists = document.querySelector('#decksWindow .content .decklists')
+        this.decksDiv = document.querySelector('#decksWindow .content .decklists')
         this.description = document.querySelector('#decksWindow .content .descriptionBox .description')
+
+        this.archButtons = []
         this.optionButtons = document.querySelectorAll('#decksWindow .optionBtn')
-        this.archButtons = document.querySelectorAll('#decksWindow .archButton')
-        for (var aBtn of this.archButtons)   { aBtn.addEventListener("click", this.buttonTrigger.bind(this)) }
         for (var oBtn of this.optionButtons) { oBtn.addEventListener("click", this.buttonTrigger.bind(this)) }
 
+
+
+        // Defaults
         this.f = 'Standard'
         this.hsClass = 'Druid'
-        this.archIdx = 0
-        this.display = 'description'
+        this.hsArch = null
+        this.display = 'description' // decklists, description
+        this.deckWidth = '12rem'
         this.fullyLoaded = false
 
 
@@ -42,21 +46,18 @@ class DecksWindow {
 
 
 
-    buttonTrigger(e) {
-        // Check if e.classList contains 'archBtn'
-        // loadArchetype(arch)
 
+
+    buttonTrigger(e) {
+        
         var btnID = e.target.id
 
-        if (btnID == 'Druid')       {this.loadClass('Druid')}
-        if (btnID == 'Hunter')      {this.loadClass('Hunter')}
-        if (btnID == 'Mage')        {this.loadClass('Mage')}
-        if (btnID == 'Paladin')     {this.loadClass('Paladin')}
-        if (btnID == 'Priest')      {this.loadClass('Priest')}
-        if (btnID == 'Rogue')       {this.loadClass('Rogue')}
-        if (btnID == 'Shaman')      {this.loadClass('Shaman')}
-        if (btnID == 'Warlock')     {this.loadClass('Warlock')}
-        if (btnID == 'Warrior')     {this.loadClass('Warrior')}
+        if (e.target.classList.contains('archBtn')) { this.deckLink(btnID, this.f) }
+
+        if (hsClasses.indexOf(btnID) != -1) {
+            this.hsArch = null
+            this.loadClass(btnID)
+        }        
 
         if (btnID == 'decklists')   {this.loadDecklists()}
         if (btnID == 'description') {this.loadDescription()}
@@ -67,28 +68,34 @@ class DecksWindow {
         this.renderOptions()   
     }
 
+
+
     renderOptions() {
          for (var btn of this.optionButtons) { 
             btn.classList.remove('highlighted')
             if (btn.id == this.display) {btn.classList.add('highlighted')}
         }
+        
+        for (var btn of this.archButtons) { 
+            btn.classList.remove('highlighted')
+            if (this.hsArch != null) { if (btn.id == this.hsArch.name) {btn.classList.add('highlighted')} }
+        }
 
         document.querySelector("#decksWindow #formatBtn").innerHTML =   btnIdToText[this.f]
         document.querySelector("#decksWindow #classBtn").innerHTML =    this.hsClass
-
     }
 
-    plot() { this.loadClass(this.hsClass) }
 
 
+
+
+
+    // Load DATA
 
     loadData() {
-
         var ref = DATABASE.ref('deckData')
         ref.on('value',this.addData.bind(this), function () {console.log('Could not load Ladder Data')})
-
-    } // load Data
-
+    } 
 
 
     addData(DATA) {
@@ -105,7 +112,7 @@ class DecksWindow {
                 var keys = Object.keys(DATA[f][hsClass].archetypes)
                 for (var key of keys) {
                     
-                    this.data[f][hsClass].archetypes.push({name:key, decklists:[]})
+                    this.data[f][hsClass].archetypes.push({name:key, hsClass:hsClass, hsFormat:f,  decklists:[]})
                     var idx = this.data[f][hsClass].archetypes.length -1
 
                     var arch = DATA[f][hsClass].archetypes[key]
@@ -116,113 +123,133 @@ class DecksWindow {
         }}}}
         this.fullyLoaded = true
         console.log('decks loaded: '+ (performance.now()-t0).toFixed(2)+' ms')
-        finishedLoading()
+        finishedLoading() //<- callback to script.js
     }// add Data
+
+
 
 
 
     deckLink(archName, hsFormat = 'Standard') {
         var hsClass
-        var archIdx
-
-        console.log('decklink:',archName,hsFormat)
+        var hsArch
+        this.display = 'decklists'
 
         for (var c of hsClasses) {
+
             if (archName.indexOf(c) != -1) {hsClass = c}
+
             var archetypes = this.data[hsFormat][c].archetypes
-            for (var i=0; i<archetypes.length;i++) {
-                if (archetypes[i].name == archName) { hsClass = c; archIdx = i; break } 
-        }}
+            for (var a of archetypes) { if (a.name == archName) { hsClass = c; hsArch = a; break } } 
+        }
         
-        if (archIdx == undefined) { archIdx = 0}
-        if (hsClass == undefined) { hsClass = 'Druid'} 
+        if (hsClass == undefined) { hsClass = 'Druid'}
+        if (hsArch == undefined)  { hsArch = null; this.display = 'description' }
         
         this.hsClass = hsClass
-        this.archIdx = archIdx
+        this.hsArch = hsArch
+        
 
-        this.loadClass(hsClass)
-        this.loadDecklists()
+        this.plot()
         this.renderOptions()
     }
 
 
 
 
+    
+    // LOAD FUNCTIONS
 
-    loadFormat(hsFormat) {
-        this.f = hsFormat
-        this.loadClass(this.hsClass)
-    }
+    // plot -> load format -> load Class -> load description/ decks
+
+
+
+    plot() { this.loadFormat(this.f) }
+
+
+    loadFormat(hsFormat) { this.f = hsFormat; this.loadClass(this.hsClass) }
+
 
     loadClass(hsClass) {
 
         this.hsClass = hsClass
+
         if (this.display == 'description') {this.loadDescription()}
         if (this.display == 'decklists') {this.loadDecklists()}
 
-        var archDiv = document.querySelector('#decksWindow .content .archetypes .archetypeList')
-        archDiv.innerHTML = ''
+        
+        this.archDiv.innerHTML = ''
         var archetypes = this.data[this.f][this.hsClass].archetypes
 
-        for (var arch of archetypes) {
-            this.insertArchetype(arch)
-        }
+        for (var arch of archetypes) { this.addArchetypeBtn(arch) }
+        
+        if (archetypes.length > 0 && this.hsArch == null) {this.hsArch = archetypes[0]}
     }
 
+
+
     loadDescription() {
+
         this.display = 'description'
         var d = this.data[this.f][this.hsClass]
-        this.insertDescription(this.hsClass,d.text)
+        this.addDescription(this.hsClass,d.text)
         this.descriptionBox.style.display = 'inline'
-        this.decklists.style.display = 'none'
+        this.decksDiv.style.display = 'none'
     }
 
 
 
 
     loadDecklists() {
-        this.display = 'decklists'
-        var deckWidth = '12rem'
 
-        this.decklists.innerHTML = ''
+        this.display = 'decklists'
+
+        this.decksDiv.innerHTML = ''
+
+        if (this.hsArch == null) {this.hsArch = this.data[this.f][this.hsClass].archetypes[0]}
+        if (this.hsArch == undefined) {this.hsArch = null; return}
         
-        var arch = this.data[this.f][this.hsClass].archetypes[this.archIdx]
         
         var gridTemplateColumns = ''
-        for (var dl of arch.decklists) {
+        for (var dl of this.hsArch.decklists) {
             for (var i=0;i<4;i++) {
-                gridTemplateColumns += deckWidth + ' '
-                this.insertDecklist(dl)
-            }
-        }
+                gridTemplateColumns += this.deckWidth + ' '
+                this.addDecklist(dl)
+        }}
         
         this.descriptionBox.style.display = 'none'
-        this.decklists.style.display = 'grid'
-        this.decklists.style.gridTemplateColumns = gridTemplateColumns
-        this.decklists.style.gridGap = '0.5rem'
+        this.decksDiv.style.display = 'grid'
+        this.decksDiv.style.gridTemplateColumns = gridTemplateColumns
+        this.decksDiv.style.gridGap = '0.5rem'
     }
 
-    insertDescription(title,text) {
+
+    addDescription(title,text) {
         this.description.innerHTML = '<p class="title">'+title+'</p><p class="text">'+text+'</p>'
     }
 
-    insertArchetype(arch) {
-        var archDiv = document.querySelector('#decksWindow .content .archetypes .archetypeList')
 
+
+    addArchetypeBtn(arch) {
+        
         var btn = document.createElement('button')
         
-        btn.style.backgroundColor = randomColor()
+        btn.style.backgroundColor = hsColors[arch.hsClass] //randomColor()
         btn.innerHTML = arch.name
+        btn.id = arch.name
         btn.style.padding = '0.2rem'
         btn.style.marginTop = '0.2rem'
         btn.className = 'archBtn'
 
-        archDiv.appendChild(btn)
+        btn.addEventListener("click", this.buttonTrigger.bind(this))
+        this.archButtons.push(btn)
 
+        this.archDiv.appendChild(btn)
     }
 
 
-    insertDecklist(dl) {
+
+    addDecklist(dl) {  // will become own class at some point
 
         var deckDiv = document.querySelector('#decksWindow .content .decklists')
 
@@ -247,7 +274,7 @@ class DecksWindow {
         var copyBtn = document.createElement('buttton')
         copyBtn.innerHTML = 'Copy To Clipboard'
         copyBtn.className = 'copyDL'
-        copyBtn.id = 'dl'+randint(0,100000)
+        copyBtn.id = 'dl'+randint(0,10000000)
         
         
         deckBox.appendChild(deckTitle)

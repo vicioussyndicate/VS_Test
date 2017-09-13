@@ -251,10 +251,6 @@ class Ladder {
         } // close for ARCHETYPES
                 
         
-        // Where is the fr loss?
-        var frSum = 0
-        for (var tr of this.traces_bar.decks) {frSum += tr.y[0]}
-        console.log('freq Sum = ',frSum)
 
         // Class Traces
         for (var i=0;i<9;i++) {

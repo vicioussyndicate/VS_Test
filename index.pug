@@ -70,7 +70,8 @@ html(lang='en')
             .dispOptions.optionBar
               button#tiers.optionBtn Tier Lists
               button#top.optionBtn Suggestions
-          #powerGrid.chart
+          .content
+            #powerGrid.chart
           .content-footer
             
         #tableWindow.tabWindow
@@ -141,14 +142,26 @@ html(lang='en')
               .description
               .video
             .decklists 
+          .content-footer
             
           
         #infoWindow.tabWindow
           .content-header
-          p The VS Live Web App is currently in Alpha.<br><br>The app is currently not updated with live data. Many of the feature implementations are placeholder.<br><br>Please leave a feedback (suggestions, bugs, comments etc.) in the reddit thread linked below:
+          .content
+            p The VS Live Web App is currently in Alpha.<br><br>The app is currently not updated with live data. Many of the feature implementations are placeholder.<br><br>Please leave a feedback (suggestions, bugs, comments etc.) in the reddit thread linked below:
           
-          a(href="https://www.reddit.com/r/ViciousSyndicate/comments/6yqj62/vs_live_web_app_feedback_thread/" target="_blank")
-            img(src='redditLogo.png')
+            a(href="https://www.reddit.com/r/ViciousSyndicate/comments/6yqj62/vs_live_web_app_feedback_thread/" target="_blank")
+              img(src='redditLogo.png')
+            .login
+              p Login in with your VS account:
+              input#emailInput(placeholder='Email')
+              input#passwordInput(placeholder='Password')
+              button#loginBtn Login
+              button#logOutBtn.hidden Logout
+              button#signUpBtn Sign Up
+              p#loginErrorMsg
+          .content-footer
+
     script(src='script.js')
     script(src='ui.js')
     script(src='data.js')

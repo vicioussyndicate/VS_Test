@@ -10,12 +10,12 @@ import random
 
 
 
-path = 'Sources/'
+path = 'Sources/' # +hsFormat/hsClass/
 hsClasses = ['Druid','Hunter','Mage','Paladin','Priest','Rogue','Shaman','Warlock','Warrior']
 hsFormats = ['Standard', 'Wild']
 
 
-def readDeckCode(file):
+def readDeckCode(file,hsClass, hsFormat):
 
     title = ''
     deckCode = ''
@@ -38,8 +38,14 @@ def readDeckCode(file):
         if '#' not in row and deckCode == '':
             deckCode = row[:-1]
             continue
-        if '# Format: Wild' in row:
-            print('not ok?')
+        if '# Format: Wild' in row and hsFormat != 'Wild':
+            print('ERROR: decklist not Wild format! DeckName: '+title)
+            #return 0
+
+        if '# Format: Standard' in row and hsFormat != 'Standard':
+            print('ERROR: decklist not Standard format! DeckName: '+title)
+            #return 0
+            
         if '# Archetype:' in row:
             archetype = row[13:-1]
 
@@ -51,6 +57,9 @@ def readDeckCode(file):
 
         count += 1
 
+    if archetype == '':
+        archetype = 'Other '+hsClass
+
     return {'name':title, 'cards':cards, 'deckCode': deckCode, 'color': 'rgb(0,0,0)'}, archetype
 
 
@@ -58,35 +67,51 @@ def readDeckCode(file):
 
 
 
-
-
-hsFormat = 'Wild'
     
-for hsClass in hsClasses:
-    firePath = '/deckData/'+hsFormat+'/'+hsClass+'/archetypes'
-    firebase.delete(firePath,'')
 
-    firePath = '/deckData/'+hsFormat+'/'+hsClass+'/text'
-    firebase.delete(firePath,'')
+def upload(hsFormat):
+
+    # Delete Existing Files
+    for hsClass in hsClasses:
+        firePath = '/deckData/'+hsFormat+'/'+hsClass+'/archetypes'
+        firebase.delete(firePath,'')
+
+        firePath = '/deckData/'+hsFormat+'/'+hsClass+'/text'
+        firebase.delete(firePath,'')
 
 
-for hsClass in hsClasses:
-    os.chdir(path+hsClass)
-    for file in glob.glob("*.txt"):
+    for hsClass in hsClasses:
 
-        if file == hsClass+'.txt':
+        # moves dir to /Sources/hsClass/ and looks for all .txt files
+        os.chdir(path+hsFormat+'/'+hsClass)
+        for file in glob.glob("*.txt"):
+
+            # Class Description Texts should be labeled 'Druid.txt', 'Hunter.txt' etc. (first letter Capital)
+            if file == hsClass+'.txt':
+                f = open(file)
+                firePath = '/deckData/'+hsFormat+'/'+hsClass+'/text'
+                firebase.post(firePath,f.read())
+                continue
+
+            # Decklist files can be named anything other than [hsClass].txt
+            # returns deckFile = {name, cards: [{cardname,manacost,quantity},...], deckCode, color} and archetype
+            # returns 0 if hsFormats don't agree
             f = open(file)
-            firePath = '/deckData/'+hsFormat+'/'+hsClass+'/text'
-            firebase.post(firePath,f.read())
-            continue
+            decklist, arch = readDeckCode(f.readlines(),hsClass, hsFormat)
 
-        f = open(file)
-        text = f.readlines()
-        decklist, arch = readDeckCode(text)
+            if decklist != 0:
+                firePath = '/deckData/'+hsFormat+'/'+hsClass+'/archetypes/'+arch
+                firebase.post(firePath,decklist)
+                print(hsClass,arch,decklist)
+        os.chdir('..')
+        os.chdir('..')
+        os.chdir('..')
 
-        if decklist != 0:
-            firePath = '/deckData/'+hsFormat+'/'+hsClass+'/archetypes/'+arch
-            firebase.post(firePath,decklist)
-            print(hsClass,arch,decklist)
-    os.chdir('..')
-    os.chdir('..')
+
+# Execute main:
+
+def main():
+    for f in hsFormats:
+        upload(f)
+
+
