@@ -33,16 +33,10 @@ class Ladder {
         this.archetypes = []
         this.c_data = {}
 
-        this.traces_bar = {classes: [], decks:[]}
-        this.traces_class_bar = []
-
-        this.traces_line = {classes: [], decks:[]}
-        this.traces_class_line = []
-
-        this.traces_pie = {classes: {}, decks:{}}
-        
-        this.traces_time = {classes: [], decks:[]}
-        this.traces_class_time = []
+        this.traces_bar =   {classes: [], decks:[]}
+        this.traces_line =  {classes: [], decks:[]}
+        this.traces_pie =   {classes: {}, decks:{}}        
+        this.traces_time =  {classes: [], decks:[]}
 
         this.archLegend = []
         this.classLegend = []
@@ -251,10 +245,6 @@ class Ladder {
         } // close for ARCHETYPES
                 
         
-        // Where is the fr loss?
-        var frSum = 0
-        for (var tr of this.traces_bar.decks) {frSum += tr.y[0]}
-        console.log('freq Sum = ',frSum)
 
         // Class Traces
         for (var i=0;i<9;i++) {
@@ -285,9 +275,9 @@ class Ladder {
 
             var class_bar = {
                 x: range(0,hsRanks),
-                y: classFR,
+                y: classFR.slice(),
                 name: hsClass,
-                text: classTxt,
+                text: classTxt.slice(),
                 hoverinfo: 'text',
                 marker: {color: hsColors[hsClass]},
                 type: 'bar',
@@ -321,13 +311,13 @@ class Ladder {
                 fr: fr_avg,
             }
 
-            this.traces_bar.classes.push(arch_bar)
-            this.traces_line.classes.push(arch_line)
-            this.traces_time.classes.push(arch_time)
+            this.traces_bar.classes.push(class_bar)
+            this.traces_line.classes.push(class_line)
+            this.traces_time.classes.push(class_time)
+            this.traces_bar.decks.push(arch_bar)
+            this.traces_line.decks.push(arch_line)
+            this.traces_time.decks.push(arch_time)
 
-            this.traces_class_bar.push(class_bar)
-            this.traces_class_line.push(class_line)
-            this.traces_class_time.push(class_time)
             this.classLegend.push({name:hsClass, color: hsColors[hsClass]})
         }// close for Classes
         
@@ -488,10 +478,10 @@ class Ladder {
         var classSort = function (a, b) { return a.hsClass < b.hsClass ? -1 : a.hsClass > b.hsClass ? 1 : 0; }
         var freqSort = function (a,b) { return a.fr > b.fr ? -1 : a.fr < b.fr ? 1 : 0;}
 
-        this.traces_class_bar.sort(classSort)
-        this.traces_class_line.sort(freqSort)
-        this.traces_class_line.splice(this.maxLines)
-
+        this.traces_bar.classes.sort(classSort)
+        this.traces_line.classes.sort(freqSort)
+        this.traces_line.classes.splice(this.maxLines)
+        
         this.traces_bar.decks.sort(classSort)
         this.traces_line.decks.sort(freqSort)
         this.traces_line.decks.splice(this.maxLines)
@@ -560,7 +550,7 @@ class Ladder {
 
 
     plot() {
-        console.log('plot ladder')
+
         document.getElementById('chart1').innerHTML = ""
         var data, layout
         this.rankFolder.style.display = 'none'
@@ -568,8 +558,7 @@ class Ladder {
         if (this.window.plotType == 'timeline') {
             this.rankFolder.style.display = 'flex'
             layout = this.layout_time
-            if (this.window.mode == 'decks') {data = this.traces_time.decks }//this.traces_arch_time}
-            if (this.window.mode == 'classes') {data = this.traces_class_time}
+            data = this.traces_time[this.window.mode]
         }
 
         if (this.window.plotType == 'pie') {
@@ -579,20 +568,18 @@ class Ladder {
         }
 
         if (this.window.plotType == 'number') {
-            if (this.window.mode == 'decks') {this.createTable('decks'); return}
-            if (this.window.mode == 'classes') {this.createTable('classes'); return}
+            this.createTable(this.window.mode)
+            return
         }
 
         if (this.window.plotType == 'bar') {
             layout = this.layout_bar
-            if (this.window.mode == 'decks') {data = this.traces_bar.decks }//this.traces_arch_bar}
-            if (this.window.mode == 'classes') {data = this.traces_class_bar}
+            data = this.traces_bar[this.window.mode]
         }
 
         if (this.window.plotType == 'line') {
             layout = this.layout_line
-            if (this.window.mode == 'decks') {data = this.traces_line.decks }//this.traces_arch_line}
-            if (this.window.mode == 'classes') {data = this.traces_class_line}
+            data = this.traces_line[this.window.mode]
         }
 
         Plotly.newPlot('chart1',data, layout, {displayModeBar: false,})
@@ -604,7 +591,6 @@ class Ladder {
 
         if (this.window.mode == 'decks') {this.createLegend('decks')}
         if (this.window.mode == 'classes') {this.createLegend('classes')}
-        //document.getElementById('chart1').on('plotly_click', this.zoomToggle.bind(this))
     }
 
 
@@ -685,27 +671,29 @@ class Ladder {
             if (mode=='classes') {
 
                 var hsClass = hsClasses[i]
-                colorSplash.style = 'background-color:'+hsColors[hsClass]+';height:15px;width:30px;margin:0 auto 0.7em auto;'
-                archName.innerHTML = hsClass
-                colorSplash.id = hsClass
-                archName.id = hsClass
+                legendDiv.style = 'background-color:'+hsColors[hsClass]//+';height:15px;width:30px;margin:0 auto 0.7em auto;'
+                //archName.innerHTML = hsClass
+                //colorSplash.id = hsClass
+                //archName.id = hsClass
                 legendDiv.id = hsClass
+                legendDiv.innerHTML = hsClass
                 legendDiv.onclick = function(e) { ui.deckLink(e.target.id,this.f);  }
             }
 
             if (mode=='decks') {
 
                 var l = legend[i]
-                colorSplash.style = 'background-color:'+l.color+';height:15px;width:30px;margin:0 auto 0.7em auto;'
-                archName.innerHTML = l.name
+                legendDiv.style = 'background-color:'+l.color//+';height:15px;width:30px;margin:0 auto 0.7em auto;'
+                //archName.innerHTML = l.name
                 legendDiv.id = l.name
-                colorSplash.id = l.name
-                archName.id = l.name
+                //colorSplash.id = l.name
+                //archName.id = l.name
+                legendDiv.innerHTML = l.name
                 legendDiv.onclick = function(e) { ui.deckLink(e.target.id,this.f);  }
             }
 
-            legendDiv.appendChild(colorSplash)
-            legendDiv.appendChild(archName)
+            //legendDiv.appendChild(colorSplash)
+            //legendDiv.appendChild(archName)
             
 
             contentFooter_ladder.appendChild(legendDiv)

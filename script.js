@@ -95,23 +95,23 @@ var colorscale_Table = [
     [1, '#055c7a']
 ];
 
-/*
-// VS Colors
-var hsColors = {
-    Druid:      '#9e3d22',
-    Hunter:     '#24693d',
-    Mage:       '#7ec8e1',
-    Paladin:    '#f4d166',
-    Priest:     '#758087',
-    Rogue:      '#1c1626',
-    Shaman:     '#1f77b4',
-    Warlock:    '#9467bd',
-    Warrior:    '#c11a3b',
-    Other:      '#88042d',
-    '':         '#88042d',
-    '§':        '#88042d',
-}
-*/
+
+// // VS Colors
+// var hsColors = {
+//     Druid:      '#9e3d22',
+//     Hunter:     '#24693d',
+//     Mage:       '#7ec8e1',
+//     Paladin:    '#f4d166',
+//     Priest:     '#758087',
+//     Rogue:      '#1c1626',
+//     Shaman:     '#1f77b4',
+//     Warlock:    '#9467bd',
+//     Warrior:    '#c11a3b',
+//     Other:      '#88042d',
+//     '':         '#88042d',
+//     '§':        '#88042d',
+// }
+
 
 var hsColors = {
     Druid:      '#9f8868',//'#836353',
@@ -127,6 +127,8 @@ var hsColors = {
     '':         '#88042d',
     '§':        '#88042d',
 }
+
+
 
 
 const btnIdToText = {
