@@ -8,11 +8,14 @@ class LadderWindow {
 
         this.window = document.querySelector('#ladderWindow')
         this.optionButtons = document.querySelectorAll('#ladderWindow .optionBtn')
+        this.firebasePath = 'Branch/ladderData'
+        this.firebaseHistoryPath = 'Branch/historyData'
 
         this.data = {}
         this.hsFormats = hsFormats
         this.hsTimes = hsTimes
         this.ranks = ladder_ranks
+
 
         // Defaults
 
@@ -87,10 +90,10 @@ class LadderWindow {
 
 
     loadData() {
-        var ref = DATABASE.ref('ladderData')
+        var ref = DATABASE.ref(this.firebasePath)
         ref.on('value',this.addData.bind(this), function () {console.log('Could not load Ladder Data')})
         
-        var ref2 = DATABASE.ref('historyData')
+        var ref2 = DATABASE.ref(this.firebaseHistoryPath)
         ref2.on('value',this.addHistoryData.bind(this),e=> console.log('Could not load history data',e))
     }
 
@@ -99,31 +102,23 @@ class LadderWindow {
     addData(DATA) {
 
         var ladderData = DATA.val()
-        
         for (var f of this.hsFormats) {
             for (var t of this.hsTimes) {
-                var key = Object.keys(ladderData[f][t])[0]
-                this.data[f][t] = new Ladder(ladderData[f][t][key],f,t,this) 
+                this.data[f][t] = new Ladder(ladderData[f][t],f,t,this) 
         }}
         this.fullyLoaded = true
         console.log('ladder loaded: '+ (performance.now()-t0).toFixed(2)+' ms')
         finishedLoading()
     }
     
-    addHistoryData(DATA) {
-    
-        this.history = new History(DATA)
-    
-    }
+    addHistoryData(DATA) { this.history = new History(DATA.val(),this) }
 
 
 
     plot () { 
-    
-        //if (this.plotType == 'timeline') {this.history.plot(); return}
-
-        this.data[this.f][this.t].plot();
         this.renderOptions()
+        if (this.plotType == 'timeline') {this.history.plot(); return}
+        this.data[this.f][this.t].plot();
     }
 
 } // close LadderWindow

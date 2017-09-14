@@ -6,6 +6,8 @@ class TableWindow {
 
     constructor(hsFormats, hsTimes, table_ranks) {
 
+
+        this.firebasePath = 'Branch/tableData'
         this.window = document.querySelector('#ladderWindow')
         this.optionButtons = document.querySelectorAll('#tableWindow .optionBtn')
         this.data = {}
@@ -84,7 +86,7 @@ class TableWindow {
 
     loadData() {
 
-        var ref = DATABASE.ref('tableData')
+        var ref = DATABASE.ref(this.firebasePath)
         ref.on('value',this.addData.bind(this), function () {console.log('Could not load Table Data')})
 
     } // load Data
@@ -94,12 +96,10 @@ class TableWindow {
     addData(DATA) {
 
         var tableData = DATA.val()
-        
         for (var f of this.hsFormats) {
             for (var t of this.hsTimes) {
                 for (var r of this.ranks) {
-                    var key = Object.keys(tableData[f][t][r])[0]
-                    this.data[f][t][r] = new Table(tableData[f][t][r][key],f,t,r,this)
+                    this.data[f][t][r] = new Table(tableData[f][t][r],f,t,r,this)
         }}}
         this.fullyLoaded = true
         console.log('table loaded: '+ (performance.now()-t0).toFixed(2)+' ms')

@@ -99,10 +99,9 @@ function setupFirebase() {
     })
 
 
-
-    tableWindow = new TableWindow(hsFormats, table_times, table_ranks, finishedLoading)
-    ladderWindow = new LadderWindow(hsFormats, ladder_times, ladder_ranks, finishedLoading)
-    decksWindow = new DecksWindow(hsFormats, finishedLoading)
+    tableWindow = new TableWindow(hsFormats, table_times, table_ranks)
+    ladderWindow = new LadderWindow(hsFormats, ladder_times, ladder_ranks)
+    decksWindow = new DecksWindow(hsFormats)
 
 }
 
@@ -256,6 +255,25 @@ var hsColors = {
     '':         '#88042d',
     '§':        '#88042d',
 }
+
+// RIVER PICTURE
+
+
+var hsColors = {
+    Druid:      '#665730',
+    Hunter:     '#4f8f49',
+    Mage:       '#98c9dc',
+    Paladin:    '#caa73f',
+    Priest:     '#f7f4b5',
+    Rogue:      '#172323',
+    Shaman:     '#2b789e',
+    Warlock:    '#514384',
+    Warrior:    '#c02e31',
+    Other:      '#88042d',
+    '':         '#88042d',
+    '§':        '#88042d',
+}
+
 
 
 // Washed out

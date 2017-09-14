@@ -3,8 +3,9 @@
 
 class History {
 
-    constructor(DATA) {
-    
+    constructor(DATA,window) {
+        
+        this.window = window
         this.data = DATA
         this.layout = {}
         this.top = 9
@@ -18,21 +19,30 @@ class History {
     }
     
     
-    plot(f,t,r,o) {
+    plot() {
         
+        
+        var f = this.window.f
+        var t = (this.window.t == 'lastDay') ? 'lastHours' : 'lastDays'
+        var r = this.window.r
+        var m = this.window.mode
+
+        console.log('plot timeline',f,t,r,m)
         var y = []
         var archetypes = []
-        var d = this.data[f][t][r][o]
+        var d = this.data[f][t][r][m]
         d.sort(function (a, b) { return a.avg > b.avg ? -1 : a.avg < b.avg ? 1 : 0 })
         for (var i=0; i<this.top;i++) { 
             y.push(d[i]['data']);
             archetypes.push(d[i]['name'])
         }
+        
+        
         var data = [{
             x: this.x[t],
             y:y,
             text: archetypes,
-            type:'line',
+            type:'scatter',
         
         }]
         
@@ -734,9 +744,6 @@ class Ladder {
 
                 var hsClass = hsClasses[i]
                 legendDiv.style = 'background-color:'+hsColors[hsClass]//+';height:15px;width:30px;margin:0 auto 0.7em auto;'
-                //archName.innerHTML = hsClass
-                //colorSplash.id = hsClass
-                //archName.id = hsClass
                 legendDiv.id = hsClass
                 legendDiv.innerHTML = hsClass
                 legendDiv.onclick = function(e) { ui.deckLink(e.target.id,this.f);  }
@@ -746,10 +753,7 @@ class Ladder {
 
                 var l = legend[i]
                 legendDiv.style = 'background-color:'+l.color//+';height:15px;width:30px;margin:0 auto 0.7em auto;'
-                //archName.innerHTML = l.name
                 legendDiv.id = l.name
-                //colorSplash.id = l.name
-                //archName.id = l.name
                 legendDiv.innerHTML = l.name
                 legendDiv.onclick = function(e) { ui.deckLink(e.target.id,this.f);  }
             }
