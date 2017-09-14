@@ -266,7 +266,7 @@ var hsColors = {
 //     Mage:       '#7dc0f1',
 //     Paladin:    '#f3ba0c',
 //     Priest:     '#d8e1e6',//'#fdfde3',
-//     Rogue:      '#335057',
+//     Rogue:      '#335057', // osfjaksadf
 //     Shaman:     '#3b5fcd',
 //     Warlock:    '#b25bba',//'#a249a2',
 //     Warrior:    '#88042d',
@@ -283,6 +283,8 @@ const btnIdToText = {
     Wild: 'Wild',
     
     ranks_all: 'All Ranks',
+    ranks_L: 'Legend Ranks',
+    ranks_1_5: 'Ranks 1-5', 
     ranks_L_5: 'Ranks L-5',
     ranks_6_15: 'Ranks 6-15',
 
@@ -301,11 +303,6 @@ const btnIdToText = {
     classes: 'Classes',
     decks: 'Archetypes',
 }
-
-
-
-
-
 
 
 // Utility

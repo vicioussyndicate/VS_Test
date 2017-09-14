@@ -61,8 +61,9 @@ html(lang='en')
                   span.tooltipText Show Timeline
           .content
             #chart1.chart
+            .chart-footer
           .content-footer
-          .page-footer
+          
         #powerWindow.tabWindow
           .content-header
             .formatOptions.optionBar
@@ -73,8 +74,9 @@ html(lang='en')
               button#top.optionBtn Suggestions
           .content
             #powerGrid.chart
+            .chart-footer
           .content-footer
-          .page-footer
+          
             
         #tableWindow.tabWindow
           .content-header
@@ -108,10 +110,11 @@ html(lang='en')
                   button#matchup.optionBtn.folderBtn By Matchup
           .content
             #chart2.chart
+            .chart-footer
+              .download
+                button.downloadTable Download Table
+                button.copyTable Copy Table
           .content-footer
-            .download
-              button.downloadTable Download Table
-              button.copyTable Copy Table
         #decksWindow.tabWindow
           .content-header
             .ftrOptions.optionBar

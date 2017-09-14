@@ -1,6 +1,46 @@
 
 
 
+class History {
+
+    constructor(DATA) {
+    
+        this.data = DATA
+        this.layout = {}
+        this.top = 9
+        this.x = {
+            'lastDay': 24,
+            'lastWeek': 7,
+            'last2Weeks':14,
+            'last3Weeks':21,
+            'lastMonth':30,
+        }
+    }
+    
+    
+    plot(f,t,r,o) {
+        
+        var y = []
+        var archetypes = []
+        var d = this.data[f][t][r][o]
+        d.sort(function (a, b) { return a.avg > b.avg ? -1 : a.avg < b.avg ? 1 : 0 })
+        for (var i=0; i<this.top;i++) { 
+            y.push(d[i]['data']);
+            archetypes.push(d[i]['name'])
+        }
+        var data = [{
+            x: this.x[t],
+            y:y,
+            text: archetypes,
+            type:'line',
+        
+        }]
+        
+        
+        Plotly.newPlot('chart1',data, this.layout, {displayModeBar: false,})
+    }
+}
+
 
 
 class Ladder {
@@ -12,6 +52,7 @@ class Ladder {
 
         this.bgColor = 'transparent'
         this.fontColor = '#222'
+        this.fontColorLight = '#999'
 
         this.DATA = DATA
         this.f = f
@@ -20,6 +61,7 @@ class Ladder {
         this.days
         this.fr_min = 0.03
 
+      
 
         switch (t) {
             case 'lastDay': this.days = 24; break;
@@ -41,6 +83,7 @@ class Ladder {
         this.archLegend = []
         this.classLegend = []
         this.totGames = 0
+        this.totGamesRanks = {}
 
         this.rankLabels = []
 
@@ -70,9 +113,21 @@ class Ladder {
 
         for (var tier of this.tiers) {
 
+            this.totGamesRanks[tier.name] = 0
+
             var button = document.createElement('button')
-            var clickButton = function () {this.tier = tier; this.plot()}
-            button.className = 'button#'+tier.buttonId+'.optionBtn.folderBtn'
+            var clickButton = function (e) {
+                for (var t of this.tiers) {
+                    if (t.buttonId == e.target.id) {
+                        this.tier = t
+                        this.plot()
+                        this.window.r = t.buttonId
+                        this.window.renderOptions()
+            }}}
+            
+            button.id = tier.buttonId
+            button.className = 'optionBtn folderBtn'
+            button.innerHTML = tier.name
             button.onclick = clickButton.bind(this)
 
             this.dropdownDiv.appendChild(button)
@@ -123,7 +178,13 @@ class Ladder {
             else {this.rankLabels.push('')}
 
             this.totGames += rankSums[i]
+            
+            for (var tier of this.tiers) {
+                if (i >= tier.start && i <= tier.end) { this.totGamesRanks[tier.name] += rankSums[i] }
+            }
             var classRankRow = [0,0,0,0,0,0,0,0,0]
+            
+            
 
             for (var j=0;j<rankData[i].length;j++) {
                 var idx_class = hsClasses.indexOf(ARCHETYPES[j][0])
@@ -364,7 +425,7 @@ class Ladder {
                 showticklabels: false,
                 fixedrange: true,
                 zeroline: false,
-			    color: this.fontColor,
+			    color: this.fontColorLight,
                 tickformat: ',.0%',
 		    },
             
@@ -411,7 +472,7 @@ class Ladder {
                 fixedrange: true,
 
                 //zeroline: false,
-			    color: this.fontColor,
+			    color: this.fontColorLight,
 		    },
 		    plot_bgcolor: this.bgColor,
             paper_bgcolor: this.bgColor,//this.bgColor2,
@@ -451,7 +512,7 @@ class Ladder {
                 tickcolor: 'transparent',
                 tickformat: ',.0%',
                 fixedrange: true,
-			    color: this.fontColor,
+			    color: this.fontColorLight,
 		    },
 		    plot_bgcolor: this.bgColor, 
             paper_bgcolor: this.bgColor,
@@ -586,8 +647,9 @@ class Ladder {
 
 
 
-        var windowInfo = document.querySelector('#ladderWindow .nrGames')    
-        windowInfo.innerHTML = this.totGames.toLocaleString()+" games"
+        var windowInfo = document.querySelector('#ladderWindow .nrGames')
+        var totGames = (this.window.plotType != 'pie') ? this.totGames : this.totGamesRanks[this.tier.name]    
+        windowInfo.innerHTML = totGames.toLocaleString()+" games"
 
         if (this.window.mode == 'decks') {this.createLegend('decks')}
         if (this.window.mode == 'classes') {this.createLegend('classes')}
@@ -648,8 +710,8 @@ class Ladder {
 
 
     createLegend(mode) {
-        var contentFooter_ladder = document.querySelector('#ladderWindow .content-footer')
-        while (contentFooter_ladder.firstChild) {contentFooter_ladder.removeChild(contentFooter_ladder.firstChild);}
+        var chartFooter = document.querySelector('#ladderWindow .chart-footer')
+        while (chartFooter.firstChild) {chartFooter.removeChild(chartFooter.firstChild);}
         
         var maxElements
         var legend = this.archLegend
@@ -696,7 +758,7 @@ class Ladder {
             //legendDiv.appendChild(archName)
             
 
-            contentFooter_ladder.appendChild(legendDiv)
+            chartFooter.appendChild(legendDiv)
 
         }
     }
@@ -704,8 +766,8 @@ class Ladder {
 
 
     createNumbersFooter() {
-        var contentFooter_ladder = document.querySelector('#ladderWindow .content-footer')
-        while (contentFooter_ladder.firstChild) {contentFooter_ladder.removeChild(contentFooter_ladder.firstChild);}
+        var chartFooter = document.querySelector('#ladderWindow .chart-footer')
+        while (chartFooter.firstChild) {chartFooter.removeChild(chartFooter.firstChild);}
 
         var div = document.createElement('div')
         var csvBtn = document.createElement('button')
@@ -722,7 +784,7 @@ class Ladder {
         div.appendChild(csvBtn)
         div.appendChild(clipboardBtn)
 
-        contentFooter_ladder.appendChild(div)
+        chartFooter.appendChild(div)
 
         new Clipboard('.copyNumbers', {
             text: function(trigger) {

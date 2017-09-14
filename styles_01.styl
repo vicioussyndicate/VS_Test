@@ -382,20 +382,20 @@ body
 
             // Ladder Window
             #ladderWindow
-                .content-footer
-                    background-color: $chart_bgColor
+                .chart-footer
+                    background-color: transparent
                     color black //$chartColors
                     margin 0 50px 0 50px
+                    height 5%
                     .ladder-legend
-                        margin 0.5rem
+                        margin-bottom 0.5rem
                         font-size: 0.8rem
-                        padding 0.3rem
+                        font-weight bold
+                        padding 0.15rem
+                        color $lightColor
                         &:hover
                             cursor pointer
-                .page-footer
-                    background-color: $darkColor
-                    width 100%
-                    height 15px
+                
 
 
             // TabWindow
@@ -405,10 +405,16 @@ body
                         #matchup
                             display: none
                         margin-right: 2rem
-                .content-footer
+                
+                .chart
+                    height 87%
+                .chart-footer
+                    height 5%
+                    flex-direction row-reverse
+                    z-index 50
                     button
                         color black
-                        font-size: 1rem
+                        font-size: 0.7rem
                         font-weight: bold
                         padding 0.3rem
                         margin 0 auto
@@ -439,6 +445,10 @@ body
                     height 100%
                     background-color $chart_bgColor
                     margin 20px
+                .chart-footer
+                    display flex
+                    flex-direction row
+                    justify-content space-between
             .content-footer
                 background-color $footer_bgColor
                 color $footer_fColor

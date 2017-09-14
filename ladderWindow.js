@@ -19,9 +19,11 @@ class LadderWindow {
         this.f = 'Standard'
         this.t = 'lastDay'
         this.r = 'ranks_all'
-        this.plotType = 'bar' // bar, line, pie, number, timeline
+        this.plotType = 'bar' // bar, line, pie, number,  !!! timeline
+        this.plotTypes = ['bar','line','pie','number','timeline']
         this.mode = 'classes' // classes, decks
         this.fullyLoaded = false
+        this.history = null
 
 
         for (var f of this.hsFormats) {
@@ -62,8 +64,7 @@ class LadderWindow {
         if (btnID == 'number')      {this.plotType = 'number'}
         if (btnID == 'timeline')    {this.plotType = 'timeline'}
         
-        this.data[this.f][this.t].plot()
-        this.renderOptions()
+        this.plot()
     }// button Handler
 
 
@@ -79,6 +80,7 @@ class LadderWindow {
         }
         document.querySelector("#ladderWindow #formatBtn").innerHTML =    btnIdToText[this.f]
         document.querySelector("#ladderWindow #timeBtn").innerHTML =      btnIdToText[this.t]
+        document.querySelector("#ladderWindow #rankBtn").innerHTML =     btnIdToText[this.r]
     }
 
 
@@ -87,6 +89,9 @@ class LadderWindow {
     loadData() {
         var ref = DATABASE.ref('ladderData')
         ref.on('value',this.addData.bind(this), function () {console.log('Could not load Ladder Data')})
+        
+        var ref2 = DATABASE.ref('historyData')
+        ref2.on('value',this.addHistoryData.bind(this),e=> console.log('Could not load history data',e))
     }
 
 
@@ -104,10 +109,22 @@ class LadderWindow {
         console.log('ladder loaded: '+ (performance.now()-t0).toFixed(2)+' ms')
         finishedLoading()
     }
+    
+    addHistoryData(DATA) {
+    
+        this.history = new History(DATA)
+    
+    }
 
 
 
-    plot () { this.data[this.f][this.t].plot();}
+    plot () { 
+    
+        //if (this.plotType == 'timeline') {this.history.plot(); return}
+
+        this.data[this.f][this.t].plot();
+        this.renderOptions()
+    }
 
 } // close LadderWindow
 
