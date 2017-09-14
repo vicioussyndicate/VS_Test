@@ -83,7 +83,7 @@ hsArchetypes = {}
 # Default Archetypes
 for f in hsFormats:
     hsArchetypes[f] = []
-    for c in hsClasses:$
+    for c in hsClasses:
         hsArchetypes[f].append([c,'Other']) # placeholder archetypes
     hsArchetypes[f].append(['','Other']) # unidentified class
     
@@ -123,14 +123,16 @@ def newHistory(archetypes, d):
     history = []
     for a in archetypes:
         history.append({
-            'name': a if type(a) is str else a[1]+" "+a[0]
+            'name': a if type(a) is str else a[1]+" "+a[0],
             'avg':0,
-            'data':[0 for x in range(d)]}
+            'data':[0 for x in range(d)],
+        })
             
     history.append({
             'name':'tot',
             'avg':0,
-            'data':[0 for x in range(d)]}
+            'data':[0 for x in range(d)],
+            })
             
     return history
                   
@@ -227,14 +229,14 @@ def run():
         
         #
         #                                H
-        #                              /  /
+        #                              /  \
         #                      Standard   Wild
-        #                       /     / 
+        #                       /     \ 
         #               lastDays      lastHours 
         #               /////
         #           rankIntervals
-        #           /     /
-        #      decks     classes    
+        #           /     \
+        #      decks       classes    
         #       /
         #   History [{ name, data, avg },...]
 
@@ -354,7 +356,12 @@ def run():
                             H[f][t][r][o][d]['avg'] = avg/len(archetypes[a]['data'])
         
         #upload stuff here
-           
+        print('H')
+        print(H)
+        print('T')
+        print(T)
+        print('L')
+        print(L)        
                     
             
 
