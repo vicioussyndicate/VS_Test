@@ -1,20 +1,8 @@
 
 
-#[id, mode, hero, hero_deck, op, op_deck, coin, result, duration, region, country, city, version]
-#
-# 0: id
-# 1: hero
-# 2: hero_deck
-# 3: op
-# 4: op_deck
-
-
-
 import csv
 from datetime import *
-import json
-
-import Pyrebase # learn more: https://python.org/pypi/Pyrebase
+import pyrebase # learn more: https://python.org/pypi/Pyrebase
 
 
 config = {
@@ -27,14 +15,10 @@ config = {
 
 }
 
-firebase = Pyrebase.initialize_app(config)
+firebase = pyrebase.initialize_app(config)
 
 
-# Get a reference to the auth service
 auth = firebase.auth()
-
-# Log the user in
-user = auth.sign_in_with_email_and_password(email, password)
 
 DB = firebase.database()
 
@@ -58,7 +42,7 @@ rankIntervals = {
 
     'ranks_all':    [0,20], # rankName: [startRank, endRank] -> rank <= endRank && rank >= startRank
     'ranks_L':      [0,0],
-    'ranks_1_5':    [1,5],
+    'ranks_L_5':    [0,5],
     'ranks_6_15':   [6,15],
 
 }
@@ -66,7 +50,7 @@ rankIntervals = {
 
 timeSpans = {        # for history
     'lastHours': 24,
-    'lastDays': 100
+    'lastDays': 30
 }
 
 
@@ -99,7 +83,6 @@ def getCSVFile(path):
 def newLadder(t, archetypes):
     ladder = {  'timeStart':[t.year,t.month,t.day,t.hour,t.minute],
                 'timeEnd':[],
-                'hsFormat': hsFormat,
                 'archetypes':archetypes,
                 'gamesPerRank':[0 for x in range(hsRanks)],
                 'rankData':[[0 for x in range(len(archetypes))] for y in range(hsRanks)],
@@ -111,7 +94,6 @@ def newLadder(t, archetypes):
 def newTable(t, archetypes):
     table = {   'timeStart':[t.year,t.month,t.day,t.hour,t.minute],
                 'timeEnd':[],
-                'hsFormat': hsFormat,
                 'archetypes':archetypes,
                 'frequency':[0 for x in range(len(archetypes))],
                 'table': [[[0,0] for x in range(len(archetypes))] for y in range(len(archetypes))]}
@@ -142,44 +124,6 @@ def newHistory(archetypes, d):
     
     
     
-    
-
- #SAVE FILES
-def saveLadderAsJson(ladder,t,span):
-    if ladder == None:
-        return
-    
-    
-    ladder['timeEnd'] = [t.year,t.month,t.day,t.hour,t.minute]
-    
-    path = '/ladderData/'+hsFormat+'/'+span
-    print(span,ladder['gamesPerRank'])
-
-    if span in ['lastDay','lastWeek','lastMonth']:
-        firebase.delete(path,'')
-        firebase.post(path,ladder)
-        pass
-    
-
-def saveTableAsJson(table,dt,f,t,r):
-    if table == None:
-        print('- ! - ! -table NONE')
-        return
-    
-    table['timeEnd'] = [dt.year,dt.month,dt.day,dt.hour,dt.minute]
-    path = '/tableData/'+f+'/'+t+'/'+r
-    print(path,table['frequency'])
-
-
-    if t in ['lastWeek','lastMonth']:
-        firebase.delete(path,'')
-        firebase.post(path,table)
-        pass
-    
-
-
-
-
 
 
 
@@ -209,8 +153,7 @@ def run():
                 op_arch[1] = 'Other'
                 
             if op_arch not in hsArchetypes[hsFormat]:
-                print(hsFormat, op_arch)
-                hsArchetypes.append(op_arch)
+                hsArchetypes[hsFormat].append(op_arch)
                 
             count += 1
 
@@ -222,7 +165,7 @@ def run():
         count = 0
         countBreak = pow(10,10)
         
-        # Data: ladder, table, activity
+        # Data: ladder, table, history
         L = {}
         T = {}
         H = {}
@@ -233,12 +176,12 @@ def run():
         #                      Standard   Wild
         #                       /     \ 
         #               lastDays      lastHours 
-        #               /////
-        #           rankIntervals
+        #               /     \\\
+        #          ranks_all   rankIntervals
         #           /     \
         #      decks       classes    
         #       /
-        #   History [{ name, data, avg },...]
+        #   [{ name, data, avg },...] <- History element
 
         for row in datareader:
             if count > countBreak:
@@ -255,12 +198,15 @@ def run():
                 for f in hsFormats:
                     L[f] = {}
                     T[f] = {}
-                    H[f] = {'lastHours':newHistory(hsClasses, 24), 'lastDays':newHistory(hsArchetypes[f], 100)}
-                    for f in hsFormats:
-                        for t in timeSpans:
-                            for r in rankIntervals:
-                                H[f][t][r]['classes'] = newHistory(hsClasses, timeSpans[t])
-                                H[f][t][r]['decks'] = newHistory(hsArchetypes[f], timeSpans[t])
+                    H[f] = {}
+
+
+                    for t in timeSpans:
+                        H[f][t] = {}
+                        for r in rankIntervals:
+                            H[f][t][r] = {}
+                            H[f][t][r]['classes'] = newHistory(hsClasses, timeSpans[t])
+                            H[f][t][r]['decks'] = newHistory(hsArchetypes[f], timeSpans[t])
                     
                     for t in timeIntervals:
                         L[f][t] = newLadder(dt, hsArchetypes[f])
@@ -303,22 +249,22 @@ def run():
                     for r in rankIntervals:
                         if rank >= rankIntervals[r][0] and rank <= rankIntervals[r][1]:
                             for o in options:
-                                H[hsFormat]['lastHours'][r][o][-1][hours] += 1
-                                H[hsFormat]['lastHours'][r][o][options[o]][hours] += 1
+                                H[hsFormat]['lastHours'][r][o][-1]['data'][hours] += 1
+                                H[hsFormat]['lastHours'][r][o][options[o]]['data'][hours] += 1
          
                 if t_delta.days < 100:       
                     for r in rankIntervals:
                         if rank >= rankIntervals[r][0] and rank <= rankIntervals[r][1]:
                             for o in options:
-                                H[hsFormat]['lastDays'][r][o][-1][hours] += 1
-                                H[hsFormat]['lastDays'][r][o][options[o]][hours] += 1
+                                H[hsFormat]['lastDays'][r][o][-1]['data'][hours] += 1
+                                H[hsFormat]['lastDays'][r][o][options[o]]['data'][hours] += 1
                 
                 
                 
                 for t in timeIntervals:
                     if t_delta.days < timeIntervals[t]:
                         L[hsFormat][t]['rankData'][rank][idx_op] += 1
-                        L[hsFormat][t]['gamesPerRank'][rank][idx_op] += 1
+                        L[hsFormat][t]['gamesPerRank'][rank] += 1
                         L[hsFormat][t]['classRankData'][rank][idx_class_op] += 1
 
                 if he_arch in hsArchetypes[hsFormat]:
@@ -339,6 +285,8 @@ def run():
 
                 
             count += 1
+            if count % 1000 == 0:
+                print(count)
         
         #normalize stuff here
         for f in hsFormats:
@@ -349,20 +297,19 @@ def run():
                         tot = archetypes[-1]['data']
                         for a in range(len(archetypes)-1):
                             avg = 0
-                            for d in range(len(archetypes[a]['data'])):
+                            for d in range(len(H[f][t][r][o][a]['data'])):
                                 if tot[d] >0:
-                                    H[f][t][r][o][d]['data'] /= tot[d] # only 6 for loops :/
-                                    avg += H[f][t][r][o][d]['data']
-                            H[f][t][r][o][d]['avg'] = avg/len(archetypes[a]['data'])
+                                    H[f][t][r][o][a]['data'][d] /= tot[d]
+                                    avg += H[f][t][r][o][a]['data'][d]
+                                    
+                            H[f][t][r][o][a]['avg'] = avg/len(H[f][t][r][o][a]['data'])
         
         #upload stuff here
-        print('H')
-        print(H)
-        print('T')
-        print(T)
-        print('L')
-        print(L)        
-                    
+
+        DB.child("Branch").child("ladderData").set(L)
+        DB.child("Branch").child("tableData").set(T)
+        DB.child("Branch").child("historyData").set(H)
+
             
 
 
