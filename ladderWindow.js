@@ -7,9 +7,17 @@ class LadderWindow {
     constructor(hsFormats, hsTimes, ladder_ranks) {
 
         this.window = document.querySelector('#ladderWindow')
+        this.chartDiv = document.querySelector('#ladderWindow #chart1')
         this.optionButtons = document.querySelectorAll('#ladderWindow .optionBtn')
         this.firebasePath = 'Branch/ladderData'
         this.firebaseHistoryPath = 'Branch/historyData'
+        
+        this.fontColor = '#222'
+        this.fontColorLight = '#999'
+        this.archetypeColors = {
+            Standard: {},
+            Wild: {},
+        }
 
         this.data = {}
         this.hsFormats = hsFormats

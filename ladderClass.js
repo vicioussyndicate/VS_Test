@@ -7,7 +7,43 @@ class History {
         
         this.window = window
         this.data = DATA
-        this.layout = {}
+        
+        this.layout = {
+		    showlegend: false,
+		    displayModeBar: false,
+            autosize: true,
+		    hovermode: 'closest',
+		    xaxis: {
+                tickfont: {
+				    family: 'Arial, bold',
+				    size: 15,
+                    color: this.window.fontColor,
+                },
+                tickcolor: 'transparent',
+                visible: true, 
+                showgrid: true,
+                hoverformat: '.1%',
+                color: this.window.fontColor,
+                fixedrange: true,
+                zeroline: false,
+                autorange: 'reversed',
+            },
+		    yaxis: {
+			    tickfont: {
+				    family: 'Arial, bold',
+				    size: 19,
+			    },
+                ticklen: 12,
+                tickcolor: 'transparent',
+                tickformat: ',.0%',
+                fixedrange: true,
+			    color: this.window.fontColorLight,
+		    },
+		    plot_bgcolor: this.bgColor, 
+            paper_bgcolor: this.bgColor,
+            margin: {l:70,r:20,b:30,t:0,},
+        }
+        
         this.top = 9
         this.x = {
             'lastDay': 24,
@@ -21,33 +57,49 @@ class History {
     
     plot() {
         
-        
+        this.window.chartDiv.innerHTML = ""
         var f = this.window.f
-        var t = (this.window.t == 'lastDay') ? 'lastHours' : 'lastDays'
+        var t_w = this.window.t
+        var t_h = (this.window.t == 'lastDay') ? 'lastHours' : 'lastDays'
         var r = this.window.r
         var m = this.window.mode
 
-        console.log('plot timeline',f,t,r,m)
+        var x = range(0,this.x[t_w])
         var y = []
+        var traces = []
         var archetypes = []
-        var d = this.data[f][t][r][m]
+        var d = this.data[f][t_h][r][m]
         d.sort(function (a, b) { return a.avg > b.avg ? -1 : a.avg < b.avg ? 1 : 0 })
+        
+        
         for (var i=0; i<this.top;i++) { 
             y.push(d[i]['data']);
             archetypes.push(d[i]['name'])
+            
+            var trace = {
+                x: x.slice(),
+                y: d[i]['data'],
+                text: d[i]['name'],
+                type: 'scatter',
+            }
+            traces.push(trace)
         }
         
+        /*
+        Plotly.animate('graph', {
+            data: data,
+            traces: [0,1],
+            layout: {}
+          }, {
+            transition: {
+              duration: 500,
+              easing: 'cubic-in-out'
+            }
+          })*/
         
-        var data = [{
-            x: this.x[t],
-            y:y,
-            text: archetypes,
-            type:'scatter',
-        
-        }]
         
         
-        Plotly.newPlot('chart1',data, this.layout, {displayModeBar: false,})
+        Plotly.newPlot('chart1',traces, this.layout, {displayModeBar: false,})
     }
 }
 
@@ -61,8 +113,8 @@ class Ladder {
         this.maxLines = 10 // max archetypes shown for the line chart
 
         this.bgColor = 'transparent'
-        this.fontColor = '#222'
-        this.fontColorLight = '#999'
+        this.fontColor = window.fontColor
+        this.fontColorLight = window.fontColorLight
 
         this.DATA = DATA
         this.f = f
@@ -88,7 +140,6 @@ class Ladder {
         this.traces_bar =   {classes: [], decks:[]}
         this.traces_line =  {classes: [], decks:[]}
         this.traces_pie =   {classes: {}, decks:{}}        
-        this.traces_time =  {classes: [], decks:[]}
 
         this.archLegend = []
         this.classLegend = []
@@ -262,9 +313,6 @@ class Ladder {
             fr_avg /= hsRanks
 
 
-            //archtimeline
-            var archT = []
-            for (var j=0; j<this.days;j++) { archT.push(Math.random()) }
 
             var arch_bar = {
                 x:range(0,hsRanks),
@@ -292,23 +340,9 @@ class Ladder {
                 fr: fr_avg,
             }
 
-            var arch_time = {
-                x: range(0,this.days),
-                y: archT,
-                name: archName,
-                //text: 'name+x',
-                hoverinfo: 'name+x',
-                orientation: 'h',
-                marker: {color: color,},
-                type: 'scatter',
-                winrate: 0,
-                hsClass: ARCHETYPES[i][0]+ARCHETYPES[i][1],
-                fr: fr_avg,
-            }
 
             this.traces_bar.decks.push(arch_bar)
             this.traces_line.decks.push(arch_line)
-            this.traces_time.decks.push(arch_time)
 
             this.archLegend.push({name: archName, color: color, fr: fr_avg})
             this.archetypes.push({name:archName,fr:fr_avg, data: archFR, color: color})
@@ -339,10 +373,7 @@ class Ladder {
             fr_avg /= hsRanks
             this.c_data[hsClass] = classFR.slice()
 
-             //classTime
-             var classT = []
-             for (var j=0; j<this.days;j++) { classT.push(Math.random()) }
-
+             
 
             var class_bar = {
                 x: range(0,hsRanks),
@@ -369,25 +400,11 @@ class Ladder {
                 fr: fr_avg,
              }
 
-             var class_time = {
-                x: range(0,this.days),
-                y: classT,
-                name: hsClass,
-                hoverinfo: 'name+x',
-                orientation: 'h',
-                marker: {color: hsColors[hsClass],},
-                type: 'scatter',
-                winrate: 0,
-                hsClass: hsClass,
-                fr: fr_avg,
-            }
 
             this.traces_bar.classes.push(class_bar)
             this.traces_line.classes.push(class_line)
-            this.traces_time.classes.push(class_time)
             this.traces_bar.decks.push(arch_bar)
             this.traces_line.decks.push(arch_line)
-            this.traces_time.decks.push(arch_time)
 
             this.classLegend.push({name:hsClass, color: hsColors[hsClass]})
         }// close for Classes
@@ -491,43 +508,7 @@ class Ladder {
 
 
 
-        // LAYOUT TIME
-        this.layout_time = {
-            title: 'Class Frequency over the last 14 days',
-		    showlegend: false,
-		    displayModeBar: false,
-            autosize: true,
-		    hovermode: 'closest',
-		    xaxis: {
-                tickfont: {
-				    family: 'Arial, bold',
-				    size: 15,
-                    color: this.fontColor,
-                },
-                tickcolor: 'transparent',
-                visible: true, 
-                showgrid: true,
-                hoverformat: '.1%',
-                color: this.fontColor,
-                fixedrange: true,
-                zeroline: false,
-                autorange: 'reversed',
-            },
-		    yaxis: {
-			    tickfont: {
-				    family: 'Arial, bold',
-				    size: 19,
-			    },
-                ticklen: 12,
-                tickcolor: 'transparent',
-                tickformat: ',.0%',
-                fixedrange: true,
-			    color: this.fontColorLight,
-		    },
-		    plot_bgcolor: this.bgColor, 
-            paper_bgcolor: this.bgColor,
-            margin: {l:70,r:20,b:30,t:0,},
-        }
+        
 
         // LAYOUT Pie
         this.layout_pie = {
@@ -626,11 +607,6 @@ class Ladder {
         var data, layout
         this.rankFolder.style.display = 'none'
 
-        if (this.window.plotType == 'timeline') {
-            this.rankFolder.style.display = 'flex'
-            layout = this.layout_time
-            data = this.traces_time[this.window.mode]
-        }
 
         if (this.window.plotType == 'pie') {
             this.rankFolder.style.display = 'flex'
@@ -758,9 +734,6 @@ class Ladder {
                 legendDiv.onclick = function(e) { ui.deckLink(e.target.id,this.f);  }
             }
 
-            //legendDiv.appendChild(colorSplash)
-            //legendDiv.appendChild(archName)
-            
 
             chartFooter.appendChild(legendDiv)
 
