@@ -331,7 +331,6 @@ function randint(min, max) {
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
 }
-function print(stuff) {console.log(stuff)}
 function randomColor() {return 'rgb('+randint(0,255)+','+randint(0,255)+','+randint(0,255)+')'}
 function range(a,b) {var range = []; for (var i=a;i<b;i++) {range.push(i)}; return range}
 function fillRange(a,b,c) {var range = []; for (var i=a;i<b;i++) {range.push(c)}; return range}
