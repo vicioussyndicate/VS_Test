@@ -87,7 +87,7 @@ function setupFirebase() {
         if (firebaseUser) {
             console.log('user logged in:',firebaseUser)
             //var uid = user.uid
-            firebase.database().ref('users/' + firebaseUser.uid).set({
+            firebase.database().ref('users').set({
                 username: 'testName',//user.displayName,
                 email: 'testEmail',//user.email,
                 status: 'vip',
