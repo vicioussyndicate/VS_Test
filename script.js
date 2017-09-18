@@ -86,6 +86,15 @@ function setupFirebase() {
 
         if (firebaseUser) {
             console.log('user logged in:',firebaseUser)
+            //var uid = user.uid
+            firebase.database().ref('users/' + user.uid).set({
+                username: 'testName',//user.displayName,
+                email: 'testEmail',//user.email,
+                status: 'vip',
+            });
+
+            
+            
             logOutBtn.classList.remove('hidden')
             signUpBtn.classList.add('hidden')
             loginBtn.classList.add('hidden')
