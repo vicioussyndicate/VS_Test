@@ -34,31 +34,45 @@ DB = firebase.database()
 
 
 FILENAME = 'live.csv'      # csv file to read from
-dataBranch = 'data' # upload target'data'
+dataBranch = 'premiumData' # upload target'data'
 
 
 
 
-timeIntervals_ladder = { # time in [days]
+timeIntervals_ladder = {
 
-    'lastDay':      1,  # class ladder 24h
-    'last2Weeks':   14, # archetype overview last 14 days
+    'last6Hours':   6, # time in [hours] !! important to have 'Hours' in key !!
+    'last12Hours':  12,
+
+    'lastDay':      1, # time in [days]
+    'last3Days':    3,
+    'lastWeek':     7,
+    'last2Weeks':   14,
 }
 
 timeIntervals_table = {
 
+
+    'lastDay':      1, # time in [days]
+    'last3Days':    3,
+    'lastWeek':     7,
     'last2Weeks':   14,
 }
 
 
-timeIntervals_history = {     # no history data
+timeIntervals_history = {
+    'lastHours': 30,
+    'lastDays': 30
 }
 
-rankIntervals = {# rankName: [startRank, endRank] -> rank <= endRank && rank >= startRank
+rankIntervals = {
 
-    'ranks_all':    [0,20], # only combined ranks for table data
+    'ranks_all':    [0,20], # rankName: [startRank, endRank] -> rank <= endRank && rank >= startRank
+    'ranks_L':      [0,0],
+    'ranks_L_5':    [0,5],
+    'ranks_6_15':   [6,15],
+
 }
-
 
 
 
@@ -255,8 +269,6 @@ def run():
                 
                 options = {'classes':idx_class_op,'decks':idx_op}
                
-
-                """
                 if t_delta.days < 1:
                     for r in rankIntervals:
                         if rank >= rankIntervals[r][0] and rank <= rankIntervals[r][1]:
@@ -271,7 +283,7 @@ def run():
                                 days = int(t_delta.days)
                                 H[hsFormat]['lastDays'][r][o][-1]['data'][days] += 1
                                 H[hsFormat]['lastDays'][r][o][options[o]]['data'][days] += 1
-                """
+                
                 
                 
                 for t in timeIntervals_ladder:
@@ -309,7 +321,6 @@ def run():
                 print(count)
         
         #normalize stuff here
-        """
         for f in hsFormats:
             for t in ['lastHours','lastDays']:
                 for r in rankIntervals:
@@ -324,12 +335,12 @@ def run():
                                     avg += H[f][t][r][o][a]['data'][d]
                                     
                             H[f][t][r][o][a]['avg'] = avg/len(H[f][t][r][o][a]['data'])
-        """
+        
         #upload stuff here
 
         DB.child(dataBranch).child("ladderData").set(  L, user['idToken'])
         DB.child(dataBranch).child("tableData").set(   T, user['idToken'])
-        #DB.child(dataBranch).child("historyData").set( H, user['idToken'])
+        DB.child(dataBranch).child("historyData").set( H, user['idToken'])
 
             
 
