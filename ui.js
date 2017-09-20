@@ -84,7 +84,11 @@ class UI {
 
 
 
-
+function overlay() {
+    if (ui.overlay) {document.getElementById("overlay").style.display = "none"; ui.overlay = false}
+    else {document.getElementById("overlay").style.display = "block"; ui.overlay = true}
+    
+}
 
 
 

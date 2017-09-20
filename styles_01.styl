@@ -1,23 +1,26 @@
 
-// Set 1
-$lightColor = #e8fcfc
-$midColor = #759cce
-$darkColor = #1f3044
-$accentColor = #9bf7ff
-$chartColors = #e8fcfc
+// // Set 1
+// $lightColor = #e8fcfc
+// $midColor = #759cce
+// $darkColor = #1f3044
+// $accentColor = #9bf7ff
+// $chartColors = #e8fcfc
 
-// Set 2 // Icy Blues
+// // Set 2 // Icy Blues
 
-$lightColor = #daecf3
-$midColor = #fe7b60
-$darkColor = #012d41
-$accentColor = #ff404e
-$chartColors = #daecf3
+// $lightColor = #daecf3
+// $midColor = #fe7b60
+// $darkColor = #012d41
+// $accentColor = #ff404e
+// $chartColors = #daecf3
 
 
 // Set 3 // Black Orange
 
 $midColor = #e6462e
+$midColor2 = #ea5d44
+$midColor3 = #ee755a
+$midColor4 = #f18b70
 $darkColor = #454c57
 $accentColor = #ff9326
 $chartColors = #ebebeb
@@ -148,13 +151,11 @@ button
     position absolute
     margin-left 46vw
     height: 40px
-    //margin-top 5px
     z-index 1
     .logo
         width 40px
         height 40px
     .text
-        //display inline
         position absolute
         top 12px
         left 40px
@@ -212,25 +213,27 @@ body
                 justify-content center
                 background $nav_bgColor
                 color $nav_fColor
-                //border-radius 0.2rem
                 .tab
                     background-color $nav_bgColor
                     color $nav_fColor
                     padding 0.4rem
-                    //margin 0.25rem
                     font-size 1.5rem
                     font-weight bold
                     letter-spacing 2px
                     transition background 0.3s ease, color 0.3s ease
+                    &#power
+                        background-color: $midColor2
+                    &#table
+                        background-color: $midColor3
+                    &#decks
+                        background-color: $midColor4
                     &:hover
                         cursor pointer
                     &.highlighted
-                        //padding-bottom 10px
                         background-color $nav_hi_bgColor
                         color $nav_hi_fColor
 
         .content-wrapper
-            //margin 1% 0% 0% 1%
             height 450px
             width 100%
             display flex
@@ -251,7 +254,6 @@ body
                     overflow-x: auto
                     overflow-y hidden
                     grid-gap 1rem
-                    //padding 1rem
                     .archetypes
                         margin-left 0.5rem
                         margin-top 1rem
@@ -308,8 +310,9 @@ body
                                     border-color: #b7ff54
                                     cursor:  pointer
                     .descriptionBox
-                        background-color white
                         height 25rem
+                        padding 1rem
+                        overflow-y: auto
                         .description
                             background-color white
                             color black
@@ -319,17 +322,13 @@ body
                             font-size: 0.9rem
                             font-weight: normal
                             font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-                            text-indent: 20px;
-                            overflow-y: auto
+                            text-indent: 20px; 
                             .text
                                 &::first-letter
-                                    font-size: 200%
-                                    
-                            .title
-                            
+                                    font-size: 200%  
+                            .title                          
                                 font-size: 150%
                                 font-weight: bold
-                                //font-size: 1.1rem
                                 margin-bottom: 1rem
                     
 
@@ -421,7 +420,6 @@ body
                         #matchup
                             display: none
                         margin-right: 2rem
-                
                 .chart
                     height 87%
                 .chart-footer
@@ -456,8 +454,17 @@ body
                 flex-direction column
 
                 height $contentHeight
-                max-height: 700px
-                
+                max-height: 700pxg
+                .graphTitle
+                    margin 1rem auto 0 auto
+                    position absolute
+                    font-size: 140%
+                    font-weight: bold
+                    color $darkColor
+                .graphLabel
+                    position absolute
+                    top 10rem
+                    color $darkColor
                 .chart
                     height 100%
                     background-color $chart_bgColor

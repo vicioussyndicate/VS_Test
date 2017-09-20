@@ -6,7 +6,7 @@ var t0 = performance.now();
 
 // Global Data
 var DATABASE
-var auth
+var USER
 
 // Windows
 var powerWindow
@@ -33,86 +33,7 @@ window.onload = function() {
     setupFirebase()
 }
 
-function setupFirebase() {
-    var config = {
-        apiKey: "AIzaSyCDn9U08D4Lzhrbfz2MSy2rws_D02eH3HA",
-        authDomain: "testproject-a0746.firebaseapp.com",
-        databaseURL: "https://testproject-a0746.firebaseio.com",
-        projectId: "testproject-a0746",
-        storageBucket: "testproject-a0746.appspot.com",
-        messagingSenderId: "826197220845"
-    };
-    firebase.initializeApp(config);
-    DATABASE = firebase.database()
-    
 
-
-    const emailTxt = document.getElementById('emailInput')
-    const passwordTxt = document.getElementById('passwordInput')
-    const loginBtn = document.getElementById('loginBtn')
-    const logOutBtn = document.getElementById('logOutBtn')
-    const signupBtn = document.getElementById('signUpBtn')
-    const errorMsg = document.getElementById('loginErrorMsg')
-
-
-
-
-    loginBtn.addEventListener('click', e => {
-        const email = emailTxt.value
-        const password = passwordTxt.value
-        auth = firebase.auth()
-
-        const promise = auth.signInWithEmailAndPassword(email,password);
-        promise.catch(e => {console.log(e.message); errorMsg.innerHTML = 'Username or Password incorrect'})
-    });
-
-
-
-    signUpBtn.addEventListener('click', e => {
-        const email = emailTxt.value
-        const password = passwordTxt.value
-        auth = firebase.auth()
-
-        const promise = auth.createUserWithEmailAndPassword(email,password);
-        promise.catch(e => {console.log(e.message); errorMsg.innerHTML = 'invalid email'})
-    });
-
-    logOutBtn.addEventListener('click', e => {
-        firebase.auth().signOut()
-
-    });
-
-    firebase.auth().onAuthStateChanged(firebaseUser => {
-
-        if (firebaseUser) {
-            console.log('user logged in:',firebaseUser)
-            //var uid = user.uid
-            firebase.database().ref('users').set({
-                username: 'testName',//user.displayName,
-                email: 'testEmail',//user.email,
-                status: 'vip',
-            });
-
-            
-            
-            logOutBtn.classList.remove('hidden')
-            signUpBtn.classList.add('hidden')
-            loginBtn.classList.add('hidden')
-            errorMsg.innerHTML = ''
-        } else {
-            console.log('not logged in')
-            logOutBtn.classList.add('hidden')
-            loginBtn.classList.remove('hidden')
-            signUpBtn.classList.remove('hidden')
-        }
-    })
-
-
-    tableWindow = new TableWindow(hsFormats, table_times, table_ranks)
-    ladderWindow = new LadderWindow(hsFormats, ladder_times, ladder_ranks)
-    decksWindow = new DecksWindow(hsFormats)
-
-}
 
 
 
@@ -137,11 +58,7 @@ function finishedLoading() {
 
 
 
-function overlay() {
-    if (ui.overlay) {document.getElementById("overlay").style.display = "none"; ui.overlay = false}
-    else {document.getElementById("overlay").style.display = "block"; ui.overlay = true}
-    
-}
+
 
 
 
