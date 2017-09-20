@@ -7,12 +7,23 @@ class LadderWindow {
     constructor(hsFormats, hsTimes, ladder_ranks) {
 
         this.window = document.querySelector('#ladderWindow')
+        this.chartDiv = document.querySelector('#ladderWindow #chart1')
         this.optionButtons = document.querySelectorAll('#ladderWindow .optionBtn')
+        this.firebasePath = (PREMIUM) ? 'premiumData/ladderData' : 'data/ladderData'
+        this.firebaseHistoryPath = (PREMIUM) ? 'premiumData/historyData' : ''
+        
+        this.fontColor = '#222'
+        this.fontColorLight = '#999'
+        this.archetypeColors = {
+            Standard: {},
+            Wild: {},
+        }
 
         this.data = {}
         this.hsFormats = hsFormats
         this.hsTimes = hsTimes
         this.ranks = ladder_ranks
+
 
         // Defaults
 
@@ -34,11 +45,15 @@ class LadderWindow {
 
 
         this.loadData()
-        for (var btn of this.optionButtons) { btn.addEventListener("click", this.buttonTrigger.bind(this)) }        
+        this.setupUI()
         this.renderOptions()
     } // close Constructor
 
 
+    setupUI() {
+        // for every hsFormat, hsRank -> add optionBtn + trigger
+        for (var btn of this.optionButtons) { btn.addEventListener("click", this.buttonTrigger.bind(this)) } 
+    }
 
     buttonTrigger(e) {
 
@@ -87,43 +102,37 @@ class LadderWindow {
 
 
     loadData() {
-        var ref = DATABASE.ref('ladderData')
-        ref.on('value',this.addData.bind(this), function () {console.log('Could not load Ladder Data')})
+        var ref = DATABASE.ref(this.firebasePath)
+        ref.on('value',this.readData.bind(this), e => console.log('Could not load Ladder Data',e))
         
-        var ref2 = DATABASE.ref('historyData')
-        ref2.on('value',this.addHistoryData.bind(this),e=> console.log('Could not load history data',e))
+        if (PREMIUM) {
+            var ref2 = DATABASE.ref(this.firebaseHistoryPath)
+            ref2.on('value',this.addHistoryData.bind(this), e => console.log('Could not load history data',e))
+        }
     }
 
 
 
-    addData(DATA) {
+    readData(DATA) {
 
         var ladderData = DATA.val()
-        
         for (var f of this.hsFormats) {
             for (var t of this.hsTimes) {
-                var key = Object.keys(ladderData[f][t])[0]
-                this.data[f][t] = new Ladder(ladderData[f][t][key],f,t,this) 
+                this.data[f][t] = new Ladder(ladderData[f][t],f,t,this) 
         }}
         this.fullyLoaded = true
         console.log('ladder loaded: '+ (performance.now()-t0).toFixed(2)+' ms')
         finishedLoading()
     }
     
-    addHistoryData(DATA) {
-    
-        this.history = new History(DATA)
-    
-    }
+    addHistoryData(DATA) { this.history = new History(DATA.val(),this) }
 
 
 
     plot () { 
-    
-        //if (this.plotType == 'timeline') {this.history.plot(); return}
-
-        this.data[this.f][this.t].plot();
         this.renderOptions()
+        if (this.plotType == 'timeline') {this.history.plot(); return}
+        this.data[this.f][this.t].plot();
     }
 
 } // close LadderWindow

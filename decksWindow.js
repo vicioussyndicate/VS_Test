@@ -6,13 +6,13 @@ class DecksWindow {
 
     constructor (hsFormats) {
 
-        //this.DATA = DATA
         this.hsFormats = hsFormats
 
         this.archDiv = document.querySelector('#decksWindow .content .archetypes .archetypeList')
         this.descriptionBox = document.querySelector('#decksWindow .content .descriptionBox')
         this.decksDiv = document.querySelector('#decksWindow .content .decklists')
         this.description = document.querySelector('#decksWindow .content .descriptionBox .description')
+        this.firebasePath = 'deckData'
 
         this.archButtons = []
         this.optionButtons = document.querySelectorAll('#decksWindow .optionBtn')
@@ -93,21 +93,18 @@ class DecksWindow {
     // Load DATA
 
     loadData() {
-        var ref = DATABASE.ref('deckData')
-        ref.on('value',this.addData.bind(this), function () {console.log('Could not load Ladder Data')})
+        var ref = DATABASE.ref(this.firebasePath)
+        ref.on('value', this.readData.bind(this), e => console.log('Could not load Deck Data',e))
     } 
 
 
-    addData(DATA) {
+    readData(DATA) {
 
         var DATA = DATA.val()
         
         for (var f of this.hsFormats) {
             for (var hsClass of hsClasses) {
-
-                var key = Object.keys(DATA[f][hsClass].text)[0]
-                this.data[f][hsClass].text = DATA[f][hsClass].text[key]
-
+                this.data[f][hsClass].text = DATA[f][hsClass].text
 
                 var keys = Object.keys(DATA[f][hsClass].archetypes)
                 for (var key of keys) {

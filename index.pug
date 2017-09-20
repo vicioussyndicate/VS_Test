@@ -1,7 +1,7 @@
 doctype html
 html(lang='en')
   head
-    link(rel="icon" href="vLogo.png")
+    link(rel="icon" href="Images/skull.png")
     meta(charset='UTF-8')
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     meta(http-equiv='X-UA-Compatible', content='ie=edge')
@@ -21,8 +21,11 @@ html(lang='en')
           button#power.tab Tier List
           button#table.tab Matchups
           button#decks.tab Decks
-          button#info.tab.fa.fa-info
-      button#overlayBtn.optionBtn(onclick='overlay()').fa.fa-info
+          //button#info.tab.fa.fa-info
+      //button#overlayBtn.optionBtn(onclick='overlay()').fa.fa-question-circle 
+      #vsLogoDiv
+        img(src="Images/skull.png").logo
+        p.text Live
         
         
       .content-wrapper
@@ -60,6 +63,8 @@ html(lang='en')
               button#timeline.optionBtn.fa.fa-clock-o.tooltip
                   span.tooltipText Show Timeline
           .content
+            p.graphTitle Graph Title
+            p.graphLabel y-axis
             #chart1.chart
             .chart-footer
           .content-footer
@@ -89,7 +94,6 @@ html(lang='en')
               .option-folder
                 button#timeBtn.folder-toggle Last Month
                 .dropdown.hidden
-                  button#lastDay.optionBtn.folderBtn Last Day
                   button#lastWeek.optionBtn.folderBtn Last Week
                   button#lastMonth.optionBtn.folderBtn Last Month
               .option-folder
@@ -109,6 +113,7 @@ html(lang='en')
                   button#winrate.optionBtn.folderBtn By Winrate
                   button#matchup.optionBtn.folderBtn By Matchup
           .content
+            p.graphTitle Versus
             #chart2.chart
             .chart-footer
               .download
@@ -145,7 +150,6 @@ html(lang='en')
               .archetypeList
             .descriptionBox
               .description
-              .video
             .decklists 
           .content-footer
             
@@ -175,5 +179,6 @@ html(lang='en')
     script(src='tableWindow.js')
     script(src='powerWindow.js')
     script(src='decksWindow.js')
+    script(src='firebaseHandler.js')
 
 

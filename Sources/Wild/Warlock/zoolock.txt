@@ -1,0 +1,27 @@
+### Zoolock 2
+# Class: Warlock
+# Format: Wild
+#
+# 2x (1) Abusive Sergeant
+# 2x (1) Flame Imp
+# 2x (1) Malchezaar's Imp
+# 1x (1) Possessed Villager
+# 2x (1) Power Overwhelming
+# 2x (1) Soulfire
+# 1x (1) Voidwalker
+# 1x (2) Dark Peddler
+# 2x (2) Dire Wolf Alpha
+# 2x (2) Haunted Creeper
+# 2x (2) Knife Juggler
+# 1x (2) Nerubian Egg
+# 2x (3) Imp Gang Boss
+# 2x (3) Silverware Golem
+# 2x (4) Defender of Argus
+# 2x (4) Imp-losion
+# 1x (5) Doomguard
+# 1x (5) Leeroy Jenkins
+# 
+AAEBAf0GBjCvBPcE+g3PFvauAgzyAfsFzgbOB9kHsQjCCPUN3Q/wEdSzAry2AgA=
+# 
+# Archetype: Zoolock
+# To use this deck, copy it to your clipboard and create a new deck in Hearthstone

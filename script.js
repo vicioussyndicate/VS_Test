@@ -6,7 +6,7 @@ var t0 = performance.now();
 
 // Global Data
 var DATABASE
-var auth
+var PREMIUM = false
 
 // Windows
 var powerWindow
@@ -16,95 +16,33 @@ var ladderWindow
 var ui
 
 // Global Variables
-var hsRanks =       21
-var hsClasses =     ["Druid","Hunter","Mage","Paladin","Priest","Rogue","Shaman","Warlock","Warrior"]
-var hsFormats =     ['Standard','Wild']
-var ladder_times =  ['lastDay','lastWeek','lastMonth']
-var ladder_ranks =  ['ranks_L_5','ranks_6_15','ranks_all']
-var table_times =   ['lastWeek','lastMonth']
-var table_ranks =   ['ranks_L_5','ranks_6_15','ranks_all']
+const hsRanks =       21
+const hsClasses =     ['Druid',"Hunter","Mage","Paladin","Priest","Rogue","Shaman","Warlock","Warrior"]
+const hsFormats =     ['Standard','Wild']
+
+const ladder_times =  ['lastDay','last2Weeks']
+const ladder_times_premium = ['last6Hours','last12Hours','lastDay','last3Days','lastWeek','last2Weeks']
+
+const ladder_ranks =  ['ranks_all']
+const ladder_ranks_premium = ['ranks_L_5','ranks_6_15','ranks_all']
+const ladder_plotTypes = []
+
+const table_times =   ['last2Weeks']
+const table_times_premium = ['lastDay','last3Days','lastWeek','last2Weeks']
+
+const table_ranks =   ['ranks_all']
+const table_ranks_premium = ['ranks_L_5','ranks_6_15','ranks_all']
 
 
 
 
 window.onload = function() {
+    setupFirebase()
     ui = new UI()
     ui.showLoader()
-    setupFirebase()
 }
 
-function setupFirebase() {
-    var config = {
-        apiKey: "AIzaSyCDn9U08D4Lzhrbfz2MSy2rws_D02eH3HA",
-        authDomain: "testproject-a0746.firebaseapp.com",
-        databaseURL: "https://testproject-a0746.firebaseio.com",
-        projectId: "testproject-a0746",
-        storageBucket: "testproject-a0746.appspot.com",
-        messagingSenderId: "826197220845"
-    };
-    firebase.initializeApp(config);
-    DATABASE = firebase.database()
-    
 
-
-    const emailTxt = document.getElementById('emailInput')
-    const passwordTxt = document.getElementById('passwordInput')
-    const loginBtn = document.getElementById('loginBtn')
-    const logOutBtn = document.getElementById('logOutBtn')
-    const signupBtn = document.getElementById('signUpBtn')
-    const errorMsg = document.getElementById('loginErrorMsg')
-
-
-
-
-    loginBtn.addEventListener('click', e => {
-        const email = emailTxt.value
-        const password = passwordTxt.value
-        auth = firebase.auth()
-
-        const promise = auth.signInWithEmailAndPassword(email,password);
-        promise.catch(e => {console.log(e.message); errorMsg.innerHTML = 'Username or Password incorrect'})
-    });
-
-
-
-    signUpBtn.addEventListener('click', e => {
-        const email = emailTxt.value
-        const password = passwordTxt.value
-        auth = firebase.auth()
-
-        const promise = auth.createUserWithEmailAndPassword(email,password);
-        promise.catch(e => {console.log(e.message); errorMsg.innerHTML = 'invalid email'})
-    });
-
-    logOutBtn.addEventListener('click', e => {
-        firebase.auth().signOut()
-
-    });
-
-    firebase.auth().onAuthStateChanged(firebaseUser => {
-
-        if (firebaseUser) {
-            console.log('user logged in:',firebaseUser)
-            logOutBtn.classList.remove('hidden')
-            signUpBtn.classList.add('hidden')
-            loginBtn.classList.add('hidden')
-            errorMsg.innerHTML = ''
-        } else {
-            console.log('not logged in')
-            logOutBtn.classList.add('hidden')
-            loginBtn.classList.remove('hidden')
-            signUpBtn.classList.remove('hidden')
-        }
-    })
-
-
-
-    tableWindow = new TableWindow(hsFormats, table_times, table_ranks, finishedLoading)
-    ladderWindow = new LadderWindow(hsFormats, ladder_times, ladder_ranks, finishedLoading)
-    decksWindow = new DecksWindow(hsFormats, finishedLoading)
-
-}
 
 
 
@@ -113,8 +51,8 @@ function finishedLoading() {
     if (!(tableWindow.fullyLoaded && ladderWindow.fullyLoaded && decksWindow.fullyLoaded)) {return}
     
 
-    powerWindow = new PowerWindow()
-    powerWindow.plot()
+    //powerWindow = new PowerWindow()
+    //powerWindow.plot()
     ladderWindow.plot()
     tableWindow.plot()
     decksWindow.plot()
@@ -129,11 +67,7 @@ function finishedLoading() {
 
 
 
-function overlay() {
-    if (ui.overlay) {document.getElementById("overlay").style.display = "none"; ui.overlay = false}
-    else {document.getElementById("overlay").style.display = "block"; ui.overlay = true}
-    
-}
+
 
 
 
@@ -257,6 +191,25 @@ var hsColors = {
     '§':        '#88042d',
 }
 
+// RIVER PICTURE
+
+
+var hsColors = {
+    Druid:      '#665730',
+    Hunter:     '#4f8f49',
+    Mage:       '#98c9dc',
+    Paladin:    '#caa73f',
+    Priest:     '#f7f4b5',
+    Rogue:      '#172323',
+    Shaman:     '#2b789e',
+    Warlock:    '#514384',
+    Warrior:    '#c02e31',
+    Other:      '#88042d',
+    '':         '#88042d',
+    '§':        '#88042d',
+}
+
+
 
 // Washed out
 
@@ -313,7 +266,6 @@ function randint(min, max) {
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
 }
-function print(stuff) {console.log(stuff)}
 function randomColor() {return 'rgb('+randint(0,255)+','+randint(0,255)+','+randint(0,255)+')'}
 function range(a,b) {var range = []; for (var i=a;i<b;i++) {range.push(i)}; return range}
 function fillRange(a,b,c) {var range = []; for (var i=a;i<b;i++) {range.push(c)}; return range}

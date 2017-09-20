@@ -1,0 +1,28 @@
+### Ender's Chum Murloc Pala
+# Class: Paladin
+# Format: Standard
+# Year of the Mammoth
+#
+# 2x (1) Grimscale Chum
+# 2x (1) Murloc Tidecaller
+# 2x (1) Righteous Protector
+# 2x (1) Vilefin Inquisitor
+# 2x (2) Hydrologist
+# 2x (2) Rockpool Hunter
+# 1x (3) Aldor Peacekeeper
+# 2x (3) Murloc Warleader
+# 2x (3) Rallying Blade
+# 1x (3) Wickerflame Burnbristle
+# 2x (4) Blessing of Kings
+# 1x (4) Corpsetaker
+# 2x (4) Gentle Megasaur
+# 1x (5) Finja, the Flying Star
+# 2x (6) Spikeridged Steed
+# 1x (6) Sunkeeper Tarim
+# 2x (7) Bonemare
+# 1x (8) Tirion Fordring
+# 
+AAECAZ8FBvoGjwm8vQLjvgK5wQKW6AIM2wOvB6cI06oC2a4C07wCs8ECncICscICiMcC48sCps4CAA==
+# 
+# Archetype: Murloc Paladin
+# To use this deck, copy it to your clipboard and create a new deck in Hearthstone

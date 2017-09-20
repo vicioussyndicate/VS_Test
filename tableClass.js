@@ -35,8 +35,6 @@ class Table {
             this.table.push(fillRange(0,this.numArch,0))
             this.textTable.push(fillRange(0,this.numArch,''))
         }
-    
-    
         var FR =            DATA.frequency.slice()
         var TABLE =         DATA.table.slice()
         var ARCHETYPES =    DATA.archetypes.slice()

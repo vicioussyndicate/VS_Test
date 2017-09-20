@@ -1,18 +1,20 @@
 
-import Pyrebase # learn more: https://python.org/pypi/Pyrebase
+import pyrebase # learn more: https://python.org/pypi/Pyrebase
 
 
-config = {
-    "apiKey": "AIzaSyCDn9U08D4Lzhrbfz2MSy2rws_D02eH3HA",
-    "authDomain": "testproject-a0746.firebaseapp.com",
-    "databaseURL": "https://testproject-a0746.firebaseio.com",
-    "projectId": "testproject-a0746",
-    "storageBucket": "testproject-a0746.appspot.com",
-    "messagingSenderId": "826197220845"
-
+config = { # Fenoms Firebase
+    "apiKey": "AIzaSyAt0uIAVOFjB42_bkwrEIqhSWkMT_VmluI",
+    "authDomain": "data-reaper.firebaseapp.com",
+    "databaseURL": "https://data-reaper.firebaseio.com",
+    "projectId": "data-reaper",
+    "storageBucket": "data-reaper.appspot.com",
+    "messagingSenderId": "1079276848174"
 }
 
-firebase = Pyrebase.initialize_app(config)
+firebase = pyrebase.initialize_app(config)
+auth = firebase.auth()
+user = auth.sign_in_with_email_and_password('admin01@vs.com', '2\!vEJ:6L]mh5R[z')
+DB = firebase.database()
 
 
 
@@ -88,11 +90,8 @@ def upload(hsFormat):
 
     # Delete Existing Files
     for hsClass in hsClasses:
-        firePath = '/deckData/'+hsFormat+'/'+hsClass+'/archetypes'
-        firebase.delete(firePath,'')
-
-        firePath = '/deckData/'+hsFormat+'/'+hsClass+'/text'
-        firebase.delete(firePath,'')
+        DB.child('deckData').child(hsFormat).child(hsClass).remove(user['idToken'])
+        pass
 
 
     for hsClass in hsClasses:
@@ -104,8 +103,7 @@ def upload(hsFormat):
             # Class Description Texts should be labeled 'Druid.txt', 'Hunter.txt' etc. (first letter Capital)
             if file == hsClass+'.txt':
                 f = open(file)
-                firePath = '/deckData/'+hsFormat+'/'+hsClass+'/text'
-                firebase.post(firePath,f.read())
+                DB.child('deckData').child(hsFormat).child(hsClass).child('text').set(f.read(),user['idToken'])
                 continue
 
             # Decklist files can be named anything other than [hsClass].txt
@@ -115,9 +113,8 @@ def upload(hsFormat):
             decklist, arch = readDeckCode(f.readlines(),hsClass, hsFormat)
 
             if decklist != 0:
-                firePath = '/deckData/'+hsFormat+'/'+hsClass+'/archetypes/'+arch
-                firebase.post(firePath,decklist)
-                print(hsClass,arch,decklist)
+                DB.child('deckData').child(hsFormat).child(hsClass).child('archetypes').child(arch).push(decklist,user['idToken'])
+                pass
         os.chdir('..')
         os.chdir('..')
         os.chdir('..')
@@ -129,4 +126,6 @@ def main():
     for f in hsFormats:
         upload(f)
 
+
+main()
 

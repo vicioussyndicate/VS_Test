@@ -1,0 +1,26 @@
+### Classic Warrior
+# Class: Warrior
+# Format: Wild
+#
+# 2x (0) Inner Rage
+# 1x (1) Iron Hide
+# 2x (1) Whirlwind
+# 2x (2) Amani Berserker
+# 1x (2) Battle Rage
+# 2x (2) Cruel Taskmaster
+# 2x (2) Execute
+# 2x (2) Fiery War Axe
+# 2x (3) Acolyte of Pain
+# 2x (3) Frothing Berserker
+# 2x (3) Raging Worgen
+# 1x (3) Shattered Sun Cleric
+# 2x (3) Shield Block
+# 1x (4) Gnomish Inventor
+# 2x (4) Kor'kron Elite
+# 2x (5) Arcanite Reaper
+# 2x (5) Gurubashi Berserker
+# 
+AAEBAQcEtAKQA+AEucMCDRYcnQKwApED/ASOBYAGkQaWBv8Hgwn7DAA=
+# 
+# Archetype: Control Warrior
+# To use this deck, copy it to your clipboard and create a new deck in Hearthstone

@@ -6,6 +6,8 @@ class TableWindow {
 
     constructor(hsFormats, hsTimes, table_ranks) {
 
+
+        this.firebasePath = (PREMIUM) ? 'premiumData/tableData' : 'data/tableData'
         this.window = document.querySelector('#ladderWindow')
         this.optionButtons = document.querySelectorAll('#tableWindow .optionBtn')
         this.data = {}
@@ -20,7 +22,7 @@ class TableWindow {
         this.height = 560
 
         this.f = 'Standard'
-        this.t = 'lastWeek'
+        this.t = 'last2Weeks'
         this.r = 'ranks_all'
         this.sortBy = 'class' // class, frequency, winrate, matchup
         this.zoomIn = false
@@ -84,22 +86,20 @@ class TableWindow {
 
     loadData() {
 
-        var ref = DATABASE.ref('tableData')
-        ref.on('value',this.addData.bind(this), function () {console.log('Could not load Table Data')})
+        var ref = DATABASE.ref(this.firebasePath)
+        ref.on('value',this.readData.bind(this), e => console.log('Could not load Table Data',e))
 
     } // load Data
 
 
 
-    addData(DATA) {
+    readData(DATA) {
 
         var tableData = DATA.val()
-        
         for (var f of this.hsFormats) {
             for (var t of this.hsTimes) {
                 for (var r of this.ranks) {
-                    var key = Object.keys(tableData[f][t][r])[0]
-                    this.data[f][t][r] = new Table(tableData[f][t][r][key],f,t,r,this)
+                    this.data[f][t][r] = new Table(tableData[f][t][r],f,t,r,this)
         }}}
         this.fullyLoaded = true
         console.log('table loaded: '+ (performance.now()-t0).toFixed(2)+' ms')

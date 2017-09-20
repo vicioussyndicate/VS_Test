@@ -1,0 +1,27 @@
+### Capilano's Dragon Priest
+# Class: Priest
+# Format: Wild
+#
+# 2x (1) Northshire Cleric
+# 2x (1) Potion of Madness
+# 2x (1) Power Word: Shield
+# 2x (1) Twilight Whelp
+# 2x (2) Netherspite Historian
+# 2x (2) Radiant Elemental
+# 1x (2) Shadow Visions
+# 1x (2) Shadow Word: Pain
+# 2x (2) Wyrmrest Agent
+# 1x (3) Brann Bronzebeard
+# 1x (3) Curious Glimmerroot
+# 1x (3) Shadow Word: Death
+# 2x (4) Twilight Guardian
+# 2x (5) Azure Drake
+# 2x (5) Blackwing Corruptor
+# 2x (5) Drakonid Operative
+# 1x (5) Holy Nova
+# 2x (6) Dragonfire Potion
+# 
+AAEBAa0GBskG0wrXCoUX0cEC2cECDOUEuQbyDO4R6RKJFKQUgrUCtbsCursC6r8C2MECAA==
+# 
+# Archetype: Dragon Priest
+# To use this deck, copy it to your clipboard and create a new deck in Hearthstone
