@@ -137,7 +137,7 @@ class Ladder {
             var fr_avg = 0
             var archName = ARCHETYPES[i][1] + " " + ARCHETYPES[i][0].replace('§', '');
             var classIdx = hsClasses.indexOf(ARCHETYPES[i][0])
-            var color = colorStringRange(hsColors[ARCHETYPES[i][0]],45)
+            var color = colorStringRange(hsColors[ARCHETYPES[i][0]],20)
 
             for (var rank=0;rank<hsRanks;rank++) {
                 var fr = rankData[rank][i]
@@ -222,8 +222,6 @@ class Ladder {
 
         } // close for ARCHETYPES
                 
-        console.log(this.traces_bar.decks)
-
         // Class Traces
         for (var i=0;i<9;i++) {
             var hsClass = hsClasses[i]
