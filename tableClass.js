@@ -110,13 +110,14 @@ class Table {
             xaxis: {side: 'top',
                 showgrid: false,
                 tickcolor: this.fontColor,
+                tickangle: 45,
                 color: this.fontColor,
                 gridcolor:this.fontColor,
                 fixedrange: true,
             },
             yaxis: {
                 autorange: 'reversed',
-                tickcolor: this.fontColor, 
+                tickcolor: this.fontColor,
                 color:this.fontColor, 
                 gridcolor:this.fontColor,
                 fixedrange: true,
@@ -126,7 +127,6 @@ class Table {
             margin: {l: 120, r: 30, b: 30, t: 100 },
             width: this.width,
             height: this.height,
-            //autosize: true,
 
             yaxis2: {
                 visible: false,
@@ -174,7 +174,10 @@ class Table {
         var table = this.table.concat([overallWR])
         var arch = this.archetypes.concat(['Overall'])
         var textRow = []
-        for (var i=0;i<table[0].length;i++) {textRow.push("Overall WR: "+(100*overallWR[i]).toFixed(1)+"%")}
+        //for (var i=0;i<table[0].length;i++) {textRow.push("Overall WR: "+(100*overallWR[i]).toFixed(1)+"%")}
+        for (var i=0;i<table[0].length;i++) {
+            textRow.push(`${this.archetypes[i]}<br>Overall wr: ${(100*overallWR[i]).toFixed(1)}%`)
+        }
         var textTable = this.textTable.concat([textRow])
 
 

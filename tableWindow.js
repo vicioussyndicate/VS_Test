@@ -4,7 +4,7 @@
 class TableWindow {
 
 
-    constructor(hsFormats, hsTimes, table_ranks) {
+    constructor(hsFormats, hsTimes, table_ranks, sortOptions) {
 
 
         this.firebasePath = (PREMIUM) ? 'premiumData/tableData' : 'data/tableData'
@@ -14,6 +14,7 @@ class TableWindow {
         this.hsFormats = hsFormats
         this.hsTimes = hsTimes
         this.ranks = table_ranks
+        this.sortOptions = sortOptions //['frequency','winrate','matchup','class']
 
 
         // Defaults
@@ -21,13 +22,14 @@ class TableWindow {
         this.width = document.querySelector('.main-wrapper').offsetWidth -9
         this.height = 560
 
-        this.f = 'Standard'
-        this.t = 'last2Weeks'
-        this.r = 'ranks_all'
-        this.sortBy = 'class' // class, frequency, winrate, matchup
+        this.f = this.hsFormats[0] //'Standard'
+        this.t = this.hsTimes[0] //'last2Weeks'
+        this.r = this.ranks[0] //'ranks_all'
+        this.sortBy = this.sortOptions[0] //'class' // class, frequency, winrate, matchup
         this.zoomIn = false
         this.zoomArch = null
         this.fullyLoaded = false
+        this.minGames = 1000
 
 
         for (var f of this.hsFormats) {
@@ -41,40 +43,92 @@ class TableWindow {
         
 
         this.loadData()
-
-        for (let i=0;i<this.optionButtons.length;i++) { this.optionButtons[i].addEventListener("click", this.buttonTrigger.bind(this)) }
-        this.renderOptions()
+        this.setupUI()
+        //this.renderOptions()
     } // close Constructor
 
 
+    setupUI() {
+
+        //for (let i=0;i<this.optionButtons.length;i++) { this.optionButtons[i].addEventListener("click", this.buttonTrigger.bind(this)) }
+
+        document.querySelector('#tableWindow .content-header #formatFolder .dropdown').innerHTML = ''
+        for (var f of this.hsFormats) {
+            var btn = document.createElement('button')
+            btn.innerHTML = btnIdToText[f]
+            btn.id = f
+            btn.className = 'folderBtn optionBtn'
+            var trigger = function (e) {this.f = e.target.id; this.plot(); this.renderOptions()}
+            btn.onclick = trigger.bind(this)
+            document.querySelector('#tableWindow .content-header #formatFolder .dropdown').appendChild(btn)
+        }
+
+        document.querySelector('#tableWindow .content-header #timeFolder .dropdown').innerHTML = ''
+        for (var t of this.hsTimes) {
+            var btn = document.createElement('button')
+            btn.innerHTML = btnIdToText[t]
+            btn.id = t
+            btn.className = 'folderBtn optionBtn'
+            var trigger = function (e) {this.t = e.target.id; this.plot(); this.renderOptions()}
+            btn.onclick = trigger.bind(this)
+            document.querySelector('#tableWindow .content-header #timeFolder .dropdown').appendChild(btn)
+        }
+
+        document.querySelector('#tableWindow .content-header #rankFolder .dropdown').innerHTML = ''
+        for (var r of this.ranks) {
+            var btn = document.createElement('button')
+            btn.innerHTML = btnIdToText[r]
+            btn.id = r
+            btn.className = 'folderBtn optionBtn'
+            var trigger = function (e) {this.r = e.target.id; this.plot(); this.renderOptions()}
+            btn.onclick = trigger.bind(this)
+            document.querySelector('#tableWindow .content-header #rankFolder .dropdown').appendChild(btn)
+        }
+
+        document.querySelector('#tableWindow .content-header #sortFolder .dropdown').innerHTML = ''
+        for (var s of this.sortOptions) {
+            var btn = document.createElement('button')
+            btn.innerHTML = btnIdToText[s]
+            btn.id = s
+            btn.className = 'folderBtn optionBtn'
+            var trigger = function (e) {
+                this.sortBy = e.target.id; 
+                this.data[this.f][this.t][this.r].sortTableBy(this.sortBy)
+                this.renderOptions()
+            }
+            btn.onclick = trigger.bind(this)
+            document.querySelector('#tableWindow .content-header #sortFolder .dropdown').appendChild(btn)
+        }
+
+    }
 
 
-    buttonTrigger(e) {
+    // buttonTrigger(e) {
 
-        var btnID = e.target.id
+    //     var btnID = e.target.id
 
-        if (btnID == 'lastWeek')    {this.t = 'lastWeek'}
-        if (btnID == 'lastMonth')   {this.t = 'lastMonth'}
+    //     if (btnID == 'lastWeek')    {this.t = 'lastWeek'}
+    //     if (btnID == 'lastMonth')   {this.t = 'lastMonth'}
 
-        if (btnID == 'Standard')    {this.f = 'Standard'}
-        if (btnID == 'Wild')        {this.f = 'Wild'}
+    //     if (btnID == 'Standard')    {this.f = 'Standard'}
+    //     if (btnID == 'Wild')        {this.f = 'Wild'}
 
-        if (btnID == 'ranks_all')   {this.r = 'ranks_all'}
-        if (btnID == 'ranks_L_5')   {this.r = 'ranks_L_5'}
-        if (btnID == 'ranks_6_15')  {this.r = 'ranks_6_15'}
+    //     if (btnID == 'ranks_all')   {this.r = 'ranks_all'}
+    //     if (btnID == 'ranks_L_5')   {this.r = 'ranks_L_5'}
+    //     if (btnID == 'ranks_6_15')  {this.r = 'ranks_6_15'}
         
-        var data = this.data[this.f][this.t][this.r]
+    //     var data = this.data[this.f][this.t][this.r]
 
-        if (btnID == 'class')       {data.sortTableBy('class'); return}
-        if (btnID == 'frequency')   {data.sortTableBy('frequency');return}
-        if (btnID == 'winrate')     {data.sortTableBy('winrate');return}
-        if (btnID == 'matchup')     {data.sortTableBy('matchup');return}
+    //     if (btnID == 'class')       {data.sortTableBy('class'); return}
+    //     if (btnID == 'frequency')   {data.sortTableBy('frequency');return}
+    //     if (btnID == 'winrate')     {data.sortTableBy('winrate');return}
+    //     if (btnID == 'matchup')     {data.sortTableBy('matchup');return}
         
-        data.plot()
-        this.renderOptions()
-    }// button Handler
+    //     data.plot()
+    //     this.renderOptions()
+    // }// button Handler
 
-    plot () { this.data[this.f][this.t][this.r].plot(); console.log('plot table')}
+    plot () { this.data[this.f][this.t][this.r].plot() }
     
     renderOptions() {
         
@@ -82,6 +136,12 @@ class TableWindow {
         document.querySelector("#tableWindow #timeBtn").innerHTML =      btnIdToText[this.t]
         document.querySelector("#tableWindow #ranksBtn").innerHTML =     btnIdToText[this.r]
         document.querySelector("#tableWindow #sortBtn").innerHTML =      btnIdToText[this.sortBy]
+
+        for (var t of this.hsTimes) {
+            if (this.data[this.f][t]['ranks_all'].totGames < this.minGames) {
+                document.querySelector('#tableWindow .content-header #timeFolder #'+t).style.display = 'none'
+            }
+        }
     }
 
     loadData() {

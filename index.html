@@ -22,7 +22,7 @@
           <button class="tab" id="power">Tier List</button>
           <button class="tab" id="table">Matchups</button>
           <button class="tab" id="decks">Decks</button>
-          <!--button#info.tab.fa.fa-info-->
+          <button class="tab" id="info">Arena</button>
         </div>
       </nav>
       <!--button#overlayBtn.optionBtn(onclick='overlay()').fa.fa-question-circle -->
@@ -95,39 +95,39 @@
         <div class="tabWindow" id="tableWindow">
           <div class="content-header">
             <div class="ftrOptions optionBar">
-              <div class="option-folder">
+              <div class="option-folder" id="formatFolder">
                 <button class="folder-toggle" id="formatBtn">Standard</button>
                 <div class="dropdown hidden">
-                  <button class="optionBtn folderBtn" id="Standard">Standard</button>
-                  <button class="optionBtn folderBtn" id="Wild">Wild</button>
+                  <!--button#Standard.optionBtn.folderBtn Standard-->
+                  <!--button#Wild.optionBtn.folderBtn Wild-->
                 </div>
               </div>
-              <div class="option-folder">
+              <div class="option-folder" id="timeFolder">
                 <button class="folder-toggle" id="timeBtn">Last Month</button>
                 <div class="dropdown hidden">
-                  <button class="optionBtn folderBtn" id="lastWeek">Last Week</button>
-                  <button class="optionBtn folderBtn" id="lastMonth">Last Month</button>
+                  <!--button#lastWeek.optionBtn.folderBtn Last Week-->
+                  <!--button#lastMonth.optionBtn.folderBtn Last Month-->
                 </div>
               </div>
-              <div class="option-folder">
+              <div class="option-folder" id="rankFolder">
                 <button class="folder-toggle" id="ranksBtn">All Ranks</button>
                 <div class="dropdown hidden">
-                  <button class="optionBtn folderBtn" id="ranks_all">All Ranks</button>
-                  <button class="optionBtn folderBtn" id="ranks_L_5">Ranks L-5</button>
-                  <button class="optionBtn folderBtn" id="ranks_6_15">Ranks 6-15</button>
+                  <!--button#ranks_all.optionBtn.folderBtn All Ranks-->
+                  <!--button#ranks_L_5.optionBtn.folderBtn Ranks L-5-->
+                  <!--button#ranks_6_15.optionBtn.folderBtn Ranks 6-15-->
                 </div>
               </div>
               <p class="nrGames"></p>
             </div>
             <div class="graphOptions optionBar">
               <p>Sort </p>
-              <div class="option-folder">
+              <div class="option-folder" id="sortFolder">
                 <button class="folder-toggle" id="sortBtn">Sort</button>
                 <div class="dropdown hidden">
-                  <button class="optionBtn folderBtn" id="class">By Class</button>
-                  <button class="optionBtn folderBtn" id="frequency">By Frequency</button>
-                  <button class="optionBtn folderBtn" id="winrate">By Winrate</button>
-                  <button class="optionBtn folderBtn" id="matchup">By Matchup</button>
+                  <!--button#class.optionBtn.folderBtn By Class-->
+                  <!--button#frequency.optionBtn.folderBtn By Frequency-->
+                  <!--button#winrate.optionBtn.folderBtn By Winrate-->
+                  <!--button#matchup.optionBtn.folderBtn By Matchup-->
                 </div>
               </div>
             </div>

@@ -25,13 +25,18 @@ const ladder_times_premium = ['last6Hours','last12Hours','lastDay','last3Days','
 
 const ladder_ranks =  ['ranks_all']
 const ladder_ranks_premium = ['ranks_L_5','ranks_6_15','ranks_all']
+
 const ladder_plotTypes = []
 
 const table_times =   ['last2Weeks']
 const table_times_premium = ['lastDay','last3Days','lastWeek','last2Weeks']
 
+const table_sortOptions = ['frequency']
+const table_sortOptions_premium = ['class','frequency','winrate','matchup']
+
+
 const table_ranks =   ['ranks_all']
-const table_ranks_premium = ['ranks_L_5','ranks_6_15','ranks_all']
+const table_ranks_premium = ['ranks_all','ranks_L_5','ranks_6_15']
 
 
 
@@ -241,8 +246,13 @@ const btnIdToText = {
     ranks_L_5: 'Ranks L-5',
     ranks_6_15: 'Ranks 6-15',
 
+    last6Hours: 'Last 6 Hours',
+    last12Hours: 'Last 12 Hours',
     lastDay: 'Last Day',
+    last3Days: 'Last 3 Days',
     lastWeek: 'Last Week',
+    last2Weeks: 'Last 2 Weeks',
+    last3Weeks: 'Last 3 Weeks',
     lastMonth: 'Last Month',
 
     class: 'By Class',

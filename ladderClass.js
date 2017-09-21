@@ -13,6 +13,7 @@ class History {
 		    displayModeBar: false,
             autosize: true,
 		    hovermode: 'closest',
+            //hoverinfo: 'x+y',
 		    xaxis: {
                 tickfont: {
 				    family: 'Arial, bold',
@@ -22,7 +23,7 @@ class History {
                 tickcolor: 'transparent',
                 visible: true, 
                 showgrid: true,
-                hoverformat: '.1%',
+                //hoverformat: '.1%',
                 color: this.window.fontColor,
                 fixedrange: true,
                 zeroline: false,
@@ -60,27 +61,31 @@ class History {
         this.window.chartDiv.innerHTML = ""
         var f = this.window.f
         var t_w = this.window.t
-        var t_h = (this.window.t == 'lastDay') ? 'lastHours' : 'lastDays'
+        var t_h = (this.window.t == 'lastDay') ? 'lastHours' : 'lastDays';
+        const baseUnit = (this.window.t == 'lastDay') ? 'Hour' : 'Day';
         var r = this.window.r
         var m = this.window.mode
 
-        var x = range(0,this.x[t_w])
-        var y = []
         var traces = []
         var archetypes = []
         var d = this.data[f][t_h][r][m]
         d.sort(function (a, b) { return a.avg > b.avg ? -1 : a.avg < b.avg ? 1 : 0 })
-        
+        var x = range(1,this.x[t_w]+1)        
         
         for (var i=0; i<this.top;i++) { 
-            y.push(d[i]['data']);
-            archetypes.push(d[i]['name'])
-            
+            var y = (this.window.t == 'lastDay') ? this.smoothData(d[i]['data']) : d[i]['data']
+            //archetypes.push(d[i]['name'])
+            var text = []
+            for (var j=0;j<y.length;j++) {
+                var unit = (j>0) ? baseUnit+'s' : baseUnit;
+                text.push(`${d[i]['name']} (${(y[j]*100).toFixed(1)}% )<br>${x[j]+' '+unit} ago`)
+            }
             var trace = {
                 x: x.slice(),
-                y: d[i]['data'],
-                text: d[i]['name'],
+                y: y.slice(),
+                text: text,//d[i]['name'],
                 type: 'scatter',
+                hoverinfo:'text',
             }
             traces.push(trace)
         }
@@ -100,6 +105,73 @@ class History {
         
         
         Plotly.newPlot('chart1',traces, this.layout, {displayModeBar: false,})
+        this.createLegend()
+
+    }
+
+    createLegend() {
+        var mode = this.window.mode
+        var chartFooter = document.querySelector('#ladderWindow .chart-footer')
+        while (chartFooter.firstChild) {chartFooter.removeChild(chartFooter.firstChild);}
+        
+        var maxElements
+        var legend = this.window.data[this.window.f][this.window.t].archLegend
+        if (mode=='classes') {maxElements = 9}
+        if (mode=='decks') {
+            maxElements = this.top;
+            if (maxElements > legend.length) {maxElements = legend.length}
+        }
+
+        for (var i=0;i<maxElements;i++) {
+
+            var legendDiv = document.createElement('div')   
+            var colorSplash = document.createElement('div')
+            var archName = document.createElement('l')     
+
+            legendDiv.className = 'ladder-legend'
+            legendDiv.style.fontSize = '0.8em'
+        
+            if (mode=='classes') {
+
+                var hsClass = hsClasses[i]
+                legendDiv.style = 'background-color:'+hsColors[hsClass]//+';height:15px;width:30px;margin:0 auto 0.7em auto;'
+                legendDiv.id = hsClass
+                legendDiv.innerHTML = hsClass
+                legendDiv.onclick = function(e) { ui.deckLink(e.target.id,this.window.f);  }
+            }
+
+            if (mode=='decks') {
+
+                var l = legend[i]
+                legendDiv.style = 'background-color:'+l.color//+';height:15px;width:30px;margin:0 auto 0.7em auto;'
+                legendDiv.id = l.name
+                legendDiv.innerHTML = l.name
+                legendDiv.onclick = function(e) { ui.deckLink(e.target.id,this.window.f);  }
+            }
+
+
+            chartFooter.appendChild(legendDiv)
+
+        }
+    }
+
+    smoothData(Data) {
+        var data_smoothed = []
+        const w = 0.3
+
+
+        for (var i=0; i<Data.length;i++) {
+            var w_tot = 0
+            var d = 0
+
+            if (i > 0)              {d += Data[i-1]*w; w_tot += w}
+            if (i < Data.length-1)  {d += Data[i+1]*w; w_tot += w}
+
+            d += Data[i]*(1-w_tot)
+            data_smoothed.push(d)
+        }
+
+        return data_smoothed
     }
 }
 
@@ -112,7 +184,7 @@ class Ladder {
         this.maxLegendEntries = 9
         this.maxLines = 10 // max archetypes shown for the line chart
 
-        this.bgColor = 'transparent'
+        this.bgColor = 'white'
         this.fontColor = window.fontColor
         this.fontColorLight = window.fontColorLight
 
@@ -456,8 +528,8 @@ class Ladder {
                 tickformat: ',.0%',
 		    },
             
-		    plot_bgcolor: this.bgColor,
-            paper_bgcolor: this.bgColor,
+		    plot_bgcolor: 'transparent',//this.bgColor,
+            paper_bgcolor: 'transparent',//this.bgColor,
             margin: {l:60,r:30,b:35,t:0,},
 	    }
 
@@ -520,8 +592,8 @@ class Ladder {
 		    hovermode: 'closest',
             
 		    
-		    plot_bgcolor: this.bgColor, 
-            paper_bgcolor: this.bgColor,
+		    plot_bgcolor: 'transparent',//this.bgColor, 
+            paper_bgcolor: 'transparent',//this.bgColor,
             margin: {l:70,r:20,b:30,t:30,},
         }
 

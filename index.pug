@@ -21,7 +21,7 @@ html(lang='en')
           button#power.tab Tier List
           button#table.tab Matchups
           button#decks.tab Decks
-          //button#info.tab.fa.fa-info
+          button#info.tab Arena
       //button#overlayBtn.optionBtn(onclick='overlay()').fa.fa-question-circle 
       #vsLogoDiv
         img(src="Images/skull.png").logo
@@ -86,32 +86,32 @@ html(lang='en')
         #tableWindow.tabWindow
           .content-header
             .ftrOptions.optionBar
-              .option-folder
+              #formatFolder.option-folder
                 button#formatBtn.folder-toggle Standard
                 .dropdown.hidden
-                  button#Standard.optionBtn.folderBtn Standard
-                  button#Wild.optionBtn.folderBtn Wild
-              .option-folder
+                  //button#Standard.optionBtn.folderBtn Standard
+                  //button#Wild.optionBtn.folderBtn Wild
+              #timeFolder.option-folder
                 button#timeBtn.folder-toggle Last Month
                 .dropdown.hidden
-                  button#lastWeek.optionBtn.folderBtn Last Week
-                  button#lastMonth.optionBtn.folderBtn Last Month
-              .option-folder
+                  //button#lastWeek.optionBtn.folderBtn Last Week
+                  //button#lastMonth.optionBtn.folderBtn Last Month
+              #rankFolder.option-folder
                 button#ranksBtn.folder-toggle All Ranks
                 .dropdown.hidden
-                  button#ranks_all.optionBtn.folderBtn All Ranks
-                  button#ranks_L_5.optionBtn.folderBtn Ranks L-5
-                  button#ranks_6_15.optionBtn.folderBtn Ranks 6-15
+                  //button#ranks_all.optionBtn.folderBtn All Ranks
+                  //button#ranks_L_5.optionBtn.folderBtn Ranks L-5
+                  //button#ranks_6_15.optionBtn.folderBtn Ranks 6-15
               p.nrGames
             .graphOptions.optionBar
               p Sort 
-              .option-folder
+              #sortFolder.option-folder
                 button#sortBtn.folder-toggle Sort
                 .dropdown.hidden
-                  button#class.optionBtn.folderBtn By Class
-                  button#frequency.optionBtn.folderBtn By Frequency
-                  button#winrate.optionBtn.folderBtn By Winrate
-                  button#matchup.optionBtn.folderBtn By Matchup
+                  //button#class.optionBtn.folderBtn By Class
+                  //button#frequency.optionBtn.folderBtn By Frequency
+                  //button#winrate.optionBtn.folderBtn By Winrate
+                  //button#matchup.optionBtn.folderBtn By Matchup
           .content
             p.graphTitle Versus
             #chart2.chart

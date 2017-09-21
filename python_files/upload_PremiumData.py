@@ -269,7 +269,7 @@ def run():
                 
                 options = {'classes':idx_class_op,'decks':idx_op}
                
-                if t_delta.days < 1:
+                if hours < timeIntervals_history['lastHours']:
                     for r in rankIntervals:
                         if rank >= rankIntervals[r][0] and rank <= rankIntervals[r][1]:
                             for o in options:

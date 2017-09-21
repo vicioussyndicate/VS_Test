@@ -96,15 +96,16 @@ function saveUser(user) {
 function loadFireData() {
     if (PREMIUM) {
        
-        tableWindow = new TableWindow(hsFormats, table_times_premium, table_ranks_premium)
+        tableWindow = new TableWindow(hsFormats, table_times_premium, table_ranks_premium, table_sortOptions_premium)
         ladderWindow = new LadderWindow(hsFormats, ladder_times_premium, ladder_ranks_premium)
         decksWindow = new DecksWindow(hsFormats)
-        
+        document.querySelector('#vsLogoDiv .text').innerHTML = 'Pro'
     }
     else {
-        tableWindow = new TableWindow(hsFormats, table_times, table_ranks)
+        tableWindow = new TableWindow(hsFormats, table_times, table_ranks, table_sortOptions)
         ladderWindow = new LadderWindow(hsFormats, ladder_times, ladder_ranks)
         decksWindow = new DecksWindow(hsFormats)
+        document.querySelector('#vsLogoDiv .text').innerHTML = 'Live'
     }
 
 }
