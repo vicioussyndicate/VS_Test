@@ -129,7 +129,6 @@ class Ladder {
 
 
         // Arch Traces
-        console.log(this.f,ARCHETYPES)
         for (var i=0;i<ARCHETYPES.length;i++) {
     
             var archFR = []
