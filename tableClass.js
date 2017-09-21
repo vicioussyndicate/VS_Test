@@ -18,8 +18,8 @@ class Table {
         this.bgColor = 'transparent'
         this.fontColor = '#22222'
         this.subplotRatio = 0.6
-        this.width = document.querySelector('.main-wrapper').offsetWidth -40
-        this.height = 560
+        this.width = this.window.width,//document.querySelector('.main-wrapper').offsetWidth -40
+        this.height = this.window.height,
 
         this.table = []
         this.textTable = []

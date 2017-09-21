@@ -19,12 +19,12 @@ class TableWindow {
 
         // Defaults
 
-        this.width = document.querySelector('.main-wrapper').offsetWidth -9
-        this.height = 560
+        this.width = document.querySelector('.main-wrapper').offsetWidth -40
+        this.height = '900' //document.querySelector('#tableWindow .content').offsetHeight-40
 
-        this.f = this.hsFormats[0] //'Standard'
-        this.t = this.hsTimes[0] //'last2Weeks'
-        this.r = this.ranks[0] //'ranks_all'
+        this.f = this.hsFormats[0] 
+        this.t = this.hsTimes[0] 
+        this.r = this.ranks[0] 
         this.sortBy = this.sortOptions[0] //'class' // class, frequency, winrate, matchup
         this.zoomIn = false
         this.zoomArch = null

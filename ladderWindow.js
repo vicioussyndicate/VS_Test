@@ -73,7 +73,6 @@ class LadderWindow {
         }
 
         for (var r of this.ranks) {
-            console.log('add rank btn',r)
             var btn = document.createElement('button')
             btn.className = 'optionBtn folderBtn'
             btn.innerHTML = btnIdToText[r]
