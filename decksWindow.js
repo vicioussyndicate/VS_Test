@@ -257,6 +257,8 @@ class DecksWindow {
         var deckTitle = document.createElement('div')
         deckTitle.className = 'deckTitle'
         deckTitle.innerHTML = '<p>'+dl.name+'</p>'
+        deckTitle.style.backgroundColor = hsColors[this.hsClass]
+        deckTitle.style.color = hsFontColors[this.hsClass]
 
         var decklist = document.createElement('div')
         decklist.className = 'decklist'

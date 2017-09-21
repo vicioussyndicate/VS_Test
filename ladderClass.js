@@ -746,42 +746,42 @@ class Ladder {
 
 
 
-    createTable2 (mode) {
+    // createTable2 (mode) {
 
-        var maxArch = 20
-        if (this.archetypes.length < maxArch) {maxArch = this.archetypes.length}
+    //     var maxArch = 20
+    //     if (this.archetypes.length < maxArch) {maxArch = this.archetypes.length}
 
-        document.getElementById('chart1').innerHTML = ""
+    //     document.getElementById('chart1').innerHTML = ""
         
-        var table = `<table style="width:100%">`
-        table += `<tr><th class="pivot">Rank -></th>`
+    //     var table = `<table style="width:100%">`
+    //     table += `<tr><th class="pivot">Rank -></th>`
 
-        for (var i=20;i>0;i--) {table += `<th>${i}</th>`}
-        table += `<th>L</th></tr>`
+    //     for (var i=20;i>0;i--) {table += `<th>${i}</th>`}
+    //     table += `<th>L</th></tr>`
 
-        if (mode == 'decks') {
-            for (var j=0; j<maxArch; j++) {
-                var arch = this.archetypes[j]
-                table += `<tr><td class="pivot" style="background-color:${arch.color}">${arch.name}</td>`
-                for (var i=hsRanks-1;i>-1;i--) {table += `<td style="background-color:${this.colorScale(arch.data[i])};">${(arch.data[i]*100).toFixed(1)}%</td>`}
-                table += `</tr>`
-            }
-        } 
+    //     if (mode == 'decks') {
+    //         for (var j=0; j<maxArch; j++) {
+    //             var arch = this.archetypes[j]
+    //             table += `<tr><td class="pivot" style="background-color:${arch.color}">${arch.name}</td>`
+    //             for (var i=hsRanks-1;i>-1;i--) {table += `<td style="background-color:${this.colorScale(arch.data[i])};">${(arch.data[i]*100).toFixed(1)}%</td>`}
+    //             table += `</tr>`
+    //         }
+    //     } 
 
-        else {
-            for (var j=0; j<9; j++) {
-                var hsClass = hsClasses[j]
-                var data = this.c_data[hsClass]
-                table += `<tr><td class="pivot" style="background-color:${hsColors[hsClass]}">${hsClass}</td>`
-                for (var i=hsRanks-1;i>-1;i--) { table += `<td style="background-color:${this.colorScale(data[i])};">${(data[i]*100).toFixed(1)}%</td>` }
-                table += `</tr>`
-            }   
-        }
-        table += `</table>`
-        document.getElementById('chart1').innerHTML = table
+    //     else {
+    //         for (var j=0; j<9; j++) {
+    //             var hsClass = hsClasses[j]
+    //             var data = this.c_data[hsClass]
+    //             table += `<tr><td class="pivot" style="background-color:${hsColors[hsClass]}">${hsClass}</td>`
+    //             for (var i=hsRanks-1;i>-1;i--) { table += `<td style="background-color:${this.colorScale(data[i])};">${(data[i]*100).toFixed(1)}%</td>` }
+    //             table += `</tr>`
+    //         }   
+    //     }
+    //     table += `</table>`
+    //     document.getElementById('chart1').innerHTML = table
 
-        this.createNumbersFooter()
-    }
+    //     this.createNumbersFooter()
+    // }
 
 
 
@@ -841,7 +841,7 @@ class Ladder {
                 for (var i=hsRanks-1;i>-1;i--) {
                     var item = document.createElement('td')
                     item.style.backgroundColor = this.colorScale(data[i])
-                    item.innerHTML = (data[i]*100).toFixed(1)
+                    item.innerHTML = (data[i]*100).toFixed(1) + '<span style="color=#999">%</span>'
                     row.appendChild(item)
                 }
                 table.appendChild(row)

@@ -13,8 +13,8 @@ function setupFirebase() {
     };
     firebase.initializeApp(config);
     DATABASE = firebase.database()
-    
-
+    const auth = firebase.auth()
+    const promise = auth.signInWithEmailAndPassword('vsProUser@vs.com','pw12345');
 
     const emailTxt = document.getElementById('emailInput')
     const passwordTxt = document.getElementById('passwordInput')

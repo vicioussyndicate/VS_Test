@@ -84,13 +84,14 @@ class LadderWindow {
             document.querySelector('#ladderWindow #rankFolder .dropdown').appendChild(btn)
         }
 
-        if (!PREMIUM) {
-            document.querySelector('#ladderWindow .content-header #line').style.display = 'none'
-            document.querySelector('#ladderWindow .content-header #decks').style.display = 'none'
-            document.querySelector('#ladderWindow .content-header #classes').style.display = 'none'
-            document.querySelector('#ladderWindow .content-header #number').style.display = 'none'
-            document.querySelector('#ladderWindow .content-header #timeline').style.display = 'none'
-        }
+        var disp = (PREMIUM) ? 'inline' : 'none'
+       
+        document.querySelector('#ladderWindow .content-header #line').style.display = disp
+        document.querySelector('#ladderWindow .content-header #decks').style.display = disp
+        document.querySelector('#ladderWindow .content-header #classes').style.display = disp
+        document.querySelector('#ladderWindow .content-header #number').style.display = disp
+        document.querySelector('#ladderWindow .content-header #timeline').style.display = disp
+        
 
         this.optionButtons = document.querySelectorAll('#ladderWindow .optionBtn')
     }
