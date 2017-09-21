@@ -174,10 +174,7 @@ class Table {
         var table = this.table.concat([overallWR])
         var arch = this.archetypes.concat(['Overall'])
         var textRow = []
-        //for (var i=0;i<table[0].length;i++) {textRow.push("Overall WR: "+(100*overallWR[i]).toFixed(1)+"%")}
-        for (var i=0;i<table[0].length;i++) {
-            textRow.push(`${this.archetypes[i]}<br>Overall wr: ${(100*overallWR[i]).toFixed(1)}%`)
-        }
+        for (var i=0;i<table[0].length;i++) { textRow.push(`${this.archetypes[i]}<br>Overall wr: ${(100*overallWR[i]).toFixed(1)}%`) }
         var textTable = this.textTable.concat([textRow])
 
 
@@ -287,7 +284,7 @@ class Table {
         var OptMU = document.querySelector('#tableWindow #matchup')
         var OptWR = document.querySelector('#tableWindow #winrate')
         OptMU.style.display = 'inline-block'
-        if (arch == 'Overall') { OptWR.style.display = 'none' }
+        if (arch == 'Overall') { OptMU.style.display = 'none' }
     
         this.window.zoomIn = true
         this.window.zoomArch = arch

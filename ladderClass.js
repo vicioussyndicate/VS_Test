@@ -7,13 +7,14 @@ class History {
         
         this.window = window
         this.data = DATA
+        this.bgColor = 'transparent'
+        this.gridcolor = this.window.fontColorLight
         
         this.layout = {
 		    showlegend: false,
 		    displayModeBar: false,
             autosize: true,
 		    hovermode: 'closest',
-            //hoverinfo: 'x+y',
 		    xaxis: {
                 tickfont: {
 				    family: 'Arial, bold',
@@ -23,7 +24,7 @@ class History {
                 tickcolor: 'transparent',
                 visible: true, 
                 showgrid: true,
-                //hoverformat: '.1%',
+                gridcolor: this.gridcolor,
                 color: this.window.fontColor,
                 fixedrange: true,
                 zeroline: false,
@@ -37,6 +38,7 @@ class History {
                 ticklen: 12,
                 tickcolor: 'transparent',
                 tickformat: ',.0%',
+                gridcolor: this.gridcolor,
                 fixedrange: true,
 			    color: this.window.fontColorLight,
 		    },
@@ -47,7 +49,10 @@ class History {
         
         this.top = 9
         this.x = {
+            'last6Hours': 6,
+            'last12Hours':12,
             'lastDay': 24,
+            'last3Days':3,
             'lastWeek': 7,
             'last2Weeks':14,
             'last3Weeks':21,
@@ -61,8 +66,8 @@ class History {
         this.window.chartDiv.innerHTML = ""
         var f = this.window.f
         var t_w = this.window.t
-        var t_h = (this.window.t == 'lastDay') ? 'lastHours' : 'lastDays';
-        const baseUnit = (this.window.t == 'lastDay') ? 'Hour' : 'Day';
+        var t_h = (this.window.t == 'lastDay' || this.window.t == 'last12Hours' || this.window.t == 'last6Hours') ? 'lastHours' : 'lastDays';
+        const baseUnit = (t_h == 'lastHours') ? 'Hour' : 'Day';
         var r = this.window.r
         var m = this.window.mode
 
@@ -73,8 +78,7 @@ class History {
         var x = range(1,this.x[t_w]+1)        
         
         for (var i=0; i<this.top;i++) { 
-            var y = (this.window.t == 'lastDay') ? this.smoothData(d[i]['data']) : d[i]['data']
-            //archetypes.push(d[i]['name'])
+            var y = (t_h == 'lastHours') ? this.smoothData(d[i]['data']) : d[i]['data']
             var text = []
             for (var j=0;j<y.length;j++) {
                 var unit = (j>0) ? baseUnit+'s' : baseUnit;
@@ -83,7 +87,7 @@ class History {
             var trace = {
                 x: x.slice(),
                 y: y.slice(),
-                text: text,//d[i]['name'],
+                text: text,
                 type: 'scatter',
                 hoverinfo:'text',
             }
@@ -134,7 +138,7 @@ class History {
             if (mode=='classes') {
 
                 var hsClass = hsClasses[i]
-                legendDiv.style = 'background-color:'+hsColors[hsClass]//+';height:15px;width:30px;margin:0 auto 0.7em auto;'
+                legendDiv.style = 'background-color:'+hsColors[hsClass]
                 legendDiv.id = hsClass
                 legendDiv.innerHTML = hsClass
                 legendDiv.onclick = function(e) { ui.deckLink(e.target.id,this.window.f);  }
@@ -143,7 +147,7 @@ class History {
             if (mode=='decks') {
 
                 var l = legend[i]
-                legendDiv.style = 'background-color:'+l.color//+';height:15px;width:30px;margin:0 auto 0.7em auto;'
+                legendDiv.style = 'background-color:'+l.color
                 legendDiv.id = l.name
                 legendDiv.innerHTML = l.name
                 legendDiv.onclick = function(e) { ui.deckLink(e.target.id,this.window.f);  }
@@ -177,6 +181,11 @@ class History {
 
 
 
+
+
+
+
+
 class Ladder {
 
     constructor (DATA,f,t,window) {
@@ -184,9 +193,12 @@ class Ladder {
         this.maxLegendEntries = 9
         this.maxLines = 10 // max archetypes shown for the line chart
 
-        this.bgColor = 'white'
+        //this.bgColor = 'rgba(255,255,255,0.5)'
+        //this.bgColor = 'rgba(0,0,0,0.05)'
+        this.bgColor = 'transparent'
         this.fontColor = window.fontColor
         this.fontColorLight = window.fontColorLight
+        this.lineWidth = 2.5
 
         this.DATA = DATA
         this.f = f
@@ -270,6 +282,7 @@ class Ladder {
                 values: [],
                 labels:[],
                 marker: {colors: []},
+                textfont: {color: []},
                 hoverinfo: 'label+percent',
                 insidetextfont: {color:'white'},
                 outsidetextfont: {color:'transparent'},
@@ -278,15 +291,16 @@ class Ladder {
             }
 
             var color_classes = []
-            for (hsClass of hsClasses) { color_classes.push(hsColors[hsClass]) }
+            // var fontColor_classes = [] // doesnt work :(
+            for (hsClass of hsClasses) { color_classes.push(hsColors[hsClass])}
 
             var trace_classes =  {
                 values: fillRange(0,hsClasses.length,0),
                 labels: hsClasses.slice(),
                 marker: {colors:color_classes},
                 hoverinfo: 'label+percent',
-                insidetextfont: {color:'black'},
-                outsidetextfont: {color:'white'},
+                insidetextfont: {color: 'white'},
+                outsidetextfont: {color:'#222'},
                 text: hsClasses.slice(),
                 type: 'pie',
             }
@@ -364,6 +378,7 @@ class Ladder {
                         this.traces_pie['decks'][tier.name][0].values.push(fr)
                         this.traces_pie['decks'][tier.name][0].labels.push(archName)
                         this.traces_pie['decks'][tier.name][0].marker.colors.push(color)
+                        //push fontColor!!
                     }
                     if (rank > tier.start && rank <= tier.end) {
                         this.traces_pie['decks'][tier.name][0].values[i] += fr
@@ -406,7 +421,9 @@ class Ladder {
                 hoverinfo: 'text',
                 orientation: 'h',
                 marker: {color: color,},
+                line: {width: this.lineWidth},
                 type: 'scatter',
+                mode: 'lines',
                 winrate: 0,
                 hsClass: ARCHETYPES[i][0]+ARCHETYPES[i][1],
                 fr: fr_avg,
@@ -416,8 +433,8 @@ class Ladder {
             this.traces_bar.decks.push(arch_bar)
             this.traces_line.decks.push(arch_line)
 
-            this.archLegend.push({name: archName, color: color, fr: fr_avg})
-            this.archetypes.push({name:archName,fr:fr_avg, data: archFR, color: color})
+            this.archLegend.push({name: archName, hsClass: ARCHETYPES[i][0], color: color, fontColor: hsFontColors[ARCHETYPES[i][0]], fr: fr_avg})
+            this.archetypes.push({name:archName,fr:fr_avg, data: archFR, color: color, fontColor: hsFontColors[ARCHETYPES[i][0]]})
 
         } // close for ARCHETYPES
                 
@@ -466,7 +483,9 @@ class Ladder {
                 text: classTxt,
                 hoverinfo: 'text',
                 marker: {color: hsColors[hsClass]},
+                line: {width: this.lineWidth},
                 type: 'scatter',
+                mode: 'lines',
                 winrate: 0,
                 hsClass: hsClass,
                 fr: fr_avg,
@@ -569,11 +588,9 @@ class Ladder {
                 tickcolor: 'transparent',
                 tickformat: ',.0%',
                 fixedrange: true,
-
-                //zeroline: false,
 			    color: this.fontColorLight,
 		    },
-		    plot_bgcolor: this.bgColor,
+		    plot_bgcolor: 'transparent',//this.bgColor,
             paper_bgcolor: this.bgColor,//this.bgColor2,
             margin: {l:70,r:20,b:30,t:0,},
         }
@@ -791,7 +808,7 @@ class Ladder {
             if (mode=='classes') {
 
                 var hsClass = hsClasses[i]
-                legendDiv.style = 'background-color:'+hsColors[hsClass]//+';height:15px;width:30px;margin:0 auto 0.7em auto;'
+                legendDiv.style = 'background-color:'+hsColors[hsClass]+'; color:'+hsFontColors[hsClass]
                 legendDiv.id = hsClass
                 legendDiv.innerHTML = hsClass
                 legendDiv.onclick = function(e) { ui.deckLink(e.target.id,this.f);  }
@@ -800,7 +817,7 @@ class Ladder {
             if (mode=='decks') {
 
                 var l = legend[i]
-                legendDiv.style = 'background-color:'+l.color//+';height:15px;width:30px;margin:0 auto 0.7em auto;'
+                legendDiv.style = 'background-color:'+l.color+'; color:'+hsFontColors[l.hsClass]
                 legendDiv.id = l.name
                 legendDiv.innerHTML = l.name
                 legendDiv.onclick = function(e) { ui.deckLink(e.target.id,this.f);  }

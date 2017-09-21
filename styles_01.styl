@@ -17,14 +17,14 @@
 
 // Set 3 // Black Orange
 
-$midColor = #e6462e
-$midColor2 = #ea5d44
-$midColor3 = #ee755a
-$midColor4 = #f18b70
-$darkColor = #454c57
-$accentColor = #ff9326
-$chartColors = #ebebeb
-$lightColor = $chartColors
+// $midColor = #e6462e
+// $midColor2 = #ea5d44
+// $midColor3 = #ee755a
+// $midColor4 = #f18b70
+// $darkColor = #454c57
+// $accentColor = #ff9326
+// $chartColors = #ebebeb
+// $lightColor = $chartColors
 
 
 // Set 3 // Sand
@@ -35,6 +35,16 @@ $accentColor = #c7de7b
 $chartColors = white// #fffeea //#f9f2c8
 $lightColor = #ebebeb*/
 
+
+// Set 4 sky
+$midColor = #1e6b97
+$midColor2 = #398ab9
+$midColor3 = #599fb5
+$midColor4 = #7fb0b4
+$darkColor = #454c57
+$accentColor = #c7e077
+$chartColors = #ebebeb
+$lightColor = $chartColors
 
 $nav_bgColor = $midColor
 $nav_fColor = $lightColor
@@ -124,6 +134,7 @@ button
     position: relative;
     display: inline-block;
     .tooltipText
+        opacity: 0.8;
         visibility: hidden;
         width: 120px;
         background-color: #222;
@@ -132,7 +143,7 @@ button
         padding: 5px 0;
         border-radius: 2%;
         width: 120px;
-        bottom: 150%;
+        bottom: 40px;
         left: 50%;
         margin-left: -60px;
         position: absolute;
@@ -366,7 +377,7 @@ body
                         &:hover
                             cursor pointer
                     .winrate
-                        color $darkColor
+                        color #999
                         font-weight: normal
                         padding: 0.2rem
                     .columnTitle
@@ -595,11 +606,11 @@ body
           100% { transform: rotate(360deg); }
           }
 
-@media (max-width: 2000px)
-    html
-        background: blue
+// @media (max-width: 2000px)
+//     html
+//         background: blue
 
 
-@media (max-width: 1000px)
-    html
-        background: green
+// @media (max-width: 1000px)
+//     html
+//         background: green

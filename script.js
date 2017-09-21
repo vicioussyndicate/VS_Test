@@ -56,8 +56,8 @@ function finishedLoading() {
     if (!(tableWindow.fullyLoaded && ladderWindow.fullyLoaded && decksWindow.fullyLoaded)) {return}
     
 
-    //powerWindow = new PowerWindow()
-    //powerWindow.plot()
+    powerWindow = new PowerWindow()
+    powerWindow.plot()
     ladderWindow.plot()
     tableWindow.plot()
     decksWindow.plot()
@@ -197,8 +197,6 @@ var hsColors = {
 }
 
 // RIVER PICTURE
-
-
 var hsColors = {
     Druid:      '#665730',
     Hunter:     '#4f8f49',
@@ -214,6 +212,37 @@ var hsColors = {
     '§':        '#88042d',
 }
 
+// Sun Picture
+var hsColors = {
+    Druid:      '#725d4d',
+    Hunter:     '#5f8732',
+    Mage:       '#7eafbf',
+    Paladin:    '#ffd96d',
+    Priest:     '#fdfae9',//'#fff3c7',
+    Rogue:      '#0b250b',
+    Shaman:     '#1a5d72',
+    Warlock:    '#ad5c7b',
+    Warrior:    '#dc7852',
+    Other:      '#88042d',
+    '':         '#88042d',
+    '§':        '#88042d',
+}
+
+
+var hsFontColors = {
+    Druid:      '#fff',
+    Hunter:     '#fff',
+    Mage:       '#fff',
+    Paladin:    '#222',
+    Priest:     '#222',
+    Rogue:      '#fff',
+    Shaman:     '#fff',
+    Warlock:    '#fff',
+    Warrior:    '#fff',
+    Other:      '#88042d',
+    '':         '#88042d',
+    '§':        '#88042d',
+}
 
 
 // Washed out
