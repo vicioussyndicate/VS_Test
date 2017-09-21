@@ -52,7 +52,30 @@ class LadderWindow {
 
     setupUI() {
         // for every hsFormat, hsRank -> add optionBtn + trigger
-        for (var btn of this.optionButtons) { btn.addEventListener("click", this.buttonTrigger.bind(this)) } 
+        for (var btn of this.optionButtons) { btn.addEventListener("click", this.buttonTrigger.bind(this)) }
+
+        for (var f of this.hsFormats) {
+            var btn = document.createElement('button')
+            btn.className = 'optionBtn folderBtn'
+            btn.innerHTML = f
+            btn.id = f
+            const trigger = function (e) {this.f = e.target.id; this.plot()}
+            btn.onclick = trigger.bind(this)
+            document.querySelector('#ladderWindow #formatFolder .dropdown').appendChild(btn)
+        }
+
+        for (var t of this.hsTimes) {
+            var btn = document.createElement('button')
+            btn.className = 'optionBtn folderBtn'
+            btn.innerHTML = t
+            btn.id = t
+            const trigger = function (e) {this.t = e.target.id; this.plot()}
+            btn.onclick = trigger.bind(this)
+            document.querySelector('#ladderWindow #timeFolder .dropdown').appendChild(btn)
+        }
+
+
+        this.optionButtons = document.querySelectorAll('#ladderWindow .optionBtn')
     }
 
     buttonTrigger(e) {

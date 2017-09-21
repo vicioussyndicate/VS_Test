@@ -21,7 +21,7 @@ html(lang='en')
           button#power.tab Tier List
           button#table.tab Matchups
           button#decks.tab Decks
-          button#info.tab Arena
+          button#info.tab Info
       //button#overlayBtn.optionBtn(onclick='overlay()').fa.fa-question-circle 
       #vsLogoDiv
         img(src="Images/skull.png").logo
@@ -33,17 +33,17 @@ html(lang='en')
         #ladderWindow.tabWindow
           .content-header
             .ftrOptions.optionBar
-              .option-folder
+              #formatFolder.option-folder
                 button#formatBtn.folder-toggle Standard
                 .dropdown.hidden
-                  button#Standard.optionBtn.folderBtn Standard
-                  button#Wild.optionBtn.folderBtn Wild
-              .option-folder
+                  //button#Standard.optionBtn.folderBtn Standard
+                  //button#Wild.optionBtn.folderBtn Wild
+              #timeFolder.option-folder
                 button#timeBtn.folder-toggle Last Day
                 .dropdown.hidden
-                  button#lastDay.optionBtn.folderBtn Last Day
-                  button#lastWeek.optionBtn.folderBtn Last Week
-                  button#lastMonth.optionBtn.folderBtn Last Month
+                  //button#lastDay.optionBtn.folderBtn Last Day
+                  //button#lastWeek.optionBtn.folderBtn Last Week
+                  //button#lastMonth.optionBtn.folderBtn Last Month
               .option-folder
                 button#rankBtn.folder-toggle All Ranks
                 .dropdown#rankDropdown.hidden
