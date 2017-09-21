@@ -70,7 +70,7 @@ function setupFirebase() {
             logOutBtn.classList.add('hidden')
             loginBtn.classList.remove('hidden')
             signUpBtn.classList.remove('hidden')
-
+            PREMIUM = false
             loadFireData()
         }
     })

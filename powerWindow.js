@@ -13,7 +13,7 @@ class PowerWindow {
         this.f = 'Standard'
         this.mode = 'tiers'
         this.t_ladder = 'lastDay'
-        this.t_table = 'lastWeek'
+        this.t_table = 'last2Weeks'
         this.top = 5
         
 
@@ -47,7 +47,7 @@ class PowerWindow {
 
         this.addData('Standard')
         this.addData('Wild')
-
+        this.setupUI()
         this.renderOptions()
     }// close constructor
 

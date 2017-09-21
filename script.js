@@ -91,134 +91,134 @@ var colorscale_Table = [
 ];
 
 
-// VS Colors
-var hsColors = {
-    Druid:      '#8C564B',
-    Hunter:     '#2CA02C',
-    Mage:       '#17BECF',
-    Paladin:    '#FFDA66',
-    Priest:     '#7F7F7F',
-    Rogue:      '#000000',
-    Shaman:     '#1F77B4',
-    Warlock:    '#9467BD',
-    Warrior:    '#D62728',
-    Other:      '#88042d',
-    '':         '#88042d',
-    '§':        '#88042d',
-}
+// // VS Colors
+// var hsColors = {
+//     Druid:      '#8C564B',
+//     Hunter:     '#2CA02C',
+//     Mage:       '#17BECF',
+//     Paladin:    '#FFDA66',
+//     Priest:     '#7F7F7F',
+//     Rogue:      '#000000',
+//     Shaman:     '#1F77B4',
+//     Warlock:    '#9467BD',
+//     Warrior:    '#D62728',
+//     Other:      '#88042d',
+//     '':         '#88042d',
+//     '§':        '#88042d',
+// }
 
-// In between
-var hsColors = {
-    Druid:      '#855043',
-    Hunter:     '#72d946',
-    Mage:       '#0090d0',
-    Paladin:    '#fdd458',
-    Priest:     '#b3b9bc',
-    Rogue:      '#203338',
-    Shaman:     '#2062a9',
-    Warlock:    '#d072df',
-    Warrior:    '#b31a27',
-    Other:      '#88042d',
-    '':         '#88042d',
-    '§':        '#88042d',
-}
+// // In between
+// var hsColors = {
+//     Druid:      '#855043',
+//     Hunter:     '#72d946',
+//     Mage:       '#0090d0',
+//     Paladin:    '#fdd458',
+//     Priest:     '#b3b9bc',
+//     Rogue:      '#203338',
+//     Shaman:     '#2062a9',
+//     Warlock:    '#d072df',
+//     Warrior:    '#b31a27',
+//     Other:      '#88042d',
+//     '':         '#88042d',
+//     '§':        '#88042d',
+// }
 
-// Compromise 2
+// // Compromise 2
 
-var hsColors = {
-    Druid:      '#7d554b',
-    Hunter:     '#1ea124',
-    Mage:       '#44d0e3',
-    Paladin:    '#f6de5d',
-    Priest:     '#abb9c2',
-    Rogue:      '#1f3739',
-    Shaman:     '#116eb5',
-    Warlock:    '#cf78dd',
-    Warrior:    '#a9070c',
-    Other:      '#88042d',
-    '':         '#88042d',
-    '§':        '#88042d',
-}
-
-
-// Compromise 3 Muted
-
-var hsColors = {
-    Druid:      '#7e564b',
-    Hunter:     '#65bb4a',
-    Mage:       '#248ec2',
-    Paladin:    '#f8be42',
-    Priest:     '#a1b6ce',
-    Rogue:      '#223135',
-    Shaman:     '#0e7290',
-    Warlock:    '#c67dd2',
-    Warrior:    '#a21a1f',
-    Other:      '#88042d',
-    '':         '#88042d',
-    '§':        '#88042d',
-}
+// var hsColors = {
+//     Druid:      '#7d554b',
+//     Hunter:     '#1ea124',
+//     Mage:       '#44d0e3',
+//     Paladin:    '#f6de5d',
+//     Priest:     '#abb9c2',
+//     Rogue:      '#1f3739',
+//     Shaman:     '#116eb5',
+//     Warlock:    '#cf78dd',
+//     Warrior:    '#a9070c',
+//     Other:      '#88042d',
+//     '':         '#88042d',
+//     '§':        '#88042d',
+// }
 
 
+// // Compromise 3 Muted
 
-// Compromise 3 Weird
-
-var hsColors = {
-    Druid:      '#7e4949',
-    Hunter:     '#49a211',
-    Mage:       '#5adccd',
-    Paladin:    '#ffb145',
-    Priest:     '#a4a8ba',
-    Rogue:      '#1f3738',
-    Shaman:     '#1877ab',
-    Warlock:    '#c483ff',
-    Warrior:    '#a9070c',
-    Other:      '#88042d',
-    '':         '#88042d',
-    '§':        '#88042d',
-}
-
-
-// Compromise 4 blue blended
+// var hsColors = {
+//     Druid:      '#7e564b',
+//     Hunter:     '#65bb4a',
+//     Mage:       '#248ec2',
+//     Paladin:    '#f8be42',
+//     Priest:     '#a1b6ce',
+//     Rogue:      '#223135',
+//     Shaman:     '#0e7290',
+//     Warlock:    '#c67dd2',
+//     Warrior:    '#a21a1f',
+//     Other:      '#88042d',
+//     '':         '#88042d',
+//     '§':        '#88042d',
+// }
 
 
-var hsColors = {
-    Druid:      '#774f53',
-    Hunter:     '#19982a',
-    Mage:       '#58c3ee',
-    Paladin:    '#fac333',
-    Priest:     '#83969e',
-    Rogue:      '#16161b',
-    Shaman:     '#0c6aa1',
-    Warlock:    '#552fa5',
-    Warrior:    '#d12825',
-    Other:      '#88042d',
-    '':         '#88042d',
-    '§':        '#88042d',
-}
 
-// RIVER PICTURE
-var hsColors = {
-    Druid:      '#665730',
-    Hunter:     '#4f8f49',
-    Mage:       '#98c9dc',
-    Paladin:    '#caa73f',
-    Priest:     '#f7f4b5',
-    Rogue:      '#172323',
-    Shaman:     '#2b789e',
-    Warlock:    '#514384',
-    Warrior:    '#c02e31',
-    Other:      '#88042d',
-    '':         '#88042d',
-    '§':        '#88042d',
-}
+// // Compromise 3 Weird
+
+// var hsColors = {
+//     Druid:      '#7e4949',
+//     Hunter:     '#49a211',
+//     Mage:       '#5adccd',
+//     Paladin:    '#ffb145',
+//     Priest:     '#a4a8ba',
+//     Rogue:      '#1f3738',
+//     Shaman:     '#1877ab',
+//     Warlock:    '#c483ff',
+//     Warrior:    '#a9070c',
+//     Other:      '#88042d',
+//     '':         '#88042d',
+//     '§':        '#88042d',
+// }
+
+
+// // Compromise 4 blue blended
+
+
+// var hsColors = {
+//     Druid:      '#774f53',
+//     Hunter:     '#19982a',
+//     Mage:       '#58c3ee',
+//     Paladin:    '#fac333',
+//     Priest:     '#83969e',
+//     Rogue:      '#16161b',
+//     Shaman:     '#0c6aa1',
+//     Warlock:    '#552fa5',
+//     Warrior:    '#d12825',
+//     Other:      '#88042d',
+//     '':         '#88042d',
+//     '§':        '#88042d',
+// }
+
+// // RIVER PICTURE
+// var hsColors = {
+//     Druid:      '#665730',
+//     Hunter:     '#4f8f49',
+//     Mage:       '#98c9dc',
+//     Paladin:    '#caa73f',
+//     Priest:     '#f7f4b5',
+//     Rogue:      '#172323',
+//     Shaman:     '#2b789e',
+//     Warlock:    '#514384',
+//     Warrior:    '#c02e31',
+//     Other:      '#88042d',
+//     '':         '#88042d',
+//     '§':        '#88042d',
+// }
 
 // Sun Picture
 var hsColors = {
-    Druid:      '#725d4d',
-    Hunter:     '#5f8732',
-    Mage:       '#7eafbf',
+    Druid:      '#674f3a',//'#725d4d',
+    Hunter:     '#719038',//'#5f8732',
+    Mage:       '#90bbc3',//'#89b9c8',
     Paladin:    '#ffd96d',
-    Priest:     '#fdfae9',//'#fff3c7',
+    Priest:     '#ddd9be', //'#fdfae9',//'#fff3c7',
     Rogue:      '#0b250b',
     Shaman:     '#1a5d72',
     Warlock:    '#ad5c7b',

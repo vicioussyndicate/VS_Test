@@ -8,7 +8,7 @@ class History {
         this.window = window
         this.data = DATA
         this.bgColor = 'transparent'
-        this.gridcolor = this.window.fontColorLight
+        this.gridcolor = 'white'//this.window.fontColorLight
         
         this.layout = {
 		    showlegend: false,
@@ -260,22 +260,22 @@ class Ladder {
 
             this.totGamesRanks[tier.name] = 0
 
-            var button = document.createElement('button')
-            var clickButton = function (e) {
-                for (var t of this.tiers) {
-                    if (t.buttonId == e.target.id) {
-                        this.tier = t
-                        this.plot()
-                        this.window.r = t.buttonId
-                        this.window.renderOptions()
-            }}}
+            // var button = document.createElement('button')
+            // var clickButton = function (e) {
+            //     for (var t of this.tiers) {
+            //         if (t.buttonId == e.target.id) {
+            //             this.tier = t
+            //             this.plot()
+            //             this.window.r = t.buttonId
+            //             this.window.renderOptions()
+            // }}}
             
-            button.id = tier.buttonId
-            button.className = 'optionBtn folderBtn'
-            button.innerHTML = tier.name
-            button.onclick = clickButton.bind(this)
+            // button.id = tier.buttonId
+            // button.className = 'optionBtn folderBtn'
+            // button.innerHTML = tier.name
+            // button.onclick = clickButton.bind(this)
 
-            this.dropdownDiv.appendChild(button)
+            // this.dropdownDiv.appendChild(button)
             
 
             var trace_decks = {
@@ -746,7 +746,7 @@ class Ladder {
 
 
 
-    createTable (mode) {
+    createTable2 (mode) {
 
         var maxArch = 20
         if (this.archetypes.length < maxArch) {maxArch = this.archetypes.length}
@@ -783,6 +783,75 @@ class Ladder {
         this.createNumbersFooter()
     }
 
+
+
+    createTable(mode) {
+
+        var maxArch = 20
+        if (this.archetypes.length < maxArch) {maxArch = this.archetypes.length}
+        document.getElementById('chart1').innerHTML = ""
+        
+        var table = document.createElement('table')
+        table.style.width = '100%'
+        var headerRow = document.createElement('tr')
+
+        var item = document.createElement('th')
+        item.className = 'pivot'
+        item.innerHTML = 'Rank ->'
+        headerRow.appendChild(item)
+
+        for (var i=hsRanks-1;i>=0;i--) {
+            var item = document.createElement('th')
+            item.innerHTML = (i>0) ? i : 'L'
+            headerRow.appendChild(item)
+        }
+        table.appendChild(headerRow)
+
+        if (mode == 'decks') {
+            for (var j=0; j<maxArch; j++) {
+                var arch = this.archetypes[j]
+                var row = document.createElement('tr')
+                var pivot = document.createElement('td')
+                pivot.className = 'pivot'
+                pivot.style.backgroundColor = arch.color
+                pivot.style.color = arch.fontColor
+                pivot.innerHTML = arch.name
+                row.appendChild(pivot)
+                for (var i=hsRanks-1;i>-1;i--) {
+                    var item = document.createElement('td')
+                    item.style.backgroundColor = this.colorScale(arch.data[i])
+                    item.innerHTML = (arch.data[i]*100).toFixed(1) + '%'
+                    row.appendChild(item)
+                }
+                table.appendChild(row)
+            }
+        }
+
+        if (mode == 'classes') {
+            for (var j=0; j<9; j++) {
+                var hsClass = hsClasses[j]
+                var data = this.c_data[hsClass]
+                var row = document.createElement('tr')
+                var pivot = document.createElement('td')
+                pivot.className = 'pivot'
+                pivot.style.backgroundColor = hsColors[hsClass]
+                pivot.style.color = hsFontColors[hsClass]
+                pivot.innerHTML = hsClass
+                row.appendChild(pivot)
+                for (var i=hsRanks-1;i>-1;i--) {
+                    var item = document.createElement('td')
+                    item.style.backgroundColor = this.colorScale(data[i])
+                    item.innerHTML = (data[i]*100).toFixed(1)
+                    row.appendChild(item)
+                }
+                table.appendChild(row)
+            }   
+        }
+        
+        
+        document.getElementById('chart1').appendChild(table)
+        this.createNumbersFooter()
+    }
 
     createLegend(mode) {
         var chartFooter = document.querySelector('#ladderWindow .chart-footer')

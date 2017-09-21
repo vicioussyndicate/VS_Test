@@ -231,7 +231,8 @@ class DecksWindow {
         
         var btn = document.createElement('button')
         
-        btn.style.backgroundColor = hsColors[arch.hsClass] //randomColor()
+        btn.style.backgroundColor = hsColors[arch.hsClass]
+        btn.style.color = hsFontColors[arch.hsClass]
         btn.innerHTML = arch.name
         btn.id = arch.name
         btn.style.padding = '0.2rem'

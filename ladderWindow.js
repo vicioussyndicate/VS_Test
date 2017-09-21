@@ -67,13 +67,30 @@ class LadderWindow {
         for (var t of this.hsTimes) {
             var btn = document.createElement('button')
             btn.className = 'optionBtn folderBtn'
-            btn.innerHTML = t
+            btn.innerHTML = btnIdToText[t]
             btn.id = t
             const trigger = function (e) {this.t = e.target.id; this.plot()}
             btn.onclick = trigger.bind(this)
             document.querySelector('#ladderWindow #timeFolder .dropdown').appendChild(btn)
         }
 
+        for (var r of this.ranks) {
+            var btn = document.createElement('button')
+            btn.className = 'optionBtn folderBtn'
+            btn.innerHTML = btnIdToText[r]
+            btn.id = r
+            const trigger = function (e) {this.t = e.target.id; this.plot()}
+            btn.onclick = trigger.bind(this)
+            document.querySelector('#ladderWindow #rankFolder .dropdown').appendChild(btn)
+        }
+
+        if (!PREMIUM) {
+            document.querySelector('#ladderWindow .content-header #line').style.display = 'none'
+            document.querySelector('#ladderWindow .content-header #decks').style.display = 'none'
+            document.querySelector('#ladderWindow .content-header #classes').style.display = 'none'
+            document.querySelector('#ladderWindow .content-header #number').style.display = 'none'
+            document.querySelector('#ladderWindow .content-header #timeline').style.display = 'none'
+        }
 
         this.optionButtons = document.querySelectorAll('#ladderWindow .optionBtn')
     }
