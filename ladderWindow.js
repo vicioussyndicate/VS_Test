@@ -43,7 +43,6 @@ class LadderWindow {
                 this.data[f][t] = null
         }}
 
-
         this.loadData()
         this.setupUI()
         this.renderOptions()
@@ -51,7 +50,6 @@ class LadderWindow {
 
 
     setupUI() {
-        // for every hsFormat, hsRank -> add optionBtn + trigger
         for (var btn of this.optionButtons) { btn.addEventListener("click", this.buttonTrigger.bind(this)) }
 
         for (var f of this.hsFormats) {
@@ -75,11 +73,12 @@ class LadderWindow {
         }
 
         for (var r of this.ranks) {
+            console.log('add rank btn',r)
             var btn = document.createElement('button')
             btn.className = 'optionBtn folderBtn'
             btn.innerHTML = btnIdToText[r]
             btn.id = r
-            const trigger = function (e) {this.t = e.target.id; this.plot()}
+            const trigger = function (e) {this.r = e.target.id; this.plot()}
             btn.onclick = trigger.bind(this)
             document.querySelector('#ladderWindow #rankFolder .dropdown').appendChild(btn)
         }
@@ -91,10 +90,14 @@ class LadderWindow {
         document.querySelector('#ladderWindow .content-header #classes').style.display = disp
         document.querySelector('#ladderWindow .content-header #number').style.display = disp
         document.querySelector('#ladderWindow .content-header #timeline').style.display = disp
-        
+        document.querySelector('#ladderWindow .content-header .nrGames').onmouseover = this.showGames.bind(this)
+        document.querySelector('#ladderWindow .content-header .nrGames').onmouseout = this.hideGames.bind(this)
 
         this.optionButtons = document.querySelectorAll('#ladderWindow .optionBtn')
     }
+
+    showGames() { if (this.plotType == 'bar') {this.data[this.f][this.t].annotate(true)} }
+    hideGames() { this.data[this.f][this.t].annotate(false); }
 
     buttonTrigger(e) {
 

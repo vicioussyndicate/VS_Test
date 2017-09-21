@@ -44,6 +44,7 @@ class History {
 		    },
 		    plot_bgcolor: this.bgColor, 
             paper_bgcolor: this.bgColor,
+            annotations: [],
             margin: {l:70,r:20,b:30,t:0,},
         }
         
@@ -64,6 +65,7 @@ class History {
     plot() {
         
         this.window.chartDiv.innerHTML = ""
+        document.querySelector('#ladderWindow .content-header #rankBtn').style.display = 'inline'
         var f = this.window.f
         var t_w = this.window.t
         var t_h = (this.window.t == 'lastDay' || this.window.t == 'last12Hours' || this.window.t == 'last6Hours') ? 'lastHours' : 'lastDays';
@@ -241,9 +243,9 @@ class Ladder {
             buttonId: 'ranks_L',
             start: 0,
             end: 0},
-            {name:'1-5',
-            buttonId: 'ranks_1_5',
-            start: 1,
+            {name:'L-5',
+            buttonId: 'ranks_L_5',
+            start: 0,
             end: 5},
             {name:'6-15',
             buttonId: 'ranks_6_15',
@@ -252,31 +254,10 @@ class Ladder {
         ]
         this.tier = this.tiers[0]
         this.rankFolder = document.querySelector('#ladderWindow .content-header #rankBtn')
-        this.rankFolder.style.display = 'none'
-        this.dropdownDiv = document.querySelector('#ladderWindow .content-header #rankDropdown')
-        this.dropdownDiv.innerHTML = ''
-
+       
         for (var tier of this.tiers) {
 
             this.totGamesRanks[tier.name] = 0
-
-            // var button = document.createElement('button')
-            // var clickButton = function (e) {
-            //     for (var t of this.tiers) {
-            //         if (t.buttonId == e.target.id) {
-            //             this.tier = t
-            //             this.plot()
-            //             this.window.r = t.buttonId
-            //             this.window.renderOptions()
-            // }}}
-            
-            // button.id = tier.buttonId
-            // button.className = 'optionBtn folderBtn'
-            // button.innerHTML = tier.name
-            // button.onclick = clickButton.bind(this)
-
-            // this.dropdownDiv.appendChild(button)
-            
 
             var trace_decks = {
                 values: [],
@@ -291,7 +272,6 @@ class Ladder {
             }
 
             var color_classes = []
-            // var fontColor_classes = [] // doesnt work :(
             for (hsClass of hsClasses) { color_classes.push(hsColors[hsClass])}
 
             var trace_classes =  {
@@ -313,33 +293,23 @@ class Ladder {
 
         var ARCHETYPES =    DATA.archetypes
         var rankSums =      DATA.gamesPerRank
+        this.rankSums = DATA.gamesPerRank
         var rankData =      this.smoothLadder(DATA.rankData,rankSums.slice())
-        var classRankData = []
+        var classRankData = this.smoothLadder(DATA.classRankData,rankSums.slice())
         
 
 
-        // Process ClassRankData  -> Should include classRankData in data file
+        // Game Sums and rank labels
         for (var i=0;i<hsRanks;i++) {
-
             if (i%5==0) {this.rankLabels.push(i+'  ')}
             else {this.rankLabels.push('')}
-
             this.totGames += rankSums[i]
-            
             for (var tier of this.tiers) {
                 if (i >= tier.start && i <= tier.end) { this.totGamesRanks[tier.name] += rankSums[i] }
             }
-            var classRankRow = [0,0,0,0,0,0,0,0,0]
-            
-            
-
-            for (var j=0;j<rankData[i].length;j++) {
-                var idx_class = hsClasses.indexOf(ARCHETYPES[j][0])
-                if (idx_class != -1) {classRankRow[idx_class] += rankData[i][j]}
-            }
-            classRankData.push(classRankRow)
         }
 
+        
         this.rankLabels[0] = 'L  '
 
 
@@ -361,7 +331,7 @@ class Ladder {
                 archTxt.push(`<b>${archName}     </b><br>freq: ${(fr*100).toFixed(1)}%`)
 
                 // Merge
-                if (fr < this.fr_min && i>9) {
+                if (fr < this.fr_min && i>8) {
                     this.traces_bar.decks[classIdx].y[rank] += fr
                     fr = 0
                 }
@@ -389,7 +359,7 @@ class Ladder {
 
                         // Merge Pie
                         var fr_pie = this.traces_pie.decks[tier.name][0].values[i]
-                        if (fr_pie <this.fr_min && i>9) {
+                        if (fr_pie <this.fr_min && i>8) {
                             this.traces_pie.decks[tier.name][0].values[i] = 0
                             this.traces_pie.decks[tier.name][0].values[classIdx] += fr_pie
                         } 
@@ -510,7 +480,8 @@ class Ladder {
 		    barmode: 'stack',
 		    showlegend: false,
 		    displayModeBar: false,
-		    hovermode: 'closest',
+            hovermode: 'closest',
+            annotations: [],
 		    xaxis: {
                 //title: 'Ranks',
                 tickfont: {
@@ -744,44 +715,30 @@ class Ladder {
     }
 
 
+    annotate(bool) {
+        var update
+        if (bool) {
+            var annotations = []
+            for (var i=0;i<hsRanks;i++) {
+                var ann = {
+                    x: i,
+                    y: 0.5,
+                    xref: 'x',
+                    yref: 'y',
+                    text: this.rankSums[i],
+                    showarrow: false,
+                    bgcolor: 'rgba(0,0,0,0.1)',
+                    opacity: 0.8
+                }
+                annotations.push(ann)
+            }
+            update = { annotations: annotations};
+        }
+        else {update = { annotations: []};}
 
+        Plotly.relayout('chart1', update)
+    }
 
-    // createTable2 (mode) {
-
-    //     var maxArch = 20
-    //     if (this.archetypes.length < maxArch) {maxArch = this.archetypes.length}
-
-    //     document.getElementById('chart1').innerHTML = ""
-        
-    //     var table = `<table style="width:100%">`
-    //     table += `<tr><th class="pivot">Rank -></th>`
-
-    //     for (var i=20;i>0;i--) {table += `<th>${i}</th>`}
-    //     table += `<th>L</th></tr>`
-
-    //     if (mode == 'decks') {
-    //         for (var j=0; j<maxArch; j++) {
-    //             var arch = this.archetypes[j]
-    //             table += `<tr><td class="pivot" style="background-color:${arch.color}">${arch.name}</td>`
-    //             for (var i=hsRanks-1;i>-1;i--) {table += `<td style="background-color:${this.colorScale(arch.data[i])};">${(arch.data[i]*100).toFixed(1)}%</td>`}
-    //             table += `</tr>`
-    //         }
-    //     } 
-
-    //     else {
-    //         for (var j=0; j<9; j++) {
-    //             var hsClass = hsClasses[j]
-    //             var data = this.c_data[hsClass]
-    //             table += `<tr><td class="pivot" style="background-color:${hsColors[hsClass]}">${hsClass}</td>`
-    //             for (var i=hsRanks-1;i>-1;i--) { table += `<td style="background-color:${this.colorScale(data[i])};">${(data[i]*100).toFixed(1)}%</td>` }
-    //             table += `</tr>`
-    //         }   
-    //     }
-    //     table += `</table>`
-    //     document.getElementById('chart1').innerHTML = table
-
-    //     this.createNumbersFooter()
-    // }
 
 
 

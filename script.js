@@ -24,7 +24,7 @@ const ladder_times =  ['lastDay','last2Weeks']
 const ladder_times_premium = ['last6Hours','last12Hours','lastDay','last3Days','lastWeek','last2Weeks']
 
 const ladder_ranks =  ['ranks_all']
-const ladder_ranks_premium = ['ranks_L_5','ranks_6_15','ranks_all']
+const ladder_ranks_premium = ['ranks_all','ranks_L_5','ranks_6_15']
 
 const ladder_plotTypes = []
 

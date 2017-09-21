@@ -38,7 +38,7 @@ class Table {
         var FR =            DATA.frequency.slice()
         var TABLE =         DATA.table.slice()
         var ARCHETYPES =    DATA.archetypes.slice()
-        
+        if (this.numArch > ARCHETYPES.length) {this.numArch = ARCHETYPES.length}    
     
     
         // Take only the most common
