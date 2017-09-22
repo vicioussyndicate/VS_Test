@@ -209,7 +209,7 @@ class DecksWindow {
         
         var gridTemplateColumns = ''
         for (var dl of this.hsArch.decklists) {
-            for (var i=0;i<4;i++) {
+            for (var i=0;i<1;i++) {
                 gridTemplateColumns += this.deckWidth + ' '
                 this.addDecklist(dl)
         }}

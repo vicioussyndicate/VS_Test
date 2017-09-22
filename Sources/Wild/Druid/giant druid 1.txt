@@ -1,0 +1,28 @@
+# Archetype: Giant Druid
+### Chai's Giants Druid
+# Class: Druid
+# Format: Wild
+# Year of the Mammoth
+#
+# 2x (0) Innervate
+# 2x (2) Doomsayer
+# 2x (2) Wild Growth
+# 2x (2) Wrath
+# 2x (3) Jade Blossom
+# 1x (5) Loatheb
+# 2x (5) Naga Sea Witch
+# 2x (5) Nourish
+# 2x (5) Spreading Plague
+# 1x (7) Malfurion the Pestilent
+# 1x (9) Aviana
+# 1x (10) Kun the Forgotten King
+# 2x (10) Sea Giant
+# 2x (10) Ultimate Infestation
+# 2x (12) Arcane Giant
+# 2x (12) Mountain Giant
+# 2x (25) Molten Giant
+#
+AAEBAZICBPoO7BXguwKZ0wINX4oB0wH+AcQG4QfkCNwK3haCtALLvAKgzQKHzgIA
+#
+# To use this deck, copy it to your clipboard and create a new deck in Hearthstone
+# https://www.vicioussyndicate.com/chais-giants-druid/

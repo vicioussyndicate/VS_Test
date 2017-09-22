@@ -64,31 +64,51 @@ class History {
             
             this.window.chartDiv.innerHTML = ""
             document.querySelector('#ladderWindow .content-header #rankBtn').style.display = 'inline'
+        
             var f = this.window.f
             var t_w = this.window.t
             var t_h = (this.window.t == 'lastDay' || this.window.t == 'last12Hours' || this.window.t == 'last6Hours') ? 'lastHours' : 'lastDays';
             const baseUnit = (t_h == 'lastHours') ? 'Hour' : 'Day';
             var r = this.window.r
             var m = this.window.mode
-    
+            var x = range(1,this.x[t_w]+1)
+            var d = this.data[f][t_h][r][m] // data 
+
             var traces = []
             var archetypes = []
-            var d = this.data[f][t_h][r][m]
+            
+            var totGames = 0
+            var total = d[d.length-1]['data'].slice() // last line is always the total games 
+            for (var i=0;i<this.x[t_w] && i<total.length;i++) {totGames += total[i]}
+
             d.sort(function (a, b) { return a.avg > b.avg ? -1 : a.avg < b.avg ? 1 : 0 })
-            var x = range(1,this.x[t_w]+1)        
+                    
             
             for (var i=0; i<this.top;i++) { 
+
+                var colors
+                var archName = d[i]['name']
+                if (m=='classes') { colors = { color: hsColors[archName], fontColor: hsFontColors[archName] } }
+                else { colors = this.window.getArchColor(0, archName, this.window.f) } 
+
+                archetypes.push({name: archName, color: colors.color, fontColor: colors.fontColor})
                 var y = (t_h == 'lastHours') ? this.smoothData(d[i]['data']) : d[i]['data']
+
                 var text = []
                 for (var j=0;j<y.length;j++) {
                     var unit = (j>0) ? baseUnit+'s' : baseUnit;
                     text.push(`${d[i]['name']} (${(y[j]*100).toFixed(1)}% )<br>${x[j]+' '+unit} ago`)
                 }
+
+
                 var trace = {
                     x: x.slice(),
                     y: y.slice(),
                     text: text,
+                    line: {width: 2.5},
+                    marker: {color: colors.color,},
                     type: 'scatter',
+                    mode: 'lines',
                     hoverinfo:'text',
                 }
                 traces.push(trace)
@@ -109,21 +129,25 @@ class History {
             
             
             Plotly.newPlot('chart1',traces, this.layout, {displayModeBar: false,})
-            this.createLegend()
-    
+            this.createLegend(archetypes)
+            this.window.setTotGames(totGames)
         }
     
-        createLegend() {
+
+
+
+        createLegend(archetypes) {
+
             var mode = this.window.mode
             var chartFooter = document.querySelector('#ladderWindow .chart-footer')
             while (chartFooter.firstChild) {chartFooter.removeChild(chartFooter.firstChild);}
             
-            var maxElements
-            var legend = this.window.data[this.window.f][this.window.t].archLegend
+            var maxElements = 9
+
             if (mode=='classes') {maxElements = 9}
             if (mode=='decks') {
                 maxElements = this.top;
-                if (maxElements > legend.length) {maxElements = legend.length}
+                if (maxElements > archetypes.length) {maxElements = archetypes.length}
             }
     
             for (var i=0;i<maxElements;i++) {
@@ -138,7 +162,8 @@ class History {
                 if (mode=='classes') {
     
                     var hsClass = hsClasses[i]
-                    legendDiv.style = 'background-color:'+hsColors[hsClass]
+                    legendDiv.style.backgroundColor = hsColors[hsClass]
+                    legendDiv.style.color = hsFontColors[hsClass]
                     legendDiv.id = hsClass
                     legendDiv.innerHTML = hsClass
                     legendDiv.onclick = function(e) { ui.deckLink(e.target.id,this.window.f);  }
@@ -146,10 +171,11 @@ class History {
     
                 if (mode=='decks') {
     
-                    var l = legend[i]
-                    legendDiv.style = 'background-color:'+l.color
-                    legendDiv.id = l.name
-                    legendDiv.innerHTML = l.name
+                    var a = archetypes[i]
+                    legendDiv.style.backgroundColor = a.color
+                    legendDiv.style.color = a.fontColor
+                    legendDiv.id = a.name
+                    legendDiv.innerHTML = a.name
                     legendDiv.onclick = function(e) { ui.deckLink(e.target.id,this.window.f);  }
                 }
     

@@ -8,12 +8,20 @@ class LadderWindow {
 
         this.window = document.querySelector('#ladderWindow')
         this.chartDiv = document.querySelector('#ladderWindow #chart1')
+        this.totGamesDiv = document.querySelector('#ladderWindow .content-header .nrGames')
+        this.rankFolder = document.querySelector('#ladderWindow .content-header #rankBtn')
         this.optionButtons = document.querySelectorAll('#ladderWindow .optionBtn')
         this.firebasePath = (PREMIUM) ? 'premiumData/ladderData' : 'data/ladderData'
         this.firebaseHistoryPath = (PREMIUM) ? 'premiumData/historyData' : ''
         
         this.fontColor = '#222'
         this.fontColorLight = '#999'
+
+        // table
+        this.colorScale_c1 = [255,255,255]
+        this.colorScale_c2 = [87, 125, 186]
+        this.colorScale_f = 0.15
+
         this.archetypeColors = {
             Standard: {},
             Wild: {},
@@ -23,6 +31,10 @@ class LadderWindow {
         this.hsFormats = hsFormats
         this.hsTimes = hsTimes
         this.ranks = ladder_ranks
+        this.archColors = {
+            Standard: {},
+            Wild: {},
+        }
 
 
         // Defaults
@@ -52,6 +64,8 @@ class LadderWindow {
     setupUI() {
         for (var btn of this.optionButtons) { btn.addEventListener("click", this.buttonTrigger.bind(this)) }
 
+
+        document.querySelector('#ladderWindow #formatFolder .dropdown').innerHTML = ""
         for (var f of this.hsFormats) {
             var btn = document.createElement('button')
             btn.className = 'optionBtn folderBtn'
@@ -62,6 +76,7 @@ class LadderWindow {
             document.querySelector('#ladderWindow #formatFolder .dropdown').appendChild(btn)
         }
 
+        document.querySelector('#ladderWindow #timeFolder .dropdown').innerHTML = ""
         for (var t of this.hsTimes) {
             var btn = document.createElement('button')
             btn.className = 'optionBtn folderBtn'
@@ -72,6 +87,7 @@ class LadderWindow {
             document.querySelector('#ladderWindow #timeFolder .dropdown').appendChild(btn)
         }
 
+        document.querySelector('#ladderWindow #rankFolder .dropdown').innerHTML = ""
         for (var r of this.ranks) {
             var btn = document.createElement('button')
             btn.className = 'optionBtn folderBtn'
@@ -102,16 +118,16 @@ class LadderWindow {
 
         var btnID = e.target.id
 
-        if (btnID == 'lastDay')     {this.t = 'lastDay'}
-        if (btnID == 'lastWeek')    {this.t = 'lastWeek'}
-        if (btnID == 'lastMonth')   {this.t = 'lastMonth'}
+        // if (btnID == 'lastDay')     {this.t = 'lastDay'}
+        // if (btnID == 'lastWeek')    {this.t = 'lastWeek'}
+        // if (btnID == 'lastMonth')   {this.t = 'lastMonth'}
 
-        if (btnID == 'Standard')    {this.f = 'Standard'}
-        if (btnID == 'Wild')        {this.f = 'Wild'}
+        // if (btnID == 'Standard')    {this.f = 'Standard'}
+        // if (btnID == 'Wild')        {this.f = 'Wild'}
 
-        if (btnID == 'ranks_all')   {this.r = 'ranks_all'}
-        if (btnID == 'ranks_L_5')   {this.r = 'ranks_L_5'}
-        if (btnID == 'ranks_6_15')  {this.r = 'ranks_6_15'}
+        // if (btnID == 'ranks_all')   {this.r = 'ranks_all'}
+        // if (btnID == 'ranks_L_5')   {this.r = 'ranks_L_5'}
+        // if (btnID == 'ranks_6_15')  {this.r = 'ranks_6_15'}
 
         if (btnID == 'classes')     {this.mode = 'classes'}
         if (btnID == 'decks')       {this.mode = 'decks'}
@@ -178,5 +194,45 @@ class LadderWindow {
         this.data[this.f][this.t].plot();
     }
 
+    getArchColor(hsClass, arch, hsFormat) {
+        var archName
+        if (hsClass) { archName = arch +' '+hsClass }
+        else {
+            archName = arch;
+            for (var c of hsClasses) {if (archName.indexOf(c) != -1) {hsClass = c; break} }
+        }
+
+        if (archName in this.archColors[hsFormat]) { return this.archColors[hsFormat][archName] }
+        else {
+            var color = colorStringRange(hsColors[hsClass],30)
+            var fontColor = hsFontColors[hsClass]
+            this.archColors[hsFormat][archName] = {color: color, fontColor: fontColor}
+            return this.archColors[hsFormat][archName]
+        }
+    }
+
+    setTotGames(totGames) { this.totGamesDiv.innerHTML = totGames.toLocaleString()+" games" }
+    showRankFolder() { this.rankFolder.style.display = 'flex' }
+    hideRankFolder() { this.rankFolder.style.display = 'none' }
+
 } // close LadderWindow
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

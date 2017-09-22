@@ -1,0 +1,29 @@
+# Archetype: Control Mage
+### Monsanto's Control Mage
+# Class: Mage
+# Format: Standard
+# Year of the Mammoth
+#
+# 2x (2) Arcanologist
+# 2x (2) Dirty Rat
+# 2x (2) Doomsayer
+# 2x (2) Frostbolt
+# 2x (2) Medivh's Valet
+# 2x (2) Primordial Glyph
+# 2x (3) Arcane Intellect
+# 1x (3) Frost Nova
+# 1x (3) Gluttonous Ooze
+# 1x (3) Ice Barrier
+# 2x (3) Ice Block
+# 2x (4) Fireball
+# 2x (4) Polymorph
+# 2x (6) Blizzard
+# 1x (6) Skulking Geist
+# 2x (7) Flamestrike
+# 1x (9) Alexstrasza
+# 1x (9) Frost Lich Jaina
+#
+AAECAf0EBsUEywTtBNPFAqDOApvTAgxNigHAAbsCyQOrBJYF7AfXtgLBwQKYxALfxAIA
+#
+# To use this deck, copy it to your clipboard and create a new deck in Hearthstone
+# https://www.vicioussyndicate.com/deck-library/mage-decks/control-mage/monsantos-control-mage/

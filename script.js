@@ -296,6 +296,15 @@ const btnIdToText = {
     decks: 'Archetypes',
 }
 
+const rankRange = {
+    ranks_all:      [0,20],
+    ranks_L:        [0,0],
+    ranks_1_5:      [1,5], 
+    ranks_L_5:      [0,5],
+    ranks_6_15:     [6,15],
+}
+
+
 
 // Utility
 

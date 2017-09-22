@@ -8,8 +8,6 @@ class Ladder {
         this.maxLegendEntries = 9
         this.maxLines = 10 // max archetypes shown for the line chart
 
-        //this.bgColor = 'rgba(255,255,255,0.5)'
-        //this.bgColor = 'rgba(0,0,0,0.05)'
         this.bgColor = 'transparent'
         this.fontColor = window.fontColor
         this.fontColorLight = window.fontColorLight
@@ -20,16 +18,7 @@ class Ladder {
         this.f = f
         this.t = t
         this.window = window
-        this.days
         
-
-      
-
-        switch (t) {
-            case 'lastDay': this.days = 24; break;
-            case 'lastWeek': this.days = 7; break;
-            case 'lastMonth': this.days = 30; break;
-        }
 
         this.zoomIn = false
         this.zoomIdx = null
@@ -47,31 +36,23 @@ class Ladder {
         this.totGamesRanks = {}
 
         this.rankLabels = []
+        this.tiers = []
 
-        this.tiers = [
-            {name:'All Ranks',
-            buttonId: 'ranks_all',
-            start:0,
-            end: 15},
-            {name:'L',
-            buttonId: 'ranks_L',
-            start: 0,
-            end: 0},
-            {name:'L-5',
-            buttonId: 'ranks_L_5',
-            start: 0,
-            end: 5},
-            {name:'6-15',
-            buttonId: 'ranks_6_15',
-            start: 6,
-            end: 15},
-        ]
+        for (var r of this.window.ranks) {
+            this.tiers.push({
+                name: btnIdToText[r],
+                buttonId: r,
+                start: rankRange[r][0],
+                end: rankRange[r][1],
+            })
+        }
+
         this.tier = this.tiers[0]
-        this.rankFolder = document.querySelector('#ladderWindow .content-header #rankBtn')
+
        
         for (var tier of this.tiers) {
 
-            this.totGamesRanks[tier.name] = 0
+            this.totGamesRanks[tier.buttonId] = 0
 
             var trace_decks = {
                 values: [],
@@ -99,8 +80,8 @@ class Ladder {
                 type: 'pie',
             }
 
-            this.traces_pie['decks'][tier.name] = [trace_decks]
-            this.traces_pie['classes'][tier.name] = [trace_classes]
+            this.traces_pie['decks'][tier.buttonId] = [trace_decks]
+            this.traces_pie['classes'][tier.buttonId] = [trace_classes]
             
         }
 
@@ -119,10 +100,9 @@ class Ladder {
             else {this.rankLabels.push('')}
             this.totGames += rankSums[i]
             for (var tier of this.tiers) {
-                if (i >= tier.start && i <= tier.end) { this.totGamesRanks[tier.name] += rankSums[i] }
+                if (i >= tier.start && i <= tier.end) { this.totGamesRanks[tier.buttonId] += rankSums[i] }
             }
         }
-
         
         this.rankLabels[0] = 'L  '
 
@@ -137,7 +117,10 @@ class Ladder {
             var fr_avg = 0
             var archName = ARCHETYPES[i][1] + " " + ARCHETYPES[i][0].replace('§', '');
             var classIdx = hsClasses.indexOf(ARCHETYPES[i][0])
-            var color = colorStringRange(hsColors[ARCHETYPES[i][0]],20)
+            var color = this.window.getArchColor(ARCHETYPES[i][0],ARCHETYPES[i][1],this.f) //colorStringRange(hsColors[ARCHETYPES[i][0]],20)
+            var fontColor = color.fontColor
+            color = color.color
+
 
             for (var rank=0;rank<hsRanks;rank++) {
                 var fr = rankData[rank][i]
@@ -159,23 +142,22 @@ class Ladder {
                 for (var tier of this.tiers) {
                     if (rank == tier.start) {
                         
-                        this.traces_pie['decks'][tier.name][0].values.push(fr)
-                        this.traces_pie['decks'][tier.name][0].labels.push(archName)
-                        this.traces_pie['decks'][tier.name][0].marker.colors.push(color)
-                        //push fontColor!!
+                        this.traces_pie['decks'][tier.buttonId][0].values.push(fr)
+                        this.traces_pie['decks'][tier.buttonId][0].labels.push(archName)
+                        this.traces_pie['decks'][tier.buttonId][0].marker.colors.push(color)
                     }
                     if (rank > tier.start && rank <= tier.end) {
-                        this.traces_pie['decks'][tier.name][0].values[i] += fr
+                        this.traces_pie['decks'][tier.buttonId][0].values[i] += fr
                     }
                     if (rank == tier.end) {
-                        this.traces_pie.decks[tier.name][0].values[i] /= (tier.end - tier.start + 1)
-                        this.traces_pie['decks'][tier.name][0].text.push(archName)
+                        this.traces_pie.decks[tier.buttonId][0].values[i] /= (tier.end - tier.start + 1)
+                        this.traces_pie['decks'][tier.buttonId][0].text.push(archName)
 
                         // Merge Pie
-                        var fr_pie = this.traces_pie.decks[tier.name][0].values[i]
+                        var fr_pie = this.traces_pie.decks[tier.buttonId][0].values[i]
                         if (fr_pie <this.fr_min && i>8) {
-                            this.traces_pie.decks[tier.name][0].values[i] = 0
-                            this.traces_pie.decks[tier.name][0].values[classIdx] += fr_pie
+                            this.traces_pie.decks[tier.buttonId][0].values[i] = 0
+                            this.traces_pie.decks[tier.buttonId][0].values[classIdx] += fr_pie
                         } 
                     }
                 }
@@ -217,8 +199,8 @@ class Ladder {
             this.traces_bar.decks.push(arch_bar)
             this.traces_line.decks.push(arch_line)
 
-            this.archLegend.push({name: archName, hsClass: ARCHETYPES[i][0], color: color, fontColor: hsFontColors[ARCHETYPES[i][0]], fr: fr_avg})
-            this.archetypes.push({name:archName,fr:fr_avg, data: archFR, color: color, fontColor: hsFontColors[ARCHETYPES[i][0]]})
+            this.archLegend.push({name: archName, hsClass: ARCHETYPES[i][0], color: color, fontColor: fontColor, fr: fr_avg})
+            this.archetypes.push({name:archName,fr:fr_avg, data: archFR, color: color, fontColor: fontColor})
 
         } // close for ARCHETYPES
                 
@@ -236,8 +218,8 @@ class Ladder {
                 fr_avg += fr
 
                 for (var tier of this.tiers) {
-                    if (rank >= tier.start && rank <= tier.end) { this.traces_pie['classes'][tier.name][0].values[i] += fr }
-                    if (rank == tier.end) { this.traces_pie['classes'][tier.name][0].values[i] /= (tier.end-tier.start +1) }
+                    if (rank >= tier.start && rank <= tier.end) { this.traces_pie['classes'][tier.buttonId][0].values[i] += fr }
+                    if (rank == tier.end) { this.traces_pie['classes'][tier.buttonId][0].values[i] /= (tier.end-tier.start +1) }
                 }
             }
             
@@ -337,7 +319,6 @@ class Ladder {
 
         // LAYOUT LINE
         this.layout_line = {
-            //title: 'Class Frequency per Rank',
 		    showlegend: false,
 		    displayModeBar: false,
             autosize: true,
@@ -470,13 +451,13 @@ class Ladder {
 
         document.getElementById('chart1').innerHTML = ""
         var data, layout
-        this.rankFolder.style.display = 'none'
+        this.window.hideRankFolder()
 
 
         if (this.window.plotType == 'pie') {
-            this.rankFolder.style.display = 'flex'
+            this.window.showRankFolder()
             layout = this.layout_pie
-            data = this.traces_pie[this.window.mode][this.tier.name]
+            data = this.traces_pie[this.window.mode][this.window.r]
         }
 
         if (this.window.plotType == 'number') {
@@ -497,10 +478,8 @@ class Ladder {
         Plotly.newPlot('chart1',data, layout, {displayModeBar: false,})
 
 
-
-        var windowInfo = document.querySelector('#ladderWindow .nrGames')
-        var totGames = (this.window.plotType != 'pie') ? this.totGames : this.totGamesRanks[this.tier.name]    
-        windowInfo.innerHTML = totGames.toLocaleString()+" games"
+        var totGames = (this.window.plotType != 'pie') ? this.totGames : this.totGamesRanks[this.window.r]
+        this.window.setTotGames(totGames)   
 
         if (this.window.mode == 'decks') {this.createLegend('decks')}
         if (this.window.mode == 'classes') {this.createLegend('classes')}
@@ -508,14 +487,14 @@ class Ladder {
 
 
     colorScale(x) {
-        var c1 = [255,255,255]
-        var c2 = [87, 125, 186]
+        var c1 = this.window.colorScale_c1
+        var c2 = this.window.colorScale_c2
         var c3 = []
 
-        x /= 0.15
+        x /= this.window.colorScale_f
         if (x>1) {x = 1}
 
-        for (var i=0;i<3;i++) {c3.push((c1[i]+(c2[i]-c1[i])*x).toFixed(0))}
+        for (var i=0;i<3;i++) {c3.push(parseInt(c1[i]+(c2[i]-c1[i])*x))}
         return 'rgb('+c3[0]+','+c3[1]+','+c3[2]+')'
     }
 

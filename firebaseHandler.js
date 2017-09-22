@@ -14,7 +14,7 @@ function setupFirebase() {
     firebase.initializeApp(config);
     DATABASE = firebase.database()
     const auth = firebase.auth()
-    const promise = auth.signInWithEmailAndPassword('vsProUser@vs.com','pw12345');
+    const promise = auth.signInAnonymously() //auth.signInWithEmailAndPassword('vsProUser@vs.com','pw12345');
 
     const emailTxt = document.getElementById('emailInput')
     const passwordTxt = document.getElementById('passwordInput')
@@ -58,8 +58,12 @@ function setupFirebase() {
         if (user) {
             console.log('user logged in:',user)
 
-            var ref = DATABASE.ref('premiumUsers/'+user.uid)
-            ref.on('value',     d => {PREMIUM = d.val(); loadFireData()}, e => console.log('Could not load User Data',e))
+
+            PREMIUM = true
+            loadFireData()
+            
+            //var ref = DATABASE.ref('premiumUsers/'+user.uid)
+            //ref.on('value',     d => {PREMIUM = d.val(); loadFireData()}, e => console.log('Could not load User Data',e))
             
             logOutBtn.classList.remove('hidden')
             signUpBtn.classList.add('hidden')

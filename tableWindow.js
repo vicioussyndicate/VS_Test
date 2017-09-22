@@ -20,7 +20,8 @@ class TableWindow {
         // Defaults
 
         this.width = document.querySelector('.main-wrapper').offsetWidth -40
-        this.height = '900' //document.querySelector('#tableWindow .content').offsetHeight-40
+
+        this.height = parseInt(this.width*0.5)
 
         this.f = this.hsFormats[0] 
         this.t = this.hsTimes[0] 

@@ -1,5 +1,5 @@
 # Archetype: Murloc Paladin
-### Ender's Chum Murloc Paladin
+### Mitsuhide's Aggro Murloc Paladin
 # Class: Paladin
 # Format: Standard
 # Year of the Mammoth
@@ -8,21 +8,21 @@
 # 2x (1) Murloc Tidecaller
 # 2x (1) Righteous Protector
 # 2x (1) Vilefin Inquisitor
+# 1x (2) Bluegill Warrior
+# 1x (2) Crazed Alchemist
 # 2x (2) Hydrologist
 # 2x (2) Rockpool Hunter
+# 2x (3) Coldlight Seer
+# 2x (3) Divine Favor
 # 2x (3) Murloc Warleader
 # 2x (3) Rallying Blade
-# 1x (3) Wickerflame Burnbristle
 # 2x (4) Blessing of Kings
-# 2x (4) Corpsetaker
 # 2x (4) Gentle Megasaur
 # 1x (5) Finja, the Flying Star
 # 2x (6) Spikeridged Steed
 # 1x (6) Sunkeeper Tarim
-# 2x (7) Bonemare
-# 1x (8) Tirion Fordring
 #
-AAECAZ8FBLy9AuO+ArnBAvoGDdsD48sC06oCs8ECncICpwjZrgKvB5boArHCAojHAqbOAtO8AgA=
+AAECAZ8FBOMFoQbjvgK5wQINxQPbA6cFrwenCNOqAtmuAtO8ArPBAp3CArHCAojHAuPLAgA=
 #
 # To use this deck, copy it to your clipboard and create a new deck in Hearthstone
-# https://www.vicioussyndicate.com/deck-library/paladin-decks/murloc-paladin/enders-chum-murloc-paladin/
+# https://www.vicioussyndicate.com/deck-library/paladin-decks/murloc-paladin/mitsuhides-aggro-murloc-paladin/
