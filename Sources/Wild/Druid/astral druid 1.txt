@@ -1,0 +1,29 @@
+# Archetype: Astral Druid
+### SamAnthony's Astral Druid
+# Class: Druid
+# Format: Wild
+# Year of the Mammoth
+#
+# 2x (0) Innervate
+# 2x (1) Raven Idol
+# 2x (2) Novice Engineer
+# 2x (2) Wild Growth
+# 2x (2) Wrath
+# 2x (3) Coldlight Oracle
+# 2x (4) Astral Communion
+# 2x (5) Spreading Plague
+# 2x (7) Ancient of War
+# 2x (7) Bog Creeper
+# 1x (7) Malfurion the Pestilent
+# 1x (7) The Curator
+# 2x (8) Primordial Drake
+# 1x (8) The Lich King
+# 1x (9) Ysera
+# 1x (10) Deathwing
+# 2x (10) Ultimate Infestation
+# 1x (10) Y'Shaarj, Rage Unbound
+#
+AAEBAZICBsIGogmoqwK5sgLCzgKZ0wIM/gGcAsQG+AeLCOQI4RWXaIatAsnHAqDNAofOAgA=
+#
+# To use this deck, copy it to your clipboard and create a new deck in Hearthstone
+# https://www.vicioussyndicate.com/samanthonys-astral-druid/
