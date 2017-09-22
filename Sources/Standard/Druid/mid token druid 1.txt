@@ -1,0 +1,29 @@
+# Archetype: Mid-Token Druid
+### Muzzy's Mid-Token Druid
+# Class: Druid
+# Format: Standard
+# Year of the Mammoth
+#
+# 2x (0) Innervate
+# 2x (1) Mark of the Lotus
+# 2x (2) Druid of the Swarm
+# 2x (2) Power of the Wild
+# 2x (2) Wild Growth
+# 2x (2) Wrath
+# 1x (3) Savage Roar
+# 1x (4) Fandral Staghelm
+# 1x (4) Mire Keeper
+# 2x (4) Strongshell Scavenger
+# 1x (4) Swipe
+# 2x (4) Violet Teacher
+# 2x (5) Nourish
+# 2x (5) Spreading Plague
+# 2x (7) Bonemare
+# 1x (7) Malfurion the Pestilent
+# 1x (8) Medivh, the Guardian
+# 2x (10) Ultimate Infestation
+#
+AAECAZICBkDmBa6rAr6uAqG3ApnTAgxf/gH3A8QGhQjkCM27ApvNAqDNAofOAqbOAo7QAgA=
+#
+# To use this deck, copy it to your clipboard and create a new deck in Hearthstone
+# https://www.vicioussyndicate.com/deck-library/druid-decks/mid-token-druid/muzzys-mid-token-druid/
