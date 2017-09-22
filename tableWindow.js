@@ -19,12 +19,12 @@ class TableWindow {
 
         // Defaults
 
-        this.width = document.querySelector('.main-wrapper').offsetWidth -9
-        this.height = 560
+        this.width = document.querySelector('.main-wrapper').offsetWidth -40
+        this.height = '900' //document.querySelector('#tableWindow .content').offsetHeight-40
 
-        this.f = this.hsFormats[0] //'Standard'
-        this.t = this.hsTimes[0] //'last2Weeks'
-        this.r = this.ranks[0] //'ranks_all'
+        this.f = this.hsFormats[0] 
+        this.t = this.hsTimes[0] 
+        this.r = this.ranks[0] 
         this.sortBy = this.sortOptions[0] //'class' // class, frequency, winrate, matchup
         this.zoomIn = false
         this.zoomArch = null
@@ -103,31 +103,6 @@ class TableWindow {
     }
 
 
-    // buttonTrigger(e) {
-
-    //     var btnID = e.target.id
-
-    //     if (btnID == 'lastWeek')    {this.t = 'lastWeek'}
-    //     if (btnID == 'lastMonth')   {this.t = 'lastMonth'}
-
-    //     if (btnID == 'Standard')    {this.f = 'Standard'}
-    //     if (btnID == 'Wild')        {this.f = 'Wild'}
-
-    //     if (btnID == 'ranks_all')   {this.r = 'ranks_all'}
-    //     if (btnID == 'ranks_L_5')   {this.r = 'ranks_L_5'}
-    //     if (btnID == 'ranks_6_15')  {this.r = 'ranks_6_15'}
-        
-    //     var data = this.data[this.f][this.t][this.r]
-
-    //     if (btnID == 'class')       {data.sortTableBy('class'); return}
-    //     if (btnID == 'frequency')   {data.sortTableBy('frequency');return}
-    //     if (btnID == 'winrate')     {data.sortTableBy('winrate');return}
-    //     if (btnID == 'matchup')     {data.sortTableBy('matchup');return}
-        
-    //     data.plot()
-    //     this.renderOptions()
-    // }// button Handler
-
     plot () { this.data[this.f][this.t][this.r].plot() }
     
     renderOptions() {
@@ -163,6 +138,7 @@ class TableWindow {
         }}}
         this.fullyLoaded = true
         console.log('table loaded: '+ (performance.now()-t0).toFixed(2)+' ms')
+        this.renderOptions()
         finishedLoading()
     }// add Data
 

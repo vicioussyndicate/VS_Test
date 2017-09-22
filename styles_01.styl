@@ -17,14 +17,14 @@
 
 // Set 3 // Black Orange
 
-$midColor = #e6462e
-$midColor2 = #ea5d44
-$midColor3 = #ee755a
-$midColor4 = #f18b70
-$darkColor = #454c57
-$accentColor = #ff9326
-$chartColors = #ebebeb
-$lightColor = $chartColors
+// $midColor = #e6462e
+// $midColor2 = #ea5d44
+// $midColor3 = #ee755a
+// $midColor4 = #f18b70
+// $darkColor = #454c57
+// $accentColor = #ff9326
+// $chartColors = #ebebeb
+// $lightColor = $chartColors
 
 
 // Set 3 // Sand
@@ -35,6 +35,16 @@ $accentColor = #c7de7b
 $chartColors = white// #fffeea //#f9f2c8
 $lightColor = #ebebeb*/
 
+
+// Set 4 sky
+$midColor = #1e6b97
+$midColor2 = #398ab9
+$midColor3 = #599fb5
+$midColor4 = #7fb0b4
+$darkColor = #454c57
+$accentColor = #c7e077
+$chartColors = #ebebeb
+$lightColor = $chartColors
 
 $nav_bgColor = $midColor
 $nav_fColor = $lightColor
@@ -124,6 +134,7 @@ button
     position: relative;
     display: inline-block;
     .tooltipText
+        opacity: 0.8;
         visibility: hidden;
         width: 120px;
         background-color: #222;
@@ -132,7 +143,7 @@ button
         padding: 5px 0;
         border-radius: 2%;
         width: 120px;
-        bottom: 150%;
+        bottom: 40px;
         left: 50%;
         margin-left: -60px;
         position: absolute;
@@ -149,7 +160,7 @@ button
 
 #vsLogoDiv
     position absolute
-    margin-left 46vw
+    margin-left 76vw
     height: 40px
     z-index 1
     .logo
@@ -194,7 +205,7 @@ table th
 body
     font-size: 20
     .main-wrapper
-        max-width 50vw
+        max-width 80vw
         min-width 510px
         height 800px
         margin 10px auto
@@ -230,8 +241,8 @@ body
                     &:hover
                         cursor pointer
                     &.highlighted
-                        background-color $nav_hi_bgColor
-                        color $nav_hi_fColor
+                        background-color $nav_hi_bgColor !important
+                        color $nav_hi_fColor !important
 
         .content-wrapper
             height 450px
@@ -275,12 +286,12 @@ body
                         .deckBox
                             .deckTitle
                                 display inline-block
-                                background-color $midColor
+                                //background-color $midColor
                                 width 100%
                                 //height 50px
                                 p
                                     padding 0.3rem
-                                    color $darkColor
+                                    //color $darkColor
                                     display inline-block
                                     
                                 &:hover
@@ -343,7 +354,7 @@ body
                     grid-template-columns repeat(6, 1fr)
                     grid-template-rows repeat(21, 1fr)
                     grid-gap 0.1rem
-                    overflow-y scroll
+                    overflow-y auto
                     text-align center
                     text-size 10
                     padding: 2rem 2rem 0 2rem
@@ -366,7 +377,7 @@ body
                         &:hover
                             cursor pointer
                     .winrate
-                        color $darkColor
+                        color #999
                         font-weight: normal
                         padding: 0.2rem
                     .columnTitle
@@ -595,11 +606,11 @@ body
           100% { transform: rotate(360deg); }
           }
 
-@media (max-width: 2000px)
-    html
-        background: blue
+// @media (max-width: 2000px)
+//     html
+//         background: blue
 
 
-@media (max-width: 1000px)
-    html
-        background: green
+// @media (max-width: 1000px)
+//     html
+//         background: green

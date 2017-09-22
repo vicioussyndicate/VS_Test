@@ -36,15 +36,13 @@ html(lang='en')
               #formatFolder.option-folder
                 button#formatBtn.folder-toggle Standard
                 .dropdown.hidden
-                  //button#Standard.optionBtn.folderBtn Standard
-                  //button#Wild.optionBtn.folderBtn Wild
               #timeFolder.option-folder
                 button#timeBtn.folder-toggle Last Day
                 .dropdown.hidden
                   //button#lastDay.optionBtn.folderBtn Last Day
                   //button#lastWeek.optionBtn.folderBtn Last Week
                   //button#lastMonth.optionBtn.folderBtn Last Month
-              .option-folder
+              #rankFolder.option-folder
                 button#rankBtn.folder-toggle All Ranks
                 .dropdown#rankDropdown.hidden
               p.nrGames
@@ -63,8 +61,8 @@ html(lang='en')
               button#timeline.optionBtn.fa.fa-clock-o.tooltip
                   span.tooltipText Show Timeline
           .content
-            p.graphTitle Graph Title
-            p.graphLabel y-axis
+            //p.graphTitle Graph Title
+            //p.graphLabel y-axis
             #chart1.chart
             .chart-footer
           .content-footer
@@ -162,7 +160,7 @@ html(lang='en')
             a(href="https://www.reddit.com/r/ViciousSyndicate/comments/6yqj62/vs_live_web_app_feedback_thread/" target="_blank")
               img(src='redditLogo.png')
             .login
-              p Login in with your VS account:
+              p Login in with your VS account (vsProUser@vs.com - pw12345):
               input#emailInput(placeholder='Email')
               input#passwordInput(placeholder='Password')
               button#loginBtn Login
@@ -174,6 +172,7 @@ html(lang='en')
     script(src='script.js')
     script(src='ui.js')
     script(src='ladderClass.js')
+    script(src='historyClass.js')
     script(src='ladderWindow.js')
     script(src='tableClass.js')
     script(src='tableWindow.js')

@@ -1,182 +1,6 @@
 
 
 
-class History {
-
-    constructor(DATA,window) {
-        
-        this.window = window
-        this.data = DATA
-        
-        this.layout = {
-		    showlegend: false,
-		    displayModeBar: false,
-            autosize: true,
-		    hovermode: 'closest',
-            //hoverinfo: 'x+y',
-		    xaxis: {
-                tickfont: {
-				    family: 'Arial, bold',
-				    size: 15,
-                    color: this.window.fontColor,
-                },
-                tickcolor: 'transparent',
-                visible: true, 
-                showgrid: true,
-                //hoverformat: '.1%',
-                color: this.window.fontColor,
-                fixedrange: true,
-                zeroline: false,
-                autorange: 'reversed',
-            },
-		    yaxis: {
-			    tickfont: {
-				    family: 'Arial, bold',
-				    size: 19,
-			    },
-                ticklen: 12,
-                tickcolor: 'transparent',
-                tickformat: ',.0%',
-                fixedrange: true,
-			    color: this.window.fontColorLight,
-		    },
-		    plot_bgcolor: this.bgColor, 
-            paper_bgcolor: this.bgColor,
-            margin: {l:70,r:20,b:30,t:0,},
-        }
-        
-        this.top = 9
-        this.x = {
-            'lastDay': 24,
-            'lastWeek': 7,
-            'last2Weeks':14,
-            'last3Weeks':21,
-            'lastMonth':30,
-        }
-    }
-    
-    
-    plot() {
-        
-        this.window.chartDiv.innerHTML = ""
-        var f = this.window.f
-        var t_w = this.window.t
-        var t_h = (this.window.t == 'lastDay') ? 'lastHours' : 'lastDays';
-        const baseUnit = (this.window.t == 'lastDay') ? 'Hour' : 'Day';
-        var r = this.window.r
-        var m = this.window.mode
-
-        var traces = []
-        var archetypes = []
-        var d = this.data[f][t_h][r][m]
-        d.sort(function (a, b) { return a.avg > b.avg ? -1 : a.avg < b.avg ? 1 : 0 })
-        var x = range(1,this.x[t_w]+1)        
-        
-        for (var i=0; i<this.top;i++) { 
-            var y = (this.window.t == 'lastDay') ? this.smoothData(d[i]['data']) : d[i]['data']
-            //archetypes.push(d[i]['name'])
-            var text = []
-            for (var j=0;j<y.length;j++) {
-                var unit = (j>0) ? baseUnit+'s' : baseUnit;
-                text.push(`${d[i]['name']} (${(y[j]*100).toFixed(1)}% )<br>${x[j]+' '+unit} ago`)
-            }
-            var trace = {
-                x: x.slice(),
-                y: y.slice(),
-                text: text,//d[i]['name'],
-                type: 'scatter',
-                hoverinfo:'text',
-            }
-            traces.push(trace)
-        }
-        
-        /*
-        Plotly.animate('graph', {
-            data: data,
-            traces: [0,1],
-            layout: {}
-          }, {
-            transition: {
-              duration: 500,
-              easing: 'cubic-in-out'
-            }
-          })*/
-        
-        
-        
-        Plotly.newPlot('chart1',traces, this.layout, {displayModeBar: false,})
-        this.createLegend()
-
-    }
-
-    createLegend() {
-        var mode = this.window.mode
-        var chartFooter = document.querySelector('#ladderWindow .chart-footer')
-        while (chartFooter.firstChild) {chartFooter.removeChild(chartFooter.firstChild);}
-        
-        var maxElements
-        var legend = this.window.data[this.window.f][this.window.t].archLegend
-        if (mode=='classes') {maxElements = 9}
-        if (mode=='decks') {
-            maxElements = this.top;
-            if (maxElements > legend.length) {maxElements = legend.length}
-        }
-
-        for (var i=0;i<maxElements;i++) {
-
-            var legendDiv = document.createElement('div')   
-            var colorSplash = document.createElement('div')
-            var archName = document.createElement('l')     
-
-            legendDiv.className = 'ladder-legend'
-            legendDiv.style.fontSize = '0.8em'
-        
-            if (mode=='classes') {
-
-                var hsClass = hsClasses[i]
-                legendDiv.style = 'background-color:'+hsColors[hsClass]//+';height:15px;width:30px;margin:0 auto 0.7em auto;'
-                legendDiv.id = hsClass
-                legendDiv.innerHTML = hsClass
-                legendDiv.onclick = function(e) { ui.deckLink(e.target.id,this.window.f);  }
-            }
-
-            if (mode=='decks') {
-
-                var l = legend[i]
-                legendDiv.style = 'background-color:'+l.color//+';height:15px;width:30px;margin:0 auto 0.7em auto;'
-                legendDiv.id = l.name
-                legendDiv.innerHTML = l.name
-                legendDiv.onclick = function(e) { ui.deckLink(e.target.id,this.window.f);  }
-            }
-
-
-            chartFooter.appendChild(legendDiv)
-
-        }
-    }
-
-    smoothData(Data) {
-        var data_smoothed = []
-        const w = 0.3
-
-
-        for (var i=0; i<Data.length;i++) {
-            var w_tot = 0
-            var d = 0
-
-            if (i > 0)              {d += Data[i-1]*w; w_tot += w}
-            if (i < Data.length-1)  {d += Data[i+1]*w; w_tot += w}
-
-            d += Data[i]*(1-w_tot)
-            data_smoothed.push(d)
-        }
-
-        return data_smoothed
-    }
-}
-
-
-
 class Ladder {
 
     constructor (DATA,f,t,window) {
@@ -184,16 +8,20 @@ class Ladder {
         this.maxLegendEntries = 9
         this.maxLines = 10 // max archetypes shown for the line chart
 
-        this.bgColor = 'white'
+        //this.bgColor = 'rgba(255,255,255,0.5)'
+        //this.bgColor = 'rgba(0,0,0,0.05)'
+        this.bgColor = 'transparent'
         this.fontColor = window.fontColor
         this.fontColorLight = window.fontColorLight
+        this.lineWidth = 2.5
+        this.fr_min = 0.03
 
         this.DATA = DATA
         this.f = f
         this.t = t
         this.window = window
         this.days
-        this.fr_min = 0.03
+        
 
       
 
@@ -229,9 +57,9 @@ class Ladder {
             buttonId: 'ranks_L',
             start: 0,
             end: 0},
-            {name:'1-5',
-            buttonId: 'ranks_1_5',
-            start: 1,
+            {name:'L-5',
+            buttonId: 'ranks_L_5',
+            start: 0,
             end: 5},
             {name:'6-15',
             buttonId: 'ranks_6_15',
@@ -240,36 +68,16 @@ class Ladder {
         ]
         this.tier = this.tiers[0]
         this.rankFolder = document.querySelector('#ladderWindow .content-header #rankBtn')
-        this.rankFolder.style.display = 'none'
-        this.dropdownDiv = document.querySelector('#ladderWindow .content-header #rankDropdown')
-        this.dropdownDiv.innerHTML = ''
-
+       
         for (var tier of this.tiers) {
 
             this.totGamesRanks[tier.name] = 0
-
-            var button = document.createElement('button')
-            var clickButton = function (e) {
-                for (var t of this.tiers) {
-                    if (t.buttonId == e.target.id) {
-                        this.tier = t
-                        this.plot()
-                        this.window.r = t.buttonId
-                        this.window.renderOptions()
-            }}}
-            
-            button.id = tier.buttonId
-            button.className = 'optionBtn folderBtn'
-            button.innerHTML = tier.name
-            button.onclick = clickButton.bind(this)
-
-            this.dropdownDiv.appendChild(button)
-            
 
             var trace_decks = {
                 values: [],
                 labels:[],
                 marker: {colors: []},
+                textfont: {color: []},
                 hoverinfo: 'label+percent',
                 insidetextfont: {color:'white'},
                 outsidetextfont: {color:'transparent'},
@@ -278,15 +86,15 @@ class Ladder {
             }
 
             var color_classes = []
-            for (hsClass of hsClasses) { color_classes.push(hsColors[hsClass]) }
+            for (hsClass of hsClasses) { color_classes.push(hsColors[hsClass])}
 
             var trace_classes =  {
                 values: fillRange(0,hsClasses.length,0),
                 labels: hsClasses.slice(),
                 marker: {colors:color_classes},
                 hoverinfo: 'label+percent',
-                insidetextfont: {color:'black'},
-                outsidetextfont: {color:'white'},
+                insidetextfont: {color: 'white'},
+                outsidetextfont: {color:'#222'},
                 text: hsClasses.slice(),
                 type: 'pie',
             }
@@ -299,47 +107,37 @@ class Ladder {
 
         var ARCHETYPES =    DATA.archetypes
         var rankSums =      DATA.gamesPerRank
+        this.rankSums = DATA.gamesPerRank
         var rankData =      this.smoothLadder(DATA.rankData,rankSums.slice())
-        var classRankData = []
+        var classRankData = this.smoothLadder(DATA.classRankData,rankSums.slice())
         
 
 
-        // Process ClassRankData  -> Should include classRankData in data file
+        // Game Sums and rank labels
         for (var i=0;i<hsRanks;i++) {
-
             if (i%5==0) {this.rankLabels.push(i+'  ')}
             else {this.rankLabels.push('')}
-
             this.totGames += rankSums[i]
-            
             for (var tier of this.tiers) {
                 if (i >= tier.start && i <= tier.end) { this.totGamesRanks[tier.name] += rankSums[i] }
             }
-            var classRankRow = [0,0,0,0,0,0,0,0,0]
-            
-            
-
-            for (var j=0;j<rankData[i].length;j++) {
-                var idx_class = hsClasses.indexOf(ARCHETYPES[j][0])
-                if (idx_class != -1) {classRankRow[idx_class] += rankData[i][j]}
-            }
-            classRankData.push(classRankRow)
         }
 
+        
         this.rankLabels[0] = 'L  '
 
 
 
         // Arch Traces
         for (var i=0;i<ARCHETYPES.length;i++) {
-
+    
             var archFR = []
             var archFR_line = [] // without merging 
             var archTxt = []
             var fr_avg = 0
             var archName = ARCHETYPES[i][1] + " " + ARCHETYPES[i][0].replace('§', '');
             var classIdx = hsClasses.indexOf(ARCHETYPES[i][0])
-            var color = colorStringRange(hsColors[ARCHETYPES[i][0]],45)
+            var color = colorStringRange(hsColors[ARCHETYPES[i][0]],20)
 
             for (var rank=0;rank<hsRanks;rank++) {
                 var fr = rankData[rank][i]
@@ -347,7 +145,7 @@ class Ladder {
                 archTxt.push(`<b>${archName}     </b><br>freq: ${(fr*100).toFixed(1)}%`)
 
                 // Merge
-                if (fr < this.fr_min && i>9) {
+                if (fr < this.fr_min && i>8) {
                     this.traces_bar.decks[classIdx].y[rank] += fr
                     fr = 0
                 }
@@ -364,6 +162,7 @@ class Ladder {
                         this.traces_pie['decks'][tier.name][0].values.push(fr)
                         this.traces_pie['decks'][tier.name][0].labels.push(archName)
                         this.traces_pie['decks'][tier.name][0].marker.colors.push(color)
+                        //push fontColor!!
                     }
                     if (rank > tier.start && rank <= tier.end) {
                         this.traces_pie['decks'][tier.name][0].values[i] += fr
@@ -374,7 +173,7 @@ class Ladder {
 
                         // Merge Pie
                         var fr_pie = this.traces_pie.decks[tier.name][0].values[i]
-                        if (fr_pie <this.fr_min && i>9) {
+                        if (fr_pie <this.fr_min && i>8) {
                             this.traces_pie.decks[tier.name][0].values[i] = 0
                             this.traces_pie.decks[tier.name][0].values[classIdx] += fr_pie
                         } 
@@ -406,7 +205,9 @@ class Ladder {
                 hoverinfo: 'text',
                 orientation: 'h',
                 marker: {color: color,},
+                line: {width: this.lineWidth},
                 type: 'scatter',
+                mode: 'lines',
                 winrate: 0,
                 hsClass: ARCHETYPES[i][0]+ARCHETYPES[i][1],
                 fr: fr_avg,
@@ -416,13 +217,11 @@ class Ladder {
             this.traces_bar.decks.push(arch_bar)
             this.traces_line.decks.push(arch_line)
 
-            this.archLegend.push({name: archName, color: color, fr: fr_avg})
-            this.archetypes.push({name:archName,fr:fr_avg, data: archFR, color: color})
+            this.archLegend.push({name: archName, hsClass: ARCHETYPES[i][0], color: color, fontColor: hsFontColors[ARCHETYPES[i][0]], fr: fr_avg})
+            this.archetypes.push({name:archName,fr:fr_avg, data: archFR, color: color, fontColor: hsFontColors[ARCHETYPES[i][0]]})
 
         } // close for ARCHETYPES
                 
-        
-
         // Class Traces
         for (var i=0;i<9;i++) {
             var hsClass = hsClasses[i]
@@ -466,7 +265,9 @@ class Ladder {
                 text: classTxt,
                 hoverinfo: 'text',
                 marker: {color: hsColors[hsClass]},
+                line: {width: this.lineWidth},
                 type: 'scatter',
+                mode: 'lines',
                 winrate: 0,
                 hsClass: hsClass,
                 fr: fr_avg,
@@ -475,8 +276,6 @@ class Ladder {
 
             this.traces_bar.classes.push(class_bar)
             this.traces_line.classes.push(class_line)
-            this.traces_bar.decks.push(arch_bar)
-            this.traces_line.decks.push(arch_line)
 
             this.classLegend.push({name:hsClass, color: hsColors[hsClass]})
         }// close for Classes
@@ -491,7 +290,8 @@ class Ladder {
 		    barmode: 'stack',
 		    showlegend: false,
 		    displayModeBar: false,
-		    hovermode: 'closest',
+            hovermode: 'closest',
+            annotations: [],
 		    xaxis: {
                 //title: 'Ranks',
                 tickfont: {
@@ -569,11 +369,9 @@ class Ladder {
                 tickcolor: 'transparent',
                 tickformat: ',.0%',
                 fixedrange: true,
-
-                //zeroline: false,
 			    color: this.fontColorLight,
 		    },
-		    plot_bgcolor: this.bgColor,
+		    plot_bgcolor: 'transparent',//this.bgColor,
             paper_bgcolor: this.bgColor,//this.bgColor2,
             margin: {l:70,r:20,b:30,t:0,},
         }
@@ -668,11 +466,6 @@ class Ladder {
 
 
 
-
-
-
-
-
     plot() {
 
         document.getElementById('chart1').innerHTML = ""
@@ -727,45 +520,100 @@ class Ladder {
     }
 
 
+    annotate(bool) {
+        var update
+        if (bool) {
+            var annotations = []
+            for (var i=0;i<hsRanks;i++) {
+                var ann = {
+                    x: i,
+                    y: 0.5,
+                    xref: 'x',
+                    yref: 'y',
+                    text: this.rankSums[i],
+                    showarrow: false,
+                    bgcolor: 'rgba(0,0,0,0.1)',
+                    opacity: 0.8
+                }
+                annotations.push(ann)
+            }
+            update = { annotations: annotations};
+        }
+        else {update = { annotations: []};}
+
+        Plotly.relayout('chart1', update)
+    }
 
 
-    createTable (mode) {
+
+
+    createTable(mode) {
 
         var maxArch = 20
         if (this.archetypes.length < maxArch) {maxArch = this.archetypes.length}
-
         document.getElementById('chart1').innerHTML = ""
         
-        var table = `<table style="width:100%">`
-        table += `<tr><th class="pivot">Rank -></th>`
+        var table = document.createElement('table')
+        table.style.width = '100%'
+        var headerRow = document.createElement('tr')
 
-        for (var i=20;i>0;i--) {table += `<th>${i}</th>`}
-        table += `<th>L</th></tr>`
+        var item = document.createElement('th')
+        item.className = 'pivot'
+        item.innerHTML = 'Rank ->'
+        headerRow.appendChild(item)
+
+        for (var i=hsRanks-1;i>=0;i--) {
+            var item = document.createElement('th')
+            item.innerHTML = (i>0) ? i : 'L'
+            headerRow.appendChild(item)
+        }
+        table.appendChild(headerRow)
 
         if (mode == 'decks') {
             for (var j=0; j<maxArch; j++) {
                 var arch = this.archetypes[j]
-                table += `<tr><td class="pivot" style="background-color:${arch.color}">${arch.name}</td>`
-                for (var i=hsRanks-1;i>-1;i--) {table += `<td style="background-color:${this.colorScale(arch.data[i])};">${(arch.data[i]*100).toFixed(1)}%</td>`}
-                table += `</tr>`
+                var row = document.createElement('tr')
+                var pivot = document.createElement('td')
+                pivot.className = 'pivot'
+                pivot.style.backgroundColor = arch.color
+                pivot.style.color = arch.fontColor
+                pivot.innerHTML = arch.name
+                row.appendChild(pivot)
+                for (var i=hsRanks-1;i>-1;i--) {
+                    var item = document.createElement('td')
+                    item.style.backgroundColor = this.colorScale(arch.data[i])
+                    item.innerHTML = (arch.data[i]*100).toFixed(1) + '%'
+                    row.appendChild(item)
+                }
+                table.appendChild(row)
             }
-        } 
+        }
 
-        else {
+        if (mode == 'classes') {
             for (var j=0; j<9; j++) {
                 var hsClass = hsClasses[j]
                 var data = this.c_data[hsClass]
-                table += `<tr><td class="pivot" style="background-color:${hsColors[hsClass]}">${hsClass}</td>`
-                for (var i=hsRanks-1;i>-1;i--) { table += `<td style="background-color:${this.colorScale(data[i])};">${(data[i]*100).toFixed(1)}%</td>` }
-                table += `</tr>`
+                var row = document.createElement('tr')
+                var pivot = document.createElement('td')
+                pivot.className = 'pivot'
+                pivot.style.backgroundColor = hsColors[hsClass]
+                pivot.style.color = hsFontColors[hsClass]
+                pivot.innerHTML = hsClass
+                row.appendChild(pivot)
+                for (var i=hsRanks-1;i>-1;i--) {
+                    var item = document.createElement('td')
+                    item.style.backgroundColor = this.colorScale(data[i])
+                    item.innerHTML = (data[i]*100).toFixed(1) + '<span style="color=#999">%</span>'
+                    row.appendChild(item)
+                }
+                table.appendChild(row)
             }   
         }
-        table += `</table>`
-        document.getElementById('chart1').innerHTML = table
-
+        
+        
+        document.getElementById('chart1').appendChild(table)
         this.createNumbersFooter()
     }
-
 
     createLegend(mode) {
         var chartFooter = document.querySelector('#ladderWindow .chart-footer')
@@ -791,7 +639,7 @@ class Ladder {
             if (mode=='classes') {
 
                 var hsClass = hsClasses[i]
-                legendDiv.style = 'background-color:'+hsColors[hsClass]//+';height:15px;width:30px;margin:0 auto 0.7em auto;'
+                legendDiv.style = 'background-color:'+hsColors[hsClass]+'; color:'+hsFontColors[hsClass]
                 legendDiv.id = hsClass
                 legendDiv.innerHTML = hsClass
                 legendDiv.onclick = function(e) { ui.deckLink(e.target.id,this.f);  }
@@ -800,7 +648,7 @@ class Ladder {
             if (mode=='decks') {
 
                 var l = legend[i]
-                legendDiv.style = 'background-color:'+l.color//+';height:15px;width:30px;margin:0 auto 0.7em auto;'
+                legendDiv.style = 'background-color:'+l.color+'; color:'+hsFontColors[l.hsClass]
                 legendDiv.id = l.name
                 legendDiv.innerHTML = l.name
                 legendDiv.onclick = function(e) { ui.deckLink(e.target.id,this.f);  }

@@ -18,8 +18,8 @@ class Table {
         this.bgColor = 'transparent'
         this.fontColor = '#22222'
         this.subplotRatio = 0.6
-        this.width = document.querySelector('.main-wrapper').offsetWidth -40
-        this.height = 560
+        this.width = this.window.width,//document.querySelector('.main-wrapper').offsetWidth -40
+        this.height = this.window.height,
 
         this.table = []
         this.textTable = []
@@ -35,7 +35,7 @@ class Table {
         var FR =            DATA.frequency.slice()
         var TABLE =         DATA.table.slice()
         var ARCHETYPES =    DATA.archetypes.slice()
-        
+        if (this.numArch > ARCHETYPES.length) {this.numArch = ARCHETYPES.length}    
     
     
         // Take only the most common
@@ -176,10 +176,7 @@ class Table {
         var table = this.table.concat([overallWR])
         var arch = this.archetypes.concat(['Overall'])
         var textRow = []
-        //for (var i=0;i<table[0].length;i++) {textRow.push("Overall WR: "+(100*overallWR[i]).toFixed(1)+"%")}
-        for (var i=0;i<table[0].length;i++) {
-            textRow.push(`${this.archetypes[i]}<br>Overall wr: ${(100*overallWR[i]).toFixed(1)}%`)
-        }
+        for (var i=0;i<table[0].length;i++) { textRow.push(`${this.archetypes[i]}<br>Overall wr: ${(100*overallWR[i]).toFixed(1)}%`) }
         var textTable = this.textTable.concat([textRow])
 
 
@@ -289,7 +286,7 @@ class Table {
         var OptMU = document.querySelector('#tableWindow #matchup')
         var OptWR = document.querySelector('#tableWindow #winrate')
         OptMU.style.display = 'inline-block'
-        if (arch == 'Overall') { OptWR.style.display = 'none' }
+        if (arch == 'Overall') { OptMU.style.display = 'none' }
     
         this.window.zoomIn = true
         this.window.zoomArch = arch

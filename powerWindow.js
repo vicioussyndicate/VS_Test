@@ -13,7 +13,7 @@ class PowerWindow {
         this.f = 'Standard'
         this.mode = 'tiers'
         this.t_ladder = 'lastDay'
-        this.t_table = 'lastWeek'
+        this.t_table = 'last2Weeks'
         this.top = 5
         
 
@@ -37,7 +37,7 @@ class PowerWindow {
             start: 6,
             end: 15},
         ]
-        this.maxTierElements = 20
+        this.maxTierElements = (PREMIUM) ? 16 : 5 ;
         for (var f of ['Standard','Wild']) {
             this.tierData[f] = {}
             for (var tier of this.tiers) {
@@ -47,12 +47,16 @@ class PowerWindow {
 
         this.addData('Standard')
         this.addData('Wild')
-
+        this.setupUI()
         this.renderOptions()
     }// close constructor
 
 
-
+    setupUI() {
+        if (!PREMIUM) {
+            document.querySelector('#powerWindow .content-header #top').style.display = 'none'
+        }
+    }
 
     buttonTrigger(e) {
 
@@ -84,7 +88,6 @@ class PowerWindow {
 
 
     addData (f) {
-        //console.log(ladderWindow.data, f, this.t_ladder,ladderWindow.data[f][this.t_ladder] )
         var ladder = ladderWindow.data[f][this.t_ladder].archetypes
         var table = tableWindow.data[f][this.t_table]['ranks_all']
         
@@ -113,11 +116,11 @@ class PowerWindow {
                 if (totFreq != 0) {totWr /= totFreq}
                 else {totWr = 0}
 
-                this.data[f][rank].push({name:arch.name, wr:totWr, fr:arch.data[rank], color: arch.color})
+                this.data[f][rank].push({name:arch.name, wr:totWr, fr:arch.data[rank], color: arch.color, fontColor: arch.fontColor})
 
                 for (var tier of this.tiers) {
                     var data = this.tierData[f][tier.name]
-                    if (rank == tier.start) {data.push({name:arch.name, wr:totWr, fr:arch.data[rank], color: arch.color})}
+                    if (rank == tier.start) {data.push({name:arch.name, wr:totWr, fr:arch.data[rank], color: arch.color, fontColor: arch.fontColor})}
                     if (rank > tier.start && rank <= tier.end) { data[data.length-1].wr += totWr }
                     if (rank == tier.end) { data[data.length-1].wr /= (tier.end - tier.start +1) }
                 }
@@ -184,14 +187,21 @@ class PowerWindow {
                 var archName = this.data[f][i][j].name
                 var wr = (100*this.data[f][i][j].wr).toFixed(1)+ '%'
                 var color = this.data[f][i][j].color
+                var fontColor = this.data[f][i][j].fontColor
 
                 var div = document.createElement('div')
                 var btn = document.createElement('button')
-
-                btn.className = 'archBtn'
+                var tooltip = document.createElement('span')
+                
+                tooltip.className = 'tooltipText'
+                tooltip.innerHTML = 'R:'+(i)+' #'+(j+1)+' '+archName
+                
+                btn.className = 'archBtn tooltip'
                 btn.id = archName
                 btn.style.backgroundColor = color
+                btn.style.color = fontColor
                 btn.innerHTML = archName
+                btn.appendChild(tooltip)
                 btn.onclick = this.pressButton.bind(this)
 
                 div.classList.add('winrate')
@@ -244,16 +254,21 @@ class PowerWindow {
                 }
 
                 var wr = (100*arch.wr).toFixed(1)+ '%'
-                var color = arch.color
 
                 var div = document.createElement('div')
                 var btn = document.createElement('button')
+                var tooltip = document.createElement('span')
 
-                btn.className = 'archBtn'
+                tooltip.className = 'tooltipText'
+                tooltip.innerHTML = '#'+(i+1)+' '+arch.name
+
+                btn.className = 'archBtn tooltip'
                 btn.id = arch.name
-                btn.style.backgroundColor = color
+                btn.style.backgroundColor = arch.color
+                btn.style.color = arch.fontColor
                 btn.style.marginLeft = '0.5rem'
                 btn.innerHTML = arch.name
+                btn.appendChild(tooltip)
                 btn.onclick = this.pressButton.bind(this)
 
                 div.className = 'winrate'
