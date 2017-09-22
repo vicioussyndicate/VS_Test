@@ -31,10 +31,7 @@ class Table {
 
         
         
-        for (var i=0;i<this.numArch;i++) {
-            this.table.push(fillRange(0,this.numArch,0))
-            this.textTable.push(fillRange(0,this.numArch,''))
-        }
+        
         var FR =            DATA.frequency.slice()
         var TABLE =         DATA.table.slice()
         var ARCHETYPES =    DATA.archetypes.slice()
@@ -45,6 +42,11 @@ class Table {
         var idx_f = range(0,FR.length)
         idx_f.sort(function (a, b) { return FR[a] > FR[b] ? -1 : FR[a] < FR[b] ? 1 : 0; });
         idx_f.splice(this.numArch)
+
+        for (var i=0;i<this.numArch;i++) {
+            this.table.push(fillRange(0,this.numArch,0))
+            this.textTable.push(fillRange(0,this.numArch,''))
+        }
 
         // Process Data
         for (var i=0;i<this.numArch;i++) {

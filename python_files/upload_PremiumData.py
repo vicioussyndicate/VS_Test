@@ -93,7 +93,7 @@ for f in hsFormats:
     hsArchetypes[f] = []
     for c in hsClasses:
         hsArchetypes[f].append([c,'Other']) # placeholder archetypes
-    hsArchetypes[f].append(['','Other']) # unidentified class
+    #hsArchetypes[f].append(['','Other']) # unidentified class
     
                 
 
@@ -216,7 +216,8 @@ def run():
             
             
             dr = row[11]
-            dt = datetime(int(dr[:4]),int(dr[5:7]),int(dr[8:10]),int(dr[11:13]))
+            dt = datetime(int(dr[:4]),int(dr[5:7]),int(dr[8:10]),int(dr[11:13]),int(dr[14:16]))
+
             if count == 1:
                 lastDate = dt
                 for f in hsFormats:
@@ -317,8 +318,8 @@ def run():
 
                 
             count += 1
-            if count % 1000 == 0:
-                print(count)
+            #if count % 1000 == 0:
+            #    print(count)
         
         #normalize stuff here
         for f in hsFormats:
@@ -331,7 +332,7 @@ def run():
                             avg = 0
                             for d in range(len(H[f][t][r][o][a]['data'])):
                                 if tot[d] >0:
-                                    H[f][t][r][o][a]['data'][d] /= tot[d]
+                                    H[f][t][r][o][a]['data'][d] /= float(tot[d])
                                     avg += H[f][t][r][o][a]['data'][d]
                                     
                             H[f][t][r][o][a]['avg'] = avg/len(H[f][t][r][o][a]['data'])
