@@ -1,0 +1,29 @@
+# Archetype: Control Warrior
+### Dog's Fatigue Warrior
+# Class: Warrior
+# Format: Standard
+# Year of the Mammoth
+#
+# 2x (1) Whirlwind
+# 2x (2) Armorsmith
+# 2x (2) Battle Rage
+# 1x (2) Bloodmage Thalnos
+# 2x (2) Bring It On!
+# 2x (2) Dead Man's Hand
+# 1x (2) Dirty Rat
+# 2x (2) Execute
+# 1x (2) Public Defender
+# 2x (2) Slam
+# 2x (2) Sleep with the Fishes
+# 2x (3) Acolyte of Pain
+# 2x (3) Coldlight Oracle
+# 2x (3) Shield Block
+# 2x (4) Blood Razor
+# 1x (5) Brawl
+# 1x (6) Skulking Geist
+# 1x (8) Scourgelord Garrosh
+#
+AAECAQcGS+0FrLsC38QCoM4Cn9MCDJAD1AT8BJEG+Af/B7II+wzGwwLMzQKOzgLx0wIA
+#
+# To use this deck, copy it to your clipboard and create a new deck in Hearthstone
+# https://www.vicioussyndicate.com/dogs-fatigue-warrior-2/

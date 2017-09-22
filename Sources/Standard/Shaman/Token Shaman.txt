@@ -1,4 +1,5 @@
-### Evolve Shaman
+# Archetype: Token Shaman
+### Standard Token Shaman
 # Class: Shaman
 # Format: Standard
 # Year of the Mammoth
@@ -11,17 +12,17 @@
 # 2x (2) Flametongue Totem
 # 2x (2) Jade Claws
 # 2x (2) Maelstrom Portal
+# 2x (2) Primalfin Totem
 # 2x (3) Mana Tide Totem
-# 2x (3) Stonehill Defender
 # 2x (4) Jade Lightning
-# 2x (4) Jade Spirit
-# 1x (4) Rattling Rascal
+# 1x (4) Saronite Chain Gang
+# 2x (5) Bloodlust
 # 2x (5) Doppelgangster
 # 1x (5) Thrall, Deathseer
 # 1x (6) Aya Blackpaw
 # 2x (6) Thing from Below
-# 
-AAECAfe5AgSRvAKUvQK2ywLrzwINgQTlB/AH+qoC+6oCoLYCh7wCz7wC0bwC9r0C+b8Cm8IC68ICAA==
-# 
-# Archetype: Evolve Shaman
+#
+AAECAaoIBJG8ApS9ApvLAuvPAg3lB/qqAuvCAva9AvAH0bwCoLYCkcECgQSHvAKTCfm/AvuqAgA=
+#
 # To use this deck, copy it to your clipboard and create a new deck in Hearthstone
+# https://www.vicioussyndicate.com/deck-library/shaman-decks/token-shaman/standard-token-shaman/

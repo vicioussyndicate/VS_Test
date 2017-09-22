@@ -1,0 +1,28 @@
+# Archetype: Zoo Warlock
+### Tako3's Discard Zoo Warlock
+# Class: Warlock
+# Format: Standard
+# Year of the Mammoth
+#
+# 2x (1) Acherus Veteran
+# 2x (1) Bloodsail Corsair
+# 2x (1) Flame Imp
+# 1x (1) Hungry Crab
+# 2x (1) Malchezaar's Imp
+# 1x (1) Patches the Pirate
+# 2x (1) Soulfire
+# 2x (1) Voidwalker
+# 1x (2) Prince Keleseth
+# 2x (3) Darkshire Councilman
+# 2x (3) Howlfiend
+# 2x (3) Silverware Golem
+# 1x (3) Southsea Captain
+# 2x (4) Crystalweaver
+# 2x (4) Defender of Argus
+# 2x (4) Ravenous Pterrordax
+# 2x (5) Doomguard
+#
+AAECAf0GBJG8ArsDnOICqAUN5QfCCLy2As4HMLSsAtSzAvsF9wSVzgKSzQLHuwLnwQIA
+#
+# To use this deck, copy it to your clipboard and create a new deck in Hearthstone
+# https://www.vicioussyndicate.com/deck-library/warlock-decks/zoo-warlock/tako3s-discard-zoo-warlock/

@@ -1,0 +1,28 @@
+# Archetype: Zoo Warlock
+### Trump's Midrange Zoo Warlock
+# Class: Warlock
+# Format: Standard
+# Year of the Mammoth
+#
+# 2x (1) Acherus Veteran
+# 2x (1) Argent Squire
+# 2x (1) Bloodsail Corsair
+# 2x (1) Fire Fly
+# 2x (1) Flame Imp
+# 1x (1) Mortal Coil
+# 1x (1) Patches the Pirate
+# 2x (1) Possessed Villager
+# 1x (2) Prince Keleseth
+# 2x (3) Darkshire Councilman
+# 2x (3) Tar Creeper
+# 2x (4) Defender of Argus
+# 2x (5) Cobalt Scalebane
+# 2x (5) Despicable Dreadlord
+# 1x (6) The Black Knight
+# 2x (7) Bonemare
+# 2x (10) Sea Giant
+#
+AAECAf0GBJG8ApziAsQI+AwNlc4C5QfCCLSsAvsF9QXTAfauAuvCAsrDAsrLAqbOAvfNAgA=
+#
+# To use this deck, copy it to your clipboard and create a new deck in Hearthstone
+# https://www.vicioussyndicate.com/deck-library/warlock-decks/zoo-warlock/trumps-midrange-zoo-warlock/

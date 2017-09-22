@@ -206,18 +206,23 @@ class DecksWindow {
         if (this.hsArch == null) {this.hsArch = this.data[this.f][this.hsClass].archetypes[0]}
         if (this.hsArch == undefined) {this.hsArch = null; return}
         
-        
+        var deckCards = []
         var gridTemplateColumns = ''
         for (var dl of this.hsArch.decklists) {
-            for (var i=0;i<1;i++) {
-                gridTemplateColumns += this.deckWidth + ' '
-                this.addDecklist(dl)
-        }}
+            
+            gridTemplateColumns += this.deckWidth + ' '
+            deckCards.push(this.addDecklist(dl))
+        }
         
+        // do in .styl file:
         this.descriptionBox.style.display = 'none'
         this.decksDiv.style.display = 'grid'
         this.decksDiv.style.gridTemplateColumns = gridTemplateColumns
         this.decksDiv.style.gridGap = '0.5rem'
+
+
+        //chek for identical cards
+        //console.log(deckCards)
     }
 
 
@@ -248,8 +253,7 @@ class DecksWindow {
 
 
     addDecklist(dl) {  // will become own class at some point
-
-        var deckDiv = document.querySelector('#decksWindow .content .decklists')
+        var cards = []
 
         var deckBox = document.createElement('div')
         deckBox.className = 'deckBox'
@@ -264,6 +268,7 @@ class DecksWindow {
         decklist.className = 'decklist'
 
         for (var card of dl.cards) {
+            cards.push[card.name]
             var cardDiv = document.createElement('div')
             cardDiv.className = 'card'
             cardDiv.innerHTML = card.manaCost+' '+card.name+' '+card.quantity
@@ -274,19 +279,20 @@ class DecksWindow {
         var copyBtn = document.createElement('buttton')
         copyBtn.innerHTML = 'Copy To Clipboard'
         copyBtn.className = 'copyDL'
-        copyBtn.id = 'dl'+randint(0,10000000)
+        copyBtn.id = 'dl'+randint(0,10000000) // unique button id for clipboard
         
         
         deckBox.appendChild(deckTitle)
         deckBox.appendChild(decklist)
         deckBox.appendChild(copyBtn)
-        deckDiv.appendChild(deckBox)
+        this.decksDiv.appendChild(deckBox)
 
         new Clipboard('#'+copyBtn.id, {
             text: function(trigger) {
                 return dl.deckCode 
             }
         });
+        return cards
     }
 
 

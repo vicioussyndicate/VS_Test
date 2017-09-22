@@ -1,0 +1,31 @@
+# Archetype: Big Priest
+### Standard Big Priest
+# Class: Priest
+# Format: Standard
+# Year of the Mammoth
+#
+# 1x (0) Silence
+# 1x (1) Holy Smite
+# 2x (1) Pint-Size Potion
+# 2x (1) Potion of Madness
+# 2x (2) Shadow Visions
+# 2x (2) Shadow Word: Pain
+# 2x (3) Shadow Word: Death
+# 1x (4) Barnes
+# 2x (4) Eternal Servitude
+# 1x (4) Greater Healing Potion
+# 1x (4) Mass Dispel
+# 2x (4) Shadow Word: Horror
+# 2x (6) Dragonfire Potion
+# 2x (6) Shadow Essence
+# 1x (8) Free From Amber
+# 1x (8) Shadowreaper Anduin
+# 1x (8) The Lich King
+# 2x (9) Obsidian Statue
+# 1x (9) Ysera
+# 1x (10) Y'Shaarj, Rage Unbound
+#
+AAECAa0GCpcChbgC1grCzgKiCairAqUJt7sCmcgCkNMCCtcK0wqhrALqvwK0zgK1uwLovwLRwQLlzALmzAIA
+#
+# To use this deck, copy it to your clipboard and create a new deck in Hearthstone
+# https://www.vicioussyndicate.com/deck-library/priest-decks/big-priest/standard-big-priest/

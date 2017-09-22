@@ -1,0 +1,29 @@
+# Archetype: Control Warlock
+### Sjoesie's Mill Control Warlock
+# Class: Warlock
+# Format: Standard
+# Year of the Mammoth
+#
+# 2x (1) Mistress of Mixtures
+# 2x (1) Voidwalker
+# 2x (2) Defile
+# 2x (2) Doomsayer
+# 2x (2) Drain Soul
+# 2x (2) Gnomeferatu
+# 1x (2) Tainted Zealot
+# 2x (3) Coldlight Oracle
+# 1x (3) Gluttonous Ooze
+# 2x (3) Stonehill Defender
+# 1x (4) Prince Valanar
+# 2x (5) Despicable Dreadlord
+# 2x (6) Siphon Soul
+# 1x (6) Skulking Geist
+# 2x (7) Abyssal Enforcer
+# 2x (8) Twisting Nether
+# 1x (9) Lord Jaraxxus
+# 1x (10) Bloodreaver Gul'dan
+#
+AAECAf0GBokG08UCoM4Cl9MCnuICl+gCDDCKAdsG+AfMCN28ApvCAt7EAufLAqLNAq7NAvfNAgA=
+#
+# To use this deck, copy it to your clipboard and create a new deck in Hearthstone
+# https://www.vicioussyndicate.com/deck-library/warlock-decks/control-warlock/sjoesies-mill-control-warlock/
