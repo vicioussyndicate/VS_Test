@@ -31,16 +31,17 @@ class Table {
 
         
         
-        for (var i=0;i<this.numArch;i++) {
-            this.table.push(fillRange(0,this.numArch,0))
-            this.textTable.push(fillRange(0,this.numArch,''))
-        }
+        
         var FR =            DATA.frequency.slice()
         var TABLE =         DATA.table.slice()
         var ARCHETYPES =    DATA.archetypes.slice()
         if (this.numArch > ARCHETYPES.length) {this.numArch = ARCHETYPES.length}    
     
-    
+        for (var i=0;i<this.numArch;i++) {
+            this.table.push(fillRange(0,this.numArch,0))
+            this.textTable.push(fillRange(0,this.numArch,''))
+        }
+        
         // Take only the most common
         var idx_f = range(0,FR.length)
         idx_f.sort(function (a, b) { return FR[a] > FR[b] ? -1 : FR[a] < FR[b] ? 1 : 0; });
