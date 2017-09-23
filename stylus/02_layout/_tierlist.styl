@@ -1,0 +1,42 @@
+
+
+
+
+
+ #powerWindow
+    height: 100%
+    #powerGrid
+        max-height 100%
+        display grid
+        grid-template-columns repeat(6, 1fr)
+        grid-template-rows repeat(21, 1fr)
+        grid-gap 0.1rem
+        overflow-y auto
+        text-align center
+        text-size 10
+        padding: 2rem 2rem 0 2rem
+        //background-color #555
+        .pivot
+            background-color transparent
+            color $darkColor
+            padding 0.2rem
+            margin-right: 0.5rem
+        .header
+            background-color transparent 
+            color $darkColor
+            padding 0.2rem
+            margin-bottom: 1rem
+            font-weight: bold
+        
+        .archBtn
+            padding 0.2rem
+            margin 0.2rem
+            &:hover
+                cursor pointer
+        .winrate
+            color #999
+            font-weight: normal
+            padding: 0.2rem
+        .columnTitle
+            grid-column-end: span 2; 
+            

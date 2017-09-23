@@ -218,7 +218,7 @@ var hsColors = {
     Hunter:     '#719038',//'#5f8732',
     Mage:       '#90bbc3',//'#89b9c8',
     Paladin:    '#ffd96d',
-    Priest:     '#ddd9be', //'#fdfae9',//'#fff3c7',
+    Priest:     '#cfcbb3',//'#ddd9be', //'#fdfae9',//'#fff3c7',
     Rogue:      '#0b250b',
     Shaman:     '#1a5d72',
     Warlock:    '#ad5c7b',

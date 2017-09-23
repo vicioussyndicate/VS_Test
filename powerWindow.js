@@ -201,7 +201,7 @@ class PowerWindow {
                 btn.style.backgroundColor = color
                 btn.style.color = fontColor
                 btn.innerHTML = archName
-                btn.appendChild(tooltip)
+                //btn.appendChild(tooltip)
                 btn.onclick = this.pressButton.bind(this)
 
                 div.classList.add('winrate')
@@ -268,7 +268,7 @@ class PowerWindow {
                 btn.style.color = arch.fontColor
                 btn.style.marginLeft = '0.5rem'
                 btn.innerHTML = arch.name
-                btn.appendChild(tooltip)
+                //btn.appendChild(tooltip)
                 btn.onclick = this.pressButton.bind(this)
 
                 div.className = 'winrate'

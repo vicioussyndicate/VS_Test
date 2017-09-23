@@ -1,0 +1,1 @@
+.tooltip{position:relative;display:inline-block}.tooltip .tooltipText{visibility:hidden;width:120px;background-color:#222;color:#fff;text-align:center;padding:5px 0;border-radius:2%;width:120px;bottom:150%;left:50%;margin-left:-60px;position:absolute;z-index:3}.tooltip:hover .tooltipText{visibility:visible}

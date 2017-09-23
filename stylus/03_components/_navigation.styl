@@ -1,0 +1,35 @@
+
+
+
+.navbar
+    display flex
+    align-content center
+    justify-content start
+    z-index 2
+    .tabs
+        display flex
+        height 100%
+        align-content center
+        align-items center
+        justify-content center
+        background $nav_bgColor
+        color $nav_fColor
+        .tab
+            background-color $nav_bgColor
+            color $nav_fColor
+            padding 0.4rem
+            font-size 1.5rem
+            font-weight bold
+            letter-spacing 2px
+            transition background 0.3s ease, color 0.3s ease
+            &#power
+                background-color: $midColor2
+            &#table
+                background-color: $midColor3
+            &#decks
+                background-color: $midColor4
+            &:hover
+                cursor pointer
+            &.highlighted
+                background-color $nav_hi_bgColor !important
+                color $nav_hi_fColor !important
