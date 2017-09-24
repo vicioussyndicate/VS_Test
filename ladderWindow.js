@@ -118,17 +118,6 @@ class LadderWindow {
 
         var btnID = e.target.id
 
-        // if (btnID == 'lastDay')     {this.t = 'lastDay'}
-        // if (btnID == 'lastWeek')    {this.t = 'lastWeek'}
-        // if (btnID == 'lastMonth')   {this.t = 'lastMonth'}
-
-        // if (btnID == 'Standard')    {this.f = 'Standard'}
-        // if (btnID == 'Wild')        {this.f = 'Wild'}
-
-        // if (btnID == 'ranks_all')   {this.r = 'ranks_all'}
-        // if (btnID == 'ranks_L_5')   {this.r = 'ranks_L_5'}
-        // if (btnID == 'ranks_6_15')  {this.r = 'ranks_6_15'}
-
         if (btnID == 'classes')     {this.mode = 'classes'}
         if (btnID == 'decks')       {this.mode = 'decks'}
 
@@ -152,9 +141,9 @@ class LadderWindow {
             if (btn.id == this.mode) {btn.classList.add('highlighted')}
             if (btn.id == this.plotType) {btn.classList.add('highlighted')}
         }
-        document.querySelector("#ladderWindow #formatBtn").innerHTML =    btnIdToText[this.f]
-        document.querySelector("#ladderWindow #timeBtn").innerHTML =      btnIdToText[this.t]
-        document.querySelector("#ladderWindow #rankBtn").innerHTML =     btnIdToText[this.r]
+        document.querySelector("#ladderWindow #formatBtn").innerHTML = (MOBILE) ? btnIdToText_m[this.f] : btnIdToText[this.f]
+        document.querySelector("#ladderWindow #timeBtn").innerHTML =   (MOBILE) ? btnIdToText_m[this.t] : btnIdToText[this.t]
+        document.querySelector("#ladderWindow #rankBtn").innerHTML =   (MOBILE) ? btnIdToText_m[this.r] : btnIdToText[this.r]
     }
 
 

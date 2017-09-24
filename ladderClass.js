@@ -308,12 +308,13 @@ class Ladder {
                 zeroline: false,
 			    color: this.fontColorLight,
                 tickformat: ',.0%',
+                visible: !MOBILE, // not visible if mobile view
 		    },
-            
 		    plot_bgcolor: 'transparent',//this.bgColor,
             paper_bgcolor: 'transparent',//this.bgColor,
-            margin: {l:60,r:30,b:35,t:0,},
-	    }
+            margin: MOBILE ? {l:10,r:10,b:35,t:0,} : {l:60,r:30,b:35,t:0,},
+        }
+        if (MOBILE) {this.layout_bar['height'] = ui.height*0.8 }
 
 
 

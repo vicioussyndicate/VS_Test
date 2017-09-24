@@ -193,6 +193,38 @@ const btnIdToText = {
     decks: 'Archetypes',
 }
 
+
+const btnIdToText_m = {
+    Standard: 'Std',
+    Wild: 'Wild',
+    
+    ranks_all: 'R: All',
+    ranks_L: 'R: L',
+    ranks_1_5: 'R: 1-5', 
+    ranks_L_5: 'R: L-5',
+    ranks_6_15: 'R: 6-15',
+
+    last6Hours: '6 Hours',
+    last12Hours: '12 Hours',
+    lastDay: '1 Day',
+    last3Days: '3 Days',
+    lastWeek: '1 Week',
+    last2Weeks: '2 Weeks',
+    last3Weeks: '3 Weeks',
+    lastMonth: '1 Month',
+
+    class: 'Class',
+    frequency: 'Freq.',
+    winrate: 'Wr',
+    matchup: 'Mu',
+    
+    frSubplot: 'Frequency',
+    wrSubplot: 'Winrate',
+
+    classes: 'Classes',
+    decks: 'Archetypes',
+}
+
 const rankRange = {
     ranks_all:      [0,20],
     ranks_L:        [0,0],

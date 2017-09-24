@@ -10,6 +10,8 @@ class UI {
         this.windows = document.querySelectorAll('.tabWindow');
         this.folderButtons = document.querySelectorAll('.folder-toggle');
         this.loader = document.getElementById('loader')
+        this.width = parseInt(Math.max(document.documentElement.clientWidth, window.innerWidth || 0))
+        this.height = parseInt(Math.max(document.documentElement.clientHeight, window.innerHeight || 0))
 
         this.tabIdx = 0
         this.activeTab =    this.tabs[0] //document.querySelector('.tab#ladder')
@@ -19,6 +21,7 @@ class UI {
         for(let i=0;i<this.tabs.length;i++) { this.tabs[i].addEventListener("click", this.toggleTabs.bind(this)) }
         for(let i=0;i<this.folderButtons.length;i++) { this.folderButtons[i].addEventListener("click", this.toggleDropDown.bind(this)) }
         if (MOBILE) {detectswipe('.navbar',this.swipeTab.bind(this))}
+        if (MOBILE) {document.querySelector('#ladderWindow .content-header .nrGames').style.display = 'none'}
 
         this.renderTabs()
         this.renderWindows()
