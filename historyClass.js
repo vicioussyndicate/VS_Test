@@ -43,7 +43,7 @@ class History {
                 plot_bgcolor: this.bgColor, 
                 paper_bgcolor: this.bgColor,
                 annotations: [],
-                margin: {l:70,r:20,b:30,t:0,},
+                margin: (MOBILE) ? {l:60, r:10, b: 50, t: 0} : {l:70,r:20,b:30,t:0,},
             }
             
             this.top = 9
