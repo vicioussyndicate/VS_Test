@@ -7,6 +7,7 @@ var t0 = performance.now();
 // Global Data
 var DATABASE
 var PREMIUM = false
+var MOBILE = false
 
 // Windows
 var powerWindow
@@ -42,6 +43,8 @@ const table_ranks_premium = ['ranks_all','ranks_L_5','ranks_6_15']
 
 
 window.onload = function() {
+    if (window.innerWidth <= 756) { MOBILE = true; console.log('mobile')}
+
     setupFirebase()
     ui = new UI()
     ui.showLoader()
@@ -107,95 +110,6 @@ var colorscale_Table = [
 //     '§':        '#88042d',
 // }
 
-// // In between
-// var hsColors = {
-//     Druid:      '#855043',
-//     Hunter:     '#72d946',
-//     Mage:       '#0090d0',
-//     Paladin:    '#fdd458',
-//     Priest:     '#b3b9bc',
-//     Rogue:      '#203338',
-//     Shaman:     '#2062a9',
-//     Warlock:    '#d072df',
-//     Warrior:    '#b31a27',
-//     Other:      '#88042d',
-//     '':         '#88042d',
-//     '§':        '#88042d',
-// }
-
-// // Compromise 2
-
-// var hsColors = {
-//     Druid:      '#7d554b',
-//     Hunter:     '#1ea124',
-//     Mage:       '#44d0e3',
-//     Paladin:    '#f6de5d',
-//     Priest:     '#abb9c2',
-//     Rogue:      '#1f3739',
-//     Shaman:     '#116eb5',
-//     Warlock:    '#cf78dd',
-//     Warrior:    '#a9070c',
-//     Other:      '#88042d',
-//     '':         '#88042d',
-//     '§':        '#88042d',
-// }
-
-
-// // Compromise 3 Muted
-
-// var hsColors = {
-//     Druid:      '#7e564b',
-//     Hunter:     '#65bb4a',
-//     Mage:       '#248ec2',
-//     Paladin:    '#f8be42',
-//     Priest:     '#a1b6ce',
-//     Rogue:      '#223135',
-//     Shaman:     '#0e7290',
-//     Warlock:    '#c67dd2',
-//     Warrior:    '#a21a1f',
-//     Other:      '#88042d',
-//     '':         '#88042d',
-//     '§':        '#88042d',
-// }
-
-
-
-// // Compromise 3 Weird
-
-// var hsColors = {
-//     Druid:      '#7e4949',
-//     Hunter:     '#49a211',
-//     Mage:       '#5adccd',
-//     Paladin:    '#ffb145',
-//     Priest:     '#a4a8ba',
-//     Rogue:      '#1f3738',
-//     Shaman:     '#1877ab',
-//     Warlock:    '#c483ff',
-//     Warrior:    '#a9070c',
-//     Other:      '#88042d',
-//     '':         '#88042d',
-//     '§':        '#88042d',
-// }
-
-
-// // Compromise 4 blue blended
-
-
-// var hsColors = {
-//     Druid:      '#774f53',
-//     Hunter:     '#19982a',
-//     Mage:       '#58c3ee',
-//     Paladin:    '#fac333',
-//     Priest:     '#83969e',
-//     Rogue:      '#16161b',
-//     Shaman:     '#0c6aa1',
-//     Warlock:    '#552fa5',
-//     Warrior:    '#d12825',
-//     Other:      '#88042d',
-//     '':         '#88042d',
-//     '§':        '#88042d',
-// }
-
 // // RIVER PICTURE
 // var hsColors = {
 //     Druid:      '#665730',
@@ -244,23 +158,6 @@ var hsFontColors = {
     '§':        '#88042d',
 }
 
-
-// Washed out
-
-// var hsColors = {
-//     Druid:      '#9f8868',//'#836353',
-//     Hunter:     '#6fbe24',//'#74a121',
-//     Mage:       '#7dc0f1',
-//     Paladin:    '#f3ba0c',
-//     Priest:     '#d8e1e6',//'#fdfde3',
-//     Rogue:      '#335057', // osfjaksadf
-//     Shaman:     '#3b5fcd',
-//     Warlock:    '#b25bba',//'#a249a2',
-//     Warrior:    '#88042d',
-//     Other:      '#88042d',
-//     '':         '#88042d',
-//     '§':        '#88042d',
-// }
 
 
 
@@ -391,13 +288,49 @@ function hsColorScale(hsClass,x) {
 
 
 
-
-
-
-
-
-
-
+function detectswipe(el,func) {
+    swipe_det = new Object();
+    swipe_det.sX = 0; swipe_det.sY = 0; swipe_det.eX = 0; swipe_det.eY = 0;
+    var min_x = 30;  //min x swipe for horizontal swipe
+    var max_x = 30;  //max x difference for vertical swipe
+    var min_y = 50;  //min y swipe for vertical swipe
+    var max_y = 60;  //max y difference for horizontal swipe
+    var direc = "";
+    ele = document.querySelector(el);
+    ele.addEventListener('touchstart',function(e){
+      var t = e.touches[0];
+      swipe_det.sX = t.screenX; 
+      swipe_det.sY = t.screenY;
+    },false);
+    ele.addEventListener('touchmove',function(e){
+      e.preventDefault();
+      var t = e.touches[0];
+      swipe_det.eX = t.screenX; 
+      swipe_det.eY = t.screenY;    
+    },false);
+    ele.addEventListener('touchend',function(e){
+      //horizontal detection
+      if ((((swipe_det.eX - min_x > swipe_det.sX) || (swipe_det.eX + min_x < swipe_det.sX)) && ((swipe_det.eY < swipe_det.sY + max_y) && (swipe_det.sY > swipe_det.eY - max_y) && (swipe_det.eX > 0)))) {
+        if(swipe_det.eX > swipe_det.sX) direc = "r";
+        else direc = "l";
+      }
+      //vertical detection
+      else if ((((swipe_det.eY - min_y > swipe_det.sY) || (swipe_det.eY + min_y < swipe_det.sY)) && ((swipe_det.eX < swipe_det.sX + max_x) && (swipe_det.sX > swipe_det.eX - max_x) && (swipe_det.eY > 0)))) {
+        if(swipe_det.eY > swipe_det.sY) direc = "d";
+        else direc = "u";
+      }
+  
+      if (direc != "") {
+        if(typeof func == 'function') func(el,direc);
+      }
+      direc = "";
+      swipe_det.sX = 0; swipe_det.sY = 0; swipe_det.eX = 0; swipe_det.eY = 0;
+    },false);  
+  }
+  
+  function myfunction(el,d) {
+    alert("you swiped on element with id '"+el+"' to "+d+" direction");
+  }
 
 
 

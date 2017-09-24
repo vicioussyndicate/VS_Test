@@ -22,7 +22,6 @@ html(lang='en')
           button#table.tab Matchups
           button#decks.tab Decks
           button#info.tab Info
-      //button#overlayBtn.optionBtn(onclick='overlay()').fa.fa-question-circle 
       #vsLogoDiv
         img(src="Images/skull.png").logo
         p.text Live
@@ -39,9 +38,6 @@ html(lang='en')
               #timeFolder.option-folder
                 button#timeBtn.folder-toggle Last Day
                 .dropdown.hidden
-                  //button#lastDay.optionBtn.folderBtn Last Day
-                  //button#lastWeek.optionBtn.folderBtn Last Week
-                  //button#lastMonth.optionBtn.folderBtn Last Month
               #rankFolder.option-folder
                 button#rankBtn.folder-toggle All Ranks
                 .dropdown#rankDropdown.hidden
@@ -61,8 +57,8 @@ html(lang='en')
               button#timeline.optionBtn.fa.fa-clock-o.tooltip
                   span.tooltipText Show Timeline
           .content
-            //p.graphTitle Graph Title
-            //p.graphLabel y-axis
+            p.graphTitle Graph Title
+            p.graphLabel y-axis
             #chart1.chart
             .chart-footer
           .content-footer
@@ -97,19 +93,12 @@ html(lang='en')
               #rankFolder.option-folder
                 button#ranksBtn.folder-toggle All Ranks
                 .dropdown.hidden
-                  //button#ranks_all.optionBtn.folderBtn All Ranks
-                  //button#ranks_L_5.optionBtn.folderBtn Ranks L-5
-                  //button#ranks_6_15.optionBtn.folderBtn Ranks 6-15
               p.nrGames
             .graphOptions.optionBar
               p Sort 
               #sortFolder.option-folder
                 button#sortBtn.folder-toggle Sort
                 .dropdown.hidden
-                  //button#class.optionBtn.folderBtn By Class
-                  //button#frequency.optionBtn.folderBtn By Frequency
-                  //button#winrate.optionBtn.folderBtn By Winrate
-                  //button#matchup.optionBtn.folderBtn By Matchup
           .content
             p.graphTitle Versus
             #chart2.chart
