@@ -44,10 +44,10 @@ const table_ranks_premium = ['ranks_all','ranks_L_5','ranks_6_15']
 
 window.onload = function() {
     if (window.innerWidth <= 756) { MOBILE = true; console.log('mobile')}
-
-    setupFirebase()
     ui = new UI()
     ui.showLoader()
+    setupFirebase()
+    
 }
 
 

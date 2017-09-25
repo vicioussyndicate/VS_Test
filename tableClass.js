@@ -18,8 +18,6 @@ class Table {
         this.bgColor = 'transparent'
         this.fontColor = '#22222'
         this.subplotRatio = 0.6
-        this.width = this.window.width,//document.querySelector('.main-wrapper').offsetWidth -40
-        this.height = this.window.height,
 
         this.table = []
         this.textTable = []
@@ -127,8 +125,8 @@ class Table {
             plot_bgcolor: "transparent",
             paper_bgcolor: this.bgColor,
             margin: {l: 120, r: 30, b: 30, t: 100 },
-            width: this.width,
-            height: this.height,
+            width: (MOBILE) ? ui.width*2 : this.window.width,
+            height: (MOBILE) ?  ui.height*0.8 : this.window.height,
 
             yaxis2: {
                 visible: false,

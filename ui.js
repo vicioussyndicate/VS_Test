@@ -7,25 +7,43 @@ class UI {
     constructor () {
 
         this.tabs = document.querySelectorAll('button.tab');
+        this.mobileBtns = document.querySelectorAll('button.mobileBtn');
         this.windows = document.querySelectorAll('.tabWindow');
         this.folderButtons = document.querySelectorAll('.folder-toggle');
         this.loader = document.getElementById('loader')
-        this.width = parseInt(Math.max(document.documentElement.clientWidth, window.innerWidth || 0))
-        this.height = parseInt(Math.max(document.documentElement.clientHeight, window.innerHeight || 0))
+        this.getWindowSize()
 
         this.tabIdx = 0
         this.activeTab =    this.tabs[0] //document.querySelector('.tab#ladder')
         this.activeWindow = document.querySelector('#ladderWindow')
         this.openFolder = null
 
-        for(let i=0;i<this.tabs.length;i++) { this.tabs[i].addEventListener("click", this.toggleTabs.bind(this)) }
-        for(let i=0;i<this.folderButtons.length;i++) { this.folderButtons[i].addEventListener("click", this.toggleDropDown.bind(this)) }
-        if (MOBILE) {detectswipe('.navbar',this.swipeTab.bind(this))}
-        if (MOBILE) {document.querySelector('#ladderWindow .content-header .nrGames').style.display = 'none'}
+        for(var tab of this.tabs) { tab.addEventListener("click", this.toggleTabs.bind(this)) }
+        for(var fBtn of this.folderButtons) { fBtn.addEventListener("click", this.toggleDropDown.bind(this)) }
+
+        if (MOBILE) {
+
+            for(var mBtn of this.mobileBtns) { mBtn.addEventListener("click", this.mobileMenu.bind(this)) }
+            detectswipe('.navbar',this.swipeTab.bind(this))
+            document.querySelector('#ladderWindow .content-header .nrGames').style.display = 'none'
+        }
+
+        window.addEventListener('orientationchange', this.getWindowSize.bind(this));
+        window.addEventListener('resize', this.getWindowSize.bind(this))
 
         this.renderTabs()
         this.renderWindows()
     } // close constructor
+
+    getWindowSize() {
+        this.width = parseInt(Math.max(document.documentElement.clientWidth, window.innerWidth || 0))
+        this.height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
+        if (MOBILE) {
+            if (this.height/this.width >= 1) {MOBILE = 'portrait'}
+            else {MOBILE = 'landscape'}
+        }
+        //console.log('getSIze',this.height,this.width,MOBILE)
+    }
 
 
     swipeTab(e,d) {
@@ -59,6 +77,18 @@ class UI {
         dd_folder.classList.toggle('hidden')
     }
 
+    mobileMenu(e) {
+        console.log('mobile menu')
+        var btn = e.target
+        for (var tab of this.tabs) {
+            if (tab.id == btn.id) {
+                this.activeTab = tab
+                this.activeWindow = document.getElementById(tab.id+'Window')
+                this.renderTabs()
+                this.renderWindows()
+            }
+        }       
+    }
 
 
     toggleTabs (e) {

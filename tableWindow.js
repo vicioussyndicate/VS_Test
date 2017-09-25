@@ -20,9 +20,9 @@ class TableWindow {
         // Defaults
 
         this.width = document.querySelector('.main-wrapper').offsetWidth -40
-        
-        this.height =  parseInt(Math.max(document.documentElement.clientHeight, window.innerHeight || 0)*0.7 - 40)
-        console.log('width:', this.height)
+        //this.height =  parseInt(Math.max(document.documentElement.clientHeight, window.innerHeight || 0)*0.7 - 40)
+        this.height = ui.height*0.7 -40
+
         this.f = this.hsFormats[0] 
         this.t = this.hsTimes[0] 
         this.r = this.ranks[0] 
@@ -108,10 +108,10 @@ class TableWindow {
     
     renderOptions() {
         
-        document.querySelector("#tableWindow #formatBtn").innerHTML =    btnIdToText[this.f]
-        document.querySelector("#tableWindow #timeBtn").innerHTML =      btnIdToText[this.t]
-        document.querySelector("#tableWindow #ranksBtn").innerHTML =     btnIdToText[this.r]
-        document.querySelector("#tableWindow #sortBtn").innerHTML =      btnIdToText[this.sortBy]
+        document.querySelector("#tableWindow #formatBtn").innerHTML = (MOBILE) ? btnIdToText_m[this.f] : btnIdToText[this.f]
+        document.querySelector("#tableWindow #timeBtn").innerHTML =   (MOBILE) ? btnIdToText_m[this.t] : btnIdToText[this.t]
+        document.querySelector("#tableWindow #ranksBtn").innerHTML =  (MOBILE) ? btnIdToText_m[this.r] : btnIdToText[this.r]
+        document.querySelector("#tableWindow #sortBtn").innerHTML =   (MOBILE) ? btnIdToText_m[this.sortBy] : btnIdToText[this.sortBy]
 
         for (var t of this.hsTimes) {
             if (this.data[this.f][t]['ranks_all'].totGames < this.minGames) {

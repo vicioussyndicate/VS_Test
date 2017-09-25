@@ -47,6 +47,7 @@ class LadderWindow {
         this.mode = 'classes' // classes, decks
         this.fullyLoaded = false
         this.history = null
+        this.zoomClass = null
 
 
         for (var f of this.hsFormats) {
@@ -126,6 +127,8 @@ class LadderWindow {
         if (btnID == 'pie')         {this.plotType = 'pie'}
         if (btnID == 'number')      {this.plotType = 'number'}
         if (btnID == 'timeline')    {this.plotType = 'timeline'}
+
+        if (this.plotType == 'zoom' && this.mode != 'classes') {this.plotType = 'bar'}
         
         this.plot()
     }// button Handler
@@ -193,7 +196,7 @@ class LadderWindow {
 
         if (archName in this.archColors[hsFormat]) { return this.archColors[hsFormat][archName] }
         else {
-            var color = colorStringRange(hsColors[hsClass],30)
+            var color = colorStringRange(hsColors[hsClass],50)
             var fontColor = hsFontColors[hsClass]
             this.archColors[hsFormat][archName] = {color: color, fontColor: fontColor}
             return this.archColors[hsFormat][archName]
