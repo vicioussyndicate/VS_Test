@@ -9,6 +9,8 @@ class LadderWindow {
         this.window = document.querySelector('#ladderWindow')
         this.chartDiv = document.querySelector('#ladderWindow #chart1')
         this.totGamesDiv = document.querySelector('#ladderWindow .content-header .nrGames')
+        this.graphTitle = document.querySelector('#ladderWindow .graphTitle')
+        this.graphLabel = document.querySelector('#ladderWindow .graphLabel')
         this.rankFolder = document.querySelector('#ladderWindow .content-header #rankBtn')
         this.optionButtons = document.querySelectorAll('#ladderWindow .optionBtn')
         this.firebasePath = (PREMIUM) ? 'premiumData/ladderData' : 'data/ladderData'
@@ -207,8 +209,34 @@ class LadderWindow {
     showRankFolder() { this.rankFolder.style.display = 'flex' }
     hideRankFolder() { this.rankFolder.style.display = 'none' }
 
-} // close LadderWindow
+    setGraphTitle() {
+        switch (this.plotType) {
+            case 'bar': 
+                this.graphTitle.innerHTML = 'Class Frequency vs Ranks'; 
+                this.graphLabel.innerHTML = 'Ranks >'
+                break;
+            case 'line': 
+                this.graphTitle.innerHTML = 'Class Frequency vs Ranks';
+                this.graphLabel.innerHTML = 'Ranks >'
+                break;
+            case 'pie': 
+                this.graphTitle.innerHTML = 'Class Frequency of Rank 1-5'; 
+                this.graphLabel.innerHTML = ''
+                break;
+            case 'number': 
+                this.graphTitle.innerHTML = 'Class Frequency vs Ranks'; 
+                this.graphLabel.innerHTML = ''
+                break;
+            case 'timeline': 
+                this.graphTitle.innerHTML = 'Class Frequency over Time';
+                this.graphLitle.innerHTML = 'Past Hours >'; 
+                break;
+        }
 
+
+    }
+
+} // close LadderWindow
 
 
 

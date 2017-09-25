@@ -203,7 +203,7 @@ class Ladder {
             this.traces_line.decks.push(arch_line)
 
             this.archLegend.push({name: archName, hsClass: ARCHETYPES[i][0], color: color, fontColor: fontColor, fr: fr_avg})
-            this.archetypes.push({name:archName, hsClass: ARCHETYPES[i][0], fr:fr_avg, data: archFR_line, color: color, fontColor: fontColor})
+            this.archetypes.push({name:archName, hsClass: ARCHETYPES[i][0], fr:fr_avg, data: archFR_line.slice(), color: color, fontColor: fontColor})
 
         } // close for ARCHETYPES
                 
@@ -511,12 +511,12 @@ class Ladder {
 
         if (MOBILE == 'portrait' && this.window.plotTyp != 'pie') {
             layout.width = ui.width*2
-            layout.height = ui.height*0.8
+            layout.height = ui.height*0.6
         }
 
 
         Plotly.newPlot('chart1',data, layout, {displayModeBar: false,})
-
+        this.window.setGraphTitle()
 
         var totGames = (this.window.plotType != 'pie') ? this.totGames : this.totGamesRanks[this.window.r]
         this.window.setTotGames(totGames)   

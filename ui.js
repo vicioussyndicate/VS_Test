@@ -26,6 +26,7 @@ class UI {
             for(var mBtn of this.mobileBtns) { mBtn.addEventListener("click", this.mobileMenu.bind(this)) }
             detectswipe('.navbar',this.swipeTab.bind(this))
             document.querySelector('#ladderWindow .content-header .nrGames').style.display = 'none'
+            this.hideLoader()
         }
 
         window.addEventListener('orientationchange', this.getWindowSize.bind(this));
