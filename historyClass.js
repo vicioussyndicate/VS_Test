@@ -129,6 +129,7 @@ class History {
             
             
             Plotly.newPlot('chart1',traces, this.layout, {displayModeBar: false,})
+            this.window.setGraphTitle()
             this.createLegend(archetypes)
             this.window.setTotGames(totGames)
         }

@@ -17,6 +17,14 @@ html(lang='en')
     .main-wrapper
       #overlay(onclick='overlay()')
       nav.navbar
+        #mobileFolder.option-folder
+          button#mobileBtn.folder-toggle.fa.fa-bars
+          .dropdown.hidden
+            button#ladder.mobileBtn.optionBtn.folderBtn Overview
+            button#power.mobileBtn.optionBtn.folderBtn Tier List
+            button#table.mobileBtn.optionBtn.folderBtn Matchups
+            button#decks.mobileBtn.optionBtn.folderBtn Decks
+            button#info.mobileBtn.optionBtn.folderBtn Info
         .tabs
           button#ladder.tab Overview
           button#power.tab Tier List
@@ -176,6 +184,7 @@ html(lang='en')
     script(src='tableWindow.js')
     script(src='powerWindow.js')
     script(src='decksWindow.js')
+    script(src='decklistClass.js')
     script(src='firebaseHandler.js')
 
 

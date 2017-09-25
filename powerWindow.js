@@ -5,7 +5,6 @@ class PowerWindow {
 
     constructor () {
 
-        console.log('construct power')
         this.grid = document.querySelector('#powerGrid')
         this.optionButtons = document.querySelectorAll('#powerWindow .optionBtn')
         

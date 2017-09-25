@@ -19,16 +19,13 @@ class Ladder {
         this.t = t
         this.window = window
         
-
-        this.zoomIn = false
-        this.zoomIdx = null
-
         this.archetypes = []
         this.c_data = {}
 
         this.traces_bar =   {classes: [], decks:[]}
         this.traces_line =  {classes: [], decks:[]}
-        this.traces_pie =   {classes: {}, decks:{}}        
+        this.traces_zoom =  {}
+        this.traces_pie =   {classes: {}, decks:{}}      
 
         this.archLegend = []
         this.classLegend = []
@@ -49,7 +46,8 @@ class Ladder {
 
         this.tier = this.tiers[0]
 
-       
+        for (var hsClass of hsClasses) {this.traces_zoom[hsClass] = []}
+
         for (var tier of this.tiers) {
 
             this.totGamesRanks[tier.buttonId] = 0
@@ -84,6 +82,11 @@ class Ladder {
             this.traces_pie['classes'][tier.buttonId] = [trace_classes]
             
         }
+
+
+
+
+
 
 
         var ARCHETYPES =    DATA.archetypes
@@ -200,7 +203,7 @@ class Ladder {
             this.traces_line.decks.push(arch_line)
 
             this.archLegend.push({name: archName, hsClass: ARCHETYPES[i][0], color: color, fontColor: fontColor, fr: fr_avg})
-            this.archetypes.push({name:archName,fr:fr_avg, data: archFR, color: color, fontColor: fontColor})
+            this.archetypes.push({name:archName, hsClass: ARCHETYPES[i][0], fr:fr_avg, data: archFR_line.slice(), color: color, fontColor: fontColor})
 
         } // close for ARCHETYPES
                 
@@ -222,6 +225,31 @@ class Ladder {
                     if (rank == tier.end) { this.traces_pie['classes'][tier.buttonId][0].values[i] /= (tier.end-tier.start +1) }
                 }
             }
+
+            // push zoom traces
+            var fr_tot = fillRange(0,hsRanks,0)
+            for (var a of this.archetypes) {
+                if (a.hsClass != hsClass) {continue}
+                for (var rank=0;rank<hsRanks;rank++) { fr_tot[rank] += a.data[rank] }
+                var bar_zoom = {
+                    x: range(0,hsRanks),
+                    y: a.data,
+                    name: a.name,
+                    text: a.name,
+                    hoverinfo: 'text',
+                    marker: {color: a.color},
+                    type: 'bar',
+                    winrate: 0,
+                    hsClass: hsClass,
+                }
+
+                this.traces_zoom[hsClass].push(bar_zoom)
+            }
+
+            for (var a of this.traces_zoom[hsClass]) {
+                for (var rank=0;rank<hsRanks;rank++) { a.y[rank] /= (fr_tot[rank]>0) ? fr_tot[rank] : 1 }
+            }
+
             
             fr_avg /= hsRanks
             this.c_data[hsClass] = classFR.slice()
@@ -242,9 +270,9 @@ class Ladder {
 
             var class_line = {
                 x:range(0,hsRanks),
-                y:classFR,
+                y:classFR.slice(),
                 name: hsClass,
-                text: classTxt,
+                text: classTxt.slice(),
                 hoverinfo: 'text',
                 marker: {color: hsColors[hsClass]},
                 line: {width: this.lineWidth},
@@ -314,7 +342,6 @@ class Ladder {
             paper_bgcolor: 'transparent',//this.bgColor,
             margin: MOBILE ? {l:10,r:10,b:35,t:0,} : {l:60,r:30,b:35,t:0,},
         }
-        if (MOBILE) {this.layout_bar['height'] = ui.height*0.8 }
 
 
 
@@ -471,19 +498,37 @@ class Ladder {
             data = this.traces_bar[this.window.mode]
         }
 
+        if (this.window.plotType == 'zoom') {
+            var zoomClass = (this.window.zoomClass) ? this.window.zoomClass : 'Druid'
+            layout = this.layout_bar
+            data = this.traces_zoom[zoomClass]
+        }
+
         if (this.window.plotType == 'line') {
             layout = this.layout_line
             data = this.traces_line[this.window.mode]
         }
 
-        Plotly.newPlot('chart1',data, layout, {displayModeBar: false,})
+        if (MOBILE == 'portrait' && this.window.plotTyp != 'pie') {
+            layout.width = ui.width*2
+            layout.height = ui.height*0.6
+        }
 
+
+        Plotly.newPlot('chart1',data, layout, {displayModeBar: false,})
+        this.window.setGraphTitle()
 
         var totGames = (this.window.plotType != 'pie') ? this.totGames : this.totGamesRanks[this.window.r]
         this.window.setTotGames(totGames)   
 
         if (this.window.mode == 'decks') {this.createLegend('decks')}
-        if (this.window.mode == 'classes') {this.createLegend('classes')}
+        if (this.window.mode == 'classes') {
+            this.createLegend('classes')
+            if (this.window.plotType == 'bar' || this.window.plotType == 'zoom') {
+                document.getElementById('chart1').on('plotly_click', this.zoomToggle.bind(this))
+        }}
+
+        
     }
 
 
@@ -672,7 +717,16 @@ class Ladder {
 
 
     zoomToggle (data) {
-        var hsClass = data.points[0].data.hsClass
+
+        if (this.window.plotType == 'zoom') {
+            this.window.plotType = 'bar'
+            this.plot()
+            return
+        }
+
+        this.window.plotType = 'zoom'
+        this.window.zoomClass = data.points[0].data.hsClass
+        this.plot()
     }
 
 }// class Ladder

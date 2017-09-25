@@ -29,6 +29,7 @@ class DecksWindow {
         this.fullyLoaded = false
 
 
+        this.decklists = []
         this.data = {}
         
         for (var f of this.hsFormats) {
@@ -130,7 +131,7 @@ class DecksWindow {
     deckLink(archName, hsFormat = 'Standard') {
         var hsClass
         var hsArch
-        this.display = 'decklists'
+        this.mode = 'decklists'
 
         for (var c of hsClasses) {
 
@@ -141,7 +142,7 @@ class DecksWindow {
         }
         
         if (hsClass == undefined) { hsClass = 'Druid'}
-        if (hsArch == undefined)  { hsArch = null; this.display = 'description' }
+        if (hsArch == undefined)  { hsArch = null; this.mode = 'description' }
         
         this.hsClass = hsClass
         this.hsArch = hsArch
@@ -171,8 +172,8 @@ class DecksWindow {
 
         this.hsClass = hsClass
 
-        if (this.display == 'description') {this.loadDescription()}
-        if (this.display == 'decklists') {this.loadDecklists()}
+        if (this.mode == 'description') {this.loadDescription()}
+        if (this.mode == 'decklists') {this.loadDecklists()}
 
         
         this.archDiv.innerHTML = ''
@@ -187,7 +188,7 @@ class DecksWindow {
 
     loadDescription() {
 
-        this.display = 'description'
+        this.mode = 'description'
         var d = this.data[this.f][this.hsClass]
         this.addDescription(this.hsClass,d.text)
         this.descriptionBox.style.display = 'inline'
@@ -199,7 +200,8 @@ class DecksWindow {
 
     loadDecklists() {
 
-        this.display = 'decklists'
+        this.mode = 'decklists'
+        this.decklists = []
 
         this.decksDiv.innerHTML = ''
 
@@ -211,7 +213,10 @@ class DecksWindow {
         for (var dl of this.hsArch.decklists) {
             
             gridTemplateColumns += this.deckWidth + ' '
-            deckCards.push(this.addDecklist(dl))
+            var decklist = new Decklist(dl, this.hsClass)
+            this.decklists.push(decklist)
+            this.decksDiv.appendChild(decklist.deckBox)
+            //this.addDecklist(dl)
         }
         
         // do in .styl file:
