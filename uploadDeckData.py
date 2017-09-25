@@ -69,6 +69,8 @@ def readDeckCode(file,hsClass, hsFormat):
         if readingCards == 'reading':
             quantity = row[2]
             manaCost = row[6]
+            if row[7] != ')':
+                manaCost = row[6:8]
             name = row[9:-1]
             cards.append({'name':name,'manaCost':manaCost,'quantity':quantity})
 

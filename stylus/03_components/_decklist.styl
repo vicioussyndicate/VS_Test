@@ -24,8 +24,31 @@
             overflow-x hidden
             background-color: white
             .card
-                padding: 0.15rem
-                //margin-top 0.2rem
+                padding 0.05rem
+                .costContainer
+                    position relative
+                .hex
+                    position fixed
+                    font-size 140%
+                    position absolute
+                    color $darkColor
+                    opacity 0.5
+                .cost
+                    color $lightColor
+                    position absolute
+                    padding 0.30rem 0 0 0.35rem
+                .name
+                    padding 0.25rem 0.1rem 0 1.5rem
+                    display inline-block
+                .quantity
+                    float right
+                    padding 0.25rem 0.25rem 0 0
+                    display inline-block
+                    z-index 10
+                    background-color white
+                &:hover
+                    color $midColor  
+            
         .copyDL
             color black
             background-color #92fc64
@@ -39,3 +62,37 @@
                 background-color: #b7ff54
                 border-color: #b7ff54
                 cursor:  pointer
+
+
+$hexBorder = 3rem
+$hexSize = 5.2rem
+
+
+
+// .hex:before {
+//     content: " ";
+//     width: 0; height: 0;
+//     border-bottom: $hexBorder solid #6C6;
+//     border-left: $hexSize solid transparent;
+//     border-right: $hexSize solid transparent;
+//     position: absolute;
+//     top: -$hexBorder;
+// }
+
+// .hex {
+//     margin-top: $hexBorder;
+//     width: $hexSize*2;
+//     height: $hexSize*2;
+//     background-color: #6C6;
+//     position: relative;
+// }
+
+// .hex:after {
+//     content: "";
+//     width: 0;
+//     position: absolute;
+//     bottom: -$hexSize;
+//     border-top: $hexBorder solid #6C6;
+//     border-left: $hexSize solid transparent;
+//     border-right: $hexSize solid transparent;
+// }
