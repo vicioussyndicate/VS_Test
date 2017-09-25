@@ -33,11 +33,13 @@ class LadderWindow {
         this.hsFormats = hsFormats
         this.hsTimes = hsTimes
         this.ranks = ladder_ranks
-        this.archColors = {
-            Standard: {},
-            Wild: {},
-        }
-
+        this.archColors = {}
+        for (var f of this.hsFormats) {
+            this.archColors[f] = {}
+            for (var c of hsClasses) {
+                this.archColors[f][c] = {count:0}
+        }}
+        
 
         // Defaults
 
@@ -196,12 +198,15 @@ class LadderWindow {
             for (var c of hsClasses) {if (archName.indexOf(c) != -1) {hsClass = c; break} }
         }
 
-        if (archName in this.archColors[hsFormat]) { return this.archColors[hsFormat][archName] }
+
+        if (archName in this.archColors[hsFormat]) { return {color: hsArchColors[hsClass][this.archColors[hsFormat][archName]], fontColor: hsFontColors[hsClass] } }
         else {
-            var color = colorStringRange(hsColors[hsClass],50)
-            var fontColor = hsFontColors[hsClass]
-            this.archColors[hsFormat][archName] = {color: color, fontColor: fontColor}
-            return this.archColors[hsFormat][archName]
+            this.archColors[hsFormat][archName] = this.archColors[hsFormat][hsClass].count
+            this.archColors[hsFormat][hsClass].count += 1
+            if (this.archColors[hsFormat][hsClass].count > 4) {this.archColors[hsFormat][hsClass].count = 4}
+            var color = hsArchColors[hsClass][this.archColors[hsFormat][archName]]
+            console.log(archName,color)
+            return {color: color, fontColor: hsFontColors[hsClass]}
         }
     }
 
@@ -229,7 +234,7 @@ class LadderWindow {
                 break;
             case 'timeline': 
                 this.graphTitle.innerHTML = 'Class Frequency over Time';
-                this.graphLitle.innerHTML = 'Past Hours >'; 
+                this.graphLabel.innerHTML = 'Past Hours >'; 
                 break;
         }
 

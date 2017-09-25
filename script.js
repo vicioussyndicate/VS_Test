@@ -127,20 +127,35 @@ var colorscale_Table = [
 // }
 
 // Sun Picture
-var hsColors = {
+const hsColors = {
     Druid:      '#674f3a',//'#725d4d',
     Hunter:     '#719038',//'#5f8732',
     Mage:       '#90bbc3',//'#89b9c8',
     Paladin:    '#ffd96d',
     Priest:     '#cfcbb3',//'#ddd9be', //'#fdfae9',//'#fff3c7',
-    Rogue:      '#0b250b',
+    Rogue:      '#172917',
     Shaman:     '#1a5d72',
     Warlock:    '#ad5c7b',
     Warrior:    '#dc7852',
-    Other:      '#88042d',
-    '':         '#88042d',
-    '§':        '#88042d',
+    // Other:      '#88042d',
+    // '':         '#88042d',
+    // '§':        '#88042d',
 }
+
+const hsArchColors = {
+    Druid:      ['#674f3a','#624737','#675645','#785c43','#523f2e'],
+    Hunter:     ['#719038','#597525','#6d8347','#8da238','#4f6d1a'],
+    Mage:       ['#90bbc3','#75a3a5','#a4c6c4','#89aaba','#638a8b'],
+    Paladin:    ['#ffd96d','#e9bf64','#ffe6a0','#f1f976','#ffc770'],
+    Priest:     ['#cfcbb3','#bbb7a1','#d5cec1','#c3c2a4','#aca995'],
+    Rogue:      ['#172917','#304030','#24352d','#33453f','#0c0c0c'],
+    Shaman:     ['#1a5d72','#154a5a','#326a8c','#245368','#05475d'],
+    Warlock:    ['#ad5c7b','#904c66','#ba7690','#a85494','#923d6d'],
+    Warrior:    ['#dc7852','#c25a48','#e0563b','#cc4941','#bc3b29'],
+}
+
+
+
 
 
 var hsFontColors = {
