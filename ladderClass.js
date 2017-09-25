@@ -31,6 +31,7 @@ class Ladder {
         this.classLegend = []
         this.totGames = 0
         this.totGamesRanks = {}
+        this.download = {classes:'',decks:''}
 
         this.rankLabels = []
         this.tiers = []
@@ -580,23 +581,31 @@ class Ladder {
         
         var table = document.createElement('table')
         table.style.width = '100%'
+        table.id = 'numberTable'
         var headerRow = document.createElement('tr')
+        this.download[mode] = [[]]
 
         var item = document.createElement('th')
         item.className = 'pivot'
         item.innerHTML = 'Rank ->'
         headerRow.appendChild(item)
+        this.download[mode] += 'Rank%2C'
+        
 
         for (var i=hsRanks-1;i>=0;i--) {
             var item = document.createElement('th')
             item.innerHTML = (i>0) ? i : 'L'
             headerRow.appendChild(item)
+            this.download[mode] += (i>0) ? i : 'L'
+            this.download[mode] += '%2C'
         }
         table.appendChild(headerRow)
+        this.download[mode] += '%0A'
 
         if (mode == 'decks') {
             for (var j=0; j<maxArch; j++) {
                 var arch = this.archetypes[j]
+                var row_dl = arch.name + '%2C'
                 var row = document.createElement('tr')
                 var pivot = document.createElement('td')
                 pivot.className = 'pivot'
@@ -607,10 +616,12 @@ class Ladder {
                 for (var i=hsRanks-1;i>-1;i--) {
                     var item = document.createElement('td')
                     item.style.backgroundColor = this.colorScale(arch.data[i])
-                    item.innerHTML = (arch.data[i]*100).toFixed(1) + '%'
+                    item.innerHTML = (arch.data[i]).toFixed(1) + '%'
                     row.appendChild(item)
+                    row_dl += arch.data[i] + '%2C'
                 }
                 table.appendChild(row)
+                this.download[mode] += row_dl+`%0A`
             }
         }
 
@@ -618,6 +629,7 @@ class Ladder {
             for (var j=0; j<9; j++) {
                 var hsClass = hsClasses[j]
                 var data = this.c_data[hsClass]
+                var row_dl = hsClass + '%2C'
                 var row = document.createElement('tr')
                 var pivot = document.createElement('td')
                 pivot.className = 'pivot'
@@ -628,10 +640,12 @@ class Ladder {
                 for (var i=hsRanks-1;i>-1;i--) {
                     var item = document.createElement('td')
                     item.style.backgroundColor = this.colorScale(data[i])
-                    item.innerHTML = (data[i]*100).toFixed(1) + '<span style="color=#999">%</span>'
+                    item.innerHTML = (data[i]*100).toFixed(1) + '%'
                     row.appendChild(item)
+                    row_dl += data[i] + '%2C'
                 }
                 table.appendChild(row)
+                this.download[mode] += row_dl+`%0A`
             }   
         }
         
@@ -703,18 +717,28 @@ class Ladder {
 
         div.style = "font-size:2rem;"
 
+        // //div.appendChild(csvBtn)
         div.appendChild(csvBtn)
-        div.appendChild(clipboardBtn)
 
+        csvBtn.addEventListener('click',this.downloadCSV.bind(this))
         chartFooter.appendChild(div)
 
-        new Clipboard('.copyNumbers', {
-            text: function(trigger) {
-                return 'hello'
-            }
-        });
+       
+        // var clipboard = new Clipboard('.copyNumbers',
+        //     {text: function() {return 'clipboard not possible'}}
+        // );
     }
 
+    
+    downloadCSV() {
+        var dlink = document.createElement('a')
+        dlink.setAttribute('href', 'data:text/plain;charset=utf-8,' + this.download[this.window.mode])
+        dlink.setAttribute('download', 'ladder.csv');
+        dlink.style.display = 'none';
+        document.body.appendChild(dlink);
+        dlink.click();
+        document.body.removeChild(dlink);
+    }
 
     zoomToggle (data) {
 

@@ -137,9 +137,6 @@ const hsColors = {
     Shaman:     '#1a5d72',
     Warlock:    '#ad5c7b',
     Warrior:    '#dc7852',
-    // Other:      '#88042d',
-    // '':         '#88042d',
-    // '§':        '#88042d',
 }
 
 const hsArchColors = {

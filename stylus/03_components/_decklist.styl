@@ -5,6 +5,8 @@
 .decklists
     display: none
     margin-top 2.5rem
+    display grid 
+    grid-column-gap 1.5rem
     .deckBox
         .deckTitle
             display inline-block
@@ -38,7 +40,7 @@
                     position absolute
                     padding 0.30rem 0 0 0.35rem
                 .name
-                    padding 0.25rem 0.1rem 0 1.5rem
+                    padding 0.25rem 0.1rem 0 1.7rem
                     display inline-block
                 .quantity
                     float right
@@ -46,6 +48,9 @@
                     display inline-block
                     z-index 10
                     background-color white
+                    font-size: 85%
+                    color $darkColor
+                    opacity: 0.5
                 &:hover
                     color $midColor  
             
@@ -64,35 +69,3 @@
                 cursor:  pointer
 
 
-$hexBorder = 3rem
-$hexSize = 5.2rem
-
-
-
-// .hex:before {
-//     content: " ";
-//     width: 0; height: 0;
-//     border-bottom: $hexBorder solid #6C6;
-//     border-left: $hexSize solid transparent;
-//     border-right: $hexSize solid transparent;
-//     position: absolute;
-//     top: -$hexBorder;
-// }
-
-// .hex {
-//     margin-top: $hexBorder;
-//     width: $hexSize*2;
-//     height: $hexSize*2;
-//     background-color: #6C6;
-//     position: relative;
-// }
-
-// .hex:after {
-//     content: "";
-//     width: 0;
-//     position: absolute;
-//     bottom: -$hexSize;
-//     border-top: $hexBorder solid #6C6;
-//     border-left: $hexSize solid transparent;
-//     border-right: $hexSize solid transparent;
-// }

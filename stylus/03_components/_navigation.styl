@@ -5,22 +5,24 @@
     display flex
     align-content center
     justify-content start
+    height: $navbarHeight
     z-index 2
     .tabs
         display flex
-        height 100%
         align-content center
         align-items center
         justify-content center
         background $nav_bgColor
         color $nav_fColor
         .tab
+            height 100%
             background-color $nav_bgColor
             color $nav_fColor
             padding 0.4rem
             font-size 1.5rem
             font-weight bold
             letter-spacing 2px
+            overflow: hidden
             transition background 0.3s ease, color 0.3s ease
             &#power
                 background-color: $midColor2

@@ -24,7 +24,7 @@ class TableWindow {
         this.height = ui.height*0.7 -40
 
         this.f = this.hsFormats[0] 
-        this.t = this.hsTimes[0] 
+        this.t = 'lastWeek' //this.hsTimes[0] 
         this.r = this.ranks[0] 
         this.sortBy = this.sortOptions[0] //'class' // class, frequency, winrate, matchup
         this.zoomIn = false
@@ -101,6 +101,8 @@ class TableWindow {
             document.querySelector('#tableWindow .content-header #sortFolder .dropdown').appendChild(btn)
         }
 
+        var dlCSV = function () {this.data[this.f][this.t][this.r].downloadCSV()}
+        document.querySelector('#tableWindow .downloadTable').addEventListener('click',dlCSV.bind(this))
     }
 
 

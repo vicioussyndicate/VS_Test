@@ -26,6 +26,7 @@ class Table {
         this.classPlusArch = [] // needed for Class Sort
         this.winrates = []
         this.totGames = 0
+        this.download = ''
 
         
         
@@ -261,7 +262,6 @@ class Table {
     }
 
     
-
     zoomIn (arch) {
         var idx = this.archetypes.indexOf(arch)
     
@@ -376,4 +376,25 @@ class Table {
         
         if (plot) { this.plot() }
     } // close SortBy    
+
+    downloadCSV() {
+        this.download = ' %2C'
+        for (var i=0;i<this.numArch;i++) { this.download += this.archetypes[i]+'%2C' }
+        this.download += '%0A'
+        for (var i=0;i<this.numArch;i++) {
+            this.download += this.archetypes[i] + '%2C'
+            for (var j=0;j<this.numArch;j++) {
+                this.download += this.table[i][j] + '%2C'
+            }
+            this.download += '%0A'
+        }
+        var dlink = document.createElement('a')
+        dlink.setAttribute('href', 'data:text/plain;charset=utf-8,' + this.download)
+        dlink.setAttribute('download', 'matchupTable.csv');
+        dlink.style.display = 'none';
+        document.body.appendChild(dlink);
+        dlink.click();
+        document.body.removeChild(dlink);
+    }    
+
 }// close Table

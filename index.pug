@@ -31,9 +31,9 @@ html(lang='en')
           button#table.tab Matchups
           button#decks.tab Decks
           button#info.tab Info
-      #vsLogoDiv
-        img(src="Images/skull.png").logo
-        p.text Live
+        #vsLogoDiv
+          img(src="Images/skull.png").logo
+          p.text Live
       .content-wrapper
         #loader
         #ladderWindow.tabWindow
@@ -120,7 +120,8 @@ html(lang='en')
             .chart-footer
               .download
                 button.downloadTable Download Table
-                button.copyTable Copy Table
+                  .fa.fa-cloud-download
+                //button.copyTable Copy Table
           .content-footer
         #decksWindow.tabWindow
           .content-header

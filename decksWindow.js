@@ -24,7 +24,7 @@ class DecksWindow {
         this.f = 'Standard'
         this.hsClass = 'Druid'
         this.hsArch = null
-        this.display = 'description' // decklists, description
+        this.mode = 'description' // decklists, description
         this.deckWidth = '12rem'
         this.fullyLoaded = false
 
@@ -74,7 +74,7 @@ class DecksWindow {
     renderOptions() {
          for (var btn of this.optionButtons) { 
             btn.classList.remove('highlighted')
-            if (btn.id == this.display) {btn.classList.add('highlighted')}
+            if (btn.id == this.mode) {btn.classList.add('highlighted')}
         }
         
         for (var btn of this.archButtons) { 
@@ -216,14 +216,12 @@ class DecksWindow {
             var decklist = new Decklist(dl, this.hsClass)
             this.decklists.push(decklist)
             this.decksDiv.appendChild(decklist.deckBox)
-            //this.addDecklist(dl)
         }
         
-        // do in .styl file:
         this.descriptionBox.style.display = 'none'
         this.decksDiv.style.display = 'grid'
         this.decksDiv.style.gridTemplateColumns = gridTemplateColumns
-        this.decksDiv.style.gridGap = '0.5rem'
+        //this.decksDiv.style.gridGap = '0.5rem'
 
 
         //chek for identical cards
@@ -257,48 +255,48 @@ class DecksWindow {
 
 
 
-    addDecklist(dl) {  // will become own class at some point
-        var cards = []
+    // addDecklist(dl) {  // will become own class at some point
+    //     var cards = []
 
-        var deckBox = document.createElement('div')
-        deckBox.className = 'deckBox'
+    //     var deckBox = document.createElement('div')
+    //     deckBox.className = 'deckBox'
 
-        var deckTitle = document.createElement('div')
-        deckTitle.className = 'deckTitle'
-        deckTitle.innerHTML = '<p>'+dl.name+'</p>'
-        deckTitle.style.backgroundColor = hsColors[this.hsClass]
-        deckTitle.style.color = hsFontColors[this.hsClass]
+    //     var deckTitle = document.createElement('div')
+    //     deckTitle.className = 'deckTitle'
+    //     deckTitle.innerHTML = '<p>'+dl.name+'</p>'
+    //     deckTitle.style.backgroundColor = hsColors[this.hsClass]
+    //     deckTitle.style.color = hsFontColors[this.hsClass]
 
-        var decklist = document.createElement('div')
-        decklist.className = 'decklist'
+    //     var decklist = document.createElement('div')
+    //     decklist.className = 'decklist'
 
-        for (var card of dl.cards) {
-            cards.push[card.name]
-            var cardDiv = document.createElement('div')
-            cardDiv.className = 'card'
-            cardDiv.innerHTML = card.manaCost+' '+card.name+' '+card.quantity
-            cardDiv.style.display = 'block'
-            decklist.appendChild(cardDiv)
-        }
+    //     for (var card of dl.cards) {
+    //         cards.push[card.name]
+    //         var cardDiv = document.createElement('div')
+    //         cardDiv.className = 'card'
+    //         cardDiv.innerHTML = card.manaCost+' '+card.name+' '+card.quantity
+    //         cardDiv.style.display = 'block'
+    //         decklist.appendChild(cardDiv)
+    //     }
 
-        var copyBtn = document.createElement('buttton')
-        copyBtn.innerHTML = 'Copy To Clipboard'
-        copyBtn.className = 'copyDL'
-        copyBtn.id = 'dl'+randint(0,10000000) // unique button id for clipboard
+    //     var copyBtn = document.createElement('buttton')
+    //     copyBtn.innerHTML = 'Copy To Clipboard'
+    //     copyBtn.className = 'copyDL'
+    //     copyBtn.id = 'dl'+randint(0,10000000) // unique button id for clipboard
         
         
-        deckBox.appendChild(deckTitle)
-        deckBox.appendChild(decklist)
-        deckBox.appendChild(copyBtn)
-        this.decksDiv.appendChild(deckBox)
+    //     deckBox.appendChild(deckTitle)
+    //     deckBox.appendChild(decklist)
+    //     deckBox.appendChild(copyBtn)
+    //     this.decksDiv.appendChild(deckBox)
 
-        new Clipboard('#'+copyBtn.id, {
-            text: function(trigger) {
-                return dl.deckCode 
-            }
-        });
-        return cards
-    }
+    //     new Clipboard('#'+copyBtn.id, {
+    //         text: function(trigger) {
+    //             return dl.deckCode 
+    //         }
+    //     });
+    //     return cards
+    // }
 
 
 } // close Decks

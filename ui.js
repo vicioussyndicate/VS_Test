@@ -63,6 +63,8 @@ class UI {
         this.renderWindows()
     }
 
+
+
     toggleDropDown(e) {
         var siblings = e.target.parentElement.childNodes
         var dd_folder = siblings[3] // !! TODO
@@ -103,7 +105,7 @@ class UI {
     }
 
     deckLink(arch, hsFormat) {
-        this.activeTab = document.querySelector('.navbar #decks')
+        this.activeTab = document.querySelector('.navbar #decks.tab')
         this.activeWindow = document.getElementById('decksWindow')
         this.renderTabs()
         this.renderWindows()        
