@@ -30,7 +30,7 @@ html(lang='en')
           button#power.tab Tier List
           button#table.tab Matchups
           button#decks.tab Decks
-          button#info.tab Info
+          button#info.tab info
         #vsLogoDiv
           img(src="Images/skull.png").logo
           p.text Live
@@ -72,7 +72,7 @@ html(lang='en')
               button#timeline.optionBtn.fa.fa-clock-o.tooltip
                   span.tooltipText Show Timeline
           .content
-            p.graphTitle Graph Title
+            p.graphTitle.chart-header Graph Title
             p.graphLabel y-axis
             #chart1.chart
             .chart-footer
@@ -98,13 +98,9 @@ html(lang='en')
               #formatFolder.option-folder
                 button#formatBtn.folder-toggle Standard
                 .dropdown.hidden
-                  //button#Standard.optionBtn.folderBtn Standard
-                  //button#Wild.optionBtn.folderBtn Wild
               #timeFolder.option-folder
                 button#timeBtn.folder-toggle Last Month
                 .dropdown.hidden
-                  //button#lastWeek.optionBtn.folderBtn Last Week
-                  //button#lastMonth.optionBtn.folderBtn Last Month
               #rankFolder.option-folder
                 button#ranksBtn.folder-toggle All Ranks
                 .dropdown.hidden
@@ -115,13 +111,12 @@ html(lang='en')
                 button#sortBtn.folder-toggle Sort
                 .dropdown.hidden
           .content
-            p.graphTitle Versus
+            //p.graphTitle Versus
             #chart2.chart
             .chart-footer
               .download
                 button.downloadTable Download Table
                   .fa.fa-cloud-download
-                //button.copyTable Copy Table
           .content-footer
         #decksWindow.tabWindow
           .content-header

@@ -14,7 +14,7 @@ class Table {
         this.window = window
 
         this.sortBy = ''
-        this.numArch = (f == 'Standard') ? 20 : 20;
+        this.numArch = (f == 'Standard') ? 16 : 16;
         this.bgColor = 'transparent'
         this.fontColor = '#22222'
         this.subplotRatio = 0.6
@@ -125,7 +125,7 @@ class Table {
             },
             plot_bgcolor: "transparent",
             paper_bgcolor: this.bgColor,
-            margin: {l: 120, r: 30, b: 30, t: 100 },
+            margin: {l: 120, r: 0, b: 30, t: 100 },
             width: (MOBILE) ? ui.width*2 : this.window.width,
             height: (MOBILE) ?  ui.height*0.8 : this.window.height,
 
@@ -170,6 +170,8 @@ class Table {
     
 
     plot() {
+
+        if (this.sortBy == '' || this.sortBy != this.window.sortBy) {this.sortTableBy(this.window.sortBy, false)}
 
         var overallWR = this.winrates
         var table = this.table.concat([overallWR])

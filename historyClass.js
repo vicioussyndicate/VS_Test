@@ -157,7 +157,7 @@ class History {
                 var colorSplash = document.createElement('div')
                 var archName = document.createElement('l')     
     
-                legendDiv.className = 'ladder-legend'
+                legendDiv.className = 'legend-item'
                 legendDiv.style.fontSize = '0.8em'
             
                 if (mode=='classes') {

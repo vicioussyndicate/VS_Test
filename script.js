@@ -33,7 +33,7 @@ const table_times =   ['last2Weeks']
 const table_times_premium = ['lastDay','last3Days','lastWeek','last2Weeks']
 
 const table_sortOptions = ['frequency']
-const table_sortOptions_premium = ['class','frequency','winrate','matchup']
+const table_sortOptions_premium = ['frequency','class','winrate','matchup']
 
 
 const table_ranks =   ['ranks_all']

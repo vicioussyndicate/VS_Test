@@ -1,52 +1,50 @@
 
 
 
-.content
-    background-color $content_bgColor
-    display flex
-    flex-direction column
 
-    overflow: auto
+        
+    .content
+        background-color $content_bgColor
+        display flex
+        flex-direction column
+        position relative
 
-    height $contentHeight
-    max-height: 700pxg
-    .graphTitle
-        margin 1rem auto 0 auto
-        position absolute
-        font-size: 140%
-        font-weight: bold
-        color $darkColor
-        opacity 0.5
-        z-index: 4
-        -webkit-transform: translate3d(0,0,4px);
-    .graphLabel
-        position absolute
-        top 75%
-        //left 0.2rem
-        color $darkColor
-        opacity 0.5
-        z-index: 4
-        -webkit-transform: translate3d(0,0,4px);
-    .chart
-        height 100%
-        background-color $chart_bgColor
-        margin 20px
-    .chart-footer
+        overflow: auto
+        
+        .graphTitle
+            margin 0.5rem auto 0 auto
+            font-size: 140%
+            font-weight: bold
+            color $darkColor
+            opacity 0.5
+            z-index: 4
+            -webkit-transform: translate3d(0,0,4px);
+        .graphLabel
+            position absolute
+            top 88%
+            color $darkColor
+            opacity 0.5
+            z-index: 4
+            font-size 85%
+            -webkit-transform: translate3d(0,0,4px);
+        .chart
+            background-color $chart_bgColor
+        .chart-footer
+            display flex
+            flex-direction row
+            justify-content space-between
+
+            
+    .content-footer
+        background-color $footer_bgColor
+        color $footer_fColor
+        //height $footerHeight
         display flex
         flex-direction row
         justify-content space-between
-
         
-.content-footer
-    background-color $footer_bgColor
-    color $footer_fColor
-    height $footerHeight
-    display flex
-    flex-direction row
-    justify-content space-between
-    
-    font-weight bold
-    div
-        margin-top 0.3em
-        margin-bottom 0.3em
+        font-weight bold
+        div
+            margin-top 0.3em
+            margin-bottom 0.3em
     

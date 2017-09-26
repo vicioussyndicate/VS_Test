@@ -21,7 +21,8 @@ class TableWindow {
 
         this.width = document.querySelector('.main-wrapper').offsetWidth -40
         //this.height =  parseInt(Math.max(document.documentElement.clientHeight, window.innerHeight || 0)*0.7 - 40)
-        this.height = ui.height*0.7 -40
+        //this.height = ui.height*0.7 -40
+        this.height = document.querySelector('#ladderWindow .content').offsetHeight*0.95
 
         this.f = this.hsFormats[0] 
         this.t = 'lastWeek' //this.hsTimes[0] 
