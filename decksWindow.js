@@ -12,6 +12,7 @@ class DecksWindow {
         this.descriptionBox = document.querySelector('#decksWindow .content .descriptionBox')
         this.decksDiv = document.querySelector('#decksWindow .content .decklists')
         this.description = document.querySelector('#decksWindow .content .descriptionBox .description')
+        this.overlayDiv = document.querySelector('#decksWindow .overlay')
         this.questionBtn = document.querySelector('#decksWindow .question')
 
         this.firebasePath = 'deckData'
@@ -29,6 +30,7 @@ class DecksWindow {
         this.mode = 'description' // decklists, description
         this.deckWidth = '12rem'
         this.fullyLoaded = false
+        this.overlay = false
 
 
         this.decklists = []
@@ -45,7 +47,8 @@ class DecksWindow {
         this.loadData()
         this.renderOptions()
 
-        this.questionBtn.addEventListener('click',this.overlay.bind(this))
+        this.questionBtn.addEventListener('click',this.toggleOverlay.bind(this))
+        this.overlayDiv.addEventListener('click',this.toggleOverlay.bind(this))
     }// close constructor
 
 
@@ -258,8 +261,9 @@ class DecksWindow {
         this.archDiv.appendChild(btn)
     }
 
-    overlay() {
-        console.log('overlay')
+    toggleOverlay() {
+        if (this.overlay) {this.overlayDiv.style.display = 'none'; this.overlay = false}
+        else{this.overlayDiv.style.display = 'block'; this.overlay = true}
     }
 
 

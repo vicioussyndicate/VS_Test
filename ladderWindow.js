@@ -14,11 +14,13 @@ class LadderWindow {
         this.rankFolder = document.querySelector('#ladderWindow .content-header #rankBtn')
         this.optionButtons = document.querySelectorAll('#ladderWindow .optionBtn')
         this.questionBtn = document.querySelector('#ladderWindow .question')
+        this.overlayDiv = document.querySelector('#ladderWindow .overlay')
         this.firebasePath = (PREMIUM) ? 'premiumData/ladderData' : 'data/ladderData'
         this.firebaseHistoryPath = (PREMIUM) ? 'premiumData/historyData' : ''
         
         this.fontColor = '#222'
         this.fontColorLight = '#999'
+        this.overlay = false
 
         // table
         this.colorScale_c1 = [255,255,255]
@@ -106,7 +108,8 @@ class LadderWindow {
 
         var disp = (PREMIUM) ? 'inline' : 'none'
 
-        this.questionBtn.addEventListener('click',this.overlay.bind(this))
+        this.questionBtn.addEventListener('click',this.toggleOverlay.bind(this))
+        this.overlayDiv.addEventListener('click',this.toggleOverlay.bind(this))
        
         document.querySelector('#ladderWindow .content-header #line').style.display = disp
         document.querySelector('#ladderWindow .content-header #decks').style.display = disp
@@ -242,8 +245,9 @@ class LadderWindow {
         }
     }
 
-    overlay() {
-        console.log('overlay')
+    toggleOverlay() {
+        if (this.overlay) {this.overlayDiv.style.display = 'none'; this.overlay = false}
+        else{this.overlayDiv.style.display = 'block'; this.overlay = true}
     }
 
 } // close LadderWindow

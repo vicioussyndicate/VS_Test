@@ -157,13 +157,13 @@ const overlayText1 = `
 
 Welcome to the VS Live web app where you can explore the newest Hearthstone data and find 
 
-the deck you want to play.<br><br>
+out about frequncey and winrates of your favorite decks.<br><br>
 
 To get more information on the current tab simply click on the 
 
     <div class='fa fa-question-circle' style='display:inline-block'></div>
 
-icon next to the tab title.<br><br>
+icon in the top right corner.<br><br>
 
 This app is currently in BETA. To give feedback simply click on the reddit link below:<br><br><br>
 

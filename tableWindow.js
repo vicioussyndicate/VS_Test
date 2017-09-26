@@ -11,6 +11,7 @@ class TableWindow {
         this.window = document.querySelector('#ladderWindow')
         this.optionButtons = document.querySelectorAll('#tableWindow .optionBtn')
         this.questionBtn = document.querySelector('#tableWindow .question')
+        this.overlayDiv = document.querySelector('#tableWindow .overlay')
 
         this.data = {}
         this.hsFormats = hsFormats
@@ -33,6 +34,7 @@ class TableWindow {
         this.zoomIn = false
         this.zoomArch = null
         this.fullyLoaded = false
+        this.overlay = false
         this.minGames = 1000
 
 
@@ -106,7 +108,8 @@ class TableWindow {
 
         var dlCSV = function () {this.data[this.f][this.t][this.r].downloadCSV()}
         document.querySelector('#tableWindow .downloadTable').addEventListener('click',dlCSV.bind(this))
-        this.questionBtn.addEventListener('click',this.overlay.bind(this))
+        this.questionBtn.addEventListener('click',this.toggleOverlay.bind(this))
+        this.overlayDiv.addEventListener('click',this.toggleOverlay.bind(this))
     }
 
 
@@ -149,8 +152,9 @@ class TableWindow {
         finishedLoading()
     }// add Data
 
-    overlay() {
-        console.log('overlay')
+    toggleOverlay() {
+        if (this.overlay) {this.overlayDiv.style.display = 'none'; this.overlay = false}
+        else{this.overlayDiv.style.display = 'block'; this.overlay = true}
     }
 
 } // close LadderWindow

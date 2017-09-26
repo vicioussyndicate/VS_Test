@@ -8,7 +8,7 @@ class PowerWindow {
         this.grid = document.querySelector('#powerGrid')
         this.optionButtons = document.querySelectorAll('#powerWindow .optionBtn')
         this.questionBtn = document.querySelector('#powerWindow .question')
-
+        this.overlayDiv = document.querySelector('#powerWindow .overlay')
         
 
         this.f = 'Standard'
@@ -45,7 +45,7 @@ class PowerWindow {
                 this.tierData[f][tier.name] = []
             }
         }
-
+        this.overlay = false
         this.addData('Standard')
         this.addData('Wild')
         this.setupUI()
@@ -57,7 +57,8 @@ class PowerWindow {
         if (!PREMIUM) {
             document.querySelector('#powerWindow .content-header #top').style.display = 'none'
         }
-        this.questionBtn.addEventListener('click',this.overlay.bind(this))
+        this.questionBtn.addEventListener('click',this.toggleOverlay.bind(this))
+        this.overlayDiv.addEventListener('click',this.toggleOverlay.bind(this))
     }
 
     buttonTrigger(e) {
@@ -284,8 +285,9 @@ class PowerWindow {
     } // close plot Tiers
 
 
-    overlay() {
-        console.log('overlay')
+    toggleOverlay() {
+        if (this.overlay) {this.overlayDiv.style.display = 'none'; this.overlay = false}
+        else{this.overlayDiv.style.display = 'block'; this.overlay = true}
     }
     
 
