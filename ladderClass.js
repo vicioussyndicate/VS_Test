@@ -11,7 +11,7 @@ class Ladder {
         this.bgColor = 'transparent'
         this.fontColor = window.fontColor
         this.fontColorLight = window.fontColorLight
-        this.lineWidth = 2.5
+        this.lineWidth = 2.7
         this.fr_min = 0.03
 
         this.DATA = DATA
@@ -490,6 +490,7 @@ class Ladder {
 
         if (this.window.plotType == 'number') {
             this.createTable(this.window.mode)
+            this.window.setGraphTitle()
             return
         }
 

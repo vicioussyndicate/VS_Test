@@ -47,7 +47,6 @@ window.onload = function() {
     ui = new UI()
     ui.showLoader()
     setupFirebase()
-    
 }
 
 
@@ -56,14 +55,16 @@ window.onload = function() {
 
 function finishedLoading() {
 
-    if (!(tableWindow.fullyLoaded && ladderWindow.fullyLoaded && decksWindow.fullyLoaded)) {return}
+    //if (!(tableWindow.fullyLoaded && ladderWindow.fullyLoaded && decksWindow.fullyLoaded)) {return}
+    if (!(tableWindow.fullyLoaded && ladderWindow.fullyLoaded)) {return}
     
 
     powerWindow = new PowerWindow()
+    decksWindow = new DecksWindow(hsFormats)
     powerWindow.plot()
     ladderWindow.plot()
     tableWindow.plot()
-    decksWindow.plot()
+    //decksWindow.plot()
 
     ui.fullyLoaded = true
     ui.hideLoader()

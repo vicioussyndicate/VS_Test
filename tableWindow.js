@@ -139,7 +139,7 @@ class TableWindow {
 
 
     readData(DATA) {
-
+        if (this.fullyLoaded) {return}
         var tableData = DATA.val()
         for (var f of this.hsFormats) {
             for (var t of this.hsTimes) {

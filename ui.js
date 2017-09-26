@@ -20,6 +20,7 @@ class UI {
         this.activeWindow = document.querySelector('#ladderWindow')
         this.openFolder = null
         this.overlay = false
+        this.loggedIn = false
 
         for(var tab of this.tabs) { tab.addEventListener("click", this.toggleTabs.bind(this)) }
         for(var fBtn of this.folderButtons) { fBtn.addEventListener("click", this.toggleDropDown.bind(this)) }

@@ -107,7 +107,7 @@ class DecksWindow {
 
 
     readData(DATA) {
-
+        if (this.fullyLoaded) {return}
         var DATA = DATA.val()
         
         for (var f of this.hsFormats) {
@@ -128,7 +128,8 @@ class DecksWindow {
         }}}}
         this.fullyLoaded = true
         console.log('decks loaded: '+ (performance.now()-t0).toFixed(2)+' ms')
-        finishedLoading() //<- callback to script.js
+        //finishedLoading() //<- callback to script.js
+        this.plot()
     }// add Data
 
 

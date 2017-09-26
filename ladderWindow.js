@@ -175,6 +175,7 @@ class LadderWindow {
 
 
     readData(DATA) {
+        if (this.fullyLoaded) {return}
 
         var ladderData = DATA.val()
         for (var f of this.hsFormats) {
@@ -220,27 +221,30 @@ class LadderWindow {
     hideRankFolder() { this.rankFolder.style.display = 'none' }
 
     setGraphTitle() {
-
+        var m = (this.mode == 'classes') ? 'Class' : 'Deck'
+        var time = (['lastDay','last6Hours','last12Hours'].indexOf(this.t) != -1) ? 'Hours' : 'Days'
+        var rank = btnIdToText[this.r]
         switch (this.plotType) {
             case 'bar': 
                 this.graphTitle.innerHTML = 'Class Frequency vs Ranks'; 
                 this.graphLabel.innerHTML = 'Ranks >'
                 break;
             case 'line': 
-                this.graphTitle.innerHTML = 'Class Frequency vs Ranks';
+                this.graphTitle.innerHTML = m + ' Frequency vs Ranks';
                 this.graphLabel.innerHTML = 'Ranks >'
                 break;
             case 'pie': 
-                this.graphTitle.innerHTML = 'Class Frequency of Rank 1-5'; 
+                this.graphTitle.innerHTML = m + ' Frequency of '+rank; 
                 this.graphLabel.innerHTML = ''
                 break;
             case 'number': 
-                this.graphTitle.innerHTML = 'Class Frequency vs Ranks'; 
+                console.log('number')
+                this.graphTitle.innerHTML = m + ' Frequency vs Ranks'; 
                 this.graphLabel.innerHTML = ''
                 break;
             case 'timeline': 
-                this.graphTitle.innerHTML = 'Class Frequency over Time';
-                this.graphLabel.innerHTML = 'Past Hours >'; 
+                this.graphTitle.innerHTML = m + ' Frequency over Time';
+                this.graphLabel.innerHTML = 'Past ' + time + ' >'; 
                 break;
         }
     }

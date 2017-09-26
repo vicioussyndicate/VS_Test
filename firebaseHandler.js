@@ -55,9 +55,11 @@ function setupFirebase() {
 
     firebase.auth().onAuthStateChanged(user => {
 
+        if (ui.loggedIn) {return}
+
         if (user) {
             console.log('user logged in:',user)
-
+            ui.loggedIn = true
 
             PREMIUM = true
             loadFireData()
@@ -71,6 +73,7 @@ function setupFirebase() {
             errorMsg.innerHTML = ''
         } else {
             console.log('not logged in')
+            ui.loggedIn = true
             logOutBtn.classList.add('hidden')
             loginBtn.classList.remove('hidden')
             signUpBtn.classList.remove('hidden')
@@ -102,13 +105,13 @@ function loadFireData() {
        
         tableWindow = new TableWindow(hsFormats, table_times_premium, table_ranks_premium, table_sortOptions_premium)
         ladderWindow = new LadderWindow(hsFormats, ladder_times_premium, ladder_ranks_premium)
-        decksWindow = new DecksWindow(hsFormats)
+        //decksWindow = new DecksWindow(hsFormats)
         document.querySelector('#vsLogoDiv .text').innerHTML = 'Pro'
     }
     else {
         tableWindow = new TableWindow(hsFormats, table_times, table_ranks, table_sortOptions)
         ladderWindow = new LadderWindow(hsFormats, ladder_times, ladder_ranks)
-        decksWindow = new DecksWindow(hsFormats)
+        //decksWindow = new DecksWindow(hsFormats)
         document.querySelector('#vsLogoDiv .text').innerHTML = 'Live'
     }
 
