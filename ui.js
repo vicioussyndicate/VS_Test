@@ -11,12 +11,15 @@ class UI {
         this.windows = document.querySelectorAll('.tabWindow');
         this.folderButtons = document.querySelectorAll('.folder-toggle');
         this.loader = document.getElementById('loader')
+        this.logo = document.querySelector('#vsLogoDiv .logo')
+        this.overlayText = document.querySelector('#overlay .overlayText')
         this.getWindowSize()
 
         this.tabIdx = 0
         this.activeTab =    this.tabs[0] //document.querySelector('.tab#ladder')
         this.activeWindow = document.querySelector('#ladderWindow')
         this.openFolder = null
+        this.overlay = false
 
         for(var tab of this.tabs) { tab.addEventListener("click", this.toggleTabs.bind(this)) }
         for(var fBtn of this.folderButtons) { fBtn.addEventListener("click", this.toggleDropDown.bind(this)) }
@@ -29,11 +32,15 @@ class UI {
             this.hideLoader()
         }
 
+        this.logo.addEventListener('click', this.toggleOverlay.bind(this))
+        document.querySelector('#overlay').addEventListener('click', this.toggleOverlay.bind(this))
+
         window.addEventListener('orientationchange', this.getWindowSize.bind(this));
         window.addEventListener('resize', this.getWindowSize.bind(this))
 
         this.renderTabs()
         this.renderWindows()
+        this.toggleOverlay()
     } // close constructor
 
     getWindowSize() {
@@ -130,26 +137,42 @@ class UI {
     }
 
     showLoader() { this.loader.style.display = 'block' }
-
     hideLoader() { this.loader.style.display = 'none' }
+
+    toggleOverlay() {
+        this.overlayText.innerHTML = overlayText1
+        if (this.overlay) {document.getElementById("overlay").style.display = "none"; this.overlay = false}
+        else {document.getElementById("overlay").style.display = "block"; this.overlay = true}
+    }
 
 } // close UI
 
 
 
+//const lien = `<img src='Images/skull.png' style='display: inline-block; width: 40px'></img> `
+
+const overlayText1 = `
+
+<span style='font-size:180%;padding-left:2rem'>Greetings Travelers,</span><br><br><br>
+
+Welcome to the VS Live web app where you can explore the newest Hearthstone data and find 
+
+the deck you want to play.<br><br>
+
+To get more information on the current tab simply click on the 
+
+    <div class='fa fa-question-circle' style='display:inline-block'></div>
+
+icon next to the tab title.<br><br>
+
+This app is currently in BETA. To give feedback simply click on the reddit link below:<br><br><br>
+
+<a href="https://www.reddit.com/r/ViciousSyndicate/comments/6yqj62/vs_live_web_app_feedback_thread/"
+   target="_blank"><img src="Images/redditLogo.png" 
+   style="position:absolute; left: 35%; display: inline-block"></a><br><br>
 
 
-
-
-function overlay() {
-    if (ui.overlay) {document.getElementById("overlay").style.display = "none"; ui.overlay = false}
-    else {document.getElementById("overlay").style.display = "block"; ui.overlay = true}
-    
-}
-
-
-
-
+`
 
 
 

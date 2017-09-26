@@ -12,6 +12,8 @@ class DecksWindow {
         this.descriptionBox = document.querySelector('#decksWindow .content .descriptionBox')
         this.decksDiv = document.querySelector('#decksWindow .content .decklists')
         this.description = document.querySelector('#decksWindow .content .descriptionBox .description')
+        this.questionBtn = document.querySelector('#decksWindow .question')
+
         this.firebasePath = 'deckData'
 
         this.archButtons = []
@@ -42,6 +44,8 @@ class DecksWindow {
 
         this.loadData()
         this.renderOptions()
+
+        this.questionBtn.addEventListener('click',this.overlay.bind(this))
     }// close constructor
 
 
@@ -132,6 +136,7 @@ class DecksWindow {
         var hsClass
         var hsArch
         this.mode = 'decklists'
+        this.f = hsFormat
 
         for (var c of hsClasses) {
 
@@ -253,50 +258,9 @@ class DecksWindow {
         this.archDiv.appendChild(btn)
     }
 
-
-
-    // addDecklist(dl) {  // will become own class at some point
-    //     var cards = []
-
-    //     var deckBox = document.createElement('div')
-    //     deckBox.className = 'deckBox'
-
-    //     var deckTitle = document.createElement('div')
-    //     deckTitle.className = 'deckTitle'
-    //     deckTitle.innerHTML = '<p>'+dl.name+'</p>'
-    //     deckTitle.style.backgroundColor = hsColors[this.hsClass]
-    //     deckTitle.style.color = hsFontColors[this.hsClass]
-
-    //     var decklist = document.createElement('div')
-    //     decklist.className = 'decklist'
-
-    //     for (var card of dl.cards) {
-    //         cards.push[card.name]
-    //         var cardDiv = document.createElement('div')
-    //         cardDiv.className = 'card'
-    //         cardDiv.innerHTML = card.manaCost+' '+card.name+' '+card.quantity
-    //         cardDiv.style.display = 'block'
-    //         decklist.appendChild(cardDiv)
-    //     }
-
-    //     var copyBtn = document.createElement('buttton')
-    //     copyBtn.innerHTML = 'Copy To Clipboard'
-    //     copyBtn.className = 'copyDL'
-    //     copyBtn.id = 'dl'+randint(0,10000000) // unique button id for clipboard
-        
-        
-    //     deckBox.appendChild(deckTitle)
-    //     deckBox.appendChild(decklist)
-    //     deckBox.appendChild(copyBtn)
-    //     this.decksDiv.appendChild(deckBox)
-
-    //     new Clipboard('#'+copyBtn.id, {
-    //         text: function(trigger) {
-    //             return dl.deckCode 
-    //         }
-    //     });
-    //     return cards
-    // }
+    overlay() {
+        console.log('overlay')
+    }
 
 
 } // close Decks

@@ -7,6 +7,8 @@ class PowerWindow {
 
         this.grid = document.querySelector('#powerGrid')
         this.optionButtons = document.querySelectorAll('#powerWindow .optionBtn')
+        this.questionBtn = document.querySelector('#powerWindow .question')
+
         
 
         this.f = 'Standard'
@@ -55,6 +57,7 @@ class PowerWindow {
         if (!PREMIUM) {
             document.querySelector('#powerWindow .content-header #top').style.display = 'none'
         }
+        this.questionBtn.addEventListener('click',this.overlay.bind(this))
     }
 
     buttonTrigger(e) {
@@ -281,7 +284,9 @@ class PowerWindow {
     } // close plot Tiers
 
 
-
+    overlay() {
+        console.log('overlay')
+    }
     
 
 } // close PowerRanking class

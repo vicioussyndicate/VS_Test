@@ -13,6 +13,7 @@ class LadderWindow {
         this.graphLabel = document.querySelector('#ladderWindow .graphLabel')
         this.rankFolder = document.querySelector('#ladderWindow .content-header #rankBtn')
         this.optionButtons = document.querySelectorAll('#ladderWindow .optionBtn')
+        this.questionBtn = document.querySelector('#ladderWindow .question')
         this.firebasePath = (PREMIUM) ? 'premiumData/ladderData' : 'data/ladderData'
         this.firebaseHistoryPath = (PREMIUM) ? 'premiumData/historyData' : ''
         
@@ -104,6 +105,8 @@ class LadderWindow {
         }
 
         var disp = (PREMIUM) ? 'inline' : 'none'
+
+        this.questionBtn.addEventListener('click',this.overlay.bind(this))
        
         document.querySelector('#ladderWindow .content-header #line').style.display = disp
         document.querySelector('#ladderWindow .content-header #decks').style.display = disp
@@ -214,6 +217,7 @@ class LadderWindow {
     hideRankFolder() { this.rankFolder.style.display = 'none' }
 
     setGraphTitle() {
+
         switch (this.plotType) {
             case 'bar': 
                 this.graphTitle.innerHTML = 'Class Frequency vs Ranks'; 
@@ -236,8 +240,10 @@ class LadderWindow {
                 this.graphLabel.innerHTML = 'Past Hours >'; 
                 break;
         }
+    }
 
-
+    overlay() {
+        console.log('overlay')
     }
 
 } // close LadderWindow

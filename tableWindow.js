@@ -10,6 +10,8 @@ class TableWindow {
         this.firebasePath = (PREMIUM) ? 'premiumData/tableData' : 'data/tableData'
         this.window = document.querySelector('#ladderWindow')
         this.optionButtons = document.querySelectorAll('#tableWindow .optionBtn')
+        this.questionBtn = document.querySelector('#tableWindow .question')
+
         this.data = {}
         this.hsFormats = hsFormats
         this.hsTimes = hsTimes
@@ -104,6 +106,7 @@ class TableWindow {
 
         var dlCSV = function () {this.data[this.f][this.t][this.r].downloadCSV()}
         document.querySelector('#tableWindow .downloadTable').addEventListener('click',dlCSV.bind(this))
+        this.questionBtn.addEventListener('click',this.overlay.bind(this))
     }
 
 
@@ -145,6 +148,10 @@ class TableWindow {
         this.renderOptions()
         finishedLoading()
     }// add Data
+
+    overlay() {
+        console.log('overlay')
+    }
 
 } // close LadderWindow
 

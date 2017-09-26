@@ -10,7 +10,17 @@
         position relative
 
         overflow: auto
-        
+        .question
+            position absolute
+            right 1rem
+            top 0.4rem
+            color $darkColor
+            font-size 1.5rem
+            opacity 0.5
+            z-index 10
+            &:hover
+                color $midColor
+                cursor pointer
         .graphTitle
             margin 0.5rem auto 0 auto
             font-size: 140%

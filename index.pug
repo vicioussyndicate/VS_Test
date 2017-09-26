@@ -15,7 +15,8 @@ html(lang='en')
     title VS
   body
     .main-wrapper
-      #overlay(onclick='overlay()')
+      #overlay
+        p.overlayText Greetings Travelers
       nav.navbar
         #mobileFolder.option-folder
           button#mobileBtn.folder-toggle.fa.fa-bars
@@ -73,6 +74,7 @@ html(lang='en')
                   span.tooltipText Show Timeline
           .content
             p.graphTitle.chart-header Graph Title
+            .question.fa.fa-question-circle
             p.graphLabel y-axis
             #chart1.chart
             .chart-footer
@@ -87,6 +89,7 @@ html(lang='en')
               button#tiers.optionBtn Tier Lists
               button#top.optionBtn Suggestions
           .content
+            .question.fa.fa-question-circle
             #powerGrid.chart
             .chart-footer
           .content-footer
@@ -112,6 +115,7 @@ html(lang='en')
                 .dropdown.hidden
           .content
             //p.graphTitle Versus
+            .question.fa.fa-question-circle
             #chart2.chart
             .chart-footer
               .download
@@ -143,6 +147,7 @@ html(lang='en')
               button#decklists.optionBtn Deck Lists
               //button#classRadar.optionBtn Class Radar
           .content
+            .question.fa.fa-question-circle
             .archetypes
               p.title Archetypes
               .archetypeList
@@ -158,7 +163,7 @@ html(lang='en')
             p Greetings and thank you for checking out the VS Live Beta!<br><br><br><br>Status: The app is updated hourly with the latest data and most features are implemented (waranting some polish). Currently on the todo list:<br><br>- Finalizing archetype colors (currently randomized) <br><br>- Mobile format <br><br>- Decks tab needs formating<br><br>- Implementing Download and Copy functions<br><br>- App tour and help button<br><br>- Graph and axis titles/ hovers<br><br><br><br><b>We need your feedback!</b> Please leave a comment in the reddit thread linked below:
           
             a(href="https://www.reddit.com/r/ViciousSyndicate/comments/6yqj62/vs_live_web_app_feedback_thread/" target="_blank")
-              img(src='redditLogo.png')
+              img(src='Images/redditLogo.png')
             .login
               p Test login in with a VS account (vsProUser@vs.com - pw12345):
               input#emailInput(placeholder='Email')
