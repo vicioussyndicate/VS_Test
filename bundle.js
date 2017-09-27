@@ -1,0 +1,11 @@
+//@prepros-append decklistClass.js
+//@prepros-append decksWindow.js
+//@prepros-append firebaseHandler.js
+//@prepros-append historyClass.js
+//@prepros-append ladderClass.js
+//@prepros-append ladderWindow.js
+//@prepros-append powerWindow.js
+//@prepros-append script.js
+//@prepros-append tableClass.js
+//@prepros-append tableWindow.js
+//@prepros-append ui.js 
