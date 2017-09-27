@@ -1,48 +1,70 @@
 
 
+$main-height = 40rem
+$nav-height = 2.6rem
+$cont-wrapper-height = $main-height - $nav-height
+$cont-header-height = 1.7rem
+$cont-header-pad = 0.6rem
+$cont-header-height-tot = $cont-header-height + 2* $cont-header-pad
+$cont-footer-height = 0.5rem
+$cont-height = $cont-wrapper-height - $cont-header-height-tot  - $cont-footer-height
 
-
+//$cont-height = 80vh -50px - 50px -5px
 
 body
     font-size: 20
     .main-wrapper
         max-width 80vw
         min-width 510px
-        height 80vh
-        margin 10px auto
+        height $main-height
+        margin 1rem auto
         display flex
         flex-direction column
         #overlay
             width 78vw
-            height 76vh
+            height $main-height*0.95
             margin 10px auto
             top 0.5rem
+            z-index 50
         .navbar
-            height: 2.6rem
+            height: $nav-height
+            z-index 40
         .content-wrapper
             width 100%
-            height 70vh
+            height $cont-wrapper-height
             display flex
             flex-direction column
-            background-color $content_bgColor
+            z-index 0
             .tabWindow
                 height 100%
                 width 100%
                 .overlay
-                    height 70vh
-                    width 80vw
+                    height $cont-height
+                    width 80vw //100%
+                    z-index 20
                 .content-header
-                    height 27px
+                    height $cont-header-height
+                    padding $cont-header-pad 0 $cont-header-pad 0
+                    z-index 30
+                    .dropdown
+                        z-index 30
                 .content
+                    z-index 10
                     position relative
-                    height 93%
+                    height $cont-height
                     .chart-header
-                        height 3%
+                        height 1.5rem
+                        margin-top 1rem
+                    .graphLabel
+                        position absolute
+                        bottom 2.6rem
+                        z-index: 11
                     .chart
-                        height 90%
+                        height $cont-height - 4.5rem
                     .chart-footer
-                        height 7%
+                        position relative
+                        height 2rem
                 .content-footer
-                    height 2%
+                    height $cont-footer-height
                     
 

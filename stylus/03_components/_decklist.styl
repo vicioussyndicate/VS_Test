@@ -1,17 +1,17 @@
 
-
+$decklists-height = $cont-height - 2.5rem
 
 .decklists
     display: none
     display grid 
     grid-column-gap 1.5rem
     margin-top 2.5rem
-    //height 90%
+    height $decklists-height
     //background-color blue
     position relative
     .deckBox
         //background-color blue
-        height 100%
+        height $decklists-height
         .deckTitle
             display inline-block
             width 100%
@@ -23,7 +23,7 @@
                 background-color:  $accentColor
                 color $darkColor
         .decklist
-            height 80%
+            max-height 0.75*$decklists-height
             margin-top: 1rem
             margin-bottom: 1rem
             overflow-y auto
@@ -31,6 +31,7 @@
             background-color: white
             .card
                 padding 0.05rem
+                position relative
                 .costContainer
                     position relative
                 .hex
@@ -47,15 +48,25 @@
                     padding 0.25rem 0.1rem 0 1.7rem
                     display inline-block
                 .quantity
-                    float right
-                    padding 0.25rem 0.25rem 0 0
+                    right 0
+                    position absolute
+                    padding 0.25rem // 0.25rem 0 0.25rem
                     display inline-block
-                    z-index 10
+                    z-index 4
                     background-color white
                     font-size: 85%
                     color $darkColor
-                    opacity: 0.5
+                    opacity: 0.9
+                .hoverDiv
+                    position absolute
+                    top 0
+                    height 100%
+                    width 100%
+                    z-index 20
                 &:hover
+                    background-color:  $midColor  
+                    color: $lightColor
+                &.highlighted
                     background-color:  $midColor  
                     color: $lightColor
             
