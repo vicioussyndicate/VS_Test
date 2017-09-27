@@ -1989,8 +1989,8 @@ var colorscale_Table = [ [ 0, "#a04608" ], [ .3, "#d65900" ], [ .5, "#FFFFFF" ],
     function t(e, i, r, a, s) {
         _classCallCheck(this, t), this.DATA = e, this.f = i, this.t = r, this.r = a, this.window = s, 
         this.sortBy = "", this.numArch = 16, this.bgColor = "transparent", this.fontColor = "#22222", 
-        this.subplotRatio = .6, this.overallString = "<b>Overall</b>", this.minGames = 20, 
-        this.table = [], this.textTable = [], this.frequency = [], this.archetypes = [], 
+        this.subplotRatio = .6, this.overallString = '<b style="font-size:130%">Overall</b>', 
+        this.minGames = 20, this.table = [], this.textTable = [], this.frequency = [], this.archetypes = [], 
         this.classPlusArch = [], this.winrates = [], this.totGames = 0, this.download = "";
         var o = e.frequency.slice(), n = e.table.slice(), l = e.archetypes.slice();
         this.numArch > l.length && (this.numArch = l.length);

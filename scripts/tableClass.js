@@ -18,7 +18,7 @@ class Table {
         this.bgColor = 'transparent'
         this.fontColor = '#22222'
         this.subplotRatio = 0.6
-        this.overallString = '<b>Overall</b>'
+        this.overallString = '<b style="font-size:130%">Overall</b>'
         this.minGames = 20
 
         this.table = []

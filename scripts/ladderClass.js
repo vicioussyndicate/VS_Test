@@ -703,29 +703,12 @@ class Ladder {
     createNumbersFooter() {
         var chartFooter = document.querySelector('#ladderWindow .chart-footer')
         while (chartFooter.firstChild) {chartFooter.removeChild(chartFooter.firstChild);}
-
-        //var div = document.createElement('div')
         var csvBtn = document.createElement('button')
-        //var clipboardBtn = document.createElement('button')
-
-        //clipboardBtn.innerHTML = "Copy to Clipboard <div class='fa fa-clipboard'></div>"
-        //clipboardBtn.style = "background-color:#92fc64;color: black; padding:0.2rem;margin:0.2rem;font-size:0.8rem;text-align:center;"
-        //clipboardBtn.className = 'copyNumbers'
+        
         csvBtn.innerHTML = "Download <div class='fa fa-cloud-download'></div>"
         csvBtn.className = 'download'
-
-        //div.style = "font-size:2rem;"
-
-        // //div.appendChild(csvBtn)
-        //div.appendChild(csvBtn)
-
         csvBtn.addEventListener('click',this.downloadCSV.bind(this))
         chartFooter.appendChild(csvBtn)
-
-       
-        // var clipboard = new Clipboard('.copyNumbers',
-        //     {text: function() {return 'clipboard not possible'}}
-        // );
     }
 
     
