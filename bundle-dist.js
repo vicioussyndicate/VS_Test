@@ -36,7 +36,7 @@ function setupFirebase() {
         t ? (ui.loggedIn = !0, PREMIUM = !0, loadFireData(), a.classList.remove("hidden"), 
         signUpBtn.classList.add("hidden"), r.classList.add("hidden"), s.innerHTML = "") : (console.log("not logged in"), 
         ui.loggedIn = !0, a.classList.add("hidden"), r.classList.remove("hidden"), signUpBtn.classList.remove("hidden"), 
-        PREMIUM = !1, loadFireData()));
+        loadFireData()));
     });
 }
 
@@ -51,16 +51,17 @@ function saveUser(t) {
 }
 
 function loadFireData() {
-    PREMIUM ? (tableWindow = new TableWindow(hsFormats, table_times_premium, table_ranks_premium, table_sortOptions_premium), 
-    ladderWindow = new LadderWindow(hsFormats, ladder_times_premium, ladder_ranks_premium), 
-    document.querySelector("#vsLogoDiv .text").innerHTML = "Pro") : (tableWindow = new TableWindow(hsFormats, table_times, table_ranks, table_sortOptions), 
-    ladderWindow = new LadderWindow(hsFormats, ladder_times, ladder_ranks), document.querySelector("#vsLogoDiv .text").innerHTML = "Live");
+    PREMIUM ? (ladderWindow = new LadderWindow(hsFormats, ladder_times_premium, ladder_ranks_premium), 
+    tableWindow = new TableWindow(hsFormats, table_times_premium, table_ranks_premium, table_sortOptions_premium), 
+    document.querySelector("#vsLogoDiv .text").innerHTML = "Pro") : (ladderWindow = new LadderWindow(hsFormats, ladder_times, ladder_ranks), 
+    tableWindow = new TableWindow(hsFormats, table_times, table_ranks, table_sortOptions), 
+    document.querySelector("#vsLogoDiv .text").innerHTML = "Live");
 }
 
 function finishedLoading() {
     tableWindow.fullyLoaded && ladderWindow.fullyLoaded && (powerWindow = new PowerWindow(), 
-    decksWindow = new DecksWindow(hsFormats), powerWindow.plot(), ladderWindow.plot(), 
-    tableWindow.plot(), ui.fullyLoaded = !0, ui.hideLoader(), console.log("App initializing took " + (performance.now() - t0) + " ms."));
+    decksWindow = new DecksWindow(hsFormats), powerWindow.plot(), tableWindow.plot(), 
+    ui.fullyLoaded = !0, ui.hideLoader(), console.log("App initializing took " + (performance.now() - t0) + " ms."));
 }
 
 function choice(t) {
@@ -524,22 +525,34 @@ var _createClass = function() {
     }, {
         key: "highlight",
         value: function(t) {
-            performance.now();
-            var e = t.path[0].id, i = t.path[0].parentElement.parentElement.id;
-            "mouseout" == t.type && (e = "", i = "");
-            var r = !0, a = !1, s = void 0;
-            try {
-                for (var o, n = this.decklists[Symbol.iterator](); !(r = (o = n.next()).done); r = !0) {
-                    var l = o.value;
-                    l.name != i && l.highlight(e);
-                }
-            } catch (t) {
-                a = !0, s = t;
-            } finally {
+            if (console.log(t), "mouseover" == t.type) {
+                var e = t.target.id, i = t.target.parentElement.parentElement.id, r = !0, a = !1, s = void 0;
                 try {
-                    !r && n.return && n.return();
+                    for (var o, n = this.decklists[Symbol.iterator](); !(r = (o = n.next()).done); r = !0) (y = o.value).name != i && y.highlight(e);
+                } catch (t) {
+                    a = !0, s = t;
                 } finally {
-                    if (a) throw s;
+                    try {
+                        !r && n.return && n.return();
+                    } finally {
+                        if (a) throw s;
+                    }
+                }
+            } else {
+                var i = t.target.parentElement.parentElement.id, l = !0, d = !1, h = void 0;
+                try {
+                    for (var c, u = this.decklists[Symbol.iterator](); !(l = (c = u.next()).done); l = !0) {
+                        var y = c.value;
+                        y.name != i && y.highlight(e);
+                    }
+                } catch (t) {
+                    d = !0, h = t;
+                } finally {
+                    try {
+                        !l && u.return && u.return();
+                    } finally {
+                        if (d) throw h;
+                    }
                 }
             }
         }
@@ -821,13 +834,13 @@ var _createClass = function() {
                 if (p) throw b;
             }
         }
-        var E = e.archetypes, M = e.gamesPerRank;
+        var E = e.archetypes, D = e.gamesPerRank;
         this.rankSums = e.gamesPerRank;
-        for (var D = this.smoothLadder(e.rankData, M.slice()), I = this.smoothLadder(e.classRankData, M.slice()), q = 0; q < hsRanks; q++) {
-            q % 5 == 0 ? this.rankLabels.push(q + "  ") : this.rankLabels.push(""), this.totGames += M[q];
+        for (var M = this.smoothLadder(e.rankData, D.slice()), I = this.smoothLadder(e.classRankData, D.slice()), q = 0; q < hsRanks; q++) {
+            q % 5 == 0 ? this.rankLabels.push(q + "  ") : this.rankLabels.push(""), this.totGames += D[q];
             var A = !0, H = !1, F = void 0;
             try {
-                for (var R, O = this.tiers[Symbol.iterator](); !(A = (R = O.next()).done); A = !0) q >= (k = R.value).start && q <= k.end && (this.totGamesRanks[k.buttonId] += M[q]);
+                for (var R, O = this.tiers[Symbol.iterator](); !(A = (R = O.next()).done); A = !0) q >= (k = R.value).start && q <= k.end && (this.totGamesRanks[k.buttonId] += D[q]);
             } catch (t) {
                 H = !0, F = t;
             } finally {
@@ -843,7 +856,7 @@ var _createClass = function() {
             var P = [], z = [], N = [], G = 0, U = E[q][1] + " " + E[q][0].replace("§", ""), X = hsClasses.indexOf(E[q][0]), Y = this.window.getArchColor(E[q][0], E[q][1], this.f), V = Y.fontColor;
             Y = Y.color;
             for (st = 0; st < hsRanks; st++) {
-                ot = D[st][q];
+                ot = M[st][q];
                 z.push(ot), N.push("<b>" + U + "     </b><br>freq: " + (100 * ot).toFixed(1) + "%"), 
                 ot < this.fr_min && q > 8 && (this.traces_bar.decks[X].y[st] += ot, ot = 0), G += ot, 
                 P.push(ot);
@@ -1541,7 +1554,7 @@ var _createClass = function() {
                     }
                 }
                 this.fullyLoaded = !0, console.log("ladder loaded: " + (performance.now() - t0).toFixed(2) + " ms"), 
-                finishedLoading();
+                finishedLoading(), this.plot(), ui.hideLoader();
             }
         }
     }, {
@@ -1792,19 +1805,19 @@ var _createClass = function() {
             for (var _ = function(t, e) {
                 return t.wr > e.wr ? -1 : t.wr < e.wr ? 1 : 0;
             }, W = 0; W < hsRanks; W++) this.data[t][W].sort(_);
-            var B = !0, E = !1, M = void 0;
+            var B = !0, E = !1, D = void 0;
             try {
-                for (var D, I = this.tiers[Symbol.iterator](); !(B = (D = I.next()).done); B = !0) {
-                    x = D.value;
+                for (var M, I = this.tiers[Symbol.iterator](); !(B = (M = I.next()).done); B = !0) {
+                    x = M.value;
                     this.tierData[t][x.name].sort(_);
                 }
             } catch (t) {
-                E = !0, M = t;
+                E = !0, D = t;
             } finally {
                 try {
                     !B && I.return && I.return();
                 } finally {
-                    if (E) throw M;
+                    if (E) throw D;
                 }
             }
         }
@@ -1891,7 +1904,7 @@ var _createClass = function() {
             this.overlay = !0);
         }
     } ]), t;
-}(), t0 = performance.now(), DATABASE, PREMIUM = !1, MOBILE = !1, powerWindow, decksWindow, tableWindow, ladderWindow, ui, hsRanks = 21, hsClasses = [ "Druid", "Hunter", "Mage", "Paladin", "Priest", "Rogue", "Shaman", "Warlock", "Warrior" ], hsFormats = [ "Standard", "Wild" ], ladder_times = [ "lastDay", "last2Weeks" ], ladder_times_premium = [ "last6Hours", "last12Hours", "lastDay", "last3Days", "lastWeek", "last2Weeks" ], ladder_ranks = [ "ranks_all" ], ladder_ranks_premium = [ "ranks_all", "ranks_L_5", "ranks_6_15" ], ladder_plotTypes = [], table_times = [ "last2Weeks" ], table_times_premium = [ "lastDay", "last3Days", "lastWeek", "last2Weeks" ], table_sortOptions = [ "frequency" ], table_sortOptions_premium = [ "frequency", "class", "winrate", "matchup" ], table_ranks = [ "ranks_all" ], table_ranks_premium = [ "ranks_all", "ranks_L_5", "ranks_6_15" ];
+}(), t0 = performance.now(), DATABASE, PREMIUM = !0, MOBILE = !1, powerWindow, decksWindow, tableWindow, ladderWindow, ui, hsRanks = 21, hsClasses = [ "Druid", "Hunter", "Mage", "Paladin", "Priest", "Rogue", "Shaman", "Warlock", "Warrior" ], hsFormats = [ "Standard", "Wild" ], ladder_times = [ "lastDay", "last2Weeks" ], ladder_times_premium = [ "last6Hours", "last12Hours", "lastDay", "last3Days", "lastWeek", "last2Weeks" ], ladder_ranks = [ "ranks_all" ], ladder_ranks_premium = [ "ranks_all", "ranks_L_5", "ranks_6_15" ], ladder_plotTypes = [], table_times = [ "last2Weeks" ], table_times_premium = [ "lastDay", "last3Days", "lastWeek", "last2Weeks" ], table_sortOptions = [ "frequency" ], table_sortOptions_premium = [ "frequency", "class", "winrate", "matchup" ], table_ranks = [ "ranks_all" ], table_ranks_premium = [ "ranks_all", "ranks_L_5", "ranks_6_15" ];
 
 window.onload = function() {
     window.innerWidth <= 756 && (MOBILE = !0, console.log("mobile")), (ui = new UI()).showLoader(), 
@@ -2385,7 +2398,7 @@ var colorscale_Table = [ [ 0, "#a04608" ], [ .3, "#d65900" ], [ .5, "#FFFFFF" ],
     }, {
         key: "plot",
         value: function() {
-            this.data[this.f][this.t][this.r].plot();
+            console.log("plotting", this.f, this.t, this.r), this.data[this.f][this.t][this.r].plot();
         }
     }, {
         key: "renderOptions",

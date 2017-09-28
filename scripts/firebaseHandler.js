@@ -79,7 +79,7 @@ function setupFirebase() {
             logOutBtn.classList.add('hidden')
             loginBtn.classList.remove('hidden')
             signUpBtn.classList.remove('hidden')
-            PREMIUM = false
+            //PREMIUM = false
             loadFireData()
         }
     })
@@ -104,16 +104,13 @@ function saveUser(user) {
 
 function loadFireData() {
     if (PREMIUM) {
-       
-        tableWindow = new TableWindow(hsFormats, table_times_premium, table_ranks_premium, table_sortOptions_premium)
         ladderWindow = new LadderWindow(hsFormats, ladder_times_premium, ladder_ranks_premium)
-        //decksWindow = new DecksWindow(hsFormats)
+        tableWindow = new TableWindow(hsFormats, table_times_premium, table_ranks_premium, table_sortOptions_premium)
         document.querySelector('#vsLogoDiv .text').innerHTML = 'Pro'
     }
     else {
-        tableWindow = new TableWindow(hsFormats, table_times, table_ranks, table_sortOptions)
         ladderWindow = new LadderWindow(hsFormats, ladder_times, ladder_ranks)
-        //decksWindow = new DecksWindow(hsFormats)
+        tableWindow = new TableWindow(hsFormats, table_times, table_ranks, table_sortOptions)
         document.querySelector('#vsLogoDiv .text').innerHTML = 'Live'
     }
 

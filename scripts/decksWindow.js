@@ -128,7 +128,6 @@ class DecksWindow {
         }}}}
         this.fullyLoaded = true
         console.log('decks loaded: '+ (performance.now()-t0).toFixed(2)+' ms')
-        //finishedLoading() //<- callback to script.js
         this.plot()
     }// add Data
 
@@ -233,15 +232,21 @@ class DecksWindow {
     }
 
     highlight(e) {
-        var t10 = performance.now();
-        var cardName = e.path[0].id
-        var decklistName = e.path[0].parentElement.parentElement.id
+        console.log(e)
         var eType = e.type
-        if (eType == 'mouseout') {cardName = ''; decklistName = ''}
-        for (var dl of this.decklists) {
-            if (dl.name == decklistName) {continue}
-            dl.highlight(cardName)
-        }
+        if (eType == 'mouseover') {
+            var cardName = e.target.id
+            var decklistName = e.target.parentElement.parentElement.id
+            for (var dl of this.decklists) {
+                if (dl.name == decklistName) {continue}
+                dl.highlight(cardName)
+            }
+        } else {
+            var decklistName = e.target.parentElement.parentElement.id
+            for (var dl of this.decklists) { 
+                if (dl.name == decklistName) {continue}
+                dl.highlight(cardName) }
+        }        
     }
 
 

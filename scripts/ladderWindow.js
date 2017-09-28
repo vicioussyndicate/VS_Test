@@ -186,6 +186,8 @@ class LadderWindow {
         this.fullyLoaded = true
         console.log('ladder loaded: '+ (performance.now()-t0).toFixed(2)+' ms')
         finishedLoading()
+        this.plot()
+        ui.hideLoader()
     }
     
     addHistoryData(DATA) { this.history = new History(DATA.val(),this) }

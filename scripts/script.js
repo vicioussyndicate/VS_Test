@@ -6,7 +6,7 @@ var t0 = performance.now();
 
 // Global Data
 var DATABASE
-var PREMIUM = false
+var PREMIUM = true
 var MOBILE = false
 
 // Windows
@@ -55,16 +55,13 @@ window.onload = function() {
 
 function finishedLoading() {
 
-    //if (!(tableWindow.fullyLoaded && ladderWindow.fullyLoaded && decksWindow.fullyLoaded)) {return}
     if (!(tableWindow.fullyLoaded && ladderWindow.fullyLoaded)) {return}
     
 
     powerWindow = new PowerWindow()
     decksWindow = new DecksWindow(hsFormats)
     powerWindow.plot()
-    ladderWindow.plot()
     tableWindow.plot()
-    //decksWindow.plot()
 
     ui.fullyLoaded = true
     ui.hideLoader()
@@ -127,18 +124,33 @@ var colorscale_Table = [
 //     '§':        '#88042d',
 // }
 
-// Sun Picture
+// // Sun Picture
+// const hsColors = {
+//     Druid:      '#674f3a',//'#725d4d',
+//     Hunter:     '#719038',//'#5f8732',
+//     Mage:       '#90bbc3',//'#89b9c8',
+//     Paladin:    '#ffd96d',
+//     Priest:     '#cfcbb3',//'#ddd9be', //'#fdfae9',//'#fff3c7',
+//     Rogue:      '#1f291f',
+//     Shaman:     '#1a5d72',
+//     Warlock:    '#ad5c7b',
+//     Warrior:    '#dc7852',
+// }
+
+// Saturated
 const hsColors = {
-    Druid:      '#674f3a',//'#725d4d',
-    Hunter:     '#719038',//'#5f8732',
-    Mage:       '#90bbc3',//'#89b9c8',
-    Paladin:    '#ffd96d',
-    Priest:     '#cfcbb3',//'#ddd9be', //'#fdfae9',//'#fff3c7',
-    Rogue:      '#172917',
-    Shaman:     '#1a5d72',
-    Warlock:    '#ad5c7b',
-    Warrior:    '#dc7852',
+    Druid:      '#674f3a',
+    Hunter:     '#94a028',
+    Mage:       '#83d8df',
+    Paladin:    '#ffa31a',
+    Priest:     '#cacfb3',
+    Rogue:      '#1e291f',
+    Shaman:     '#0b72ca',//'#1a5d72',
+    Warlock:    '#892667',
+    Warrior:    '#ec4441',
 }
+
+
 
 const hsArchColors = {
     Druid:      ['#674f3a','#624737','#675645','#785c43','#523f2e'],
