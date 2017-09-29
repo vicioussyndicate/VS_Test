@@ -334,14 +334,14 @@ function hsColorScale(hsClass,x) {
 
 
 function detectswipe(el,func) {
-    swipe_det = new Object();
+    var swipe_det = {};
     swipe_det.sX = 0; swipe_det.sY = 0; swipe_det.eX = 0; swipe_det.eY = 0;
     var min_x = 30;  //min x swipe for horizontal swipe
     var max_x = 30;  //max x difference for vertical swipe
     var min_y = 50;  //min y swipe for vertical swipe
     var max_y = 60;  //max y difference for horizontal swipe
     var direc = "";
-    ele = document.querySelector(el);
+    var ele = document.querySelector(el);
     ele.addEventListener('touchstart',function(e){
       var t = e.touches[0];
       swipe_det.sX = t.screenX; 

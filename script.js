@@ -331,10 +331,10 @@ function hsColorScale(hsClass,x) {
 }
 
 
-
+var swipe_det
 
 function detectswipe(el,func) {
-    swipe_det = new Object();
+    const swipe_det = new Object();
     swipe_det.sX = 0; swipe_det.sY = 0; swipe_det.eX = 0; swipe_det.eY = 0;
     var min_x = 30;  //min x swipe for horizontal swipe
     var max_x = 30;  //max x difference for vertical swipe
@@ -373,11 +373,7 @@ function detectswipe(el,func) {
     },false);  
   }
   
-  function myfunction(el,d) {
-    alert("you swiped on element with id '"+el+"' to "+d+" direction");
-  }
-
-
+  
 
 // var hsColors = {
 //     Druid: "#FF7D0A",
