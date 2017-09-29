@@ -500,7 +500,6 @@ class Ladder {
         }
 
         if (this.window.plotType == 'zoom') {
-            //var zoomClass = (this.window.zoomClass) ? this.window.zoomClass : 'Druid'
             layout = this.layout_bar
             data = this.traces_zoom[this.window.zoomClass]
         }
@@ -676,9 +675,7 @@ class Ladder {
     createZoomLegend() {
         var hsClass = this.window.zoomClass
         this.window.clearChartFooter()
-        for (var arch of this.traces_zoom[hsClass]) {
-            this.window.addLegendItem(arch.name)
-        }
+        for (var arch of this.traces_zoom[hsClass]) { this.window.addLegendItem(arch.name) }
     }
 
 
