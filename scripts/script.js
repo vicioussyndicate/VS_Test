@@ -140,9 +140,9 @@ var colorscale_Table = [
 // Saturated
 const hsColors = {
     Druid:      '#674f3a',
-    Hunter:     '#94a028',
+    Hunter:     '#b0c404',
     Mage:       '#83d8df',
-    Paladin:    '#ffa31a',
+    Paladin:    '#ffe551',
     Priest:     '#cacfb3',
     Rogue:      '#1e291f',
     Shaman:     '#0b72ca',//'#1a5d72',

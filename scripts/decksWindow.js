@@ -232,7 +232,7 @@ class DecksWindow {
     }
 
     highlight(e) {
-        console.log(e)
+
         var eType = e.type
         if (eType == 'mouseover') {
             var cardName = e.target.id

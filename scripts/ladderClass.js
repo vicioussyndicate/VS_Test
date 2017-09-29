@@ -500,9 +500,9 @@ class Ladder {
         }
 
         if (this.window.plotType == 'zoom') {
-            var zoomClass = (this.window.zoomClass) ? this.window.zoomClass : 'Druid'
+            //var zoomClass = (this.window.zoomClass) ? this.window.zoomClass : 'Druid'
             layout = this.layout_bar
-            data = this.traces_zoom[zoomClass]
+            data = this.traces_zoom[this.window.zoomClass]
         }
 
         if (this.window.plotType == 'line') {
@@ -522,14 +522,11 @@ class Ladder {
         var totGames = (this.window.plotType != 'pie') ? this.totGames : this.totGamesRanks[this.window.r]
         this.window.setTotGames(totGames)   
 
-        if (this.window.mode == 'decks') {this.createLegend('decks')}
-        if (this.window.mode == 'classes') {
-            this.createLegend('classes')
-            if (this.window.plotType == 'bar' || this.window.plotType == 'zoom') {
-                document.getElementById('chart1').on('plotly_click', this.zoomToggle.bind(this))
-        }}
 
-        
+        this.createLegend(this.window.mode)
+        if (this.window.plotType == 'bar' || this.window.plotType == 'zoom') {
+            document.getElementById('chart1').on('plotly_click', this.zoomToggle.bind(this))
+        }
     }
 
 
@@ -654,8 +651,10 @@ class Ladder {
     }
 
     createLegend(mode) {
-        var chartFooter = document.querySelector('#ladderWindow .chart-footer')
-        while (chartFooter.firstChild) {chartFooter.removeChild(chartFooter.firstChild);}
+
+        if (this.window.plotType == 'zoom') {this.createZoomLegend(); return}
+
+        this.window.clearChartFooter()
         
         var maxElements
         var legend = this.archLegend
@@ -665,39 +664,22 @@ class Ladder {
             if (maxElements > legend.length) {maxElements = legend.length}
         }
 
+
+
         for (var i=0;i<maxElements;i++) {
 
-            var legendDiv = document.createElement('div')   
-            var colorSplash = document.createElement('div')
-            var archName = document.createElement('l')     
-
-            legendDiv.className = 'legend-item'
-            legendDiv.style.fontSize = '0.8em'
-        
-            if (mode=='classes') {
-
-                var hsClass = hsClasses[i]
-                legendDiv.style = 'background-color:'+hsColors[hsClass]+'; color:'+hsFontColors[hsClass]
-                legendDiv.id = hsClass
-                legendDiv.innerHTML = hsClass
-                legendDiv.onclick = function(e) { ui.deckLink(e.target.id,this.f);  }
-            }
-
-            if (mode=='decks') {
-
-                var l = legend[i]
-                legendDiv.style = 'background-color:'+l.color+'; color:'+hsFontColors[l.hsClass]
-                legendDiv.id = l.name
-                legendDiv.innerHTML = l.name
-                legendDiv.onclick = function(e) { ui.deckLink(e.target.id,this.f);  }
-            }
-
-
-            chartFooter.appendChild(legendDiv)
-
+            if (mode=='classes') { this.window.addLegendItem(hsClasses[i]) }
+            if (mode=='decks') { this.window.addLegendItem(legend[i].name) }
         }
     }
 
+    createZoomLegend() {
+        var hsClass = this.window.zoomClass
+        this.window.clearChartFooter()
+        for (var arch of this.traces_zoom[hsClass]) {
+            this.window.addLegendItem(arch.name)
+        }
+    }
 
 
     createNumbersFooter() {
@@ -731,7 +713,14 @@ class Ladder {
         }
 
         this.window.plotType = 'zoom'
-        this.window.zoomClass = data.points[0].data.hsClass
+        var zoomClass = data.points[0].data.hsClass
+        if (hsClasses.indexOf(zoomClass) == -1) {
+            for (var c of hsClasses) {
+                if (zoomClass.indexOf(c) != -1) {
+                    this.window.zoomClass = c
+                    break 
+        }}}
+        else {this.window.zoomClass = zoomClass}
         this.plot()
     }
 
