@@ -16,7 +16,7 @@ html(lang='en')
   body
     .main-wrapper
       #overlay
-        p.overlayText Greetings Travelers
+        p.overlayText
       nav.navbar
         #mobileFolder.option-folder
           button#mobileBtn.folder-toggle.fa.fa-bars
@@ -73,6 +73,7 @@ html(lang='en')
               button#timeline.optionBtn.fa.fa-clock-o.tooltip
                   span.tooltipText Show Timeline
           .overlay
+            p.overlayText
           .content
             p.graphTitle.chart-header
             .question.fa.fa-question-circle
@@ -90,6 +91,7 @@ html(lang='en')
               button#tiers.optionBtn Tier Lists
               button#top.optionBtn Suggestions
           .overlay
+            p.overlayText
           .content
             .question.fa.fa-question-circle
             #powerGrid.chart
@@ -116,6 +118,7 @@ html(lang='en')
                 button#sortBtn.folder-toggle Sort
                 .dropdown.hidden
           .overlay
+            p.overlayText
           .content
             //p.graphTitle Versus
             .question.fa.fa-question-circle
@@ -150,6 +153,7 @@ html(lang='en')
               button#decklists.optionBtn Deck Lists
               //button#classRadar.optionBtn Class Radar
           .overlay
+            p.overlayText
           .content
             .question.fa.fa-question-circle
             .archetypes

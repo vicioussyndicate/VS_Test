@@ -1,5 +1,5 @@
 # Archetype: Exodia Mage
-### Neirea's Exodia Mage
+### Standard Exodia Mage
 # Class: Mage
 # Format: Standard
 # Year of the Mammoth
@@ -22,7 +22,7 @@
 # 2x (6) Blizzard
 # 1x (7) Archmage Antonidas
 #
-AAECAf0EBNDBArnRArgI7QQNgbICwcECigGcApjEAuYEqwT4B8sEwAHaxQKSrALJAwA=
+AAECAf0EBO0EuAjQwQK50QINigHAAZwCyQOrBMsE5gT4B5KsAoGyAsHBApjEAtrFAgA=
 #
 # To use this deck, copy it to your clipboard and create a new deck in Hearthstone
-# https://www.vicioussyndicate.com/deck-library/mage-decks/exodia-mage/neireas-exodia-mage/
+# https://www.vicioussyndicate.com/deck-library/mage-decks/exodia-mage/standard-exodia-mage/

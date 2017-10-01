@@ -1,11 +1,12 @@
 # Archetype: Big Priest
-### Frescha's Big Priest
+### C0ntrolBoy's Big Priest
 # Class: Priest
 # Format: Standard
 # Year of the Mammoth
 #
-# 2x (0) Forbidden Shaping
 # 1x (0) Silence
+# 1x (1) Holy Smite
+# 1x (1) Mind Vision
 # 2x (1) Pint-Size Potion
 # 2x (1) Potion of Madness
 # 2x (2) Shadow Visions
@@ -14,17 +15,17 @@
 # 1x (4) Barnes
 # 2x (4) Eternal Servitude
 # 1x (4) Greater Healing Potion
+# 1x (4) Mass Dispel
 # 2x (4) Shadow Word: Horror
 # 2x (6) Dragonfire Potion
 # 2x (6) Shadow Essence
-# 1x (8) Free From Amber
 # 1x (8) Shadowreaper Anduin
 # 1x (8) The Lich King
 # 2x (9) Obsidian Statue
 # 1x (9) Ysera
 # 1x (10) Y'Shaarj, Rage Unbound
 #
-AAECAa0GCKUJhbgCt7sCmcgCkNMCws4CogmoqwIL6L8CtbsC0cEC1wrTCuXMAqGsAuq/ArTOAubMAqKsAgA=
+AAECAa0GCpcCywiiCaUJ1gqoqwKFuAK3uwLCzgKQ0wIK0wrXCqGsArW7Aui/Auq/AtHBAuXMAubMArTOAgA=
 #
 # To use this deck, copy it to your clipboard and create a new deck in Hearthstone
-# https://www.vicioussyndicate.com/deck-library/priest-decks/big-priest/freschas-big-priest/
+# https://www.vicioussyndicate.com/deck-library/priest-decks/big-priest/c0ntrolboys-big-priest/

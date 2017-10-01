@@ -105,7 +105,10 @@ def upload(hsFormat):
             # Class Description Texts should be labeled 'Druid.txt', 'Hunter.txt' etc. (first letter Capital)
             if file == hsClass+'.txt':
                 f = open(file)
-                DB.child('deckData').child(hsFormat).child(hsClass).child('text').set(f.read(),user['idToken'])
+                txt = f.read()
+                txt.replace('<strong>',"<strong style='font-weight:bold'>")
+                txt.replace('</p>','</p><br><br>')
+                DB.child('deckData').child(hsFormat).child(hsClass).child('text').set(txt,user['idToken'])
                 continue
 
             # Decklist files can be named anything other than [hsClass].txt

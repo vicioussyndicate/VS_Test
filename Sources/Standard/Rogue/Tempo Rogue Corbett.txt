@@ -1,29 +1,28 @@
-# Archetype: Elemental Rogue
-### Corbett's Elemental Rogue
+# Archetype: Tempo Rogue
+### Corbett's Elemental Tempo Rogue
 # Class: Rogue
 # Format: Standard
 # Year of the Mammoth
 #
 # 2x (0) Backstab
+# 2x (0) Shadowstep
 # 2x (1) Fire Fly
 # 1x (1) Patches the Pirate
-# 1x (1) Southsea Deckhand
+# 2x (1) Southsea Deckhand
 # 2x (1) Swashburglar
 # 1x (2) Prince Keleseth
 # 1x (3) Edwin VanCleef
-# 2x (3) Plague Scientist
+# 1x (3) Shaku, the Collector
 # 2x (3) SI:7 Agent
+# 2x (3) Southsea Captain
 # 2x (3) Tar Creeper
 # 2x (4) Fire Plume Phoenix
-# 2x (4) Tol'vir Stoneshaper
-# 2x (5) Shadowcaster
+# 2x (5) Cobalt Scalebane
 # 2x (5) Vilespine Slayer
-# 1x (6) The Black Knight
 # 2x (7) Blazecaller
 # 2x (7) Bonemare
-# 1x (8) The Lich King
 #
-AAECAaIHBrIC1AX4DJG8AsLOApziAgy0Ad0I3K8CkrYCgcICmcICrMIC68ICysMCyMcCps4ClNACAA==
+AAECAaIHBLICkbwCyb8CnOICDbQB7QKoBdQF3QiStgKBwgKswgLrwgLKwwLIxwLKywKmzgIA
 #
 # To use this deck, copy it to your clipboard and create a new deck in Hearthstone
-# https://www.vicioussyndicate.com/deck-library/rogue-decks/elemental-rogue/corbetts-elemental-rogue/
+# https://www.vicioussyndicate.com/deck-library/rogue-decks/tempo-rogue/corbetts-elemental-tempo-rogue/

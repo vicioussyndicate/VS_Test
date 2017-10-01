@@ -1,30 +1,27 @@
 # Archetype: Midrange Hunter
-### Roast's Hybrid Hunter
+### TheBest's Midrange Hunter
 # Class: Hunter
 # Format: Standard
 # Year of the Mammoth
 #
 # 2x (1) Alleycat
-# 1x (1) Hungry Crab
-# 1x (1) Tracking
+# 2x (1) Bloodsail Corsair
+# 1x (1) Patches the Pirate
 # 2x (2) Crackling Razormaw
-# 1x (2) Flare
 # 2x (2) Golakka Crawler
+# 2x (2) Kindly Grandmother
 # 2x (2) Scavenging Hyena
 # 2x (3) Animal Companion
-# 2x (3) Deadly Shot
+# 2x (3) Bearshark
 # 2x (3) Eaglehorn Bow
 # 2x (3) Kill Command
 # 2x (3) Unleash the Hounds
-# 2x (3) Vicious Fledgling
 # 2x (4) Houndmaster
-# 1x (4) Spellbreaker
-# 1x (5) Bittertide Hydra
-# 1x (5) Leeroy Jenkins
-# 1x (5) Tundra Rhino
+# 2x (5) Bittertide Hydra
 # 1x (6) Deathstalker Rexxar
+# 2x (6) Savannah Highmane
 #
-AAECAR8IuwOvBLsF8gWAB5cIr8IChtMCC6gCtQPrB8UI2wmBCv4M6rsCn8IC5MICjsMCAA==
+AAECAR8CkbwChtMCDqgCtQPlB+sH2wntCYEK/gy5tALquwKvwgLkwgKOwwLXzQIA
 #
 # To use this deck, copy it to your clipboard and create a new deck in Hearthstone
-# https://www.vicioussyndicate.com/deck-library/hunter-decks/midrange-hunter/roasts-hybrid-hunter/
+# https://www.vicioussyndicate.com/deck-library/hunter-decks/midrange-hunter/thebests-midrange-hunter/
