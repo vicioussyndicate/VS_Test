@@ -16,6 +16,7 @@ class LadderWindow {
         this.optionButtons = document.querySelectorAll('#ladderWindow .optionBtn')
         this.questionBtn = document.querySelector('#ladderWindow .question')
         this.overlayDiv = document.querySelector('#ladderWindow .overlay')
+        this.chartFooter = document.querySelector('#ladderWindow .chart-footer')
         this.firebasePath = (PREMIUM) ? 'premiumData/ladderData' : 'data/ladderData'
         this.firebaseHistoryPath = (PREMIUM) ? 'premiumData/historyData' : ''
         
@@ -186,6 +187,8 @@ class LadderWindow {
         this.fullyLoaded = true
         console.log('ladder loaded: '+ (performance.now()-t0).toFixed(2)+' ms')
         finishedLoading()
+        this.plot()
+        ui.hideLoader()
     }
     
     addHistoryData(DATA) { this.history = new History(DATA.val(),this) }
@@ -199,6 +202,9 @@ class LadderWindow {
     }
 
     getArchColor(hsClass, arch, hsFormat) {
+        
+        if (hsClasses.indexOf(arch) != -1) {return {color:hsColors[arch], fontColor: hsFontColors[arch]}}
+
         var archName
         if (hsClass) { archName = arch +' '+hsClass }
         else {
@@ -253,6 +259,29 @@ class LadderWindow {
     toggleOverlay() {
         if (this.overlay) {this.overlayDiv.style.display = 'none'; this.overlay = false}
         else{this.overlayDiv.style.display = 'block'; this.overlay = true}
+    }
+
+    addLegendItem(archName) {
+        
+        var legendDiv = document.createElement('div')   
+        var colorSplash = document.createElement('div')
+        var name = document.createElement('l')
+        var colors = this.getArchColor(null, archName, this.f)
+
+        legendDiv.className = 'legend-item'
+        legendDiv.style.fontSize = '0.8em'
+
+        legendDiv.style = 'background-color:'+colors.color+'; color:'+colors.fontColor
+        legendDiv.id = archName
+        legendDiv.innerHTML = archName
+        legendDiv.onclick = function(e) { ui.deckLink(e.target.id,this.f);  }
+
+        this.chartFooter.appendChild(legendDiv)
+        
+    }
+
+    clearChartFooter() {
+        while (this.chartFooter.firstChild) {this.chartFooter.removeChild(this.chartFooter.firstChild);}
     }
 
 } // close LadderWindow

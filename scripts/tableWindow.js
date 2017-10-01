@@ -113,7 +113,9 @@ class TableWindow {
     }
 
 
-    plot () { this.data[this.f][this.t][this.r].plot() }
+    plot () { 
+        console.log('plotting',this.f,this.t,this.r)
+        this.data[this.f][this.t][this.r].plot() }
     
     renderOptions() {
         
