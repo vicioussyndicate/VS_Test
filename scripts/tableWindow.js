@@ -12,6 +12,7 @@ class TableWindow {
         this.optionButtons = document.querySelectorAll('#tableWindow .optionBtn')
         this.questionBtn = document.querySelector('#tableWindow .question')
         this.overlayDiv = document.querySelector('#tableWindow .overlay')
+        this.overlayP = document.querySelector('#tableWindow .overlayText')
 
         this.data = {}
         this.hsFormats = hsFormats
@@ -19,13 +20,29 @@ class TableWindow {
         this.ranks = table_ranks
         this.sortOptions = sortOptions //['frequency','winrate','matchup','class']
 
+        this.overlayText = `
+            Here you can see how your deck on the left hand side performs against any other deck on the top. 
+            The colors range  from favorable <span class='blue'>blue</span> to unfavorable <span class='red'>red</span>.<br><br>
+            The matchup table lists the top 16 most frequent decks within the selected time and rank brackets.<br><br>
+            The hover info lists the number of games recorded for that specific matchup in the (parenthesis).<br><br>
+            The 'Overall' line at the bottom shows the overall winrate of the opposing decks in the specified time and rank bracket.<br><br>
+            Sorting the table displays the most frequent/ highest winrate deck in the top left. Changing the format, time or rank brackets automatically sorts the table.<br><br>
+            <img src='Images/muSort.png'></img>
+            
+            <br><br><br><br>
+            Click on a matchup to 'zoom in'. Click again to 'zoom out'.<br><br>
+            In the zoomed in view you see only one deck on the left side.<br><br>
+            Additionally there are 2 subplots displaying the frequency of the opposing decks (brown line chart) and the specific matchup as black bar charts.<br><br>
+            Changing any parameter (Format, time, rank, sorting) keeps you zoomed into the same archetype if possible.<br><br>
+            You can additionally sort 'by Matchup' while zoomed in.<br><br>
+        `
+
+
 
         // Defaults
 
         this.width = document.querySelector('.main-wrapper').offsetWidth -40
-        //this.height =  parseInt(Math.max(document.documentElement.clientHeight, window.innerHeight || 0)*0.7 - 40)
-        //this.height = ui.height*0.7 -40
-        this.height = document.querySelector('#ladderWindow .content').offsetHeight*0.95
+        this.height = document.querySelector('#ladderWindow .content').offsetHeight*0.94
 
         this.f = this.hsFormats[0] 
         this.t = 'lastWeek' //this.hsTimes[0] 
@@ -156,7 +173,10 @@ class TableWindow {
 
     toggleOverlay() {
         if (this.overlay) {this.overlayDiv.style.display = 'none'; this.overlay = false}
-        else{this.overlayDiv.style.display = 'block'; this.overlay = true}
+        else{
+            this.overlayP.innerHTML = this.overlayText
+            this.overlayDiv.style.display = 'block'; 
+            this.overlay = true}
     }
 
 } // close LadderWindow

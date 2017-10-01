@@ -13,7 +13,19 @@ class DecksWindow {
         this.decksDiv = document.querySelector('#decksWindow .content .decklists')
         this.description = document.querySelector('#decksWindow .content .descriptionBox .description')
         this.overlayDiv = document.querySelector('#decksWindow .overlay')
+        this.overlayP = document.querySelector('#decksWindow .overlayText')
         this.questionBtn = document.querySelector('#decksWindow .question')
+
+        this.overlayText = `
+            This tab displays the VS Deck library.<br><br>
+            Select "Description" to see the latest Data Reaper Report article on that class.<br><br>
+            Select any archetype on the left side to see all the decklists of that archetype.<br><br>
+            Tips:<br><br>
+            - When you hover over a card of a decklist it highlights all cards with the same name in the other decklists.<br><br>
+            - Click on "Copy to Clipboard" under a decklist to copy the deckcode to your clipboard.<br><br>
+        `
+
+
 
         this.firebasePath = 'deckData'
 
@@ -276,7 +288,10 @@ class DecksWindow {
 
     toggleOverlay() {
         if (this.overlay) {this.overlayDiv.style.display = 'none'; this.overlay = false}
-        else{this.overlayDiv.style.display = 'block'; this.overlay = true}
+        else{
+            this.overlayP.innerHTML = this.overlayText
+            this.overlayDiv.style.display = 'block'; 
+            this.overlay = true}
     }
 
 
