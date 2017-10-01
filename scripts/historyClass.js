@@ -73,8 +73,10 @@ class History {
             var m = this.window.mode
             var x = range(1,this.x[t_w]+1)
             var d = this.data[f][t_h][r][m] // data 
+            var maxEntry = 0
 
             var traces = []
+            var zeroTraces = []
             var archetypes = []
             
             var totGames = 0
@@ -94,14 +96,26 @@ class History {
                 archetypes.push({name: archName, color: colors.color, fontColor: colors.fontColor})
                 var y = (t_h == 'lastHours') ? this.smoothData(d[i]['data']) : d[i]['data']
 
+
                 var text = []
                 for (var j=0;j<y.length;j++) {
                     var unit = (j>0) ? baseUnit+'s' : baseUnit;
                     text.push(`${d[i]['name']} (${(y[j]*100).toFixed(1)}% )<br>${x[j]+' '+unit} ago`)
+                    if (y[j] > maxEntry) {maxEntry = y[j]}
                 }
 
+                zeroTraces.push({
+                    x: range(1,x.length+1),
+                    y: fillRange(0,y.length,0),
+                    text: text,
+                    line: {width: 2.5, simplify: false},
+                    marker: {color: colors.color,},
+                    type: 'scatter',
+                    mode: 'lines',
+                    hoverinfo:'text',
+                })
 
-                var trace = {
+                traces.push({
                     x: x.slice(),
                     y: y.slice(),
                     text: text,
@@ -110,28 +124,28 @@ class History {
                     type: 'scatter',
                     mode: 'lines',
                     hoverinfo:'text',
-                }
-                traces.push(trace)
+                })
             }
             
-            /* // Animation
-            Plotly.animate('graph', {
-                data: data,
-                traces: [0,1],
-                layout: {}
-              }, {
-                transition: {
-                  duration: 500,
-                  easing: 'cubic-in-out'
-                }
-              })*/
+            this.layout.yaxis['range'] = [0,maxEntry*1.1] 
+            this.layout.xaxis['range'] = [this.x[t_w]+1,2]       
             
-            
-            
-            Plotly.newPlot('chart1',traces, this.layout, {displayModeBar: false,})
+            Plotly.newPlot('chart1',zeroTraces, this.layout, {displayModeBar: false,})
             this.window.setGraphTitle()
             this.createLegend(archetypes)
             this.window.setTotGames(totGames)
+
+            // Animation
+            Plotly.animate('chart1', {
+                data: traces,
+                traces: range(0,traces.length),
+                layout: {},
+              }, {
+                transition: {
+                  duration: 300,
+                  easing: 'linear'//'cubic-in-out'
+                }
+              })
         }
     
 
