@@ -131,7 +131,7 @@ class TableWindow {
 
 
     plot () { 
-        console.log('plotting',this.f,this.t,this.r)
+        if (!this.fullyLoaded) {return}
         this.data[this.f][this.t][this.r].plot() }
     
     renderOptions() {

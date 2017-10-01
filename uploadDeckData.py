@@ -107,7 +107,7 @@ def upload(hsFormat):
                 f = open(file)
                 txt = f.read()
                 txt = txt.replace('<strong>',"<strong style='font-weight:bold'>")
-                txt = txt.replace('</p>','</p><br>')
+                txt = txt.replace('</p>','</p><br><br>')
                 DB.child('deckData').child(hsFormat).child(hsClass).child('text').set(txt,user['idToken'])
                 continue
 

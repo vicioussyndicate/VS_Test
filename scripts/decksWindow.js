@@ -182,7 +182,9 @@ class DecksWindow {
 
 
 
-    plot() { this.loadFormat(this.f) }
+    plot() { 
+        if (!this.fullyLoaded) {return}
+        this.loadFormat(this.f) }
 
 
     loadFormat(hsFormat) { this.f = hsFormat; this.loadClass(this.hsClass) }

@@ -96,16 +96,16 @@ class History {
                 archetypes.push({name: archName, color: colors.color, fontColor: colors.fontColor})
                 var y = (t_h == 'lastHours') ? this.smoothData(d[i]['data']) : d[i]['data']
 
-
                 var text = []
                 for (var j=0;j<y.length;j++) {
                     var unit = (j>0) ? baseUnit+'s' : baseUnit;
                     text.push(`${d[i]['name']} (${(y[j]*100).toFixed(1)}% )<br>${x[j]+' '+unit} ago`)
                     if (y[j] > maxEntry) {maxEntry = y[j]}
                 }
+                var xrange = (t_h == 'lastHours') ? range(1,x.length+1) : range(0,x.length)
 
                 zeroTraces.push({
-                    x: range(1,x.length+1),
+                    x: xrange,
                     y: fillRange(0,y.length,0),
                     text: text,
                     line: {width: 2.5, simplify: false},
@@ -116,7 +116,7 @@ class History {
                 })
 
                 traces.push({
-                    x: x.slice(),
+                    x: xrange,
                     y: y.slice(),
                     text: text,
                     line: {width: 2.5},
@@ -127,7 +127,28 @@ class History {
                 })
             }
             
-            this.layout.yaxis['range'] = [0,maxEntry*1.1] 
+            var xLabels = []
+            if (t_h == 'lastHours') {
+                var t0 = (new Date()).getHours()
+                for (var i=0;i<x.length;i++) {
+                    if (i%3!=0 && i!=1) {xLabels.push(''); continue}
+                    var ti = parseInt((t0+24-i)%24)
+                    xLabels.push(ti+':00')
+            }}
+
+            if (t_h == 'lastDays') {
+                var t0 = new Date()
+                for (var i=0;i<x.length;i++) {
+                    if (i%4!=0 && i!=0) {xLabels.push(''); continue}
+                    t0.setDate(t0.getDate()-1);
+                    
+                    xLabels.push(t0.getDate()+'.'+t0.getMonth()+'.')
+            }}
+
+            this.layout.yaxis['range'] = [0,maxEntry*1.1]
+            this.layout.xaxis['tickvals'] = range(0,x.length)
+            this.layout.xaxis['ticktext'] = xLabels
+            this.layout.xaxis['tickangle'] = 'xLabels', 
             this.layout.xaxis['range'] = [this.x[t_w]+1,2]       
             
             Plotly.newPlot('chart1',zeroTraces, this.layout, {displayModeBar: false,})
@@ -136,13 +157,14 @@ class History {
             this.window.setTotGames(totGames)
 
             // Animation
+
             Plotly.animate('chart1', {
                 data: traces,
                 traces: range(0,traces.length),
                 layout: {},
               }, {
                 transition: {
-                  duration: 300,
+                  duration: 100,
                   easing: 'linear'//'cubic-in-out'
                 }
               })

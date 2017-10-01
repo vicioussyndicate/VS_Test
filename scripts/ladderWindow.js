@@ -242,6 +242,7 @@ class LadderWindow {
 
 
     plot () { 
+        if (!this.fullyLoaded) {return}
         this.renderOptions()
         if (this.plotType == 'timeline') {this.history.plot(); return}
         this.data[this.f][this.t].plot();
