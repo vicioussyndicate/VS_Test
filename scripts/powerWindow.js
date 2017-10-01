@@ -9,6 +9,7 @@ class PowerWindow {
         this.optionButtons = document.querySelectorAll('#powerWindow .optionBtn')
         this.questionBtn = document.querySelector('#powerWindow .question')
         this.overlayDiv = document.querySelector('#powerWindow .overlay')
+        this.overlayP = document.querySelector('#powerWindow .overlayText')
         
 
         this.f = 'Standard'
@@ -17,6 +18,13 @@ class PowerWindow {
         this.t_table = 'last2Weeks'
         this.top = 5
         
+        this.overlayText = `
+            This tab displays the best decks to be played in the respective rank brackets.<br><br>
+            "Tier Lists" shows the top 16 decks across specific rank brackets ('All Ranks', 'Rank 1-5' etc.).<br><br>
+            "Suggestions" shows the top 5 decks for every single rank until rank 20.<br><br>
+            The winrates are calculated by using the deck frequencies of the last 24 hours and the matchup table of the last week.<br><br>
+            Click on a deck to get to it's deck list in the "Decks" tab.<br><br>        
+        `
 
         this.data = {Standard:[], Wild:[]} // [rank0=[{name: druid, wr: x, fr: x}]]
         for (var rank=0; rank<hsRanks;rank++) {this.data['Standard'].push([])}
@@ -287,7 +295,10 @@ class PowerWindow {
 
     toggleOverlay() {
         if (this.overlay) {this.overlayDiv.style.display = 'none'; this.overlay = false}
-        else{this.overlayDiv.style.display = 'block'; this.overlay = true}
+        else{
+            this.overlayP.innerHTML = this.overlayText
+            this.overlayDiv.style.display = 'block'; 
+            this.overlay = true}
     }
     
 
