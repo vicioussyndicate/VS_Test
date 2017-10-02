@@ -78,11 +78,6 @@ class Decklist {
         this.deckinfo.className = 'decklist' + ' deckinfo'
         this.deckinfo.id = dl.name 
 
-        var dustInfo = document.createElement('p')
-        dustInfo.innerHTML = 'Dust: '+this.dust
-        dustInfo.className = 'dustInfo'
-        this.deckinfo.appendChild(dustInfo)
-
         var chartTitle = document.createElement('p')
         chartTitle.innerHTML = 'Manacurve'
         chartTitle.className = 'manacurve'
@@ -94,6 +89,49 @@ class Decklist {
         this.chart.className = 'manaChart'
         this.deckinfo.appendChild(this.chart)
 
+        var dustDiv = document.createElement('div')
+        var dustInfo = document.createElement('p')
+        dustInfo.innerHTML = this.dust+ '  '
+        dustInfo.className = 'dustInfo'
+        var dustImg = document.createElement('img')
+        dustImg.src = 'Images/dust.png'
+        dustImg.className = 'dustImg'
+        dustDiv.appendChild(dustInfo)
+        dustDiv.appendChild(dustImg)
+        this.deckinfo.appendChild(dustDiv)
+
+        var cardTypes = document.createElement('p')
+        cardTypes.className = 'cardtypes'
+        var ct_txt = ''
+        if (dl.cardTypes.Minion >= 10) {ct_txt += dl.cardTypes.Minion +' Minions<br>' }
+        else if (dl.cardTypes.Minion == 1) {ct_txt += dl.cardTypes.Minion +'  Minion<br>' }
+        else {ct_txt += dl.cardTypes.Minion +'  Minions<br>' }
+
+        if (dl.cardTypes.Spell >= 10) {ct_txt += dl.cardTypes.Spell +' Spells<br>' }
+        else if (dl.cardTypes.Spell == 1) {ct_txt += dl.cardTypes.Spell +'  Spell<br>' }
+        else {ct_txt += dl.cardTypes.Spell +'  Spells<br>' }
+
+        if (dl.cardTypes.Weapon) { ct_txt += dl.cardTypes.Weapon+'  Weapons<br>' }
+        if (dl.cardTypes.Hero) { ct_txt += dl.cardTypes.Hero+'  Hero<br>' }
+        cardTypes.innerHTML = ct_txt
+        this.deckinfo.appendChild(cardTypes)
+
+        var author = document.createElement('p')
+        author.className = 'author'
+        author.innerHTML = 'Author: '+ dl.author
+        this.deckinfo.appendChild(author)
+
+        var timeStamp = document.createElement('p')
+        timeStamp.className = 'timestamp'
+        timeStamp.innerHTML = 'created '+ dl.timestamp
+        this.deckinfo.appendChild(timeStamp)
+
+        var gameplay = document.createElement('a')
+        gameplay.href = 'https://www.reddit.com/r/ViciousSyndicate/comments/6yqj62/vs_live_web_app_feedback_thread/'
+        gameplay.target = '_blank'
+        gameplay.className = 'gameplay'
+        gameplay.innerHTML = 'Gameplay'
+        this.deckinfo.appendChild(gameplay)
        
         
 

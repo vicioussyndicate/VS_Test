@@ -52,12 +52,28 @@ def getCardRarity(cardName):
             return 'Basic'
     return 'Basic'
 
+def getCardType(cardName):
+    for c in CARDS:
+        if c[0] != cardName:
+            continue
+
+        if len(c) >= 3:
+            t = c[2]
+            return t
+        else:
+            return 'Minion'
+    return 'Minion'
+
 
 def readDeckCode(file,hsClass, hsFormat):
 
     title = ''
     deckCode = ''
     archetype = ''
+    author = ''
+    timestamp = ''
+    gameplay = ''
+    cardTypes = {'Minion': 0, 'Spell': 0, 'Weapon': 0, 'Hero': 0}
     cards = []
     readingCards = 'waiting'
     count = 0
@@ -84,16 +100,28 @@ def readDeckCode(file,hsClass, hsFormat):
             print('ERROR: decklist not Standard format! DeckName: '+title)
             #return 0
             
+
+        # Our markers:
         if '# Archetype:' in row:
             archetype = row[13:-1]
+        if '# Author:' in row:
+            author = row
+        if '# Gameplay:' in row:
+            gameplay = row
+        if '# Timestamp:' in row:
+            timestamp = row
 
+        # Cards
         if readingCards == 'reading':
             quantity = row[2]
             manaCost = row[6]
-            if row[7] != ')':
+            if row[7] != ')': # check if double digit
                 manaCost = row[6:8]
             name = row[9:-1]
             rarity = getCardRarity(name)
+            cardType = getCardType(name)
+            cardTypes[cardType] += int(quantity)
+
             cards.append({'name':name,'manaCost':manaCost,'quantity':quantity, 'rarity':rarity})
 
         count += 1
@@ -101,7 +129,12 @@ def readDeckCode(file,hsClass, hsFormat):
     if archetype == '':
         archetype = 'Other '+hsClass
 
-    return {'name':title, 'cards':cards, 'deckCode': deckCode, 'color': 'rgb(0,0,0)'}, archetype
+    if timestamp == '':
+        dt = datetime.utcnow()
+        timestamp = dt.strftime("%Y-%m-%d")
+
+    return {'name':title, 'cards':cards, 'deckCode': deckCode, 'gameplay': gameplay,
+            'author':author, 'timestamp':timestamp, 'cardTypes':cardTypes}, archetype
 
 
 

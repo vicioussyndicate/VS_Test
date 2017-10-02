@@ -297,7 +297,7 @@ class LadderWindow {
                 break;
             case 'timeline': 
                 this.graphTitle.innerHTML = m + ' Frequency over Time';
-                this.graphLabel.innerHTML = 'Past ' + time + ' >'; 
+                this.graphLabel.innerHTML = ''//'Past ' + time + ' >'; 
                 break;
         }
     }
