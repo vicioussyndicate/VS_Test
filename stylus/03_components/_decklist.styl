@@ -7,23 +7,59 @@ $decklists-height = $cont-height - 2.5rem
     grid-column-gap 1.5rem
     margin-top 2.5rem
     height $decklists-height
-    //background-color blue
     position relative
     .deckBox
-        //background-color blue
         height $decklists-height
         .deckTitle
             display inline-block
             width 100%
+            height 2.5rem
             p
                 padding 0.3rem
                 display inline-block
+            .titleHover
+                opacity 0
+                height 2.5rem
+                width 12rem
+                position absolute
+                top 0
+                .titleHover-content
+                    display inline-block
+                    padding 0.5rem 1rem 0.5rem 1rem
+                    margin 0.15rem
+                    font-size 120%
+                    font-weight bold
+                    letter-spacing 0.9px
+                    color white
+                    border-radius 3%
+                    &:hover
+                        cursor pointer
+                        background-color $accentColor
+                        color $darkColor
+                    &:active
+                        background-color yellow
+                        
+                    
                 
             &:hover
-                background-color:  $accentColor
+                background-color:  $darkColor !important
+                p
+                    opacity 0.2
+                .titleHover
+                    opacity 1
+        .deckinfo
+            display none
+            .dustInfo
+                padding 0.4rem
+                font-weight bold
+            .manacurve
+                margin 0.4rem
                 color $darkColor
+            .manaChart
+                width 12rem
+                height 8rem
         .decklist
-            max-height 0.75*$decklists-height
+            max-height 0.88*$decklists-height
             margin-top: 1rem
             margin-bottom: 1rem
             overflow-y auto
@@ -38,8 +74,16 @@ $decklists-height = $cont-height - 2.5rem
                     position fixed
                     font-size 140%
                     position absolute
-                    color $darkColor
-                    opacity 0.5
+                    &.Basic
+                        color #b3b3b3
+                    &.Common
+                        color #736c6c
+                    &.Rare
+                        color $midColor
+                    &.Epic
+                        color #cc87cc
+                    &.Legendary
+                        color #dc9a22
                 .cost
                     color $lightColor
                     position absolute
@@ -69,19 +113,22 @@ $decklists-height = $cont-height - 2.5rem
                 &.highlighted
                     background-color:  $midColor  
                     color: $lightColor
+                &.half-highlighted
+                    background-color:  $midColor3  
+                    color: $lightColor
             
-        .copyDL
-            color black
-            background-color #92fc64
-            font-size: 1rem
-            font-weight: bold
-            padding 0.3rem
-            margin 0 auto
-            border 0.1rem solid #92fc64
-            border-radius 3%
-            &:hover
-                background-color: #b7ff54
-                border-color: #b7ff54
-                cursor:  pointer
+        // .copyDL
+        //     color black
+        //     background-color #92fc64
+        //     font-size: 1rem
+        //     font-weight: bold
+        //     padding 0.3rem
+        //     margin 0 auto
+        //     border 0.1rem solid #92fc64
+        //     border-radius 3%
+        //     &:hover
+        //         background-color: #b7ff54
+        //         border-color: #b7ff54
+        //         cursor:  pointer
 
 

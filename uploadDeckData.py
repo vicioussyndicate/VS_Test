@@ -21,7 +21,6 @@ DB = firebase.database()
 
 import csv
 from datetime import datetime
-import json
 import glob, os
 import random
 
@@ -30,6 +29,28 @@ import random
 path = 'Sources/' # +hsFormat/hsClass/
 hsClasses = ['Druid','Hunter','Mage','Paladin','Priest','Rogue','Shaman','Warlock','Warrior']
 hsFormats = ['Standard', 'Wild']
+
+def getCSVFile(path):
+    f = open(path,encoding='latin-1')
+    reader=csv.reader(f)
+    return list(reader)  
+
+CARDS = getCSVFile(path+'cards.csv')
+
+
+def getCardRarity(cardName):
+    for c in CARDS:
+        if c[0] != cardName:
+            continue
+
+        if len(c) >= 5:
+            r = c[4]
+            if r == 'Free':
+                r = 'Basic'
+            return r
+        else:
+            return 'Basic'
+    return 'Basic'
 
 
 def readDeckCode(file,hsClass, hsFormat):
@@ -72,7 +93,8 @@ def readDeckCode(file,hsClass, hsFormat):
             if row[7] != ')':
                 manaCost = row[6:8]
             name = row[9:-1]
-            cards.append({'name':name,'manaCost':manaCost,'quantity':quantity})
+            rarity = getCardRarity(name)
+            cards.append({'name':name,'manaCost':manaCost,'quantity':quantity, 'rarity':rarity})
 
         count += 1
 

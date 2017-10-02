@@ -292,7 +292,6 @@ class LadderWindow {
                 this.graphLabel.innerHTML = ''
                 break;
             case 'number': 
-                console.log('number')
                 this.graphTitle.innerHTML = m + ' Frequency vs Ranks'; 
                 this.graphLabel.innerHTML = ''
                 break;

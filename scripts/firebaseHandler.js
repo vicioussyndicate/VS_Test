@@ -14,7 +14,8 @@ function setupFirebase() {
     firebase.initializeApp(config);
     DATABASE = firebase.database()
     const auth = firebase.auth()
-    const promise = auth.signInAnonymously() //auth.signInWithEmailAndPassword('vsProUser@vs.com','pw12345');
+    //const promise = auth.signInAnonymously() //auth.signInWithEmailAndPassword('vsProUser@vs.com','pw12345');
+    const promise = auth.signInWithEmailAndPassword('freeUser@vs.com','eva8r_PM2#H-F?B&');
 
     const emailTxt = document.getElementById('emailInput')
     const passwordTxt = document.getElementById('passwordInput')

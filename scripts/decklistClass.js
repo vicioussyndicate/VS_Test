@@ -11,6 +11,9 @@ class Decklist {
 
         this.cards = []
         this.cardNames = []
+        this.dust = 0
+        this.manaBin = fillRange(0,11,0)
+        this.showInfo = false
 
         this.div = document.createElement('div')
         this.div.className = 'deckBox'
@@ -21,7 +24,34 @@ class Decklist {
         this.deckTitle.innerHTML = '<p>'+dl.name+'</p>'
         this.deckTitle.style.backgroundColor = hsColors[this.hsClass]
         this.deckTitle.style.color = hsFontColors[this.hsClass]
+        
 
+
+        var titleHover = document.createElement('div')
+        titleHover.className = 'titleHover'
+
+        this.infoBtn = document.createElement('div')
+        this.infoBtn.className = 'titleHover-content' 
+        this.infoBtn.innerHTML = 'info'
+        this.infoBtn.style.float = 'right'
+        this.infoBtn.addEventListener('click',this.toggleInfo.bind(this))
+
+        this.copyBtn = document.createElement('div')
+        this.copyBtn.className = 'titleHover-content'
+        this.copyBtn.innerHTML = 'copy'
+        this.copyBtn.style.float = 'left'
+        this.copyBtn.id = 'dl'+randint(0,1000000000)
+
+        titleHover.appendChild(this.copyBtn)
+        titleHover.appendChild(this.infoBtn)
+        this.deckTitle.appendChild(titleHover)
+
+        new Clipboard('#'+this.copyBtn.id, {
+            text: function(trigger) { return dl.deckCode }
+        });
+        
+
+        // Cards
 
         this.decklist = document.createElement('div')
         this.decklist.className = 'decklist'
@@ -35,31 +65,90 @@ class Decklist {
             c.hoverDiv.onmouseover = this.window.highlight.bind(this.window)
             c.hoverDiv.onmouseout = this.window.highlight.bind(this.window)
             this.cards.push(c)
+            this.dust += c.dust * c.quantity
+            var cost = (c.cost >= 10) ? 10 : c.cost
+            this.manaBin[cost] += parseInt(c.quantity)
             this.decklist.appendChild(c.div)
         }
 
-        this.copyBtn = document.createElement('buttton')
-        this.copyBtn.innerHTML = 'Copy To Clipboard'
-        this.copyBtn.className = 'copyDL'
-        this.copyBtn.id = 'dl'+randint(0,10000000) // unique button id for clipboard
+
+        // Info
+
+        this.deckinfo = document.createElement('div')
+        this.deckinfo.className = 'decklist' + ' deckinfo'
+        this.deckinfo.id = dl.name 
+
+        var dustInfo = document.createElement('p')
+        dustInfo.innerHTML = 'Dust: '+this.dust
+        dustInfo.className = 'dustInfo'
+        this.deckinfo.appendChild(dustInfo)
+
+        var chartTitle = document.createElement('p')
+        chartTitle.innerHTML = 'Manacurve'
+        chartTitle.className = 'manacurve'
+        this.deckinfo.appendChild(chartTitle)
+
+        this.chart = document.createElement('div')
+        this.chartId = 'chartId:' + randint(0,100000000)
+        this.chart.id = this.chartId
+        this.chart.className = 'manaChart'
+        this.deckinfo.appendChild(this.chart)
+
+       
+        
+
+        // this.copyBtn = document.createElement('buttton')
+        // this.copyBtn.innerHTML = 'Copy To Clipboard'
+        // this.copyBtn.className = 'copyDL'
+        // this.copyBtn.id = 'dl'+randint(0,10000000) // unique button id for clipboard
         
         
         this.div.appendChild(this.deckTitle)
         this.div.appendChild(this.decklist)
-        this.div.appendChild(this.copyBtn)
+        this.div.appendChild(this.deckinfo)
+        //this.div.appendChild(this.copyBtn)
 
-        new Clipboard('#'+this.copyBtn.id, {
-            text: function(trigger) {
-                return dl.deckCode 
-            }
-        });
     }
 
     highlight(cardName) {
         for (var c of this.cards) {
-            if (c.name == cardName) { c.div.classList.add('highlighted')}
-            else { c.div.classList.remove('highlighted')}
+            var hl = 0
+            if (c.name + 'x1' == cardName) { hl = 1 }
+            if (c.name + 'x2' == cardName) { hl = 2 }
+            if (hl == 0) { 
+                c.div.classList.remove('highlighted'); 
+                c.div.classList.remove('half-highlighted'); 
+                continue }
+
+            if (hl == c.quantity) { c.div.classList.add('highlighted') }
+            else { c.div.classList.add('half-highlighted') }            
         }   
+    }
+
+    toggleInfo() {
+        if (this.showInfo) {
+            this.decklist.style.display = 'block'
+            this.deckinfo.style.display = 'none'
+            this.infoBtn.innerHTML = 'info'
+            this.showInfo = false
+        }
+        else {
+            this.decklist.style.display = 'none'
+            this.deckinfo.style.display = 'block'
+            this.infoBtn.innerHTML = 'cards'
+            this.showInfo = true
+            this.plot()
+        }
+    }
+
+    plot() {
+        var trace = {
+            x: range(0,this.manaBin.length),
+            y: this.manaBin,
+            type: 'bar',
+        }
+        var layout = { margin: {l:15, r:10, b:25, t: 0}, }
+        Plotly.newPlot(this.chartId,[trace], layout, {displayModeBar: false,})
     }
 
 
@@ -75,6 +164,8 @@ class CardDiv {
         this.name = card.name
         this.cost = card.manaCost
         this.quantity = card.quantity
+        this.rarity = card.rarity
+        this.dust = cardDust[this.rarity]
 
         this.div = document.createElement('div')
         this.div.className = 'card'
@@ -83,13 +174,13 @@ class CardDiv {
 
         this.hoverDiv = document.createElement('div')
         this.hoverDiv.className = 'hoverDiv'
-        this.hoverDiv.id = this.name
+        this.hoverDiv.id = this.name + 'x' + this.quantity
 
         var costContainer = document.createElement('div')
         costContainer.className = 'costContainer'
 
         var hex = document.createElement('div')
-        hex.className = 'hex'
+        hex.className = 'hex '+this.rarity
         hex.innerHTML = `&#11042`
 
         var cost = document.createElement('div')

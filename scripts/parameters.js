@@ -35,7 +35,14 @@ const rankRange = {
 
 
 
-
+const cardDust = {
+    Free: 0,
+    Basic: 0,
+    Common: 40,
+    Rare: 100,
+    Epic: 400,
+    Legendary: 1600,
+}
 
 
 // Text
