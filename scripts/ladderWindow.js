@@ -292,13 +292,12 @@ class LadderWindow {
                 this.graphLabel.innerHTML = ''
                 break;
             case 'number': 
-                console.log('number')
                 this.graphTitle.innerHTML = m + ' Frequency vs Ranks'; 
                 this.graphLabel.innerHTML = ''
                 break;
             case 'timeline': 
                 this.graphTitle.innerHTML = m + ' Frequency over Time';
-                this.graphLabel.innerHTML = 'Past ' + time + ' >'; 
+                this.graphLabel.innerHTML = ''//'Past ' + time + ' >'; 
                 break;
         }
     }

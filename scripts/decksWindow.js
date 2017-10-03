@@ -243,7 +243,7 @@ class DecksWindow {
         this.descriptionBox.style.display = 'none'
         this.decksDiv.style.display = 'grid'
         this.decksDiv.style.gridTemplateColumns = gridTemplateColumns
-    }
+    } 
 
     highlight(e) {
 

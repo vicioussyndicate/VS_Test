@@ -23,11 +23,10 @@ config = { # Fenoms Firebase
     "messagingSenderId": "1079276848174"
 }
 
-firebase = pyrebase.initialize_app(config)
-auth = firebase.auth()
-user = auth.sign_in_with_email_and_password('admin01@vs.com', '2\!vEJ:6L]mh5R[z')
-DB = firebase.database()
-
+# firebase = pyrebase.initialize_app(config)
+# auth = firebase.auth()
+# user = auth.sign_in_with_email_and_password('admin01@vs.com', '2\!vEJ:6L]mh5R[z')
+# DB = firebase.database()
 
 
 
@@ -35,6 +34,7 @@ DB = firebase.database()
 
 FILENAME = 'live.csv'      # csv file to read from
 dataBranch = 'premiumData' # upload target'data'
+
 
 
 
@@ -143,15 +143,6 @@ def newHistory(archetypes, d):
     return history
                   
     
-    
-    
-    
-    
-    
-
-
-
-
 
 
 
@@ -208,12 +199,16 @@ def run():
         #   [{ name, data, avg },...] <- History element
 
         for row in datareader:
+            if count < 10:
+                print(row)
+            else:
+                quit()
             if count > countBreak:
                 break
             if count == 0:
                 count = 1
                 continue
-            
+
             
             dr = row[11]
             dt = datetime(int(dr[:4]),int(dr[5:7]),int(dr[8:10]),int(dr[11:13]),int(dr[14:16]))
@@ -259,6 +254,7 @@ def run():
             he_arch = [row[2],row[3]]
             op_arch = [row[4],row[5]]
             
+            duration = row[8]
             
             # ADD DATA
             if op_arch in hsArchetypes[hsFormat]:
