@@ -250,7 +250,7 @@ var _createClass = function() {
         this.descriptionBox = document.querySelector("#decksWindow .content .descriptionBox"), 
         this.decksDiv = document.querySelector("#decksWindow .content .decklists"), this.description = document.querySelector("#decksWindow .content .descriptionBox .description"), 
         this.overlayDiv = document.querySelector("#decksWindow .overlay"), this.overlayP = document.querySelector("#decksWindow .overlayText"), 
-        this.questionBtn = document.querySelector("#decksWindow .question"), this.overlayText = '\n            This tab displays the VS Deck library.<br><br>\n            Select "Description" to see the latest Data Reaper Report article on that class.<br><br>\n            Select any archetype on the left side to see all the decklists of that archetype.<br><br>\n            Tips:<br><br>\n            - When you hover over a card of a decklist it highlights all cards with the same name in the other decklists.<br><br>\n            - Click on "Copy to Clipboard" under a decklist to copy the deckcode to your clipboard.<br><br>\n        ', 
+        this.questionBtn = document.querySelector("#decksWindow .question"), this.overlayText = '\n            This tab displays the VS Deck library.<br><br>\n            Select "Description" to see the latest Data Reaper Report article on that class.<br><br>\n            Select any archetype on the left side to see all the decklists of that archetype.<br><br>\n            Tips:<br><br>\n            • When you hover over a card of a decklist it highlights all cards with the same name in the other decklists.<br><br>\n            • Click on "Copy to Clipboard" under a decklist to copy the deckcode to your clipboard.<br><br>\n        ', 
         this.firebasePath = "deckData", this.archButtons = [], this.optionButtons = document.querySelectorAll("#decksWindow .optionBtn");
         var r = !0, i = !1, a = void 0;
         try {
@@ -1368,11 +1368,11 @@ var _createClass = function() {
         this.overlayDiv = document.querySelector("#ladderWindow .overlay"), this.overlayP = document.querySelector("#ladderWindow .overlayText"), 
         this.chartFooter = document.querySelector("#ladderWindow .chart-footer"), this.firebasePath = PREMIUM ? "premiumData/ladderData" : "data/ladderData", 
         this.firebaseHistoryPath = PREMIUM ? "premiumData/historyData" : "", this.overlayText = {}, 
-        this.overlayText.bar = "\n        This stacked bar graph displays the class/ deck frequencies on the y-axis and the ranks on the ranked ladder on the x-axis.<br><br>\n        In \"Decks\" mode decks with 3% or lower frequencies have been merged with the 'Other' deck of that class.<br><br>\n        Tips:<br><br>\n        - Hover over the 'number of games' label in the header to display the number of games per rank on the bar plot.<br><br>\n        - Click on one bar of any class to 'zoom in' to display all the archetypes of that class. Click again to 'zoom out'.<br><br>\n        - Click on a class or deck button at the bottom of the graph to get to the respective description or decklist.<br><br>\n        ", 
-        this.overlayText.zoom = this.overlayText.bar, this.overlayText.line = '\n        This line graph displays the class/ deck frequencies on the y-axis and the ranks on the ranked ladder on the x-axis.<br><br>\n        In "Decks" mode the chart displays the 9 most frequent decks.<br><br>\n        Tips:<br><br>\n        - Click on a class or deck button at the bottom of the graph to get to the respective description or decklist.<br><br>\n        ', 
-        this.overlayText.pie = "\n        This pie graph displays the class/ deck frequencies as pie slices. You can vary the rank brackets in the header.<br><br>\n        In \"Decks\" mode decks with 3% or lower frequencies have been merged with the 'Other' deck of that class.<br><br>\n        Tips:<br><br>\n        - Click on a class or deck button at the bottom of the graph to get to the respective description or decklist.<br><br>\n        ", 
+        this.overlayText.bar = "\n        This stacked bar graph displays the class/ deck frequencies on the y-axis and the ranks on the ranked ladder on the x-axis.<br><br>\n        In \"Decks\" mode decks with 3% or lower frequencies have been merged with the 'Other' deck of that class.<br><br>\n        Tips:<br><br>\n        • Hover over the 'number of games' label in the header to display the number of games per rank on the bar plot.<br><br>\n        • Click on one bar of any class to 'zoom in' to display all the archetypes of that class. Click again to 'zoom out'.<br><br>\n        • Click on a class or deck button at the bottom of the graph to get to the respective description or decklist.<br><br>\n        ", 
+        this.overlayText.zoom = this.overlayText.bar, this.overlayText.line = '\n        This line graph displays the class/ deck frequencies on the y-axis and the ranks on the ranked ladder on the x-axis.<br><br>\n        In "Decks" mode the chart displays the 9 most frequent decks.<br><br>\n        Tips:<br><br>\n        • Click on a class or deck button at the bottom of the graph to get to the respective description or decklist.<br><br>\n        ', 
+        this.overlayText.pie = "\n        This pie graph displays the class/ deck frequencies as pie slices. You can vary the rank brackets in the header.<br><br>\n        In \"Decks\" mode decks with 3% or lower frequencies have been merged with the 'Other' deck of that class.<br><br>\n        Tips:<br><br>\n        • Click on a class or deck button at the bottom of the graph to get to the respective description or decklist.<br><br>\n        ", 
         this.overlayText.number = "\n        This table displays the class/ deck frequencies over ladder ranks (rank 20 - Legend). You can vary the rank brackets in the header.<br><br>\n        In \"Decks\" mode decks with 3% or lower frequencies have been merged with the 'Other' deck of that class.<br><br>\n        Click on the \"download\" button at the bottom of the graph to download the data as '.csv' file.<br><br>\n        ", 
-        this.overlayText.timeline = "\n        This line graph displays the class/ deck frequencies on the y-axis and time (in hours or days) on the x-axis.<br><br>\n        If you choose 'Last Day', 'Last 6 Hours' or 'Last 12 Hours' the time unit is in 'Hours' whereas for 'Last 3 Days' etc. it's in 'Days'.<br><br>\n        The 'Hours' lines have been averaged between +/- 1 Hour to make for a smoother curve.<br><br>\n        In \"Decks\" mode the chart displays the 9 most frequent decks.<br><br>\n        Tips:<br><br>\n        - Click on a class or deck button at the bottom of the graph to get to the respective description or decklist.<br><br>\n        ", 
+        this.overlayText.timeline = "\n        This line graph displays the class/ deck frequencies on the y-axis and time (in hours or days) on the x-axis.<br><br>\n        If you choose 'Last Day', 'Last 6 Hours' or 'Last 12 Hours' the time unit is in 'Hours' whereas for 'Last 3 Days' etc. it's in 'Days'.<br><br>\n        The 'Hours' lines have been averaged between +/- 1 Hour to make for a smoother curve.<br><br>\n        In \"Decks\" mode the chart displays the 9 most frequent decks.<br><br>\n        Tips:<br><br>\n        • Click on a class or deck button at the bottom of the graph to get to the respective description or decklist.<br><br>\n        ", 
         this.fontColor = "#222", this.fontColorLight = "#999", this.overlay = !1, this.colorScale_c1 = [ 255, 255, 255 ], 
         this.colorScale_c2 = [ 87, 125, 186 ], this.colorScale_f = .15, this.archetypeColors = {
             Standard: {},
@@ -1800,15 +1800,15 @@ var _createClass = function() {
     classes: "Classes",
     decks: "Archetypes"
 }, colorscale_Table = [ [ 0, "#a04608" ], [ .3, "#d65900" ], [ .5, "#FFFFFF" ], [ .7, "#00a2bc" ], [ 1, "#055c7a" ] ], hsColors = {
-    Druid: "#674f3a",
-    Hunter: "#b0c404",
-    Mage: "#83d8df",
-    Paladin: "#ffe551",
-    Priest: "#cacfb3",
-    Rogue: "#1e291f",
-    Shaman: "#0b72ca",
-    Warlock: "#892667",
-    Warrior: "#ec4441"
+    Druid: "#795548",
+    Hunter: "#689f38",
+    Mage: "#4fc3f7",
+    Paladin: "#ffee58",
+    Priest: "#bdbdbb",
+    Rogue: "#424242",
+    Shaman: "#5c6bc0",
+    Warlock: "#9c27b0",
+    Warrior: "#f44336"
 }, hsArchColors = {
     Druid: [ "#674f3a", "#624737", "#675645", "#785c43", "#523f2e" ],
     Hunter: [ "#719038", "#597525", "#6d8347", "#8da238", "#4f6d1a" ],

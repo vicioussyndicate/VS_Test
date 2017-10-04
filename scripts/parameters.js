@@ -173,17 +173,30 @@ var colorscale_Table = [
 //     Warrior:    '#dc7852',
 // }
 
-// Saturated
+// // Neon
+// const hsColors = {
+//     Druid:      '#674f3a',
+//     Hunter:     '#b0c404',
+//     Mage:       '#83d8df',
+//     Paladin:    '#ffe551',
+//     Priest:     '#cacfb3',
+//     Rogue:      '#1e291f',
+//     Shaman:     '#0b72ca',//'#1a5d72',
+//     Warlock:    '#892667',
+//     Warrior:    '#ec4441',
+// }
+
+// Material
 const hsColors = {
-    Druid:      '#674f3a',
-    Hunter:     '#b0c404',
-    Mage:       '#83d8df',
-    Paladin:    '#ffe551',
-    Priest:     '#cacfb3',
-    Rogue:      '#1e291f',
-    Shaman:     '#0b72ca',//'#1a5d72',
-    Warlock:    '#892667',
-    Warrior:    '#ec4441',
+    Druid:      '#795548',
+    Hunter:     '#689f38',
+    Mage:       '#4fc3f7',
+    Paladin:    '#ffee58',
+    Priest:     '#bdbdbb',
+    Rogue:      '#424242',
+    Shaman:     '#5c6bc0',
+    Warlock:    '#9c27b0',
+    Warrior:    '#f44336',
 }
 
 
