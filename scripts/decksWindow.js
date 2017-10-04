@@ -17,12 +17,14 @@ class DecksWindow {
         this.questionBtn = document.querySelector('#decksWindow .question')
 
         this.overlayText = `
-            This tab displays the VS Deck library.<br><br>
-            Select "Description" to see the latest Data Reaper Report article on that class.<br><br>
+            Select <span class='optionBtn'>Description</span> to see the latest Data Reaper Report article on that class.
+            Select <span class='optionBtn'>Deck Lists</span> to see the latest Data Reaper Report deck lists on that class.<br><br>
             Select any archetype on the left side to see all the decklists of that archetype.<br><br>
             Tips:<br><br>
             • When you hover over a card of a decklist it highlights all cards with the same name in the other decklists.<br><br>
-            • Click on "Copy to Clipboard" under a decklist to copy the deckcode to your clipboard.<br><br>
+            • Hover over the decklist title to reveal the 'copy' and 'info' options.<br><br>
+            • 'copy' copies the deckcode to your clipboard.<br><br>
+            • 'info' shows information on the mana curve, cardtypes and more.
         `
 
 

@@ -151,10 +151,11 @@ class Decklist {
     }
 
     highlight(cardName) {
+        var count = 0
         for (var c of this.cards) {
             var hl = 0
-            if (c.name + 'x1' == cardName) { hl = 1 }
-            if (c.name + 'x2' == cardName) { hl = 2 }
+            if (c.name + 'x1' == cardName) { hl = 1; count = 1 }
+            if (c.name + 'x2' == cardName) { hl = 2; count = 2 }
             if (hl == 0) { 
                 c.div.classList.remove('highlighted'); 
                 c.div.classList.remove('half-highlighted'); 
@@ -162,7 +163,8 @@ class Decklist {
 
             if (hl == c.quantity) { c.div.classList.add('highlighted') }
             else { c.div.classList.add('half-highlighted') }            
-        }   
+        }
+        return count   
     }
 
     toggleInfo() {

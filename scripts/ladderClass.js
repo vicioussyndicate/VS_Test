@@ -552,9 +552,11 @@ class Ladder {
                     y: 0.5,
                     xref: 'x',
                     yref: 'y',
+                    textangle: 90,
                     text: this.rankSums[i],
                     showarrow: false,
-                    bgcolor: 'rgba(0,0,0,0.1)',
+                    bgcolor: 'rgba(0,0,0,0.3)',
+                    font: {color:'white'},
                     opacity: 0.8
                 }
                 annotations.push(ann)

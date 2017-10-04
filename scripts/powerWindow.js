@@ -21,8 +21,8 @@ class PowerWindow {
         
         this.overlayText = `
             This tab displays the best decks to be played in the respective rank brackets.<br><br>
-            <span class='tierlist option'>Tier Lists</span> shows the top 16 decks across specific rank brackets ('All Ranks', 'Rank 1-5' etc.).<br><br>
-            <span class='suggestion option'>Suggestions</span> shows the top 5 decks for every single rank until rank 20.<br><br>
+            <span class='optionBtn'>Tier Lists</span> shows the top 16 decks across specific rank brackets ('All Ranks', 'Rank 1-5' etc.).<br><br>
+            <span class='optionBtn'>Suggestions</span> shows the top 5 decks for every single rank until rank 20.<br><br>
             The winrates are calculated by using the deck frequencies of the last 24 hours and the matchup table of the last week.<br><br>
             If there are fewer than ${this.minGames} games in the respective category no data is displayed instead.<br><br>
             Click on a deck to get to it's deck list in the "Decks" tab.<br><br>        
