@@ -176,8 +176,7 @@ class History {
         createLegend(archetypes) {
 
             var mode = this.window.mode
-            var chartFooter = document.querySelector('#ladderWindow .chart-footer')
-            while (chartFooter.firstChild) {chartFooter.removeChild(chartFooter.firstChild);}
+            this.window.clearChartFooter()
             
             var maxElements = 9
 
@@ -187,38 +186,9 @@ class History {
                 if (maxElements > archetypes.length) {maxElements = archetypes.length}
             }
     
-            for (var i=0;i<maxElements;i++) {
-    
-                var legendDiv = document.createElement('div')   
-                var colorSplash = document.createElement('div')
-                var archName = document.createElement('l')     
-    
-                legendDiv.className = 'legend-item'
-                legendDiv.style.fontSize = '0.8em'
-            
-                if (mode=='classes') {
-    
-                    var hsClass = hsClasses[i]
-                    legendDiv.style.backgroundColor = hsColors[hsClass]
-                    legendDiv.style.color = hsFontColors[hsClass]
-                    legendDiv.id = hsClass
-                    legendDiv.innerHTML = hsClass
-                    legendDiv.onclick = function(e) { ui.deckLink(e.target.id,this.window.f);  }
-                }
-    
-                if (mode=='decks') {
-    
-                    var a = archetypes[i]
-                    legendDiv.style.backgroundColor = a.color
-                    legendDiv.style.color = a.fontColor
-                    legendDiv.id = a.name
-                    legendDiv.innerHTML = a.name
-                    legendDiv.onclick = function(e) { ui.deckLink(e.target.id,this.window.f);  }
-                }
-    
-    
-                chartFooter.appendChild(legendDiv)
-    
+            for (var i=0;i<maxElements;i++) {        
+                if (mode=='classes') { this.window.addLegendItem(hsClasses[i]) }
+                if (mode=='decks') { this.window.addLegendItem(archetypes[i].name) }
             }
         }
     
