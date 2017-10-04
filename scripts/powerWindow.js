@@ -17,6 +17,7 @@ class PowerWindow {
         this.t_ladder = 'lastDay'
         this.t_table = 'last2Weeks'
         this.top = 5
+        this.minGames = 50
         
         this.overlayText = `
             This tab displays the best decks to be played in the respective rank brackets.<br><br>
@@ -26,7 +27,7 @@ class PowerWindow {
             Click on a deck to get to it's deck list in the "Decks" tab.<br><br>        
         `
 
-        this.data = {Standard:[], Wild:[]} // [rank0=[{name: druid, wr: x, fr: x}]]
+        this.data = {Standard:[], Wild:[], rankSums: {Standard:[], Wild:[]}} // [rank0=[{name: druid, wr: x, fr: x}]]
         for (var rank=0; rank<hsRanks;rank++) {this.data['Standard'].push([])}
         for (var rank=0; rank<hsRanks;rank++) {this.data['Wild'].push([])}
         for (let i=0;i<this.optionButtons.length;i++) { this.optionButtons[i].addEventListener("click", this.buttonTrigger.bind(this)) }
@@ -34,15 +35,19 @@ class PowerWindow {
         this.tierData = {}
         this.tiers = [
             {name:'All Ranks',
+            games:{Standard:0,Wild:0},
             start:0,
             end: 15},
             {name:'L',
+            games:{Standard:0,Wild:0},
             start: 0,
             end: 0},
             {name:'1-5',
+            games:{Standard:0,Wild:0},
             start: 1,
             end: 5},
             {name:'6-15',
+            games:{Standard:0,Wild:0},
             start: 6,
             end: 15},
         ]
@@ -62,9 +67,8 @@ class PowerWindow {
 
 
     setupUI() {
-        if (!PREMIUM) {
-            document.querySelector('#powerWindow .content-header #top').style.display = 'none'
-        }
+        var disp = (PREMIUM) ? 'inline':'none'
+        document.querySelector('#powerWindow .content-header #top').style.display = disp
         this.questionBtn.addEventListener('click',this.toggleOverlay.bind(this))
         this.overlayDiv.addEventListener('click',this.toggleOverlay.bind(this))
     }
@@ -101,7 +105,13 @@ class PowerWindow {
     addData (f) {
         var ladder = ladderWindow.data[f][this.t_ladder].archetypes
         var table = tableWindow.data[f][this.t_table]['ranks_all']
-        
+
+        this.data.rankSums[f] = ladderWindow.data[f][this.t_ladder].rankSums
+        for (var rank=0; rank<hsRanks;rank++) {
+            for (var tier of this.tiers) {
+                if (tier.start<=rank && tier.end>=rank) { 
+                    tier.games[f] += this.data.rankSums[f][rank]
+        }}}
 
         for (var arch of ladder) {
 
@@ -128,7 +138,6 @@ class PowerWindow {
                 else {totWr = 0}
 
                 this.data[f][rank].push({name:arch.name, wr:totWr, fr:arch.data[rank], color: arch.color, fontColor: arch.fontColor})
-
                 for (var tier of this.tiers) {
                     var data = this.tierData[f][tier.name]
                     if (rank == tier.start) {data.push({name:arch.name, wr:totWr, fr:arch.data[rank], color: arch.color, fontColor: arch.fontColor})}
@@ -167,7 +176,6 @@ class PowerWindow {
         for (var i=0;i<this.top;i++) {columnTemplate += '4fr 1fr '}
 
         this.grid.style.gridTemplateColumns = columnTemplate
-        this.grid.style.gridTemplateRows = 'auto'
         this.grid.style.gridGap = '0.1rem'
 
 
@@ -188,11 +196,21 @@ class PowerWindow {
 
 
         for (var i=0;i<hsRanks;i++) {
+
             var div = document.createElement('div')
             div.className = 'pivot'
             div.innerHTML = ranks[i]
             this.grid.appendChild(div)
 
+            if (this.data.rankSums[f][i] < this.minGames) { 
+                for (var j=0;j<this.top;j++) { 
+                    var div = document.createElement('div')
+                    div.className = 'blank'
+                    this.grid.appendChild(div)
+                    this.grid.appendChild(document.createElement('div')) 
+                }
+                continue
+            }
 
             for (var j=0;j<this.top;j++) {
                 var archName = this.data[f][i][j].name
@@ -241,7 +259,6 @@ class PowerWindow {
         for (var i=0;i<this.tiers.length;i++) {columnTemplate += '4fr 1fr '}
 
         this.grid.style.gridTemplateColumns = columnTemplate
-        this.grid.style.gridTemplateRows = 'auto'
         this.grid.style.gridGap = '0.3rem'
 
         //Header
@@ -258,17 +275,24 @@ class PowerWindow {
             for (var tier of this.tiers) {
                 
                 var arch = this.tierData[f][tier.name][i]
-                if (arch == undefined) {
-                    this.grid.appendChild(document.createElement('div'))
+                
+                if (tier.games[f] <= this.minGames || arch == undefined) { 
+                    var div = document.createElement('div')
+                    div.className = 'blank'
+                    this.grid.appendChild(div)
                     this.grid.appendChild(document.createElement('div'))
                     continue
                 }
+                
 
                 var wr = (100*arch.wr).toFixed(1)+ '%'
 
                 var div = document.createElement('div')
                 var btn = document.createElement('button')
                 var tooltip = document.createElement('span')
+
+                
+
 
                 tooltip.className = 'tooltipText'
                 tooltip.innerHTML = '#'+(i+1)+' '+arch.name

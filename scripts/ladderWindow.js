@@ -9,6 +9,7 @@ class LadderWindow {
 
         this.window = document.querySelector('#ladderWindow')
         this.chartDiv = document.querySelector('#ladderWindow #chart1')
+        this.classDeckOptions = document.querySelector('#ladderWindow .content-header .classDeckOptions')
         this.totGamesDiv = document.querySelector('#ladderWindow .content-header .nrGames')
         this.graphTitle = document.querySelector('#ladderWindow .graphTitle')
         this.graphLabel = document.querySelector('#ladderWindow .graphLabel')
@@ -158,12 +159,16 @@ class LadderWindow {
 
         this.questionBtn.addEventListener('click',this.toggleOverlay.bind(this))
         this.overlayDiv.addEventListener('click',this.toggleOverlay.bind(this))
+
+        this.classDeckOptions.style.display = disp
+        //document.querySelector('#ladderWindow .content-header .classDeckOptions').style.display = disp
        
-        document.querySelector('#ladderWindow .content-header #line').style.display = disp
-        document.querySelector('#ladderWindow .content-header #decks').style.display = disp
-        document.querySelector('#ladderWindow .content-header #classes').style.display = disp
-        document.querySelector('#ladderWindow .content-header #number').style.display = disp
-        document.querySelector('#ladderWindow .content-header #timeline').style.display = disp
+        // document.querySelector('#ladderWindow .content-header .classDeckOptions #decks').style.display = disp
+        // document.querySelector('#ladderWindow .content-header .classDeckOptions #classes').style.display = disp
+
+        document.querySelector('#ladderWindow .content-header .graphOptions #line').style.display = disp
+        document.querySelector('#ladderWindow .content-header .graphOptions #number').style.display = disp
+        document.querySelector('#ladderWindow .content-header .graphOptions #timeline').style.display = disp
         document.querySelector('#ladderWindow .content-header .nrGames').onmouseover = this.showGames.bind(this)
         document.querySelector('#ladderWindow .content-header .nrGames').onmouseout = this.hideGames.bind(this)
 
@@ -215,8 +220,8 @@ class LadderWindow {
         ref.on('value',this.readData.bind(this), e => console.log('Could not load Ladder Data',e))
         
         if (PREMIUM) {
-            var ref2 = DATABASE.ref(this.firebaseHistoryPath)
-            ref2.on('value',this.addHistoryData.bind(this), e => console.log('Could not load history data',e))
+            var ref_h = DATABASE.ref(this.firebaseHistoryPath)
+            ref_h.on('value',this.addHistoryData.bind(this), e => console.log('Could not load history data',e))
         }
     }
 
@@ -243,6 +248,15 @@ class LadderWindow {
 
     plot () { 
         if (!this.fullyLoaded) {return}
+
+        if (!PREMIUM) {
+            if (this.plotType == 'pie') { this.classDeckOptions.style.display = 'inline' }
+            if (this.plotType == 'bar') { 
+                this.classDeckOptions.style.display = 'none';
+                this.mode = 'classes'
+            }
+        }
+
         this.renderOptions()
         if (this.plotType == 'timeline') {this.history.plot(); return}
         this.data[this.f][this.t].plot();

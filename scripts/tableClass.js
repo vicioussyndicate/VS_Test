@@ -227,7 +227,9 @@ class Table {
         var data = [trace_Table,trace_FR,trace_WR]
 
         Plotly.newPlot('chart2',data,this.layout,{displayModeBar: false})
-        document.getElementById('chart2').on('plotly_click', this.zoomToggle.bind(this))
+        if (PREMIUM) {
+            document.getElementById('chart2').on('plotly_click', this.zoomToggle.bind(this))
+        }
 
         if (this.window.zoomIn) {this.zoomIn(this.window.zoomArch)}
         document.getElementById('loader').style.display = 'none'

@@ -126,13 +126,15 @@ class Decklist {
         timeStamp.innerHTML = 'created '+ dl.timestamp
         this.deckinfo.appendChild(timeStamp)
 
-        var gameplay = document.createElement('a')
-        gameplay.href = 'https://www.reddit.com/r/ViciousSyndicate/comments/6yqj62/vs_live_web_app_feedback_thread/'
-        gameplay.target = '_blank'
-        gameplay.className = 'gameplay'
-        gameplay.innerHTML = 'Gameplay'
-        this.deckinfo.appendChild(gameplay)
-       
+        if (dl.gameplay != '') {
+            var gameplay = document.createElement('a')
+            gameplay.href = 'https://www.reddit.com/r/ViciousSyndicate/comments/6yqj62/vs_live_web_app_feedback_thread/'
+            gameplay.target = '_blank'
+            gameplay.className = 'gameplay'
+            gameplay.innerHTML = 'Gameplay'
+            this.deckinfo.appendChild(gameplay)
+        }
+           
         
 
         // this.copyBtn = document.createElement('buttton')

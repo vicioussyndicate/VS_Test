@@ -6,7 +6,7 @@ var t0 = performance.now();
 
 // Global Data
 var DATABASE
-var PREMIUM = true
+var PREMIUM = false
 var MOBILE = false
 
 // Windows
@@ -29,7 +29,21 @@ window.onload = function() {
 }
 
 
+function reloadPremium() {
+  if (PREMIUM) {return}
+  PREMIUM = true
+  ui.showLoader()
+  ui.loggedIn = false
+  setupFirebase()
+}
 
+function reloadBasic() {
+  if (!PREMIUM) {return}
+  PREMIUM = false
+  ui.showLoader()
+  ui.loggedIn = false
+  setupFirebase()
+}
 
 
 function finishedLoading() {

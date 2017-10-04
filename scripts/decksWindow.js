@@ -263,6 +263,10 @@ class DecksWindow {
         }        
     }
 
+    highlightUnique() {
+        
+    }
+
 
     addDescription(title,text) {
         this.description.innerHTML = '<p class="title">'+title+'</p><p class="text">'+text+'</p>'

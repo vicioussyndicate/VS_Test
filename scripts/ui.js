@@ -16,7 +16,7 @@ class UI {
         this.getWindowSize()
 
         this.tabIdx = 0
-        this.activeTab =    this.tabs[0] //document.querySelector('.tab#ladder')
+        this.activeTab =    this.tabs[0]
         this.activeWindow = document.querySelector('#ladderWindow')
         this.openFolder = null
         this.overlay = false
@@ -51,7 +51,6 @@ class UI {
             if (this.height/this.width >= 1) {MOBILE = 'portrait'}
             else {MOBILE = 'landscape'}
         }
-        //console.log('getSIze',this.height,this.width,MOBILE)
     }
 
 
@@ -143,14 +142,18 @@ class UI {
     toggleOverlay() {
         this.overlayText.innerHTML = overlayText1
         if (this.overlay) {document.getElementById("overlay").style.display = "none"; this.overlay = false}
-        else {document.getElementById("overlay").style.display = "block"; this.overlay = true}
+        else {
+            document.getElementById("overlay").style.display = "block"; 
+            this.overlay = true
+            document.querySelector('#overlay #basicBtn').addEventListener('click',reloadBasic)
+            document.querySelector('#overlay #premiumBtn').addEventListener('click',reloadPremium)
+        }
     }
 
 } // close UI
 
 
 
-//const lien = `<img src='Images/skull.png' style='display: inline-block; width: 40px'></img> `
 
 const overlayText1 = `
 
@@ -166,11 +169,17 @@ To get more information on the current tab simply click on the
 
 icon in the top right corner.<br><br>
 
-This app is currently in BETA. To give feedback simply click on the reddit link below:<br><br><br>
+This app is currently in BETA. That's why until the <span class='highlight'>15. 10. 2017</span> you can check out the Premium version for free:<br><br><br>
+
+<button id='basicBtn'>BASIC</button>
+<button id='premiumBtn'>PREMIUM</button>
+
+<br><br><br>
+
+To give feedback simply click on the reddit link below:<br><br><br>
 
 <a href="https://www.reddit.com/r/ViciousSyndicate/comments/6yqj62/vs_live_web_app_feedback_thread/"
-   target="_blank"><img src="Images/redditLogo.png" 
-   style="position:absolute; left: 35%; display: inline-block"></a><br><br>
+   target="_blank"><img class='redditLogo' src="Images/redditLogo.png"></a><br><br>
 
 
 `

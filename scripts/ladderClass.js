@@ -523,7 +523,7 @@ class Ladder {
 
 
         this.createLegend(this.window.mode)
-        if (this.window.plotType == 'bar' || this.window.plotType == 'zoom') {
+        if ((this.window.plotType == 'bar' || this.window.plotType == 'zoom') && PREMIUM) {
             document.getElementById('chart1').on('plotly_click', this.zoomToggle.bind(this))
         }
     }

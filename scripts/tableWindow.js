@@ -45,11 +45,13 @@ class TableWindow {
         this.height = document.querySelector('#ladderWindow .content').offsetHeight*0.94
 
         this.f = this.hsFormats[0] 
-        this.t = 'lastWeek' //this.hsTimes[0] 
+        this.t = 'last2Weeks' //this.hsTimes[0] 
         this.r = this.ranks[0] 
         this.sortBy = this.sortOptions[0] //'class' // class, frequency, winrate, matchup
-        this.zoomIn = false
-        this.zoomArch = null
+        if (PREMIUM) {
+            this.zoomIn = false
+            this.zoomArch = null
+        }
         this.fullyLoaded = false
         this.overlay = false
         this.minGames = 1000

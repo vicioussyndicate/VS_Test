@@ -1,7 +1,4 @@
 // Global Variables
-const hsRanks =       21
-const hsClasses =     ['Druid',"Hunter","Mage","Paladin","Priest","Rogue","Shaman","Warlock","Warrior"]
-const hsFormats =     ['Standard','Wild']
 
 const ladder_times =  ['lastDay','last2Weeks']
 const ladder_times_premium = ['last6Hours','last12Hours','lastDay','last3Days','lastWeek','last2Weeks']
@@ -21,8 +18,15 @@ const table_sortOptions_premium = ['frequency','class','winrate','matchup']
 const table_ranks =   ['ranks_all']
 const table_ranks_premium = ['ranks_all','ranks_L_5','ranks_6_15']
 
+const login = {
+    true: {email: 'premiumUser@vs.com', pw: 'Nx:j5nvDFuAjL-)e'},
+    false: {email: 'freeUser@vs.com', pw: 'eva8r_PM2#H-F?B&'},
+}
 
 
+const hsRanks =       21
+const hsClasses =     ['Druid',"Hunter","Mage","Paladin","Priest","Rogue","Shaman","Warlock","Warrior"]
+const hsFormats =     ['Standard','Wild']
 
 
 const rankRange = {

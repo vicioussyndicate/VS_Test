@@ -9,7 +9,7 @@
         max-height 100%
         display grid
         grid-template-columns repeat(6, 1fr)
-        grid-template-rows repeat(21, 1fr)
+        grid-template-rows repeat(21, 3rem)
         grid-gap 0.1rem
         overflow-y auto
         text-align center
@@ -37,6 +37,10 @@
             color #999
             font-weight: normal
             padding: 0.2rem
+        .blank
+            background-color $darkColor
+            margin: 0.2rem
+            opacity 0.3
         .columnTitle
             grid-column-end: span 2; 
             
