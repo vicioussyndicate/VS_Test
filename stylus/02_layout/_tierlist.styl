@@ -5,6 +5,21 @@
 
  #powerWindow
     height: 100%
+    .overlay
+        .option
+            background $header_btn_bgColor
+            color $header_btn_fColor
+            font-size 1em
+            border 0.1rem solid $header_btn_borderColor
+            font-size 0.8em
+            border-radius 5%
+            padding 0.4rem 0.4rem 0.2rem 0.4rem
+            transition background 0.3s ease, color 0.3s ease
+            //margin-left 1em
+            &:hover
+                background $header_btn_hi_bgColor
+                color $header_btn_hi_fColor
+                border 0.1rem solid $header_btn_hi_borderColor
     #powerGrid
         max-height 100%
         display grid
@@ -15,7 +30,6 @@
         text-align center
         text-size 10
         padding: 2rem 2rem 0 2rem
-        //background-color #555
         .pivot
             background-color transparent
             color $darkColor

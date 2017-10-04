@@ -21,25 +21,30 @@
         font-weight bold
         font-family: 'Garamond'
         letter-spacing 0.8px
-        .highlight
-            background-color $lightColor
-            color $darkColor
-            padding 0 0.3rem
-            opacity 0.7
+        line-height 1.5rem
+        // .highlight
+        //     background-color $lightColor
+        //     color $darkColor
+        //     padding 0 0.3rem
+        //     opacity 0.7
         .redditLogo
             position absolute
             left 35%
             display inline-block
             height 10rem
+        .arrow
+            height 2rem
+            display inline-block
+            padding 0 1rem
         button
             color $lightColor
             font-size 2rem
             font-weight bold
-            margin-left 4rem
             marign-right 4rem
             &#basicBtn
                 background-color $lightColor
                 color $darkColor
+                margin-left 25%
             &#premiumBtn
                 background-color gold
                 color $darkColor
@@ -59,6 +64,7 @@
     z-index 10
     cursor pointer
     overflow auto
+    line-height 1.5rem
     margin auto
     .overlayText
         color white

@@ -19,11 +19,12 @@ class TableWindow {
         this.hsTimes = hsTimes
         this.ranks = table_ranks
         this.sortOptions = sortOptions //['frequency','winrate','matchup','class']
+        this.top = 16
 
         this.overlayText = `
             Here you can see how your deck on the left hand side performs against any other deck on the top. 
             The colors range  from favorable <span class='blue'>blue</span> to unfavorable <span class='red'>red</span>.<br><br>
-            The matchup table lists the top 16 most frequent decks within the selected time and rank brackets.<br><br>
+            The matchup table lists the top ${this.top} most frequent decks within the selected time and rank brackets.<br><br>
             The hover info lists the number of games recorded for that specific matchup in the (parenthesis).<br><br>
             The 'Overall' line at the bottom shows the overall winrate of the opposing decks in the specified time and rank bracket.<br><br>
             Sorting the table displays the most frequent/ highest winrate deck in the top left. Changing the format, time or rank brackets automatically sorts the table.<br><br>

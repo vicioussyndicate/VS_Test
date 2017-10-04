@@ -865,13 +865,13 @@ var _createClass = function() {
                 if (p) throw b;
             }
         }
-        var B = e.archetypes, D = e.gamesPerRank;
+        var B = e.archetypes, I = e.gamesPerRank;
         this.rankSums = e.gamesPerRank;
-        for (var I = this.smoothLadder(e.rankData, D.slice()), E = this.smoothLadder(e.classRankData, D.slice()), q = 0; q < hsRanks; q++) {
-            q % 5 == 0 ? this.rankLabels.push(q + "  ") : this.rankLabels.push(""), this.totGames += D[q];
+        for (var D = this.smoothLadder(e.rankData, I.slice()), E = this.smoothLadder(e.classRankData, I.slice()), q = 0; q < hsRanks; q++) {
+            q % 5 == 0 ? this.rankLabels.push(q + "  ") : this.rankLabels.push(""), this.totGames += I[q];
             var H = !0, A = !1, F = void 0;
             try {
-                for (var R, O = this.tiers[Symbol.iterator](); !(H = (R = O.next()).done); H = !0) q >= (g = R.value).start && q <= g.end && (this.totGamesRanks[g.buttonId] += D[q]);
+                for (var R, O = this.tiers[Symbol.iterator](); !(H = (R = O.next()).done); H = !0) q >= (g = R.value).start && q <= g.end && (this.totGamesRanks[g.buttonId] += I[q]);
             } catch (t) {
                 A = !0, F = t;
             } finally {
@@ -887,7 +887,7 @@ var _createClass = function() {
             var P = [], z = [], N = [], G = 0, U = B[q][1] + " " + B[q][0].replace("§", ""), Y = hsClasses.indexOf(B[q][0]), X = this.window.getArchColor(B[q][0], B[q][1], this.f), V = X.fontColor;
             X = X.color;
             for (st = 0; st < hsRanks; st++) {
-                ot = I[st][q];
+                ot = D[st][q];
                 z.push(ot), N.push("<b>" + U + "     </b><br>freq: " + (100 * ot).toFixed(1) + "%"), 
                 ot < this.fr_min && q > 8 && (this.traces_bar.decks[Y].y[st] += ot, ot = 0), G += ot, 
                 P.push(ot);
@@ -1838,7 +1838,7 @@ var _createClass = function() {
         this.questionBtn = document.querySelector("#powerWindow .question"), this.overlayDiv = document.querySelector("#powerWindow .overlay"), 
         this.overlayP = document.querySelector("#powerWindow .overlayText"), this.f = "Standard", 
         this.mode = "tiers", this.t_ladder = "lastDay", this.t_table = "last2Weeks", this.top = 5, 
-        this.minGames = 50, this.overlayText = '\n            This tab displays the best decks to be played in the respective rank brackets.<br><br>\n            "Tier Lists" shows the top 16 decks across specific rank brackets (\'All Ranks\', \'Rank 1-5\' etc.).<br><br>\n            "Suggestions" shows the top 5 decks for every single rank until rank 20.<br><br>\n            The winrates are calculated by using the deck frequencies of the last 24 hours and the matchup table of the last week.<br><br>\n            Click on a deck to get to it\'s deck list in the "Decks" tab.<br><br>        \n        ', 
+        this.minGames = 50, this.overlayText = "\n            This tab displays the best decks to be played in the respective rank brackets.<br><br>\n            <span class='tierlist option'>Tier Lists</span> shows the top 16 decks across specific rank brackets ('All Ranks', 'Rank 1-5' etc.).<br><br>\n            <span class='suggestion option'>Suggestions</span> shows the top 5 decks for every single rank until rank 20.<br><br>\n            The winrates are calculated by using the deck frequencies of the last 24 hours and the matchup table of the last week.<br><br>\n            If there are fewer than " + this.minGames + ' games in the respective category no data is displayed instead.<br><br>\n            Click on a deck to get to it\'s deck list in the "Decks" tab.<br><br>        \n        ', 
         this.data = {
             Standard: [],
             Wild: [],
@@ -1996,14 +1996,14 @@ var _createClass = function() {
                         var L = !0, S = !1, W = void 0;
                         try {
                             for (var M, _ = this.tiers[Symbol.iterator](); !(L = (M = _.next()).done); L = !0) {
-                                var B = M.value, D = this.tierData[t][B.name];
-                                E == B.start && D.push({
+                                var B = M.value, I = this.tierData[t][B.name];
+                                E == B.start && I.push({
                                     name: y.name,
                                     wr: v,
                                     fr: y.data[E],
                                     color: y.color,
                                     fontColor: y.fontColor
-                                }), E > B.start && E <= B.end && (D[D.length - 1].wr += v), E == B.end && (D[D.length - 1].wr /= B.end - B.start + 1);
+                                }), E > B.start && E <= B.end && (I[I.length - 1].wr += v), E == B.end && (I[I.length - 1].wr /= B.end - B.start + 1);
                             }
                         } catch (t) {
                             S = !0, W = t;
@@ -2025,14 +2025,14 @@ var _createClass = function() {
                     if (h) throw d;
                 }
             }
-            for (var I = function(t, e) {
+            for (var D = function(t, e) {
                 return t.wr > e.wr ? -1 : t.wr < e.wr ? 1 : 0;
-            }, E = 0; E < hsRanks; E++) this.data[t][E].sort(I);
+            }, E = 0; E < hsRanks; E++) this.data[t][E].sort(D);
             var q = !0, H = !1, A = void 0;
             try {
                 for (var F, R = this.tiers[Symbol.iterator](); !(q = (F = R.next()).done); q = !0) {
                     B = F.value;
-                    this.tierData[t][B.name].sort(I);
+                    this.tierData[t][B.name].sort(D);
                 }
             } catch (t) {
                 H = !0, A = t;
@@ -2135,8 +2135,8 @@ window.onload = function() {
 var Table = function() {
     function t(e, r, i, a, s) {
         _classCallCheck(this, t), this.DATA = e, this.f = r, this.t = i, this.r = a, this.window = s, 
-        this.sortBy = "", this.numArch = 16, this.bgColor = "transparent", this.fontColor = "#22222", 
-        this.subplotRatio = .6, this.overallString = '<b style="font-size:130%">Overall</b>', 
+        this.sortBy = "", this.numArch = this.window.top, this.bgColor = "transparent", 
+        this.fontColor = "#22222", this.subplotRatio = .6, this.overallString = '<b style="font-size:130%">Overall</b>', 
         this.minGames = 20, this.table = [], this.textTable = [], this.frequency = [], this.archetypes = [], 
         this.classPlusArch = [], this.winrates = [], this.totGames = 0, this.download = "";
         var o = e.frequency.slice(), n = e.table.slice(), l = e.archetypes.slice();
@@ -2389,7 +2389,8 @@ var Table = function() {
         this.window = document.querySelector("#ladderWindow"), this.optionButtons = document.querySelectorAll("#tableWindow .optionBtn"), 
         this.questionBtn = document.querySelector("#tableWindow .question"), this.overlayDiv = document.querySelector("#tableWindow .overlay"), 
         this.overlayP = document.querySelector("#tableWindow .overlayText"), this.data = {}, 
-        this.hsFormats = e, this.hsTimes = r, this.ranks = i, this.sortOptions = a, this.overlayText = "\n            Here you can see how your deck on the left hand side performs against any other deck on the top. \n            The colors range  from favorable <span class='blue'>blue</span> to unfavorable <span class='red'>red</span>.<br><br>\n            The matchup table lists the top 16 most frequent decks within the selected time and rank brackets.<br><br>\n            The hover info lists the number of games recorded for that specific matchup in the (parenthesis).<br><br>\n            The 'Overall' line at the bottom shows the overall winrate of the opposing decks in the specified time and rank bracket.<br><br>\n            Sorting the table displays the most frequent/ highest winrate deck in the top left. Changing the format, time or rank brackets automatically sorts the table.<br><br>\n            <img src='Images/muSort.png'></img>\n            \n            <br><br><br><br>\n            Click on a matchup to 'zoom in'. Click again to 'zoom out'.<br><br>\n            In the zoomed in view you see only one deck on the left side.<br><br>\n            Additionally there are 2 subplots displaying the frequency of the opposing decks (brown line chart) and the specific matchup as black bar charts.<br><br>\n            Changing any parameter (Format, time, rank, sorting) keeps you zoomed into the same archetype if possible.<br><br>\n            You can additionally sort 'by Matchup' while zoomed in.<br><br>\n        ", 
+        this.hsFormats = e, this.hsTimes = r, this.ranks = i, this.sortOptions = a, this.top = 16, 
+        this.overlayText = "\n            Here you can see how your deck on the left hand side performs against any other deck on the top. \n            The colors range  from favorable <span class='blue'>blue</span> to unfavorable <span class='red'>red</span>.<br><br>\n            The matchup table lists the top " + this.top + " most frequent decks within the selected time and rank brackets.<br><br>\n            The hover info lists the number of games recorded for that specific matchup in the (parenthesis).<br><br>\n            The 'Overall' line at the bottom shows the overall winrate of the opposing decks in the specified time and rank bracket.<br><br>\n            Sorting the table displays the most frequent/ highest winrate deck in the top left. Changing the format, time or rank brackets automatically sorts the table.<br><br>\n            <img src='Images/muSort.png'></img>\n            \n            <br><br><br><br>\n            Click on a matchup to 'zoom in'. Click again to 'zoom out'.<br><br>\n            In the zoomed in view you see only one deck on the left side.<br><br>\n            Additionally there are 2 subplots displaying the frequency of the opposing decks (brown line chart) and the specific matchup as black bar charts.<br><br>\n            Changing any parameter (Format, time, rank, sorting) keeps you zoomed into the same archetype if possible.<br><br>\n            You can additionally sort 'by Matchup' while zoomed in.<br><br>\n        ", 
         this.width = document.querySelector(".main-wrapper").offsetWidth - 40, this.height = .94 * document.querySelector("#ladderWindow .content").offsetHeight, 
         this.f = this.hsFormats[0], this.t = "last2Weeks", this.r = this.ranks[0], this.sortBy = this.sortOptions[0], 
         PREMIUM && (this.zoomIn = !1, this.zoomArch = null), this.fullyLoaded = !1, this.overlay = !1, 
@@ -2625,7 +2626,7 @@ var Table = function() {
     function t() {
         _classCallCheck(this, t), this.tabs = document.querySelectorAll("button.tab"), this.mobileBtns = document.querySelectorAll("button.mobileBtn"), 
         this.windows = document.querySelectorAll(".tabWindow"), this.folderButtons = document.querySelectorAll(".folder-toggle"), 
-        this.loader = document.getElementById("loader"), this.logo = document.querySelector("#vsLogoDiv .logo"), 
+        this.loader = document.getElementById("loader"), this.logo = document.querySelector("#vsLogoDiv"), 
         this.overlayText = document.querySelector("#overlay .overlayText"), this.getWindowSize(), 
         this.tabIdx = 0, this.activeTab = this.tabs[0], this.activeWindow = document.querySelector("#ladderWindow"), 
         this.openFolder = null, this.overlay = !1, this.loggedIn = !1;
@@ -2786,4 +2787,4 @@ var Table = function() {
             document.querySelector("#overlay #premiumBtn").addEventListener("click", reloadPremium));
         }
     } ]), t;
-}(), overlayText1 = "\n\n<span style='font-size:180%;padding-left:2rem'>Greetings Travelers,</span><br><br><br>\n\nWelcome to the VS Live web app where you can explore the newest Hearthstone data and find \n\nout about frequncey and winrates of your favorite decks.<br><br>\n\nTo get more information on the current tab simply click on the \n\n    <div class='fa fa-question-circle' style='display:inline-block'></div>\n\nicon in the top right corner.<br><br>\n\nThis app is currently in BETA. That's why until the <span class='highlight'>15. 10. 2017</span> you can check out the Premium version for free:<br><br><br>\n\n<button id='basicBtn'>BASIC</button>\n<button id='premiumBtn'>PREMIUM</button>\n\n<br><br><br>\n\nTo give feedback simply click on the reddit link below:<br><br><br>\n\n<a href=\"https://www.reddit.com/r/ViciousSyndicate/comments/6yqj62/vs_live_web_app_feedback_thread/\"\n   target=\"_blank\"><img class='redditLogo' src=\"Images/redditLogo.png\"></a><br><br>\n\n\n";
+}(), overlayText1 = "\n\n<span style='font-size:180%;padding-left:2rem'>Greetings Travelers,</span><br><br><br>\n\nWelcome to the VS Live web app where you can explore the newest Hearthstone data and find \n\nout about frequncey and winrates of your favorite decks.<br><br>\n\nTo get more information on the current tab simply click on the \n\n    <div class='fa fa-question-circle' style='display:inline-block'></div>\n\nicon in the top right corner.<br><br>\n\nThis app is currently in BETA. That's why until the <span class='highlight'>15. 10. 2017</span> you can check out the Premium version for free:<br><br><br>\n\n<button id='basicBtn'>BASIC</button>\n<img src='Images/arrow.png' class='arrow'>\n<button id='premiumBtn'>PREMIUM</button>\n\n<br><br><br>\n\nTo give feedback simply click on the reddit link below:<br><br><br>\n\n<a href=\"https://www.reddit.com/r/ViciousSyndicate/comments/6yqj62/vs_live_web_app_feedback_thread/\"\n   target=\"_blank\"><img class='redditLogo' src=\"Images/redditLogo.png\"></a><br><br>\n\n\n";

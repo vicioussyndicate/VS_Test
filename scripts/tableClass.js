@@ -14,7 +14,7 @@ class Table {
         this.window = window
 
         this.sortBy = ''
-        this.numArch = (f == 'Standard') ? 16 : 16;
+        this.numArch = (f == 'Standard') ? this.window.top : this.window.top;
         this.bgColor = 'transparent'
         this.fontColor = '#22222'
         this.subplotRatio = 0.6

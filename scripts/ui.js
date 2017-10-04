@@ -11,7 +11,7 @@ class UI {
         this.windows = document.querySelectorAll('.tabWindow');
         this.folderButtons = document.querySelectorAll('.folder-toggle');
         this.loader = document.getElementById('loader')
-        this.logo = document.querySelector('#vsLogoDiv .logo')
+        this.logo = document.querySelector('#vsLogoDiv')
         this.overlayText = document.querySelector('#overlay .overlayText')
         this.getWindowSize()
 
@@ -172,6 +172,7 @@ icon in the top right corner.<br><br>
 This app is currently in BETA. That's why until the <span class='highlight'>15. 10. 2017</span> you can check out the Premium version for free:<br><br><br>
 
 <button id='basicBtn'>BASIC</button>
+<img src='Images/arrow.png' class='arrow'>
 <button id='premiumBtn'>PREMIUM</button>
 
 <br><br><br>
