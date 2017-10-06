@@ -18,10 +18,7 @@ const table_sortOptions_premium = ['frequency','class','winrate','matchup']
 const table_ranks =   ['ranks_all']
 const table_ranks_premium = ['ranks_all','ranks_L_5','ranks_6_15']
 
-const login = {
-    true: {email: 'premiumUser@vs.com', pw: 'Nx:j5nvDFuAjL-)e'},
-    false: {email: 'freeUser@vs.com', pw: 'eva8r_PM2#H-F?B&'},
-}
+
 
 
 const hsRanks =       21
@@ -176,11 +173,11 @@ var colorscale_Table = [
 // Neon
 const hsColors = {
     Druid:      '#674f3a',
-    Hunter:     '#b0c404',
+    Hunter:     '#5c9e53',//'#b0c404',
     Mage:       '#83d8df',
-    Paladin:    '#ffe551',
-    Priest:     '#cacfb3',
-    Rogue:      '#1e291f',
+    Paladin:    '#f6cb59',
+    Priest:     '#bfc6b1',
+    Rogue:      '#2a3231',//'#1e291f',
     Shaman:     '#0b72ca',//'#1a5d72',
     Warlock:    '#892667',
     Warrior:    '#ec4441',
@@ -201,20 +198,55 @@ const hsColors = {
 
 
 
-const hsArchColors = {
-    Druid:      ['#674f3a','#624737','#675645','#785c43','#523f2e'],
-    Hunter:     ['#719038','#597525','#6d8347','#8da238','#4f6d1a'],
-    Mage:       ['#90bbc3','#75a3a5','#a4c6c4','#89aaba','#638a8b'],
-    Paladin:    ['#ffd96d','#e9bf64','#ffe6a0','#f1f976','#ffc770'],
-    Priest:     ['#cfcbb3','#bbb7a1','#d5cec1','#c3c2a4','#aca995'],
-    Rogue:      ['#172917','#304030','#24352d','#33453f','#0c0c0c'],
-    Shaman:     ['#1a5d72','#154a5a','#326a8c','#245368','#05475d'],
-    Warlock:    ['#ad5c7b','#904c66','#ba7690','#a85494','#923d6d'],
-    Warrior:    ['#dc7852','#c25a48','#e0563b','#cc4941','#bc3b29'],
+// const hsArchColors = { // Original
+//     Druid:      ['#674f3a','#624737','#675645','#785c43','#523f2e'],
+//     Hunter:     ['#719038','#597525','#6d8347','#8da238','#4f6d1a'],
+//     Mage:       ['#90bbc3','#75a3a5','#a4c6c4','#89aaba','#638a8b'],
+//     Paladin:    ['#ffd96d','#e9bf64','#ffe6a0','#f1f976','#ffc770'],
+//     Priest:     ['#cfcbb3','#bbb7a1','#d5cec1','#c3c2a4','#aca995'],
+//     Rogue:      ['#172917','#304030','#24352d','#33453f','#0c0c0c'],
+//     Shaman:     ['#1a5d72','#154a5a','#326a8c','#245368','#05475d'],
+//     Warlock:    ['#ad5c7b','#904c66','#ba7690','#a85494','#923d6d'],
+//     Warrior:    ['#dc7852','#c25a48','#e0563b','#cc4941','#bc3b29'],
+// }
+
+// const hsArchColors = { // new
+//     Druid:      ['#3d2a25','#543f33','#694f3f','#b88230','#d39e48'],
+//     Hunter:     ['#1f7922','#329c50','#67b35f','#abda48','#bce86a'],
+//     Mage:       ['#22abb1','#38ccd8','#74d8dd','#a4dadc','#b5eef0'],
+//     Paladin:    ['#ff8f00','#ffc42e','#ffda74','#ffee58','#fbffaa'],
+//     Priest:     ['#95a482','#9eb5a5','#bfc6b1','#cad3be','#e3e6dd'],
+//     Rogue:      ['#0e1413','#2a3231','#3e4447','#4d5c5a','#5e716f'],
+//     Shaman:     ['#002b8d','#0052b4','#0074be','#009ec7','#00b6e5'],
+//     Warlock:    ['#470f26','#591c55','#902661','#c33891','#d95dab'],
+//     Warrior:    ['#ba1419','#ec191d','#f83f4a','#ea5e53','#fc736b'],
+// }
+
+const hsArchColors = { // switch
+    Druid:      ['#3d2a25','#694f3f','#543f33','#b88230','#d39e48'],
+    Hunter:     ['#1f7922','#67b35f','#329c50','#abda48','#bce86a'],
+    Mage:       ['#22abb1','#74d8dd','#38ccd8','#a4dadc','#b5eef0'],
+    Paladin:    ['#ff8f00','#ffda74','#ffc42e','#ffee58','#fbffaa'],
+    Priest:     ['#95a482','#bfc6b1','#9eb5a5','#cad3be','#e3e6dd'],
+    Rogue:      ['#0e1413','#3e4447','#2a3231','#4d5c5a','#5e716f'],
+    Shaman:     ['#002b8d','#0074be','#0052b4','#009ec7','#00b6e5'],
+    Warlock:    ['#470f26','#902661','#591c55','#c33891','#d95dab'],
+    Warrior:    ['#ba1419','#f83f4a','#ec191d','#ea5e53','#fc736b'],
 }
 
+// const hsArchColors = { // high saturation
+//     Druid:      ['#541c0d','#743713','#694f3f','#b88230','#f4a627'],
+//     Hunter:     ['#007e05','#329c50','#67b35f','#aded26','#c4ffae'],
+//     Mage:       ['#00a7af','#38ccd8','#74d8dd','#92eaee','#b5eef0'],
+//     Paladin:    ['#ff9100','#ffc42e','#ffda74','#ffef58','#fbffaa'],
+//     Priest:     ['#95a482','#9eb5a5','#bfc6b1','#cde3ae','#e3e6dd'],
+//     Rogue:      ['#0e1413','#203c38','#424242','#4a5e5b','#5b7471'],
+//     Shaman:     ['#002b8d','#0052b4','#0074be','#009ec7','#00b5e5'],
+//     Warlock:    ['#470f26','#75006e','#902661','#e7149a','#f640b4'],
+//     Warrior:    ['#870106','#d40509','#f83f4a','#ff6b5b','#ff8b76'],
+// }
 
-
+// for (var c of hsClasses) { hsArchColors[c] = shuffle(hsArchColors[c]) }
 
 
 var hsFontColors = {
