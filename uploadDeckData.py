@@ -1,6 +1,17 @@
 
 import pyrebase # learn more: https://python.org/pypi/Pyrebase
 
+import csv
+from datetime import datetime
+import glob, os
+import random
+
+
+path = 'Sources/' # +hsFormat/hsClass/
+UPLOAD_CLASS_TXT = False # Should the script upload class description texts?
+
+
+
 
 config = { # Fenoms Firebase
     "apiKey": "AIzaSyAt0uIAVOFjB42_bkwrEIqhSWkMT_VmluI",
@@ -19,14 +30,9 @@ DB = firebase.database()
 
 
 
-import csv
-from datetime import datetime
-import glob, os
-import random
 
 
 
-path = 'Sources/' # +hsFormat/hsClass/
 hsClasses = ['Druid','Hunter','Mage','Paladin','Priest','Rogue','Shaman','Warlock','Warrior']
 hsFormats = ['Standard', 'Wild']
 
@@ -47,6 +53,9 @@ def getCardRarity(cardName):
             r = c[4]
             if r == 'Free':
                 r = 'Basic'
+            if r == '':
+                continue
+            #print(cardName,r)
             return r
         else:
             return 'Basic'
@@ -117,7 +126,9 @@ def readDeckCode(file,hsClass, hsFormat):
             manaCost = row[6]
             if row[7] != ')': # check if double digit
                 manaCost = row[6:8]
-            name = row[9:-1]
+                name = row[10:-1]
+            else:
+                name = row[9:-1]
             rarity = getCardRarity(name)
             cardType = getCardType(name)
             cardTypes[cardType] += int(quantity)
@@ -147,7 +158,7 @@ def upload(hsFormat):
 
     # Delete Existing Files
     for hsClass in hsClasses:
-        DB.child('deckData').child(hsFormat).child(hsClass).remove(user['idToken'])
+        DB.child('deckData').child(hsFormat).child(hsClass).child('archetypes').remove(user['idToken'])
         pass
 
 
@@ -159,6 +170,8 @@ def upload(hsFormat):
 
             # Class Description Texts should be labeled 'Druid.txt', 'Hunter.txt' etc. (first letter Capital)
             if file == hsClass+'.txt':
+                if not UPLOAD_CLASS_TXT:
+                    continue
                 f = open(file)
                 txt = f.read()
                 txt = txt.replace('<strong>',"<strong style='font-weight:bold'>")

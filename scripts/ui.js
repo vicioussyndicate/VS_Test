@@ -13,6 +13,8 @@ class UI {
         this.loader = document.getElementById('loader')
         this.logo = document.querySelector('#vsLogoDiv')
         this.overlayText = document.querySelector('#overlay .overlayText')
+        this.infoWindow = document.querySelector('#infoWindow .content p')
+
         this.getWindowSize()
 
         this.tabIdx = 0
@@ -33,11 +35,17 @@ class UI {
             this.hideLoader()
         }
 
+        //document.querySelector('#vsLogoDiv .text').innerHTML = PREMIUM ? 'Gold':'Live'
+
+
         this.logo.addEventListener('click', this.toggleOverlay.bind(this))
         document.querySelector('#overlay').addEventListener('click', this.toggleOverlay.bind(this))
 
+
         window.addEventListener('orientationchange', this.getWindowSize.bind(this));
         window.addEventListener('resize', this.getWindowSize.bind(this))
+
+        this.infoWindow.innerHTML = infoWindowText
 
         this.renderTabs()
         this.renderWindows()
@@ -73,18 +81,25 @@ class UI {
 
 
     toggleDropDown(e) {
-        var siblings = e.target.parentElement.childNodes
-        var dd_folder = siblings[3] // !! TODO
+        console.log(e)
+        //var siblings = e.target.parentElement.childNodes
+        var nextSibling = e.target.nextElementSibling 
+        while (nextSibling != null) { if (nextSibling.classList.contains('dropdown')) {break} }
+        if (nextSibling == null) {return}
+
+
+        console.log(nextSibling)
+
 
         //for (s of siblings) { if (s.class = 'dropdown' || s.class == 'dropdown hidden') {dd_folder = s; break} }
         
-        if (dd_folder == this.openFolder) {this.openFolder = null}
+        if (nextSibling == this.openFolder) {this.openFolder = null}
         else if (this.openFolder != null) {
             this.openFolder.classList.toggle('hidden');
-            this.openFolder = dd_folder
+            this.openFolder = nextSibling
         }
 
-        dd_folder.classList.toggle('hidden')
+        nextSibling.classList.toggle('hidden')
     }
 
     mobileMenu(e) {
@@ -140,15 +155,17 @@ class UI {
     hideLoader() { this.loader.style.display = 'none' }
 
     toggleOverlay() {
-        this.overlayText.innerHTML = overlayText1
+        this.overlayText.innerHTML = PREMIUM ?  overlayText2 : overlayText1
         if (this.overlay) {document.getElementById("overlay").style.display = "none"; this.overlay = false}
         else {
             document.getElementById("overlay").style.display = "block"; 
             this.overlay = true
-            document.querySelector('#overlay #basicBtn').addEventListener('click',reloadBasic)
-            document.querySelector('#overlay #premiumBtn').addEventListener('click',reloadPremium)
+            //document.querySelector('#overlay #basicBtn').addEventListener('click',reloadBasic)
+            //document.querySelector('#overlay #premiumBtn').addEventListener('click',reloadPremium)
         }
     }
+
+    
 
 } // close UI
 
@@ -169,7 +186,7 @@ To get more information on the current tab simply click on the
 
 icon in the top right corner.<br><br>
 
-This app is currently in BETA. That's why until the <span class='highlight'>15. 10. 2017</span> you can check out the Premium version for free:<br><br><br>
+Upgrade to vS Gold to visit the gold version of this app. Check the link more inforomation:<br><br><br>
 
 <button id='basicBtn'>BASIC</button>
 <img src='Images/arrow.png' class='arrow'>
@@ -177,14 +194,51 @@ This app is currently in BETA. That's why until the <span class='highlight'>15. 
 
 <br><br><br>
 
-To give feedback simply click on the reddit link below:<br><br><br>
+To give feedback simply click on the discord link below:<br><br><br>
 
-<a href="https://www.reddit.com/r/ViciousSyndicate/comments/6yqj62/vs_live_web_app_feedback_thread/"
+<a href="https://discordapp.com/channels/147167584666517505/147167584666517505"
    target="_blank"><img class='redditLogo' src="Images/redditLogo.png"></a><br><br>
 
 
 `
 
+
+const overlayText2 = `
+
+<span style='font-size:180%;padding-left:2rem'>Greetings Travelers,</span><br><br><br>
+
+Welcome to the VS Live web app where you can explore the newest Hearthstone data and find 
+
+out about frequncey and winrates of your favorite decks.<br><br>
+
+To get more information on the current tab simply click on the 
+
+    <div class='fa fa-question-circle' style='display:inline-block'></div>
+
+icon in the top right corner.<br><br>
+
+Thank you for using vS Live Gold.
+
+<br><br><br>
+
+To give feedback simply click on the discord link below:<br><br><br>
+
+<a href="https://discordapp.com/channels/147167584666517505/147167584666517505"
+   target="_blank"><img class='redditLogo' src="Images/discordLogo.png"></a><br><br>
+
+
+`
+
+
+const infoWindowText = `
+
+Greetings and thank you for checking out the VS Live Beta!<br><br>
+
+To give feedback simply click on the discord link below:<br><br><br>
+
+<a href="https://discordapp.com/channels/147167584666517505/147167584666517505"
+   target="_blank"><img class='redditLogo' src="Images/discordLogo.png"></a><br><br>
+`
 
 
 

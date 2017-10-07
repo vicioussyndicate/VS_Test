@@ -1,11 +1,17 @@
-//@prepros-append scripts_basic/decklistClass.js
-//@prepros-append scripts_basic/decksWindow.js
-//@prepros-append scripts_basic/firebaseHandler.js
-//@prepros-append scripts_basic/historyClass.js
-//@prepros-append scripts_basic/ladderClass.js
-//@prepros-append scripts_basic/ladderWindow.js
-//@prepros-append scripts_basic/powerWindow.js
-//@prepros-append scripts_basic/script.js
-//@prepros-append scripts_basic/tableClass.js
-//@prepros-append scripts_basic/tableWindow.js
-//@prepros-append scripts_basic/ui.js 
+
+
+//@prepros-append scripts/build_basic.js
+//@prepros-append scripts/decklistClass.js
+//@prepros-append scripts/decksWindow.js
+//@prepros-append scripts/firebaseHandler.js
+//@prepros-append scripts/historyClass.js
+//@prepros-append scripts/infoWindow.js
+//@prepros-append scripts/ladderClass.js
+//@prepros-append scripts/ladderWindow.js
+//@prepros-append scripts/parameters.js
+//@prepros-append scripts/powerWindow.js
+//@prepros-append scripts/script.js
+//@prepros-append scripts/tableClass.js
+//@prepros-append scripts/tableWindow.js
+//@prepros-append scripts/ui.js 
+

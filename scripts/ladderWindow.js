@@ -25,7 +25,7 @@ class LadderWindow {
 
         this.overlayText['bar'] = `
         This stacked bar graph displays the class/ deck frequencies on the y-axis and the ranks on the ranked ladder on the x-axis.<br><br>
-        In <span class='optionBtn'>Decks</span> mode decks with 3% or lower frequencies have been merged with the 'Other' deck of that class.<br><br>
+        In <span class='optionBtn'>Decks</span> mode decks with 3% or lower frequencies have been merged with the 'Other' decks of that class.<br><br>
         Tips:<br><br>
         • Hover over the 'number of games' label in the header to display the number of games per rank on the bar plot.<br><br>
         • Click on one bar of any class to 'zoom in' to display all the archetypes of that class. Click again to 'zoom out'.<br><br>
@@ -42,14 +42,14 @@ class LadderWindow {
 
         this.overlayText['pie'] = `
         This pie graph displays the class/ deck frequencies as pie slices. You can vary the rank brackets in the header.<br><br>
-        In <span class='optionBtn'>Decks</span> mode decks with 3% or lower frequencies have been merged with the 'Other' deck of that class.<br><br>
+        In <span class='optionBtn'>Decks</span> mode decks with 3% or lower frequencies have been merged with the 'Other' decks of that class.<br><br>
         Tips:<br><br>
         • Click on a class or deck button at the bottom of the graph to get to the respective description or decklist.<br><br>
         `
 
         this.overlayText['number'] = `
         This table displays the class/ deck frequencies over ladder ranks (rank 20 - Legend). You can vary the rank brackets in the header.<br><br>
-        In <span class='optionBtn'>Decks</span> mode decks with 3% or lower frequencies have been merged with the 'Other' deck of that class.<br><br>
+        In <span class='optionBtn'>Decks</span> mode decks with 3% or lower frequencies have been merged with the 'Other' decks of that class.<br><br>
         Click on the "download" button at the bottom of the graph to download the data as '.csv' file.<br><br>
         `
 

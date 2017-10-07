@@ -6,7 +6,6 @@ var t0 = performance.now();
 
 // Global Data
 var DATABASE
-var PREMIUM = false
 var MOBILE = false
 
 // Windows
@@ -31,7 +30,7 @@ window.onload = function() {
 
 function reloadPremium() {
   if (PREMIUM) {return}
-  PREMIUM = true
+  //PREMIUM = true
   ui.showLoader()
   ui.loggedIn = false
   setupFirebase()
@@ -39,7 +38,7 @@ function reloadPremium() {
 
 function reloadBasic() {
   if (!PREMIUM) {return}
-  PREMIUM = false
+  //PREMIUM = false
   ui.showLoader()
   ui.loggedIn = false
   setupFirebase()
@@ -92,6 +91,25 @@ function randint(min, max) {
 //function randomColor() {return 'rgb('+randint(0,255)+','+randint(0,255)+','+randint(0,255)+')'}
 function range(a,b) {var range = []; for (var i=a;i<b;i++) {range.push(i)}; return range}
 function fillRange(a,b,c) {var range = []; for (var i=a;i<b;i++) {range.push(c)}; return range}
+
+function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+}
 
 
 // function colorRange(r,b,g,delta) {

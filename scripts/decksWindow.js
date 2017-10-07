@@ -17,8 +17,8 @@ class DecksWindow {
         this.questionBtn = document.querySelector('#decksWindow .question')
 
         this.overlayText = `
-            Select <span class='optionBtn'>Description</span> to see the latest Data Reaper Report article on that class.
-            Select <span class='optionBtn'>Deck Lists</span> to see the latest Data Reaper Report deck lists on that class.<br><br>
+            Select <span class='optionBtn'>Description</span> to see the latest report on that class.
+            Select <span class='optionBtn'>Deck Lists</span> to see the latest deck lists on that class.<br><br>
             Select any archetype on the left side to see all the decklists of that archetype.<br><br>
             Tips:<br><br>
             • When you hover over a card of a decklist it highlights all cards with the same name in the other decklists.<br><br>

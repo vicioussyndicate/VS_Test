@@ -19,7 +19,7 @@ function setupFirebase() {
     const auth = firebase.auth()
     //const promise = auth.signInAnonymously() //auth.signInWithEmailAndPassword('vsProUser@vs.com','pw12345');
 
-    const promise = auth.signInWithEmailAndPassword(login[PREMIUM].email, login[PREMIUM].pw);
+    const promise = auth.signInWithEmailAndPassword(login.email, login.pw);
 
     // const emailTxt = document.getElementById('emailInput')
     // const passwordTxt = document.getElementById('passwordInput')
@@ -70,8 +70,10 @@ function setupFirebase() {
             
             
             var ref = DATABASE.ref('premiumUsers/'+user.uid)
-            ref.on('value',     d => {PREMIUM = d.val(); loadFireData()}, e => console.log('Could not load User Data',e))
-            console.log(user,'user login '+(performance.now()-t0).toFixed(2)+' ms, Premium:',PREMIUM)
+            ref.on('value',     d => {
+                if(!d.val() && PREMIUM) {console.log('PERMISSION ERROR',d.val())}
+                loadFireData()}, e => console.log('Could not load User Data',e))
+            console.log('user login '+(performance.now()-t0).toFixed(2)+' ms, Premium:',PREMIUM)
             // logOutBtn.classList.remove('hidden')
             // signUpBtn.classList.add('hidden')
             // loginBtn.classList.add('hidden')
@@ -82,7 +84,7 @@ function setupFirebase() {
             // logOutBtn.classList.add('hidden')
             // loginBtn.classList.remove('hidden')
             // signUpBtn.classList.remove('hidden')
-            PREMIUM = false
+            //PREMIUM = false
             loadFireData()
         }
     })
@@ -110,15 +112,13 @@ function loadFireData() {
         console.log('load Premium')
         ladderWindow = new LadderWindow(hsFormats, ladder_times_premium, ladder_ranks_premium)
         tableWindow = new TableWindow(hsFormats, table_times_premium, table_ranks_premium, table_sortOptions_premium)
-        document.querySelector('#vsLogoDiv .text').innerHTML = 'Premium'
     }
     else {
         console.log('load basic')
 
-        PREMIUM = false
+        //PREMIUM = false
         ladderWindow = new LadderWindow(hsFormats, ladder_times, ladder_ranks)
         tableWindow = new TableWindow(hsFormats, table_times, table_ranks, table_sortOptions)
-        document.querySelector('#vsLogoDiv .text').innerHTML = 'Basic'
     }
 
 }
