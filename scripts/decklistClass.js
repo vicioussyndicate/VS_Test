@@ -231,7 +231,7 @@ class CardDiv {
         if (this.cost >= 10) {
             cost.style.fontSize = '75%'
             cost.style.paddingLeft = '0.2rem'
-            cost.style.paddingTop = '0.7rem'
+            cost.style.paddingTop = '0.4rem'
         }
 
         var name = document.createElement('div')
