@@ -1,31 +1,33 @@
 # Archetype: Control Mage
-# Author: Breezy
-### Breezy's Frost Lich Control Mage
+# Author: Sjow
+### Sjow's Control Mage
 # Class: Mage
 # Format: Standard
 # Year of the Mammoth
 #
+# 2x (1) Mana Wyrm
 # 2x (2) Arcanologist
 # 1x (2) Bloodmage Thalnos
-# 2x (2) Doomsayer
 # 2x (2) Frostbolt
 # 2x (2) Medivh's Valet
 # 2x (2) Primordial Glyph
-# 2x (3) Arcane Intellect
-# 2x (3) Frost Nova
+# 2x (3) Acolyte of Pain
+# 1x (3) Arcane Intellect
+# 1x (3) Counterspell
 # 2x (3) Ice Block
-# 2x (4) Fireball
+# 2x (3) Volcanic Potion
 # 2x (4) Polymorph
 # 1x (5) Elise the Trailblazer
-# 2x (6) Blizzard
 # 1x (6) Meteor
 # 1x (6) Skulking Geist
+# 1x (7) Baron Geddon
+# 1x (7) Firelands Portal
 # 1x (7) Flamestrike
-# 1x (8) Sindragosa
+# 1x (8) Medivh, the Guardian
 # 1x (9) Alexstrasza
 # 1x (9) Frost Lich Jaina
 #
-AAECAf0ECMUE7QXsB5bHAs/HAqDOApvTAvLTAgtNigHAAbsCyQOrBMsElgXXtgLBwQKYxAIA
+AAECAf0EDHHQAqsExQTtBewHo7YCobcClscCz8cCoM4Cm9MCCU3AAZUDlgX7DNe2Aum6AsHBApjEAgA=
 #
 # To use this deck, copy it to your clipboard and create a new deck in Hearthstone
-# https://www.vicioussyndicate.com/deck-library/mage-decks/control-mage/breezys-frost-lich-control-mage/
+# https://www.vicioussyndicate.com/deck-library/mage-decks/control-mage/sjows-control-mage/

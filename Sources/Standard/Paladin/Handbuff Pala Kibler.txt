@@ -1,29 +1,29 @@
 # Archetype: Handbuff Paladin
+# Author: Kibler
 ### Kibler's Handbuff Paladin
 # Class: Paladin
 # Format: Standard
 # Year of the Mammoth
 #
+# 2x (1) Fire Fly
 # 2x (1) Righteous Protector
 # 2x (1) Smuggler's Run
 # 1x (2) Prince Keleseth
 # 2x (3) Aldor Peacekeeper
 # 2x (3) Rallying Blade
 # 2x (3) Stonehill Defender
-# 2x (3) Tar Creeper
 # 1x (3) Wickerflame Burnbristle
 # 2x (4) Chillblade Champion
 # 2x (4) Corpsetaker
 # 2x (4) Spellbreaker
+# 2x (5) Cobalt Scalebane
 # 2x (5) Grimestreet Enforcer
 # 2x (6) Spikeridged Steed
 # 1x (6) Sunkeeper Tarim
-# 1x (6) The Black Knight
 # 2x (7) Bonemare
-# 1x (8) The Lich King
 # 1x (8) Tirion Fordring
 #
-AAECAZ8FBry9ArnBAvoGnOICws4C+AwM48sC2a4Cm8IClugCiMcCps4Cs7sCysMCjwn30ALyBZW8AgA=
+AAECAZ8FBPoGvL0CucECnOICDfIFjwnZrgKzuwKVvAKbwgLrwgKIxwLKywLjywKmzgL30AKW6AIA
 #
 # To use this deck, copy it to your clipboard and create a new deck in Hearthstone
-# https://www.vicioussyndicate.com/deck-library/paladin-decks/handbuff-paladin/kiblers-handbuff-paladin/
+# https://www.vicioussyndicate.com/deck-library/paladin-decks/handbuff-paladin/kiblers-handbuff-paladin-2/

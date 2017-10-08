@@ -1,4 +1,5 @@
 # Archetype: Exodia Mage
+# Author: Vicious Syndicate
 ### Standard Exodia Mage
 # Class: Mage
 # Format: Standard

@@ -1,4 +1,5 @@
 # Archetype: Token Shaman
+# Author: Vicious Syndicate
 ### Standard Token Shaman
 # Class: Shaman
 # Format: Standard

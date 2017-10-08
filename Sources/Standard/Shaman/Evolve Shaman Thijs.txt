@@ -1,0 +1,30 @@
+# Archetype: Evolve Shaman
+# Author: Thijs
+### Thijs's Control Evolve Shaman
+# Class: Shaman
+# Format: Standard
+# Year of the Mammoth
+#
+# 2x (1) Evolve
+# 1x (2) Bloodmage Thalnos
+# 2x (2) Devolve
+# 1x (2) Golakka Crawler
+# 2x (2) Jade Claws
+# 2x (2) Maelstrom Portal
+# 1x (3) Lightning Storm
+# 2x (3) Mana Tide Totem
+# 2x (3) Stonehill Defender
+# 2x (4) Jade Lightning
+# 2x (4) Jade Spirit
+# 2x (4) Saronite Chain Gang
+# 2x (5) Doppelgangster
+# 1x (5) Thrall, Deathseer
+# 2x (5) Volcano
+# 1x (6) Aya Blackpaw
+# 2x (6) Thing from Below
+# 1x (7) Jade Chieftain
+#
+AAECAaoIBvUE7QXmuwKUvQLkwgLrzwIMgQT6qgL7qgKgtgKHvALPvALRvAL2vQL5vwLHwQKbwgKbywIA
+#
+# To use this deck, copy it to your clipboard and create a new deck in Hearthstone
+# https://www.vicioussyndicate.com/thijss-control-evolve-shaman/

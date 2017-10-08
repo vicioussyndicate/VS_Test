@@ -1,0 +1,30 @@
+# Archetype: OTK Warrior
+# Author: Monsanto
+### Monsanto's OTK Warrior
+# Class: Warrior
+# Format: Standard
+# Year of the Mammoth
+#
+# 2x (0) Inner Rage
+# 1x (1) Blood To Ichor
+# 2x (1) Whirlwind
+# 2x (2) Armorsmith
+# 2x (2) Battle Rage
+# 2x (2) Commanding Shout
+# 2x (2) Execute
+# 2x (2) Slam
+# 2x (2) Sleep with the Fishes
+# 2x (2) Wild Pyromancer
+# 2x (3) Acolyte of Pain
+# 2x (3) Shield Block
+# 2x (4) Blood Razor
+# 1x (5) Leeroy Jenkins
+# 1x (5) Sudden Genesis
+# 1x (7) Don Han'Cho
+# 1x (8) Grommash Hellscream
+# 1x (8) Scourgelord Garrosh
+#
+AAECAQcG0gKvBIawAv+9Ar/DAp/TAgwWkAPUBPwEkQb2B/8HggiyCPsMxsMCzM0CAA==
+#
+# To use this deck, copy it to your clipboard and create a new deck in Hearthstone
+# https://www.vicioussyndicate.com/monsantos-otk-warrior/

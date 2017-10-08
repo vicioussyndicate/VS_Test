@@ -1,4 +1,5 @@
 # Archetype: Big Priest
+# Author: C0ntrolBoy
 ### C0ntrolBoy's Big Priest
 # Class: Priest
 # Format: Standard

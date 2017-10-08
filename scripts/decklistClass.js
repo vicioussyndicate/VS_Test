@@ -123,7 +123,7 @@ class Decklist {
 
         var timeStamp = document.createElement('p')
         timeStamp.className = 'timestamp'
-        timeStamp.innerHTML = 'created '+ dl.timestamp
+        timeStamp.innerHTML = 'Updated '+ dl.timestamp
         this.deckinfo.appendChild(timeStamp)
 
         if (dl.gameplay != '') {
@@ -231,7 +231,7 @@ class CardDiv {
         if (this.cost >= 10) {
             cost.style.fontSize = '75%'
             cost.style.paddingLeft = '0.2rem'
-            cost.style.paddingTop = '0.35rem'
+            cost.style.paddingTop = '0.7rem'
         }
 
         var name = document.createElement('div')

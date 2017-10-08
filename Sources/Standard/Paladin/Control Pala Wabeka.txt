@@ -1,30 +1,31 @@
 # Archetype: Control Paladin
-### Weghuz' Control Paladin
+# Author: Wabeka
+### Wabeka's Control Paladin
 # Class: Paladin
 # Format: Standard
 # Year of the Mammoth
 #
+# 1x (0) Forbidden Healing
 # 2x (2) Doomsayer
 # 2x (2) Equality
 # 2x (2) Golakka Crawler
 # 2x (2) Hydrologist
 # 2x (2) Wild Pyromancer
 # 2x (3) Aldor Peacekeeper
+# 2x (3) Rallying Blade
 # 2x (3) Stonehill Defender
-# 1x (3) Wickerflame Burnbristle
 # 2x (4) Consecration
-# 2x (4) Truesilver Champion
+# 2x (4) Hammer of Wrath
 # 1x (6) Skulking Geist
 # 2x (6) Spikeridged Steed
 # 1x (6) Sunkeeper Tarim
 # 1x (7) The Curator
-# 1x (8) Lay on Hands
-# 2x (8) Primordial Drake
-# 1x (8) The Lich King
+# 1x (8) Ragnaros, Lightlord
 # 1x (8) Tirion Fordring
 # 1x (9) Uther of the Ebon Blade
+# 1x (10) Deathwing
 #
-AAECAZ8FCNIE+ga5sgK8vQK5wQKgzgLCzgKO0wILigHcA/QFzwb2B48Js8ECm8IC5MICiMcCyccCAA==
+AAECAZ8FCMIG+gaKrgLmrgK5sgK5wQKgzgKO0wILigH6AdwD9AX2B48J2a4Cs8ECm8IC5MICiMcCAA==
 #
 # To use this deck, copy it to your clipboard and create a new deck in Hearthstone
-# https://www.vicioussyndicate.com/deck-library/paladin-decks/control-paladin/weghuz-control-paladin/
+# https://www.vicioussyndicate.com/deck-library/paladin-decks/control-paladin/wabekas-control-paladin/

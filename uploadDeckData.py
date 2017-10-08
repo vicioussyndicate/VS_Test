@@ -8,7 +8,7 @@ import random
 
 
 path = 'Sources/' # +hsFormat/hsClass/
-UPLOAD_CLASS_TXT = False # Should the script upload class description texts?
+UPLOAD_CLASS_TXT = True # Should the script upload class description texts?
 
 
 
@@ -114,7 +114,7 @@ def readDeckCode(file,hsClass, hsFormat):
         if '# Archetype:' in row:
             archetype = row[13:-1]
         if '# Author:' in row:
-            author = row
+            author = row[10:-1]
         if '# Gameplay:' in row:
             gameplay = row
         if '# Timestamp:' in row:
@@ -176,6 +176,7 @@ def upload(hsFormat):
                 txt = f.read()
                 txt = txt.replace('<strong>',"<strong style='font-weight:bold'>")
                 txt = txt.replace('</p>','</p><br>')
+                txt = txt.replace('\n','<br>')
                 DB.child('deckData').child(hsFormat).child(hsClass).child('text').set(txt,user['idToken'])
                 continue
 

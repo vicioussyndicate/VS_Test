@@ -1,5 +1,6 @@
 # Archetype: Tempo Rogue
-### Ryzen's Tempo Rogue
+# Author: Muzzy
+### Muzzy's Hydra Tempo Rogue
 # Class: Rogue
 # Format: Standard
 # Year of the Mammoth
@@ -13,17 +14,17 @@
 # 2x (1) Swashburglar
 # 1x (2) Prince Keleseth
 # 1x (3) Edwin VanCleef
+# 1x (3) Plague Scientist
 # 1x (3) Shaku, the Collector
 # 2x (3) SI:7 Agent
 # 2x (3) Southsea Captain
-# 2x (4) Naga Corsair
-# 1x (4) Xaril, Poisoned Mind
-# 2x (5) Cobalt Scalebane
+# 2x (3) Tar Creeper
+# 2x (5) Bittertide Hydra
 # 1x (5) Leeroy Jenkins
 # 2x (5) Vilespine Slayer
 # 2x (7) Bonemare
 #
-AAECAaIHBrICrwSDrAKRvALJvwKc4gIMtAGMAu0CqAXUBd0IkrYCub8CgcIC68ICyssCps4CAA==
+AAECAaIHBrICrwSRvALJvwKU0AKc4gIMtAGMAu0CqAXUBd0IkrYCgcICr8IC68ICysMCps4CAA==
 #
 # To use this deck, copy it to your clipboard and create a new deck in Hearthstone
-# https://www.vicioussyndicate.com/deck-library/rogue-decks/tempo-rogue/ryzens-tempo-rogue/
+# https://www.vicioussyndicate.com/deck-library/rogue-decks/tempo-rogue/muzzys-hydra-tempo-rogue/

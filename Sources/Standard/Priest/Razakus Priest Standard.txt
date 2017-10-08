@@ -1,41 +1,30 @@
-# Archetype: Razakus Priest
-### Standard Razakus Priest
+# Archetype: Dragon Priest
+# Author: Kefan
+### Kefan's Dragon Priest
 # Class: Priest
 # Format: Standard
 # Year of the Mammoth
 #
-# 1x (0) Silence
-# 1x (1) Holy Smite
-# 1x (1) Northshire Cleric
-# 1x (1) Pint-Size Potion
-# 1x (1) Potion of Madness
-# 1x (1) Power Word: Shield
-# 1x (2) Bloodmage Thalnos
-# 1x (2) Doomsayer
-# 1x (2) Loot Hoarder
-# 1x (2) Mind Blast
-# 1x (2) Novice Engineer
-# 1x (2) Radiant Elemental
-# 1x (2) Shadow Visions
-# 1x (2) Shadow Word: Pain
-# 1x (2) Spirit Lash
-# 1x (3) Acolyte of Pain
-# 1x (3) Curious Glimmerroot
+# 1x (1) Inner Fire
+# 2x (1) Northshire Cleric
+# 2x (1) Power Word: Shield
+# 1x (2) Divine Spirit
+# 2x (2) Golakka Crawler
+# 2x (2) Netherspite Historian
+# 2x (2) Radiant Elemental
+# 2x (2) Shadow Visions
+# 2x (2) Shadow Word: Pain
+# 2x (3) Kabal Talonpriest
 # 1x (3) Shadow Word: Death
-# 1x (3) Tar Creeper
-# 1x (4) Gnomish Inventor
-# 1x (4) Greater Healing Potion
-# 1x (4) Kazakus
-# 1x (4) Priest of the Feast
-# 1x (4) Shadow Word: Horror
+# 2x (4) Priest of the Feast
+# 2x (4) Twilight Drake
+# 2x (5) Cobalt Scalebane
+# 2x (5) Drakonid Operative
 # 1x (5) Lyra the Sunshard
-# 1x (5) Raza the Chained
-# 1x (6) Cabal Shadow Priest
 # 1x (6) Dragonfire Potion
-# 1x (7) Prophet Velen
-# 1x (8) Shadowreaper Anduin
+# 1x (7) Bonemare
 #
-AAECAa0GHgmKAfsBkAKXApwCtAKhBOUE7QWlCdMK1wryDPsMoawCkrQCg7sCtbsCt7sC2LsC6L8C6r8C0cEC2MEC2cECysMCvsgC8M8CkNMCAAA=
+AAECAa0GBvgC0QrTCuq/Ar7IAqbOAgzlBI0I1wryDJK0AoK1Arq7AvC7AtHBAtjBAuTCAsrLAgA=
 #
 # To use this deck, copy it to your clipboard and create a new deck in Hearthstone
-# https://www.vicioussyndicate.com/deck-library/priest-decks/razakus-priest/standard-razakus-priest/
+# https://www.vicioussyndicate.com/deck-library/priest-decks/dragon-priest/kefans-dragon-priest/

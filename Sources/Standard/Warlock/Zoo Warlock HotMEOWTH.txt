@@ -1,28 +1,29 @@
 # Archetype: Zoo Warlock
-### Tako3's Discard Zoo Warlock
+# Author: HotMEOWTH
+### HotMEOWTH'S Pirate Zoo Warlock
 # Class: Warlock
 # Format: Standard
 # Year of the Mammoth
 #
-# 2x (1) Acherus Veteran
+# 2x (1) Blood Imp
 # 2x (1) Bloodsail Corsair
 # 2x (1) Flame Imp
-# 1x (1) Hungry Crab
 # 2x (1) Malchezaar's Imp
 # 1x (1) Patches the Pirate
 # 2x (1) Soulfire
 # 2x (1) Voidwalker
 # 1x (2) Prince Keleseth
 # 2x (3) Darkshire Councilman
-# 2x (3) Howlfiend
-# 2x (3) Silverware Golem
-# 1x (3) Southsea Captain
+# 2x (3) Southsea Captain
+# 2x (3) Vicious Fledgling
 # 2x (4) Crystalweaver
-# 2x (4) Defender of Argus
-# 2x (4) Ravenous Pterrordax
+# 1x (4) Spellbreaker
+# 2x (5) Despicable Dreadlord
 # 2x (5) Doomguard
+# 2x (7) Bonemare
+# 1x (10) Bloodreaver Gul'dan
 #
-AAECAf0GBJG8ArsDnOICqAUN5QfCCLy2As4HMLSsAtSzAvsF9wSVzgKSzQLHuwLnwQIA
+AAECAf0GBPIFkbwCl9MCnOICDTDVA/cEqAXOB+UHwgi0rAK8tgLHuwKfwgL3zQKmzgIA
 #
 # To use this deck, copy it to your clipboard and create a new deck in Hearthstone
-# https://www.vicioussyndicate.com/deck-library/warlock-decks/zoo-warlock/tako3s-discard-zoo-warlock/
+# https://www.vicioussyndicate.com/deck-library/warlock-decks/zoo-warlock/hotmeowths-pirate-zoo-warlock/

@@ -1,4 +1,5 @@
 # Archetype: Quest Rogue
+# Author: Yangbongkun
 ### Yangbongkun's Quest Rogue
 # Class: Rogue
 # Format: Standard

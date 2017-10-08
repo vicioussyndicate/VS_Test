@@ -1,0 +1,33 @@
+# Archetype: Control Paladin
+# Author: Kito
+### Kito's Control Paladin
+# Class: Paladin
+# Format: Standard
+# Year of the Mammoth
+#
+# 1x (0) Forbidden Healing
+# 2x (2) Dirty Rat
+# 2x (2) Doomsayer
+# 2x (2) Equality
+# 2x (2) Hydrologist
+# 2x (2) Wild Pyromancer
+# 1x (3) Acolyte of Pain
+# 2x (3) Aldor Peacekeeper
+# 1x (3) Rallying Blade
+# 2x (3) Stonehill Defender
+# 2x (4) Consecration
+# 1x (4) Truesilver Champion
+# 1x (5) Stampeding Kodo
+# 2x (6) Spikeridged Steed
+# 1x (6) Sunkeeper Tarim
+# 1x (7) The Curator
+# 1x (8) Primordial Drake
+# 1x (8) Ragnaros, Lightlord
+# 1x (8) Tirion Fordring
+# 1x (9) Uther of the Ebon Blade
+# 1x (9) Ysera
+#
+AAECAZ8FDM8G+gaiCdsK+wyKrgLZrgLmrgK5sgK5wQLJxwKO0wIJigHcA/QF9gePCbPBApvCAt/EAojHAgA=
+#
+# To use this deck, copy it to your clipboard and create a new deck in Hearthstone
+# https://www.vicioussyndicate.com/deck-library/paladin-decks/control-paladin/kitos-control-paladin-2/

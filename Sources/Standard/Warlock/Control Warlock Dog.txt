@@ -1,0 +1,31 @@
+# Archetype: Control Warlock
+# Author: Dog
+### Dog's Mill Control Warlock
+# Class: Warlock
+# Format: Standard
+# Year of the Mammoth
+#
+# 2x (1) Mistress of Mixtures
+# 1x (1) Possessed Villager
+# 2x (1) Voidwalker
+# 2x (2) Defile
+# 2x (2) Dirty Rat
+# 1x (2) Drain Soul
+# 2x (2) Gnomeferatu
+# 1x (2) Golakka Crawler
+# 1x (2) Tainted Zealot
+# 2x (3) Coldlight Oracle
+# 1x (3) Howlfiend
+# 2x (3) Stonehill Defender
+# 1x (3) Treachery
+# 2x (5) Despicable Dreadlord
+# 2x (6) Siphon Soul
+# 1x (6) Skulking Geist
+# 2x (7) Abyssal Enforcer
+# 2x (8) Twisting Nether
+# 1x (10) Bloodreaver Gul'dan
+#
+AAECAf0GCPauAuTCAsXMApLNAqLNAqDOApfTApfoAgsw2wb4B8wI3bwCm8IC3sQC38QC58sCrs0C980CAA==
+#
+# To use this deck, copy it to your clipboard and create a new deck in Hearthstone
+# https://www.vicioussyndicate.com/deck-library/warlock-decks/control-warlock/dogs-mill-control-warlock/

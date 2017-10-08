@@ -175,7 +175,7 @@ var _createClass = function() {
         var w = document.createElement("p");
         w.className = "author", w.innerHTML = "Author: " + e.author, this.deckinfo.appendChild(w);
         var k = document.createElement("p");
-        if (k.className = "timestamp", k.innerHTML = "created " + e.timestamp, this.deckinfo.appendChild(k), 
+        if (k.className = "timestamp", k.innerHTML = "Updated " + e.timestamp, this.deckinfo.appendChild(k), 
         "" != e.gameplay) {
             var g = document.createElement("a");
             g.href = "https://www.reddit.com/r/ViciousSyndicate/comments/6yqj62/vs_live_web_app_feedback_thread/", 
@@ -244,7 +244,7 @@ var _createClass = function() {
     i.className = "hex " + this.rarity, i.innerHTML = "&#11042";
     var a = document.createElement("div");
     a.innerHTML = this.cost, a.className = "cost", this.cost >= 10 && (a.style.fontSize = "75%", 
-    a.style.paddingLeft = "0.2rem", a.style.paddingTop = "0.35rem");
+    a.style.paddingLeft = "0.2rem", a.style.paddingTop = "0.7rem");
     var s = document.createElement("div");
     s.innerHTML = this.name, s.className = "name";
     var n;

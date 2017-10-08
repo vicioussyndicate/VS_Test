@@ -1,28 +1,31 @@
 # Archetype: Tempo Rogue
-### Corbett's Elemental Tempo Rogue
+# Author: Kagome
+### Kagome's Non-Keleseth Tempo Rogue
 # Class: Rogue
 # Format: Standard
 # Year of the Mammoth
 #
 # 2x (0) Backstab
-# 2x (0) Shadowstep
+# 1x (0) Shadowstep
+# 2x (1) Cold Blood
 # 2x (1) Fire Fly
 # 1x (1) Patches the Pirate
 # 2x (1) Southsea Deckhand
 # 2x (1) Swashburglar
-# 1x (2) Prince Keleseth
+# 2x (2) Eviscerate
+# 1x (2) Golakka Crawler
 # 1x (3) Edwin VanCleef
 # 1x (3) Shaku, the Collector
 # 2x (3) SI:7 Agent
 # 2x (3) Southsea Captain
-# 2x (3) Tar Creeper
-# 2x (4) Fire Plume Phoenix
+# 1x (3) Tar Creeper
+# 1x (4) Xaril, Poisoned Mind
 # 2x (5) Cobalt Scalebane
+# 1x (5) Leeroy Jenkins
 # 2x (5) Vilespine Slayer
-# 2x (7) Blazecaller
 # 2x (7) Bonemare
 #
-AAECAaIHBLICkbwCyb8CnOICDbQB7QKoBdQF3QiStgKBwgKswgLrwgLKwwLIxwLKywKmzgIA
+AAECAaIHCLIC7QKvBIOsApG8Asm/AuTCAsrDAgu0AYwCqAXUBYgH3QiStgKBwgLrwgLKywKmzgIA
 #
 # To use this deck, copy it to your clipboard and create a new deck in Hearthstone
-# https://www.vicioussyndicate.com/deck-library/rogue-decks/tempo-rogue/corbetts-elemental-tempo-rogue/
+# https://www.vicioussyndicate.com/deck-library/rogue-decks/tempo-rogue/kagomes-non-keleseth-tempo-rogue/
