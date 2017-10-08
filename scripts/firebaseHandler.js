@@ -73,7 +73,7 @@ function setupFirebase() {
             ref.on('value',     d => {
                 if(!d.val() && PREMIUM) {console.log('PERMISSION ERROR',d.val())}
                 loadFireData()}, e => console.log('Could not load User Data',e))
-            console.log(user,'user login '+(performance.now()-t0).toFixed(2)+' ms, Premium:',PREMIUM)
+            console.log('user login '+(performance.now()-t0).toFixed(2)+' ms, Premium:',PREMIUM)
             // logOutBtn.classList.remove('hidden')
             // signUpBtn.classList.add('hidden')
             // loginBtn.classList.add('hidden')

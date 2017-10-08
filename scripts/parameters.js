@@ -175,7 +175,7 @@ const hsColors = {
     Druid:      '#674f3a',
     Hunter:     '#5c9e53',//'#b0c404',
     Mage:       '#83d8df',
-    Paladin:    '#f6cb59',
+    Paladin:    '#ffbe21',
     Priest:     '#bfc6b1',
     Rogue:      '#2a3231',//'#1e291f',
     Shaman:     '#0b72ca',//'#1a5d72',

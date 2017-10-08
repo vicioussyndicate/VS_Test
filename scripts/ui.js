@@ -81,18 +81,19 @@ class UI {
 
 
     toggleDropDown(e) {
-        var siblings = e.target.parentElement.childNodes
-        var dd_folder = siblings[3] // !! TODO
-
-        //for (s of siblings) { if (s.class = 'dropdown' || s.class == 'dropdown hidden') {dd_folder = s; break} }
         
-        if (dd_folder == this.openFolder) {this.openFolder = null}
+        var nextSibling = e.target.nextElementSibling 
+        var count = 0
+        while (nextSibling != null) { if (nextSibling.classList.contains('dropdown') || count > 10) {break}; count += 1; nextSibling = nextSibling.nextElementSibling }
+        if (nextSibling == null) {return}
+        
+        if (nextSibling == this.openFolder) {this.openFolder = null}
         else if (this.openFolder != null) {
             this.openFolder.classList.toggle('hidden');
-            this.openFolder = dd_folder
+            this.openFolder = nextSibling
         }
 
-        dd_folder.classList.toggle('hidden')
+        nextSibling.classList.toggle('hidden')
     }
 
     mobileMenu(e) {
@@ -187,9 +188,9 @@ Upgrade to vS Gold to visit the gold version of this app. Check the link more in
 
 <br><br><br>
 
-To give feedback simply click on the reddit link below:<br><br><br>
+To give feedback simply click on the discord link below:<br><br><br>
 
-<a href="https://www.reddit.com/r/ViciousSyndicate/comments/6yqj62/vs_live_web_app_feedback_thread/"
+<a href="https://discordapp.com/channels/147167584666517505/147167584666517505"
    target="_blank"><img class='redditLogo' src="Images/redditLogo.png"></a><br><br>
 
 
@@ -214,10 +215,10 @@ Thank you for using vS Live Gold.
 
 <br><br><br>
 
-To give feedback simply click on the reddit link below:<br><br><br>
+To give feedback simply click on the discord link below:<br><br><br>
 
-<a href="https://www.reddit.com/r/ViciousSyndicate/comments/6yqj62/vs_live_web_app_feedback_thread/"
-   target="_blank"><img class='redditLogo' src="Images/redditLogo.png"></a><br><br>
+<a href="https://discordapp.com/channels/147167584666517505/147167584666517505"
+   target="_blank"><img class='redditLogo' src="Images/discordLogo.png"></a><br><br>
 
 
 `
@@ -225,15 +226,12 @@ To give feedback simply click on the reddit link below:<br><br><br>
 
 const infoWindowText = `
 
-Greetings and thank you for checking out the VS Live Beta!<br><br><br><br>Status: The app is updated hourly with the latest data and most features are implemented (waranting some polish). Currently on the todo list:<br><br>- Finalizing archetype colors<br><br>- Mobile format <br><br>- Decks tab needs formating<br><br>- Help buttons<br><br><br><br><b>We need your feedback!</b> Please leave a comment in the reddit thread linked below:
-          
-            <a href="https://www.reddit.com/r/ViciousSyndicate/comments/6yqj62/vs_live_web_app_feedback_thread/" target="_blank">
-                <img src='Images/redditLogo.png'></img>
-            </a>
+Greetings and thank you for checking out the VS Live Beta!<br><br>
 
+To give feedback simply click on the discord link below:<br><br><br>
 
-
-
+<a href="https://discordapp.com/channels/147167584666517505/147167584666517505"
+   target="_blank"><img class='redditLogo' src="Images/discordLogo.png"></a><br><br>
 `
 
 
