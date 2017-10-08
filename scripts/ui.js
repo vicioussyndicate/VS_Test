@@ -81,17 +81,11 @@ class UI {
 
 
     toggleDropDown(e) {
-        console.log(e)
-        //var siblings = e.target.parentElement.childNodes
+        
         var nextSibling = e.target.nextElementSibling 
-        while (nextSibling != null) { if (nextSibling.classList.contains('dropdown')) {break} }
+        var count = 0
+        while (nextSibling != null) { if (nextSibling.classList.contains('dropdown') || count > 10) {break}; count += 1; nextSibling = nextSibling.nextElementSibling }
         if (nextSibling == null) {return}
-
-
-        console.log(nextSibling)
-
-
-        //for (s of siblings) { if (s.class = 'dropdown' || s.class == 'dropdown hidden') {dd_folder = s; break} }
         
         if (nextSibling == this.openFolder) {this.openFolder = null}
         else if (this.openFolder != null) {
