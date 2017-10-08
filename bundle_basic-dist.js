@@ -1824,7 +1824,7 @@ var _createClass = function() {
 }, hsFontColors = {
     Druid: "#fff",
     Hunter: "#fff",
-    Mage: "#fff",
+    Mage: "#222",
     Paladin: "#222",
     Priest: "#222",
     Rogue: "#fff",
@@ -1839,7 +1839,10 @@ var _createClass = function() {
         _classCallCheck(this, t), this.grid = document.querySelector("#powerGrid"), this.optionButtons = document.querySelectorAll("#powerWindow .optionBtn"), 
         this.questionBtn = document.querySelector("#powerWindow .question"), this.overlayDiv = document.querySelector("#powerWindow .overlay"), 
         this.overlayP = document.querySelector("#powerWindow .overlayText"), this.f = "Standard", 
-        this.mode = "tiers", this.t_ladder = "lastDay", this.t_table = "last2Weeks", this.top = 5, 
+        this.mode = "tiers", this.t_ladder = {
+            Standard: "lastDay",
+            Wild: "last2Weeks"
+        }, PREMIUM && (this.t_ladder.Wild = "lastWeek"), this.t_table = "last2Weeks", this.top = 5, 
         this.minGames = 50, this.overlayText = "\n            This tab displays the best decks to be played in the respective rank brackets.<br><br>\n            <span class='optionBtn'>Tier Lists</span> shows the top 16 decks across specific rank brackets ('All Ranks', 'Rank 1-5' etc.).<br><br>\n            <span class='optionBtn'>Suggestions</span> shows the top 5 decks for every single rank until rank 20.<br><br>\n            The winrates are calculated by using the deck frequencies of the last 24 hours and the matchup table of the last week.<br><br>\n            If there are fewer than " + this.minGames + ' games in the respective category no data is displayed instead.<br><br>\n            Click on a deck to get to it\'s deck list in the "Decks" tab.<br><br>        \n        ', 
         this.data = {
             Standard: [],
@@ -1949,8 +1952,9 @@ var _createClass = function() {
     }, {
         key: "addData",
         value: function(t) {
-            var e = ladderWindow.data[t][this.t_ladder].archetypes, i = tableWindow.data[t][this.t_table].ranks_all;
-            this.data.rankSums[t] = ladderWindow.data[t][this.t_ladder].rankSums;
+            console.log(t, this.t_ladder);
+            var e = ladderWindow.data[t][this.t_ladder[t]].archetypes, i = tableWindow.data[t][this.t_table].ranks_all;
+            this.data.rankSums[t] = ladderWindow.data[t][this.t_ladder[t]].rankSums;
             for (E = 0; E < hsRanks; E++) {
                 var r = !0, a = !1, s = void 0;
                 try {

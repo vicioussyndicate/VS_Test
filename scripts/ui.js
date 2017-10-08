@@ -239,6 +239,3 @@ To give feedback simply click on the discord link below:<br><br><br>
 
 
 
-
-
-

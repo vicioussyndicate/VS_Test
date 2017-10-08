@@ -14,7 +14,8 @@ class PowerWindow {
 
         this.f = 'Standard'
         this.mode = 'tiers'
-        this.t_ladder = 'lastDay'
+        this.t_ladder = {Standard: 'lastDay', Wild: 'last2Weeks'}
+        if(PREMIUM) {this.t_ladder.Wild = 'lastWeek'}
         this.t_table = 'last2Weeks'
         this.top = 5
         this.minGames = 50
@@ -104,10 +105,11 @@ class PowerWindow {
 
 
     addData (f) {
-        var ladder = ladderWindow.data[f][this.t_ladder].archetypes
+        console.log(f,this.t_ladder)
+        var ladder = ladderWindow.data[f][this.t_ladder[f]].archetypes
         var table = tableWindow.data[f][this.t_table]['ranks_all']
 
-        this.data.rankSums[f] = ladderWindow.data[f][this.t_ladder].rankSums
+        this.data.rankSums[f] = ladderWindow.data[f][this.t_ladder[f]].rankSums
         for (var rank=0; rank<hsRanks;rank++) {
             for (var tier of this.tiers) {
                 if (tier.start<=rank && tier.end>=rank) { 
