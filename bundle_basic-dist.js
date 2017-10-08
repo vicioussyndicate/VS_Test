@@ -173,13 +173,9 @@ var _createClass = function() {
         e.cardTypes.Weapon && (b += e.cardTypes.Weapon + "  Weapons<br>"), e.cardTypes.Hero && (b += e.cardTypes.Hero + "  Hero<br>"), 
         p.innerHTML = b, this.deckinfo.appendChild(p);
         var k = document.createElement("p");
-<<<<<<< HEAD
-        if (k.className = "timestamp", k.innerHTML = "Updated " + e.timestamp, this.deckinfo.appendChild(k), 
-=======
         k.className = "author", k.innerHTML = "Author: " + e.author, this.deckinfo.appendChild(k);
         var w = document.createElement("p");
-        if (w.className = "timestamp", w.innerHTML = "created " + e.timestamp, this.deckinfo.appendChild(w), 
->>>>>>> 0d30de8bf4975819c71d71485050d85db8985253
+        if (w.className = "timestamp", w.innerHTML = "Updated " + e.timestamp, this.deckinfo.appendChild(w), 
         "" != e.gameplay) {
             var g = document.createElement("a");
             g.href = "https://www.reddit.com/r/ViciousSyndicate/comments/6yqj62/vs_live_web_app_feedback_thread/", 
@@ -1817,13 +1813,13 @@ var _createClass = function() {
     Warrior: "#ec4441"
 }, hsArchColors = {
     Druid: [ "#3d2a25", "#694f3f", "#543f33", "#b88230", "#d39e48" ],
-    Hunter: [ "#1f7922", "#67b35f", "#329c50", "#abda48", "#bce86a" ],
+    Hunter: [ "#67b35f", "#329c50", "#abda48", "#bce86a", "#1f7922" ],
     Mage: [ "#22abb1", "#74d8dd", "#38ccd8", "#a4dadc", "#b5eef0" ],
-    Paladin: [ "#ff8f00", "#ffda74", "#ffc42e", "#ffee58", "#fbffaa" ],
+    Paladin: [ "#ffda74", "#ffc42e", "#ffee58", "#fbffaa", "#ff8f00" ],
     Priest: [ "#95a482", "#bfc6b1", "#9eb5a5", "#cad3be", "#e3e6dd" ],
-    Rogue: [ "#0e1413", "#3e4447", "#2a3231", "#4d5c5a", "#5e716f" ],
+    Rogue: [ "#3e4447", "#2a3231", "#4d5c5a", "#5e716f", "#0e1413" ],
     Shaman: [ "#002b8d", "#0074be", "#0052b4", "#009ec7", "#00b6e5" ],
-    Warlock: [ "#470f26", "#902661", "#591c55", "#c33891", "#d95dab" ],
+    Warlock: [ "#d95dab", "#470f26", "#902661", "#591c55", "#c33891" ],
     Warrior: [ "#ba1419", "#f83f4a", "#ec191d", "#ea5e53", "#fc736b" ]
 }, hsFontColors = {
     Druid: "#fff",
