@@ -172,7 +172,7 @@ const overlayText1 = `
 
 Welcome to the VS Live web app where you can explore the newest Hearthstone data and find 
 
-out about frequncey and winrates of your favorite decks.<br><br>
+out about frequency and winrates of your favorite decks.<br><br>
 
 To get more information on the current tab simply click on the 
 
@@ -184,15 +184,16 @@ Upgrade to vS Gold to visit the gold version of this app. Check the link more in
 
 <button id='basicBtn'>BASIC</button>
 <img src='Images/arrow.png' class='arrow'>
+<a href="https://www.vicioussyndicate.com/membership/ad-free-viewing/" target="_blank">
 <button id='premiumBtn'>PREMIUM</button>
+</a>
 
 <br><br><br>
 
 To give feedback simply click on the discord link below:<br><br><br>
 
 <a href="https://discordapp.com/channels/147167584666517505/147167584666517505"
-   target="_blank"><img class='redditLogo' src="Images/redditLogo.png"></a><br><br>
-
+   target="_blank"><img class='redditLogo' src="Images/discordLogo.png"></a><br><br>
 
 `
 
