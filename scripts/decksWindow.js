@@ -20,11 +20,10 @@ class DecksWindow {
             Select <span class='optionBtn'>Description</span> to see the latest report on that class.
             Select <span class='optionBtn'>Deck Lists</span> to see the latest deck lists on that class.<br><br>
             Select any archetype on the left side to see all the decklists of that archetype.<br><br>
+            Hover over the deck title to copy or get more information on that decklist.<br><br>
+            <img src='Images/clickOnDeckTitle.png'><br><br>
             Tips:<br><br>
             • When you hover over a card of a decklist it highlights all cards with the same name in the other decklists.<br><br>
-            • Hover over the decklist title to reveal the 'copy' and 'info' options.<br><br>
-            • 'copy' copies the deckcode to your clipboard.<br><br>
-            • 'info' shows information on the mana curve, cardtypes and more.
         `
 
 

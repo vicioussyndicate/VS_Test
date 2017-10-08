@@ -172,7 +172,7 @@ const overlayText1 = `
 
 Welcome to the VS Live web app where you can explore the newest Hearthstone data and find 
 
-out about frequency and winrates of your favorite decks.<br><br>
+out about frequency and win rates of your favorite decks.<br><br>
 
 To get more information on the current tab simply click on the 
 
@@ -204,7 +204,7 @@ const overlayText2 = `
 
 Welcome to the VS Live web app where you can explore the newest Hearthstone data and find 
 
-out about frequency and winrates of your favorite decks.<br><br>
+out about frequency and win rates of your favorite decks.<br><br>
 
 To get more information on the current tab simply click on the 
 
