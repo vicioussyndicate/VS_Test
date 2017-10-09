@@ -397,11 +397,14 @@ class Table {
         this.download += '%0A'
         for (var i=0;i<this.numArch;i++) {
             this.download += this.archetypes[i] + '%2C'
-            for (var j=0;j<this.numArch;j++) {
-                this.download += this.table[i][j] + '%2C'
-            }
+            for (var j=0;j<this.numArch;j++) { this.download += this.table[i][j] + '%2C' }
             this.download += '%0A'
         }
+
+        // Overall
+        this.download += 'Overall%2C'
+        for (var i=0;i<this.numArch;i++) { this.download += this.winrates[i] + '%2C' }
+
         var dlink = document.createElement('a')
         dlink.setAttribute('href', 'data:text/plain;charset=utf-8,' + this.download)
         dlink.setAttribute('download', 'matchupTable.csv');

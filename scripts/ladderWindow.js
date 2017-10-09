@@ -155,7 +155,7 @@ class LadderWindow {
             document.querySelector('#ladderWindow #rankFolder .dropdown').appendChild(btn)
         }
 
-        var disp = (PREMIUM) ? 'inline' : 'none'
+        var disp = (PREMIUM) ? 'flex' : 'none'
 
         this.questionBtn.addEventListener('click',this.toggleOverlay.bind(this))
         this.overlayDiv.addEventListener('click',this.toggleOverlay.bind(this))
@@ -246,7 +246,7 @@ class LadderWindow {
         if (!this.fullyLoaded) {return}
 
         if (!PREMIUM) {
-            if (this.plotType == 'pie') { this.classDeckOptions.style.display = 'inline' }
+            if (this.plotType == 'pie') { this.classDeckOptions.style.display = 'flex' }
             if (this.plotType == 'bar') { 
                 this.classDeckOptions.style.display = 'none';
                 this.mode = 'classes'
@@ -291,6 +291,10 @@ class LadderWindow {
         switch (this.plotType) {
             case 'bar': 
                 this.graphTitle.innerHTML = 'Class Frequency vs Ranks'; 
+                this.graphLabel.innerHTML = 'Ranks >'
+                break;
+            case 'zoom':
+                this.graphTitle.innerHTML = this.zoomClass+' Deck Frequency vs Ranks'; 
                 this.graphLabel.innerHTML = 'Ranks >'
                 break;
             case 'line': 

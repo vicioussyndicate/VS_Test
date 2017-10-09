@@ -13,7 +13,7 @@ class UI {
         this.loader = document.getElementById('loader')
         this.logo = document.querySelector('#vsLogoDiv')
         this.overlayText = document.querySelector('#overlay .overlayText')
-        this.infoWindow = document.querySelector('#infoWindow .content p')
+        this.infoWindow = document.querySelector('#infoWindow .content .infoText')
 
         this.getWindowSize()
 
@@ -34,8 +34,6 @@ class UI {
             document.querySelector('#ladderWindow .content-header .nrGames').style.display = 'none'
             this.hideLoader()
         }
-
-        //document.querySelector('#vsLogoDiv .text').innerHTML = PREMIUM ? 'Gold':'Live'
 
 
         this.logo.addEventListener('click', this.toggleOverlay.bind(this))
@@ -172,7 +170,7 @@ const overlayText1 = `
 
 Welcome to the VS Live web app where you can explore the newest Hearthstone data and find 
 
-out about frequncey and winrates of your favorite decks.<br><br>
+out about frequency and win rates of your favorite decks.<br><br>
 
 To get more information on the current tab simply click on the 
 
@@ -184,15 +182,16 @@ Upgrade to vS Gold to visit the gold version of this app. Check the link more in
 
 <button id='basicBtn'>BASIC</button>
 <img src='Images/arrow.png' class='arrow'>
-<button id='premiumBtn'>PREMIUM</button>
+<a href="https://www.vicioussyndicate.com/membership/ad-free-viewing/" target="_blank">
+<button id='premiumBtn'>GOLD</button>
+</a>
 
 <br><br><br>
 
 To give feedback simply click on the discord link below:<br><br><br>
 
 <a href="https://discordapp.com/channels/147167584666517505/147167584666517505"
-   target="_blank"><img class='redditLogo' src="Images/redditLogo.png"></a><br><br>
-
+   target="_blank"><img class='redditLogo' src="Images/discordLogo.png"></a><br><br>
 
 `
 
@@ -203,7 +202,7 @@ const overlayText2 = `
 
 Welcome to the VS Live web app where you can explore the newest Hearthstone data and find 
 
-out about frequncey and winrates of your favorite decks.<br><br>
+out about frequency and win rates of your favorite decks.<br><br>
 
 To get more information on the current tab simply click on the 
 
@@ -233,9 +232,6 @@ To give feedback simply click on the discord link below:<br><br><br>
 <a href="https://discordapp.com/channels/147167584666517505/147167584666517505"
    target="_blank"><img class='redditLogo' src="Images/discordLogo.png"></a><br><br>
 `
-
-
-
 
 
 

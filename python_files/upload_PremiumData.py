@@ -172,6 +172,11 @@ def run():
                 
             count += 1
 
+    # Sort Archetypes
+    for f in hsFormats:
+        if len(hsArchetypes[f]) <= 9:
+            continue 
+        hsArchetypes[f] = hsArchetypes[f][:9] + sorted(hsArchetypes[f][9:])
 
     # GET DATA
 

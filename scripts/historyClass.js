@@ -128,21 +128,22 @@ class History {
             }
             
             var xLabels = []
+            var step_hours = 3
+            var step_days = 4
             if (t_h == 'lastHours') {
                 var t0 = (new Date()).getHours()
                 for (var i=0;i<x.length;i++) {
-                    if (i%3!=0 && i!=1) {xLabels.push(''); continue}
+                    if (i%step_hours!=0 && i!=1) {xLabels.push(''); continue}
                     var ti = parseInt((t0+24-i)%24)
                     xLabels.push(ti+':00')
             }}
 
             if (t_h == 'lastDays') {
-                var t0 = new Date()
                 for (var i=0;i<x.length;i++) {
-                    if (i%4!=0 && i!=0) {xLabels.push(''); continue}
-                    t0.setDate(t0.getDate()-1);
-                    
-                    xLabels.push(t0.getDate()+'.'+t0.getMonth()+'.')
+                    if (i%step_days!=0 && i!=0) {xLabels.push(''); continue}
+                    var t0 = new Date()
+                    t0.setDate(t0.getDate()-i);
+                    xLabels.push(t0.getDate()+'.'+(t0.getMonth()+1)+'.')
             }}
 
             this.layout.yaxis['range'] = [0,maxEntry*1.1]
