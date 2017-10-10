@@ -93,8 +93,8 @@ class Table {
                 this.table[j][i] = 1-wr
                 this.totGames += totGames
                 if (totGames >= this.minGames) {
-                    this.textTable[i][j] =`${hero}<br><b>vs:</b> ${opp}<br><b>wr:</b>  ${(wr*100).toFixed(0)}%  (${totGames})`           
-                    this.textTable[j][i] =`${opp}<br><b>vs:</b> ${hero}<br><b>wr:</b>  ${((1-wr)*100).toFixed(0)}%  (${totGames})`
+                    this.textTable[i][j] =`${hero}<br><b>vs:</b> ${opp}<br><b>wr:</b>  ${(wr*100).toFixed(1)}%  (${totGames})`           
+                    this.textTable[j][i] =`${opp}<br><b>vs:</b> ${hero}<br><b>wr:</b>  ${((1-wr)*100).toFixed(1)}%  (${totGames})`
                 } else {
                     this.textTable[i][j] =`${hero}<br><b>vs:</b> ${opp}<br><b>wr:</b>  Not enough games`           
                     this.textTable[j][i] =`${opp}<br><b>vs:</b> ${hero}<br><b>wr:</b>  Not enough games`
@@ -180,8 +180,8 @@ class Table {
     
 
     plot() {
-
         if (this.sortBy == '' || this.sortBy != this.window.sortBy) {this.sortTableBy(this.window.sortBy, false)}
+        if (this.window.annotated) {this.annotate(false)}
 
         var overallWR = this.winrates
         var table = this.table.concat([overallWR])
@@ -236,6 +236,9 @@ class Table {
 
         var windowInfo = document.querySelector('#tableWindow .nrGames')    
         windowInfo.innerHTML = this.totGames.toLocaleString()+" games"
+
+        if (this.window.annotated) {this.annotate(true)}
+        else (this.annotate(false))
     }
 
 
@@ -413,5 +416,42 @@ class Table {
         dlink.click();
         document.body.removeChild(dlink);
     }    
+
+    annotate(bool) {
+        var update
+        if (bool) {
+            ui.showLoader()
+            var annotations = []
+            for (var i=0;i<this.numArch;i++) {
+                for (var j=0;j<this.numArch;j++) {
+                    var ann = {
+                        x: i,
+                        y: j,
+                        text: (100*this.table[j][i]).toFixed(1)+'%',
+                        showarrow: false,
+                        //bgcolor: 'rgba(0,0,0,0.3)',
+                        font: {color:'black'},
+                        opacity: 0.8
+                    }
+                    annotations.push(ann)
+                }
+                var ann = {
+                    x: i,
+                    y: this.numArch,
+                    text: (100*this.winrates[i]).toFixed(1)+'%',
+                    showarrow: false,
+                    //bgcolor: 'rgba(0,0,0,0.3)',
+                    font: {color:'black'},
+                    opacity: 0.8
+                }
+                annotations.push(ann)
+            }
+            update = { annotations: annotations};
+        }
+        else {update = { annotations: []};}
+
+        Plotly.relayout('chart2', update)
+        ui.hideLoader()
+    }
 
 }// close Table

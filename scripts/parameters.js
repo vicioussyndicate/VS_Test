@@ -137,9 +137,23 @@ var colorscale_Table = [
 //     Warlock:    '#9467BD',
 //     Warrior:    '#D62728',
 //     Other:      '#88042d',
-//     '':         '#88042d',
-//     '§':        '#88042d',
 // }
+
+
+// Official wow
+// var hsColors = {
+//     Druid:      '#FF7D0A',
+//     Hunter:     '#ABD473',
+//     Mage:       '#69CCF0',
+//     Paladin:    '#F58CBA',
+//     Priest:     '#FFFFFF',
+//     Rogue:      '#FFF569',
+//     Shaman:     '#0070DE',
+//     Warlock:    '#9482C9',
+//     Warrior:    '#C79C6E',
+//     Other:      '#88042d',
+// }
+
 
 // // RIVER PICTURE
 // var hsColors = {
@@ -171,32 +185,34 @@ var colorscale_Table = [
 // }
 
 // Neon
-const hsColors = {
-    Druid:      '#674f3a',
-    Hunter:     '#5c9e53',//'#b0c404',
-    Mage:       '#83d8df',
-    Paladin:    '#ffbe21',
-    Priest:     '#bfc6b1',
-    Rogue:      '#2a3231',//'#1e291f',
-    Shaman:     '#0b72ca',//'#1a5d72',
-    Warlock:    '#892667',
-    Warrior:    '#ec4441',
-}
-
-// // Material
 // const hsColors = {
-//     Druid:      '#795548',
-//     Hunter:     '#689f38',
-//     Mage:       '#4fc3f7',
-//     Paladin:    '#ffee58',
-//     Priest:     '#bdbdbb',
-//     Rogue:      '#424242',
-//     Shaman:     '#5c6bc0',
-//     Warlock:    '#9c27b0',
-//     Warrior:    '#f44336',
+//     Druid:      '#674f3a',
+//     Hunter:     '#5c9e53',//'#b0c404',
+//     Mage:       '#83d8df',
+//     Paladin:    '#ffbe21',
+//     Priest:     '#bfc6b1',
+//     Rogue:      '#2a3231',//'#1e291f',
+//     Shaman:     '#0b72ca',//'#1a5d72',
+//     Warlock:    '#892667',
+//     Warrior:    '#ec4441',
 // }
 
+// // Material
+const hsColors = {
+    Druid:      '#795548',
+    Hunter:     '#689f38',
+    Mage:       '#4fc3f7',
+    Paladin:    '#ffee58',
+    Priest:     '#bdbdbb',
+    Rogue:      '#424242',
+    Shaman:     '#5c6bc0',
+    Warlock:    '#9c27b0',
+    Warrior:    '#f44336',
+}
 
+
+// var hsColors = { Druid: "rgb(158,131,8)", Hunter: "rgb(160,210,13)", Mage: "rgb(24,199,208)", Paladin: "rgb(238,156,40)", Priest: "rgb(230,224,168)", Rogue: "rgb(41,80,77)", Shaman: "rgb(24,113,193)", Warlock: "rgb(150,75,185)", Warrior: "rgb(167,0,24)" }
+// var hsColors = { Druid: "rgb(171,168,73)", Hunter: "rgb(111,183,56)", Mage: "rgb(0,155,231)", Paladin: "rgb(220,150,45)", Priest: "rgb(232,245,218)", Rogue: "rgb(98,77,91)", Shaman: "rgb(76,141,190)", Warlock: "rgb(134,60,190)", Warrior: "rgb(90,33,0)" }
 
 // const hsArchColors = { // Original
 //     Druid:      ['#674f3a','#624737','#675645','#785c43','#523f2e'],

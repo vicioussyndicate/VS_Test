@@ -13,6 +13,7 @@ class TableWindow {
         this.questionBtn = document.querySelector('#tableWindow .question')
         this.overlayDiv = document.querySelector('#tableWindow .overlay')
         this.overlayP = document.querySelector('#tableWindow .overlayText')
+        this.windowInfo = document.querySelector('#tableWindow .nrGames')    
 
         this.data = {}
         this.hsFormats = hsFormats
@@ -20,6 +21,7 @@ class TableWindow {
         this.ranks = table_ranks
         this.sortOptions = sortOptions //['frequency','winrate','matchup','class']
         this.top = 16
+        this.annotated = false
 
         this.overlayText = `
             Here you can see how your deck on the left hand side performs against any other deck on the top. 
@@ -130,12 +132,20 @@ class TableWindow {
         document.querySelector('#tableWindow .downloadTable').addEventListener('click',dlCSV.bind(this))
         this.questionBtn.addEventListener('click',this.toggleOverlay.bind(this))
         this.overlayDiv.addEventListener('click',this.toggleOverlay.bind(this))
+        this.windowInfo.addEventListener('click',this.annotate.bind(this))
     }
 
 
     plot () { 
         if (!this.fullyLoaded) {return}
         this.data[this.f][this.t][this.r].plot() }
+    
+    annotate() { 
+        if (this.annotated) {this.data[this.f][this.t][this.r].annotate(false); this.windowInfo.classList.remove('highlighted') }
+        else {this.data[this.f][this.t][this.r].annotate(true); this.windowInfo.classList.add('highlighted') }
+        this.annotated = !this.annotated        
+    }
+
     
     renderOptions() {
         

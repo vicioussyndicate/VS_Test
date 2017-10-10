@@ -70,6 +70,7 @@ class LadderWindow {
         this.fontColor = '#222'
         this.fontColorLight = '#999'
         this.overlay = false
+        this.annotated = false
 
         // table
         this.colorScale_c1 = [255,255,255]
@@ -98,7 +99,7 @@ class LadderWindow {
         this.f = 'Standard'
         this.t = 'lastDay'
         this.r = 'ranks_all'
-        this.plotType = 'bar' // bar, line, pie, number,  !!! timeline
+        this.plotType = 'bar'
         this.plotTypes = ['bar','line','pie','number','timeline']
         this.mode = 'classes' // classes, decks
         this.fullyLoaded = false
@@ -165,14 +166,21 @@ class LadderWindow {
         document.querySelector('#ladderWindow .content-header .graphOptions #line').style.display = disp
         document.querySelector('#ladderWindow .content-header .graphOptions #number').style.display = disp
         document.querySelector('#ladderWindow .content-header .graphOptions #timeline').style.display = disp
-        document.querySelector('#ladderWindow .content-header .nrGames').onmouseover = this.showGames.bind(this)
-        document.querySelector('#ladderWindow .content-header .nrGames').onmouseout = this.hideGames.bind(this)
+        this.totGamesDiv.onclick = this.annotate.bind(this)
+        this.totGamesDiv.onmouseover = this.showGames.bind(this)
+        this.totGamesDiv.onmouseout = this.hideGames.bind(this)
 
         this.optionButtons = document.querySelectorAll('#ladderWindow .optionBtn')
     }
 
-    showGames() { if (this.plotType == 'bar') {this.data[this.f][this.t].annotate(true)} }
-    hideGames() { this.data[this.f][this.t].annotate(false); }
+    annotate() { 
+        if (this.annotated) {this.data[this.f][this.t].annotate(false); this.totGamesDiv.classList.remove('highlighted')}
+        else { this.data[this.f][this.t].annotate(true); this.totGamesDiv.classList.add('highlighted') }
+        this.annotated = !this.annotated
+    }
+
+    showGames() { if (this.plotType == 'bar' || this.plotType == 'zoom') {this.data[this.f][this.t].annotate(true)} }
+    hideGames() { if (!this.annotated) {this.data[this.f][this.t].annotate(false) } }
 
     buttonTrigger(e) {
 

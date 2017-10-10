@@ -143,7 +143,7 @@ class UI {
         }
     }
 
-    showLoader() { this.loader.style.display = 'block' }
+    showLoader() { this.loader.style.display = 'block'}
     hideLoader() { this.loader.style.display = 'none' }
 
     toggleOverlay() {
@@ -191,7 +191,7 @@ Upgrade to vS Gold to visit the gold version of this app. Check the link more in
 To give feedback simply click on the discord link below:<br><br><br>
 
 <a href="https://discordapp.com/channels/147167584666517505/147167584666517505"
-   target="_blank"><img class='redditLogo' src="Images/discordLogo.png"></a><br><br>
+   target="_blank"><img class='discordLogo' src="Images/discordLogo.png"></a><br><br>
 
 `
 
@@ -212,12 +212,18 @@ icon in the top right corner.<br><br>
 
 Thank you for using vS Live Gold.
 
-<br><br><br>
+<br><br>
+
+Please Take a minute to vote on the VS Live color scheme:
+<a href="https://docs.google.com/forms/d/e/1FAIpQLSel6ym_rJHduxkgeimzf9HdNbBMB5Kak7Fmk0Bl2O7O8XhVGg/viewform?usp=sf_link"
+   target="_blank"><img class='googleFormsLogo' src="Images/googleForms.png"></a><br><br>
 
 To give feedback simply click on the discord link below:<br><br><br>
 
 <a href="https://discordapp.com/channels/147167584666517505/147167584666517505"
-   target="_blank"><img class='redditLogo' src="Images/discordLogo.png"></a><br><br>
+   target="_blank"><img class='discordLogo' src="Images/discordLogo.png"></a><br><br>
+
+
 
 
 `
@@ -230,7 +236,7 @@ Greetings and thank you for checking out the VS Live Beta!<br><br>
 To give feedback simply click on the discord link below:<br><br><br>
 
 <a href="https://discordapp.com/channels/147167584666517505/147167584666517505"
-   target="_blank"><img class='redditLogo' src="Images/discordLogo.png"></a><br><br>
+   target="_blank"><img class='discordLogo' src="Images/discordLogo.png"></a><br><br>
 `
 
 

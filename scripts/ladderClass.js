@@ -231,13 +231,14 @@ class Ladder {
             var fr_tot = fillRange(0,hsRanks,0)
             for (var a of this.archetypes) {
                 if (a.hsClass != hsClass) {continue}
-                for (var rank=0;rank<hsRanks;rank++) { fr_tot[rank] += a.data[rank] }
+                var text = []
+                for (var rank=0;rank<hsRanks;rank++) { fr_tot[rank] += a.data[rank]; text.push(a.name+'<br>'+a.data[rank].toFixed(2)+'% overall') }
                 var bar_zoom = {
                     x: range(0,hsRanks),
                     y: a.data.slice(),
                     name: a.name,
-                    text: a.name,
-                    hoverinfo: 'text',
+                    text: text,
+                    hoverinfo: 'text+y',
                     marker: {color: a.color},
                     type: 'bar',
                     winrate: 0,
@@ -336,6 +337,7 @@ class Ladder {
                 zeroline: false,
 			    color: this.fontColorLight,
                 tickformat: ',.0%',
+                hoverformat: ',.0%',
                 visible: !MOBILE, // not visible if mobile view
 		    },
 		    plot_bgcolor: 'transparent',//this.bgColor,
