@@ -121,9 +121,12 @@ class Ladder {
             var fr_avg = 0
             var archName = ARCHETYPES[i][1] + " " + ARCHETYPES[i][0].replace('§', '');
             var classIdx = hsClasses.indexOf(ARCHETYPES[i][0])
-            var color = this.window.getArchColor(ARCHETYPES[i][0],ARCHETYPES[i][1],this.f) //colorStringRange(hsColors[ARCHETYPES[i][0]],20)
+            var color = this.window.getArchColor(ARCHETYPES[i][0],ARCHETYPES[i][1],this.f)            
             var fontColor = color.fontColor
             color = color.color
+
+            // var color = hsColors[ARCHETYPES[i][0]]
+            // var fontColor = hsFontColors[ARCHETYPES[i][0]]
 
 
             for (var rank=0;rank<hsRanks;rank++) {
@@ -177,7 +180,9 @@ class Ladder {
                 name: archName,
                 text: archTxt,
                 hoverinfo: 'text',
-                marker: {color: color,},
+                marker: {color: color,
+                    //line: {color: '#ebebeb',width: 1}
+                },
                 type: 'bar',
                 winrate: 0,
                 hsClass: ARCHETYPES[i][0]+ARCHETYPES[i][1],
@@ -232,24 +237,29 @@ class Ladder {
             for (var a of this.archetypes) {
                 if (a.hsClass != hsClass) {continue}
                 var text = []
-                for (var rank=0;rank<hsRanks;rank++) { fr_tot[rank] += a.data[rank]; text.push(a.name+'<br>'+a.data[rank].toFixed(2)+'% overall') }
+                var overall = []
+                for (var rank=0;rank<hsRanks;rank++) { fr_tot[rank] += a.data[rank]; text.push(''); overall.push(a.data[rank]) }
                 var bar_zoom = {
                     x: range(0,hsRanks),
                     y: a.data.slice(),
                     name: a.name,
                     text: text,
-                    hoverinfo: 'text+y',
+                    hoverinfo: 'text',
                     marker: {color: a.color},
                     type: 'bar',
                     winrate: 0,
                     hsClass: hsClass,
+                    overall: overall,
                 }
 
                 this.traces_zoom[hsClass].push(bar_zoom)
             }
 
             for (var a of this.traces_zoom[hsClass]) {
-                for (var rank=0;rank<hsRanks;rank++) { a.y[rank] /= (fr_tot[rank]>0) ? fr_tot[rank] : 1 }
+                for (var rank=0;rank<hsRanks;rank++) { 
+                    a.y[rank] /= (fr_tot[rank]>0) ? fr_tot[rank] : 1
+                    a.text[rank] = a.name+'<br>'+(100*a.y[rank]).toFixed(1)+'% of '+a.hsClass+'<br>'+(100*a.overall[rank]).toFixed(1)+'% overall'
+                }
             }
 
             
@@ -545,16 +555,24 @@ class Ladder {
 
 
     annotate(bool) {
+        var plotType = this.window.plotType
+        if (plotType == 'pie' || plotType == 'number' || plotType == 'timeline') {return}
         var update
+        var heights = {
+            bar: 0.5,
+            zoom: 0.5,
+            line: 0.05,
+        }
+        var textangle = (plotType == 'bar' || plotType == 'zoom') ? 90:0
         if (bool) {
             var annotations = []
             for (var i=0;i<hsRanks;i++) {
                 var ann = {
                     x: i,
-                    y: 0.5,
+                    y: heights[plotType],
                     xref: 'x',
                     yref: 'y',
-                    textangle: 90,
+                    textangle: textangle,
                     text: this.rankSums[i],
                     showarrow: false,
                     bgcolor: 'rgba(0,0,0,0.3)',

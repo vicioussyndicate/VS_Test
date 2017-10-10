@@ -164,7 +164,7 @@ class LadderWindow {
         this.classDeckOptions.style.display = disp
 
         document.querySelector('#ladderWindow .content-header .graphOptions #line').style.display = disp
-        document.querySelector('#ladderWindow .content-header .graphOptions #number').style.display = disp
+        //document.querySelector('#ladderWindow .content-header .graphOptions #number').style.display = disp
         document.querySelector('#ladderWindow .content-header .graphOptions #timeline').style.display = disp
         this.totGamesDiv.onclick = this.annotate.bind(this)
         this.totGamesDiv.onmouseover = this.showGames.bind(this)
@@ -179,7 +179,7 @@ class LadderWindow {
         this.annotated = !this.annotated
     }
 
-    showGames() { if (this.plotType == 'bar' || this.plotType == 'zoom') {this.data[this.f][this.t].annotate(true)} }
+    showGames() { if (this.plotType == 'bar' || this.plotType == 'zoom' || this.plotType == 'line') {this.data[this.f][this.t].annotate(true)} }
     hideGames() { if (!this.annotated) {this.data[this.f][this.t].annotate(false) } }
 
     buttonTrigger(e) {
@@ -256,6 +256,10 @@ class LadderWindow {
         if (!PREMIUM) {
             if (this.plotType == 'pie') { this.classDeckOptions.style.display = 'flex' }
             if (this.plotType == 'bar') { 
+                this.classDeckOptions.style.display = 'none';
+                this.mode = 'classes'
+            }
+            if (this.plotType == 'number') {
                 this.classDeckOptions.style.display = 'none';
                 this.mode = 'classes'
             }
