@@ -1,3 +1,8 @@
+
+const discordLink = 'https://discord.gg/ZeAfz3'
+
+
+
 // Global Variables
 
 const ladder_times =  ['lastDay','last2Weeks']

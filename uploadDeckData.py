@@ -8,7 +8,7 @@ import random
 
 
 path = 'Sources/' # +hsFormat/hsClass/
-UPLOAD_CLASS_TXT = True # Should the script upload class description texts?
+UPLOAD_CLASS_TXT = False # Should the script upload class description texts?
 
 
 
