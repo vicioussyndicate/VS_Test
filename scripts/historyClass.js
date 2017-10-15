@@ -69,6 +69,7 @@ class History {
             var t_w = this.window.t
             var t_h = (this.window.t == 'lastDay' || this.window.t == 'last12Hours' || this.window.t == 'last6Hours') ? 'lastHours' : 'lastDays';
             const baseUnit = (t_h == 'lastHours') ? 'Hour' : 'Day';
+            const t_delay = (t_h == 'lastHours') ? 1:0
             var r = this.window.r
             var m = this.window.mode
             var x = range(1,this.x[t_w]+1)
@@ -97,12 +98,12 @@ class History {
                 var y = (t_h == 'lastHours') ? this.smoothData(d[i]['data']) : d[i]['data']
 
                 var text = []
-                for (var j=0;j<y.length;j++) {
+                for (var j=t_delay;j<y.length;j++) {
                     var unit = (j>0) ? baseUnit+'s' : baseUnit;
                     text.push(`${d[i]['name']} (${(y[j]*100).toFixed(1)}% )<br>${x[j]+' '+unit} ago`)
                     if (y[j] > maxEntry) {maxEntry = y[j]}
                 }
-                var xrange = (t_h == 'lastHours') ? range(1,x.length+1) : range(0,x.length)
+                var xrange = (t_h == 'lastHours') ? range(2,x.length+1) : range(0,x.length)
 
                 zeroTraces.push({
                     x: xrange,

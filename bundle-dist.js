@@ -659,70 +659,70 @@ var _createClass = function() {
         key: "plot",
         value: function() {
             this.window.chartDiv.innerHTML = "", document.querySelector("#ladderWindow .content-header #rankBtn").style.display = "inline";
-            for (var t = this.window.f, e = this.window.t, i = "lastDay" == this.window.t || "last12Hours" == this.window.t || "last6Hours" == this.window.t ? "lastHours" : "lastDays", r = "lastHours" == i ? "Hour" : "Day", a = this.window.r, s = this.window.mode, o = range(1, this.x[e] + 1), n = this.data[t][i][a][s], l = 0, h = [], d = [], c = [], u = 0, y = n[n.length - 1].data.slice(), f = 0; f < this.x[e] && f < y.length; f++) u += y[f];
-            n.sort(function(t, e) {
+            for (var t = this.window.f, e = this.window.t, i = "lastDay" == this.window.t || "last12Hours" == this.window.t || "last6Hours" == this.window.t ? "lastHours" : "lastDays", r = "lastHours" == i ? "Hour" : "Day", a = "lastHours" == i ? 1 : 0, s = this.window.r, o = this.window.mode, n = range(1, this.x[e] + 1), l = this.data[t][i][s][o], h = 0, d = [], c = [], u = [], y = 0, f = l[l.length - 1].data.slice(), m = 0; m < this.x[e] && m < f.length; m++) y += f[m];
+            l.sort(function(t, e) {
                 return t.avg > e.avg ? -1 : t.avg < e.avg ? 1 : 0;
             });
-            for (f = 0; f < this.top; f++) {
-                var m, v = n[f].name;
-                m = "classes" == s ? {
-                    color: hsColors[v],
-                    fontColor: hsFontColors[v]
-                } : this.window.getArchColor(0, v, this.window.f), c.push({
-                    name: v,
-                    color: m.color,
-                    fontColor: m.fontColor
+            for (m = 0; m < this.top; m++) {
+                var v, p = l[m].name;
+                v = "classes" == o ? {
+                    color: hsColors[p],
+                    fontColor: hsFontColors[p]
+                } : this.window.getArchColor(0, p, this.window.f), u.push({
+                    name: p,
+                    color: v.color,
+                    fontColor: v.fontColor
                 });
-                for (var p = "lastHours" == i ? this.smoothData(n[f].data) : n[f].data, b = [], g = 0; g < p.length; g++) {
-                    var k = g > 0 ? r + "s" : r;
-                    b.push(n[f].name + " (" + (100 * p[g]).toFixed(1) + "% )<br>" + o[g] + " " + k + " ago"), 
-                    p[g] > l && (l = p[g]);
+                for (var b = "lastHours" == i ? this.smoothData(l[m].data) : l[m].data, g = [], k = a; k < b.length; k++) {
+                    var w = k > 0 ? r + "s" : r;
+                    g.push(l[m].name + " (" + (100 * b[k]).toFixed(1) + "% )<br>" + n[k] + " " + w + " ago"), 
+                    b[k] > h && (h = b[k]);
                 }
-                var w = "lastHours" == i ? range(1, o.length + 1) : range(0, o.length);
-                d.push({
-                    x: w,
-                    y: fillRange(0, p.length, 0),
-                    text: b,
+                var T = "lastHours" == i ? range(2, n.length + 1) : range(0, n.length);
+                c.push({
+                    x: T,
+                    y: fillRange(0, b.length, 0),
+                    text: g,
                     line: {
                         width: 2.5,
                         simplify: !1
                     },
                     marker: {
-                        color: m.color
+                        color: v.color
                     },
                     type: "scatter",
                     mode: "lines",
                     hoverinfo: "text"
-                }), h.push({
-                    x: w,
-                    y: p.slice(),
-                    text: b,
+                }), d.push({
+                    x: T,
+                    y: b.slice(),
+                    text: g,
                     line: {
                         width: 2.5
                     },
                     marker: {
-                        color: m.color
+                        color: v.color
                     },
                     type: "scatter",
                     mode: "lines",
                     hoverinfo: "text"
                 });
             }
-            var T = [];
-            if ("lastHours" == i) for (var x = new Date().getHours(), f = 0; f < o.length; f++) if (f % 3 == 0 || 1 == f) {
-                var C = parseInt((x + 24 - f) % 24);
-                T.push(C + ":00");
-            } else T.push("");
-            if ("lastDays" == i) for (f = 0; f < o.length; f++) f % 4 == 0 || 0 == f ? ((x = new Date()).setDate(x.getDate() - f), 
-            T.push(x.getDate() + "." + (x.getMonth() + 1) + ".")) : T.push("");
-            this.layout.yaxis.range = [ 0, 1.1 * l ], this.layout.xaxis.tickvals = range(0, o.length), 
-            this.layout.xaxis.ticktext = T, this.layout.xaxis.tickangle = "xLabels", this.layout.xaxis.range = [ this.x[e] + 1, 2 ], 
-            Plotly.newPlot("chart1", d, this.layout, {
+            var x = [];
+            if ("lastHours" == i) for (var C = new Date().getHours(), m = 0; m < n.length; m++) if (m % 3 == 0 || 1 == m) {
+                var L = parseInt((C + 24 - m) % 24);
+                x.push(L + ":00");
+            } else x.push("");
+            if ("lastDays" == i) for (m = 0; m < n.length; m++) m % 4 == 0 || 0 == m ? ((C = new Date()).setDate(C.getDate() - m), 
+            x.push(C.getDate() + "." + (C.getMonth() + 1) + ".")) : x.push("");
+            this.layout.yaxis.range = [ 0, 1.1 * h ], this.layout.xaxis.tickvals = range(0, n.length), 
+            this.layout.xaxis.ticktext = x, this.layout.xaxis.tickangle = "xLabels", this.layout.xaxis.range = [ this.x[e] + 1, 2 ], 
+            Plotly.newPlot("chart1", c, this.layout, {
                 displayModeBar: !1
-            }), this.window.setGraphTitle(), this.createLegend(c), this.window.setTotGames(u), 
+            }), this.window.setGraphTitle(), this.createLegend(u), this.window.setTotGames(y), 
             Plotly.animate("chart1", {
-                data: h,
-                traces: range(0, h.length),
+                data: d,
+                traces: range(0, d.length),
                 layout: {}
             }, {
                 transition: {
