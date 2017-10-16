@@ -1552,8 +1552,9 @@ var _createClass = function() {
     }, {
         key: "annotate",
         value: function() {
-            this.annotated ? (this.data[this.f][this.t].annotate(!1), this.totGamesDiv.classList.remove("highlighted")) : (this.data[this.f][this.t].annotate(!0), 
-            this.totGamesDiv.classList.add("highlighted")), this.annotated = !this.annotated;
+            "pie" != this.plotType && "number" != this.plotType && (this.annotated ? (this.data[this.f][this.t].annotate(!1), 
+            this.totGamesDiv.classList.remove("highlighted")) : (this.data[this.f][this.t].annotate(!0), 
+            this.totGamesDiv.classList.add("highlighted")), this.annotated = !this.annotated);
         }
     }, {
         key: "showGames",
@@ -2123,14 +2124,17 @@ var _createClass = function() {
                 var l = !0, h = !1, d = void 0;
                 try {
                     for (var c, u = this.tiers[Symbol.iterator](); !(l = (c = u.next()).done); l = !0) {
-                        var y = c.value, f = this.tierData[t][y.name][i];
-                        if (y.games[t] <= this.minGames || void 0 == f) (v = document.createElement("div")).className = "blank", 
-                        this.grid.appendChild(v), this.grid.appendChild(document.createElement("div")); else {
-                            var m = (100 * f.wr).toFixed(1) + "%", v = document.createElement("div"), p = document.createElement("button"), b = document.createElement("span");
-                            b.className = "tooltipText", b.innerHTML = "#" + (i + 1) + " " + f.name, p.className = "archBtn tooltip", 
-                            p.id = f.name, p.style.backgroundColor = f.color, p.style.color = f.fontColor, p.style.marginLeft = "0.5rem", 
-                            p.innerHTML = f.name, p.onclick = this.pressButton.bind(this), v.className = "winrate", 
-                            v.innerHTML = m, this.grid.appendChild(p), this.grid.appendChild(v);
+                        var y = c.value;
+                        if (!(this.tierData[t][y.name].length <= i)) {
+                            var f = this.tierData[t][y.name][i];
+                            if (y.games[t] <= this.minGames || void 0 == f) (v = document.createElement("div")).className = "blank", 
+                            this.grid.appendChild(v), this.grid.appendChild(document.createElement("div")); else {
+                                var m = (100 * f.wr).toFixed(1) + "%", v = document.createElement("div"), p = document.createElement("button"), b = document.createElement("span");
+                                b.className = "tooltipText", b.innerHTML = "#" + (i + 1) + " " + f.name, p.className = "archBtn tooltip", 
+                                p.id = f.name, p.style.backgroundColor = f.color, p.style.color = f.fontColor, p.style.marginLeft = "0.5rem", 
+                                p.innerHTML = f.name, p.onclick = this.pressButton.bind(this), v.className = "winrate", 
+                                v.innerHTML = m, this.grid.appendChild(p), this.grid.appendChild(v);
+                            }
                         }
                     }
                 } catch (t) {

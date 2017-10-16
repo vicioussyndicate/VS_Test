@@ -9,7 +9,7 @@ import random
 
 path = 'Sources/' # +hsFormat/hsClass/
 UPLOAD_CLASS_TXT = True # Should the script upload class description texts?
-
+UPLOAD_DECKS = False
 
 
 
@@ -157,9 +157,10 @@ def readDeckCode(file,hsClass, hsFormat):
 def upload(hsFormat):
 
     # Delete Existing Files
-    for hsClass in hsClasses:
-        DB.child('deckData').child(hsFormat).child(hsClass).child('archetypes').remove(user['idToken'])
-        pass
+    if UPLOAD_DECKS:
+        for hsClass in hsClasses:
+            DB.child('deckData').child(hsFormat).child(hsClass).child('archetypes').remove(user['idToken'])
+            pass
 
 
     for hsClass in hsClasses:
@@ -186,7 +187,7 @@ def upload(hsFormat):
             f = open(file)
             decklist, arch = readDeckCode(f.readlines(),hsClass, hsFormat)
 
-            if decklist != 0:
+            if decklist != 0 and UPLOAD_DECKS:
                 DB.child('deckData').child(hsFormat).child(hsClass).child('archetypes').child(arch).push(decklist,user['idToken'])
                 pass
         os.chdir('..')

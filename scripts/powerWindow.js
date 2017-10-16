@@ -275,7 +275,9 @@ class PowerWindow {
         for (var i=0;i<this.maxTierElements;i++) {
 
             for (var tier of this.tiers) {
-                
+
+                if (this.tierData[f][tier.name].length <= i) {continue}
+
                 var arch = this.tierData[f][tier.name][i]
 
                 if (tier.games[f] <= this.minGames || arch == undefined) { 

@@ -174,6 +174,7 @@ class LadderWindow {
     }
 
     annotate() { 
+        if (this.plotType == 'pie' || this.plotType == 'number') {return}
         if (this.annotated) {this.data[this.f][this.t].annotate(false); this.totGamesDiv.classList.remove('highlighted')}
         else { this.data[this.f][this.t].annotate(true); this.totGamesDiv.classList.add('highlighted') }
         this.annotated = !this.annotated
