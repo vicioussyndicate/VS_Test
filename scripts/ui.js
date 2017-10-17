@@ -163,7 +163,6 @@ class UI {
 
 
 
-
 const overlayText1 = `
 
 <span style='font-size:180%;padding-left:2rem'>Greetings Travelers,</span><br><br><br>
@@ -193,7 +192,7 @@ Please Take a minute to vote on the VS Live color scheme:
 
 To give feedback simply click on the discord link below:<br><br><br>
 
-<a href="https://discordapp.com/channels/147167584666517505/147167584666517505"
+<a href=${discordLink}
    target="_blank"><img class='discordLogo' src="Images/discordLogo.png"></a><br><br>
 
 `
@@ -223,11 +222,8 @@ Please Take a minute to vote on the VS Live color scheme:
 
 To give feedback simply click on the discord link below:<br><br><br>
 
-<a href="https://discordapp.com/channels/147167584666517505/147167584666517505"
+<a href=${discordLink}
    target="_blank"><img class='discordLogo' src="Images/discordLogo.png"></a><br><br>
-
-
-
 
 `
 
@@ -240,10 +236,10 @@ Greetings and thank you for checking out the VS Live Beta!<br><br>
 Please Take a minute to vote on the VS Live color scheme:
 <a href="https://docs.google.com/forms/d/e/1FAIpQLSel6ym_rJHduxkgeimzf9HdNbBMB5Kak7Fmk0Bl2O7O8XhVGg/viewform?usp=sf_link"
    target="_blank"><img class='googleFormsLogo' src="Images/googleForms.png"></a><br><br>
-   
+
    To give feedback simply click on the discord link below:<br><br>
    
-<a href="https://discordapp.com/channels/147167584666517505/147167584666517505"
+<a href=${discordLink}
    target="_blank"><img class='discordLogo' src="Images/discordLogo.png"></a><br><br>
 `
 

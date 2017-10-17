@@ -20,6 +20,19 @@ class Table {
         this.subplotRatio = 0.6
         this.overallString = '<b style="font-size:130%">Overall</b>'
         this.minGames = 20
+        this.whiteTile = 0.50000001
+        this.blackTile = 0.51
+        this.colorScale =  [
+            [0, '#a04608'],
+            [0.3, '#d65900'],
+            [0.5, '#FFFFFF'],
+            // [this.whiteTile, '#FFFFFF'],
+            // [this.blackTile, '#222222'],
+            // [this.blackTile+0.0000001,'#FFFFFF'],
+            [0.7,'#00a2bc'],
+            [1, '#055c7a']
+        ];
+
 
         this.table = []
         this.textTable = []
@@ -42,7 +55,7 @@ class Table {
         // Take only the most common
         var idx_f = range(0,FR.length)
         idx_f.sort(function (a, b) { return FR[a] > FR[b] ? -1 : FR[a] < FR[b] ? 1 : 0; });
-        idx_f.splice(this.numArch)
+        //idx_f.splice(0,this.numArch)
 
         for (var i=0;i<this.numArch;i++) {
             this.table.push(fillRange(0,this.numArch,0))
@@ -62,7 +75,8 @@ class Table {
             for (var j=i;j<this.numArch;j++) {
         
                 var y = idx_f[j]
-        
+                var wr = 0
+
                 var wr1 = 0
                 var wr2 = 0
     
@@ -76,21 +90,23 @@ class Table {
 
                 var totGames = w1+w2+l1+l2
         
-                if (i==j) {wr1 = 0.5; wr2 = 0.5}
-        
-        
-                var wr = 0
-                if (totGames < this.minGames) {wr = 0.5}
-                else if (w1+l1 > 0 && w2+l2 > 0) {wr = (wr1+wr2)/2}
-                else if (w1+l1 == 0) {wr = wr2}
-                else {wr = wr1}
+                //if (i==j) {wr1 = this.blackTile; wr2 = this.blackTile; wr = this.blackTile} // wr = 50%
+                if (i==j) {wr1 = 0.5; wr2 = 0.5; wr = 0.5} 
+                else {
+                    
+                    //if (totGames < this.minGames) {wr = this.whiteTile}
+                    if (totGames < this.minGames) {wr = 0.5}
+                    else if (w1+l1 > 0 && w2+l2 > 0) {wr = (wr1+wr2)/2}
+                    else if (w1+l1 == 0) {wr = wr2}
+                    else {wr = wr1}
+                }
 
                     
                 var hero =  ARCHETYPES[x][1]+" "+ARCHETYPES[x][0]
                 var opp = ARCHETYPES[y][1]+" "+ARCHETYPES[y][0]
                     
-                this.table[i][j] = wr
                 this.table[j][i] = 1-wr
+                this.table[i][j] = wr
                 this.totGames += totGames
                 if (totGames >= this.minGames) {
                     this.textTable[i][j] =`${hero}<br><b>vs:</b> ${opp}<br><b>wr:</b>  ${(wr*100).toFixed(1)}%  (${totGames})`           
@@ -181,7 +197,6 @@ class Table {
 
     plot() {
         if (this.sortBy == '' || this.sortBy != this.window.sortBy) {this.sortTableBy(this.window.sortBy, false)}
-        if (this.window.annotated) {this.annotate(false)}
 
         var overallWR = this.winrates
         var table = this.table.concat([overallWR])
@@ -199,7 +214,7 @@ class Table {
             y: arch,
             text: textTable,
             hoverinfo: 'text',
-            colorscale: colorscale_Table,
+            colorscale: this.colorScale,
             showscale: false,
         }
 
@@ -225,6 +240,7 @@ class Table {
         }
         
         var data = [trace_Table,trace_FR,trace_WR]
+        if (this.window.annotated) {data.push(this.getAnnotations())}
 
         Plotly.newPlot('chart2',data,this.layout,{displayModeBar: false})
         if (PREMIUM) {
@@ -234,11 +250,9 @@ class Table {
         if (this.window.zoomIn) {this.zoomIn(this.window.zoomArch)}
         document.getElementById('loader').style.display = 'none'
 
-        var windowInfo = document.querySelector('#tableWindow .nrGames')    
-        windowInfo.innerHTML = this.totGames.toLocaleString()+" games"
-
-        if (this.window.annotated) {this.annotate(true)}
-        else (this.annotate(false))
+        this.window.nrGames = this.totGames
+        this.window.setTotGames()
+       
     }
 
 
@@ -264,9 +278,7 @@ class Table {
             text: [text],
             visible: true,
             hoverinfo:'text',
-            marker: {
-                color: '#222',
-            },
+            marker: { color: '#222' },
         }
         
         Plotly.restyle('chart2',wrPlotData,2)
@@ -417,41 +429,47 @@ class Table {
         document.body.removeChild(dlink);
     }    
 
-    annotate(bool) {
-        var update
-        if (bool) {
-            ui.showLoader()
-            var annotations = []
-            for (var i=0;i<this.numArch;i++) {
-                for (var j=0;j<this.numArch;j++) {
-                    var ann = {
-                        x: i,
-                        y: j,
-                        text: (100*this.table[j][i]).toFixed(1)+'%',
-                        showarrow: false,
-                        //bgcolor: 'rgba(0,0,0,0.3)',
-                        font: {color:'black'},
-                        opacity: 0.8
-                    }
-                    annotations.push(ann)
-                }
-                var ann = {
-                    x: i,
-                    y: this.numArch,
-                    text: (100*this.winrates[i]).toFixed(1)+'%',
-                    showarrow: false,
-                    //bgcolor: 'rgba(0,0,0,0.3)',
-                    font: {color:'black'},
-                    opacity: 0.8
-                }
-                annotations.push(ann)
-            }
-            update = { annotations: annotations};
-        }
-        else {update = { annotations: []};}
+    
 
-        Plotly.relayout('chart2', update)
-        ui.hideLoader()
+    getAnnotations() {
+
+        var toFixed = 1
+        
+        var tr = {
+            x: [],
+            y: [],
+            mode: 'text',
+            text: [],
+            font: {
+                color:'black',
+                size: 8,
+            },
+            hoverinfo: 'none',
+            //opacity: 0.8,
+        }
+        for (var i=0;i<this.numArch;i++) {
+
+            tr.x.push(this.archetypes[i])
+            tr.y.push(this.overallString)
+            tr.text.push((100*this.winrates[i]).toFixed(toFixed)+'%')
+
+            for (var j=0;j<this.numArch;j++) {
+                tr.x.push(this.archetypes[i])
+                tr.y.push(this.archetypes[j])
+                tr.text.push((100*this.table[j][i]).toFixed(toFixed)+'%')
+        }}
+
+        return tr
     }
 
 }// close Table
+
+
+
+
+
+
+
+
+
+

@@ -1,3 +1,8 @@
+
+const discordLink = 'https://discord.gg/ZeAfz3'
+
+
+
 // Global Variables
 
 const ladder_times =  ['lastDay','last2Weeks']
@@ -116,13 +121,13 @@ const btnIdToText_m = {
 
 // Colors
 
-var colorscale_Table = [
-    [0, '#a04608'],
-    [0.3, '#d65900'],
-    [0.5, '#FFFFFF'],
-    [0.7,'#00a2bc'],
-    [1, '#055c7a']
-];
+// var colorscale_Table = [
+//     [0, '#a04608'],
+//     [0.3, '#d65900'],
+//     [0.5, '#FFFFFF'],
+//     [0.7,'#00a2bc'],
+//     [1, '#055c7a']
+// ];
 
 
 // // VS Colors

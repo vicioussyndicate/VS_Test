@@ -10,7 +10,7 @@ class LadderWindow {
         this.window = document.querySelector('#ladderWindow')
         this.chartDiv = document.querySelector('#ladderWindow #chart1')
         this.classDeckOptions = document.querySelector('#ladderWindow .content-header .classDeckOptions')
-        this.totGamesDiv = document.querySelector('#ladderWindow .content-header .nrGames')
+        this.nrGamesBtn = document.querySelector('#ladderWindow .content-header #nrGames')
         this.graphTitle = document.querySelector('#ladderWindow .graphTitle')
         this.graphLabel = document.querySelector('#ladderWindow .graphLabel')
         this.rankFolder = document.querySelector('#ladderWindow .content-header #rankBtn')
@@ -105,6 +105,7 @@ class LadderWindow {
         this.fullyLoaded = false
         this.history = null
         this.zoomClass = null
+        this.nrGames = 0
 
 
         for (var f of this.hsFormats) {
@@ -166,17 +167,25 @@ class LadderWindow {
         document.querySelector('#ladderWindow .content-header .graphOptions #line').style.display = disp
         //document.querySelector('#ladderWindow .content-header .graphOptions #number').style.display = disp
         document.querySelector('#ladderWindow .content-header .graphOptions #timeline').style.display = disp
-        this.totGamesDiv.onclick = this.annotate.bind(this)
-        this.totGamesDiv.onmouseover = this.showGames.bind(this)
-        this.totGamesDiv.onmouseout = this.hideGames.bind(this)
+        this.nrGamesBtn.onclick = this.annotate.bind(this)
+        //this.totGamesDiv.onmouseover = this.showGames.bind(this)
+        //this.totGamesDiv.onmouseout = this.hideGames.bind(this)
 
         this.optionButtons = document.querySelectorAll('#ladderWindow .optionBtn')
     }
 
     annotate() { 
         if (this.plotType == 'pie' || this.plotType == 'number') {return}
-        if (this.annotated) {this.data[this.f][this.t].annotate(false); this.totGamesDiv.classList.remove('highlighted')}
-        else { this.data[this.f][this.t].annotate(true); this.totGamesDiv.classList.add('highlighted') }
+        if (this.annotated) {
+            if (this.plotType == 'timeline') { this.history.annotate(false) }
+            else { this.data[this.f][this.t].annotate(false) }
+            this.nrGamesBtn.classList.remove('highlighted')
+        }
+        else {
+            if (this.plotType == 'timeline') { this.history.annotate(true) }
+            else { this.data[this.f][this.t].annotate(true) }
+            this.nrGamesBtn.classList.add('highlighted')
+        }
         this.annotated = !this.annotated
     }
 
@@ -208,9 +217,9 @@ class LadderWindow {
 
         for (var btn of this.optionButtons) { 
             btn.classList.remove('highlighted')
-
-            if (btn.id == this.mode) {btn.classList.add('highlighted')}
-            if (btn.id == this.plotType) {btn.classList.add('highlighted')}
+            if (btn.id == this.mode)                    {btn.classList.add('highlighted')}
+            if (btn.id == this.plotType)                {btn.classList.add('highlighted')}
+            if (btn.id == 'nrGames' && this.annotated)  {btn.classList.add('highlighted')}
         }
         document.querySelector("#ladderWindow #formatBtn").innerHTML = (MOBILE) ? btnIdToText_m[this.f] : btnIdToText[this.f]
         document.querySelector("#ladderWindow #timeBtn").innerHTML =   (MOBILE) ? btnIdToText_m[this.t] : btnIdToText[this.t]
@@ -254,18 +263,38 @@ class LadderWindow {
     plot () { 
         if (!this.fullyLoaded) {return}
 
-        if (!PREMIUM) {
-            if (this.plotType == 'pie') { this.classDeckOptions.style.display = 'flex' }
-            if (this.plotType == 'bar') { 
-                this.classDeckOptions.style.display = 'none';
-                this.mode = 'classes'
-            }
-            if (this.plotType == 'number') {
-                this.classDeckOptions.style.display = 'none';
-                this.mode = 'classes'
-            }
+        switch (this.plotType) {
+            case 'bar':
+                this.nrGamesBtn.style.display = 'flex'
+                if (!PREMIUM) { 
+                    this.classDeckOptions.style.display = 'none' 
+                    this.mode = 'classes'
+                }
+                break
+
+            case 'line':
+                this.nrGamesBtn.style.display = 'flex'
+                break
+
+            case 'pie':
+                this.nrGamesBtn.style.display = 'none'
+                if (!PREMIUM) { this.classDeckOptions.style.display = 'flex' }
+                break
+
+            case 'number':
+                this.nrGamesBtn.style.display = 'none'
+                if (!PREMIUM) { 
+                    this.classDeckOptions.style.display = 'none' 
+                    this.mode = 'classes'
+                }
+                break
+
+            case 'timeline':
+                this.nrGamesBtn.style.display = 'flex'
+                break
         }
 
+        
         this.renderOptions()
         if (this.plotType == 'timeline') {this.history.plot(); return}
         this.data[this.f][this.t].plot();
@@ -293,7 +322,7 @@ class LadderWindow {
         }
     }
 
-    setTotGames(totGames) { this.totGamesDiv.innerHTML = totGames.toLocaleString()+" games" }
+    //setTotGames(totGames) { this.totGamesDiv.innerHTML = totGames.toLocaleString()+" games" }
     showRankFolder() { this.rankFolder.style.display = 'flex' }
     hideRankFolder() { this.rankFolder.style.display = 'none' }
 
@@ -301,29 +330,30 @@ class LadderWindow {
         var m = (this.mode == 'classes') ? 'Class' : 'Deck'
         var time = (['lastDay','last6Hours','last12Hours'].indexOf(this.t) != -1) ? 'Hours' : 'Days'
         var rank = btnIdToText[this.r]
+        var games = `<span style='font-size: 80%'> ( ${this.nrGames.toLocaleString()} games )</span>`
         switch (this.plotType) {
             case 'bar': 
-                this.graphTitle.innerHTML = 'Class Frequency vs Ranks'; 
+                this.graphTitle.innerHTML = 'Class Frequency vs Ranks'+games; 
                 this.graphLabel.innerHTML = 'Ranks >'
                 break;
             case 'zoom':
-                this.graphTitle.innerHTML = this.zoomClass+' Deck Frequency vs Ranks'; 
+                this.graphTitle.innerHTML = this.zoomClass+' Deck Frequency vs Ranks'+games; 
                 this.graphLabel.innerHTML = 'Ranks >'
                 break;
             case 'line': 
-                this.graphTitle.innerHTML = m + ' Frequency vs Ranks';
+                this.graphTitle.innerHTML = m + ' Frequency vs Ranks'+games;
                 this.graphLabel.innerHTML = 'Ranks >'
                 break;
             case 'pie': 
-                this.graphTitle.innerHTML = m + ' Frequency of '+rank; 
+                this.graphTitle.innerHTML = m + ' Frequency of '+rank+games; 
                 this.graphLabel.innerHTML = ''
                 break;
             case 'number': 
-                this.graphTitle.innerHTML = m + ' Frequency vs Ranks'; 
+                this.graphTitle.innerHTML = m + ' Frequency vs Ranks'+games; 
                 this.graphLabel.innerHTML = ''
                 break;
             case 'timeline': 
-                this.graphTitle.innerHTML = m + ' Frequency over Time';
+                this.graphTitle.innerHTML = m + ' Frequency over Time'+games;
                 this.graphLabel.innerHTML = ''//'Past ' + time + ' >'; 
                 break;
         }

@@ -7,6 +7,7 @@ class History {
             this.data = DATA
             this.bgColor = 'transparent'
             this.gridcolor = 'white'//this.window.fontColorLight
+            this.annotations = []
             
             this.layout = {
                 showlegend: false,
@@ -20,6 +21,7 @@ class History {
                         color: this.window.fontColor,
                     },
                     tickcolor: 'transparent',
+                    tickangle: 0,
                     visible: true, 
                     showgrid: true,
                     gridcolor: this.gridcolor,
@@ -47,7 +49,7 @@ class History {
             }
             
             this.top = 9
-            this.x = {
+            this.timeFrame = {
                 'last6Hours': 6,
                 'last12Hours':12,
                 'lastDay': 24,
@@ -69,9 +71,11 @@ class History {
             var t_w = this.window.t
             var t_h = (this.window.t == 'lastDay' || this.window.t == 'last12Hours' || this.window.t == 'last6Hours') ? 'lastHours' : 'lastDays';
             const baseUnit = (t_h == 'lastHours') ? 'Hour' : 'Day';
+            const t_delay = (t_h == 'lastHours') ? 2:0 // hours delay
+            var timeFrame = this.timeFrame[t_w]
             var r = this.window.r
             var m = this.window.mode
-            var x = range(1,this.x[t_w]+1)
+            var x = range(t_delay,timeFrame)
             var d = this.data[f][t_h][r][m] // data 
             var maxEntry = 0
 
@@ -79,33 +83,48 @@ class History {
             var zeroTraces = []
             var archetypes = []
             
-            var totGames = 0
+            var totGames = 0 // To display in header
+            this.annotations = []
             var total = d[d.length-1]['data'].slice() // last line is always the total games 
-            for (var i=0;i<this.x[t_w] && i<total.length;i++) {totGames += total[i]}
+            for (var i = t_delay; i < timeFrame && i < total.length; i++) {
+                totGames += total[i]
+                var ann = {
+                    x: i,
+                    y: 0.05,
+                    xref: 'x',
+                    yref: 'y',
+                    text: total[i],
+                    showarrow: false,
+                    bgcolor: 'rgba(0,0,0,0.3)',
+                    font: {color:'white'},
+                    opacity: 0.8
+                }
+                this.annotations.push(ann)
+            }
 
-            d.sort(function (a, b) { return a.avg > b.avg ? -1 : a.avg < b.avg ? 1 : 0 })
-                    
+            var d2 = d.slice().sort(function (a, b) { return a.avg > b.avg ? -1 : a.avg < b.avg ? 1 : 0 })
+            
             
             for (var i=0; i<this.top;i++) { 
 
                 var colors
-                var archName = d[i]['name']
-                if (m=='classes') { colors = { color: hsColors[archName], fontColor: hsFontColors[archName] } }
+                var archName = d2[i]['name']
+                if (m =='classes') { colors = { color: hsColors[archName], fontColor: hsFontColors[archName] } }
                 else { colors = this.window.getArchColor(0, archName, this.window.f) } 
 
                 archetypes.push({name: archName, color: colors.color, fontColor: colors.fontColor})
-                var y = (t_h == 'lastHours') ? this.smoothData(d[i]['data']) : d[i]['data']
+                var y = (t_h == 'lastHours') ? this.smoothData(d2[i]['data']) : d2[i]['data'].slice()
+                y = y.slice(t_delay, timeFrame)
 
                 var text = []
-                for (var j=0;j<y.length;j++) {
+                for (var j = 0; j < x.length ; j++) {
                     var unit = (j>0) ? baseUnit+'s' : baseUnit;
-                    text.push(`${d[i]['name']} (${(y[j]*100).toFixed(1)}% )<br>${x[j]+' '+unit} ago`)
+                    text.push(`${d2[i]['name']} (${(y[j]*100).toFixed(1)}% )<br>${x[j]+' '+unit} ago`)
                     if (y[j] > maxEntry) {maxEntry = y[j]}
                 }
-                var xrange = (t_h == 'lastHours') ? range(1,x.length+1) : range(0,x.length)
 
                 zeroTraces.push({
-                    x: xrange,
+                    x: x.slice(),
                     y: fillRange(0,y.length,0),
                     text: text,
                     line: {width: 2.5, simplify: false},
@@ -116,7 +135,7 @@ class History {
                 })
 
                 traces.push({
-                    x: xrange,
+                    x: x.slice(),
                     y: y.slice(),
                     text: text,
                     line: {width: 2.5},
@@ -130,11 +149,12 @@ class History {
             var xLabels = []
             var step_hours = 3
             var step_days = 4
+
             if (t_h == 'lastHours') {
                 var t0 = (new Date()).getHours()
-                for (var i=0;i<x.length;i++) {
+                for (var i=0; i < x.length; i++) {
                     if (i%step_hours!=0 && i!=1) {xLabels.push(''); continue}
-                    var ti = parseInt((t0+24-i)%24)
+                    var ti = parseInt((t0+24-x[i])%24)
                     xLabels.push(ti+':00')
             }}
 
@@ -147,15 +167,15 @@ class History {
             }}
 
             this.layout.yaxis['range'] = [0,maxEntry*1.1]
-            this.layout.xaxis['tickvals'] = range(0,x.length)
+            this.layout.xaxis['tickvals'] = range(t_delay,x.length+t_delay)
             this.layout.xaxis['ticktext'] = xLabels
-            this.layout.xaxis['tickangle'] = 'xLabels', 
-            this.layout.xaxis['range'] = [this.x[t_w]+1,2]       
+            
             
             Plotly.newPlot('chart1',zeroTraces, this.layout, {displayModeBar: false,})
+            this.window.nrGames = totGames
             this.window.setGraphTitle()
             this.createLegend(archetypes)
-            this.window.setTotGames(totGames)
+            this.annotate(this.window.annotated)
 
             // Animation
 
@@ -192,20 +212,30 @@ class History {
                 if (mode=='decks') { this.window.addLegendItem(archetypes[i].name) }
             }
         }
+
+        annotate(bool) {
+            var update
+
+            if (bool) { update = { annotations: this.annotations} }
+            else {update = { annotations: []};}
+
+            Plotly.relayout('chart1', update)
+        }
     
         smoothData(Data) {
+            var D = Data.slice()
             var data_smoothed = []
             const w = 0.3
     
     
-            for (var i=0; i<Data.length;i++) {
+            for (var i=0; i<D.length;i++) {
                 var w_tot = 0
                 var d = 0
     
-                if (i > 0)              {d += Data[i-1]*w; w_tot += w}
-                if (i < Data.length-1)  {d += Data[i+1]*w; w_tot += w}
+                if (i > 0)              {d += D[i-1]*w; w_tot += w}
+                if (i < D.length-1)  {d += D[i+1]*w; w_tot += w}
     
-                d += Data[i]*(1-w_tot)
+                d += D[i]*(1-w_tot)
                 data_smoothed.push(d)
             }
     

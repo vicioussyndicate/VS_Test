@@ -13,6 +13,7 @@ UPLOAD_DECKS = False
 
 
 
+
 config = { # Fenoms Firebase
     "apiKey": "AIzaSyAt0uIAVOFjB42_bkwrEIqhSWkMT_VmluI",
     "authDomain": "data-reaper.firebaseapp.com",

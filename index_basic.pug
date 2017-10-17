@@ -1,7 +1,7 @@
 doctype html
 html(lang='en')
   head
-    link(rel="icon" href="Images/vsLogo57x57.png")
+    link(rel="icon" href="Images/vsLogo.png")
     link(rel='apple-touch-icon-precomposed', size='57x57' href='Images/vsLogo57x57.png')
     meta(charset='UTF-8')
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
@@ -33,7 +33,7 @@ html(lang='en')
           button#decks.tab Decks
           button#info.tab info
         #vsLogoDiv
-          img(src="Images/vsLiveLogo.png").logo
+          img(src="Images/vsGoldLogo.png").logo
           //p.text Live
       .content-wrapper
         #loader
@@ -49,7 +49,7 @@ html(lang='en')
               #rankFolder.option-folder
                 button#rankBtn.folder-toggle All Ranks
                 .dropdown#rankDropdown.hidden
-              p.nrGames
+              button#nrGames.optionBtn Show Games
             .classDeckOptions.optionBar
               button#classes.optionBtn Classes
               button#decks.optionBtn Decks
@@ -111,6 +111,8 @@ html(lang='en')
               #rankFolder.option-folder
                 button#ranksBtn.folder-toggle All Ranks
                 .dropdown.hidden
+            .nrGamesOptions.optionBar
+              button#nrGames.optionBtn Show Games
               p.nrGames
             .graphOptions.optionBar
               p Sort 
@@ -179,7 +181,7 @@ html(lang='en')
               p#loginErrorMsg
           .content-footer
 
-    //- script(src='scripts/build_basic.js')
+    //- script(src='scripts/build_premium.js')
     //- script(src='scripts/parameters.js')
     //- script(src='scripts/script.js')
     //- script(src='scripts/ui.js')

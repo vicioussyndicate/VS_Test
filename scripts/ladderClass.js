@@ -528,11 +528,13 @@ class Ladder {
 
 
         Plotly.newPlot('chart1',data, layout, {displayModeBar: false,})
-        this.window.setGraphTitle()
+        
 
         var totGames = (this.window.plotType != 'pie') ? this.totGames : this.totGamesRanks[this.window.r]
-        this.window.setTotGames(totGames)   
+        this.window.nrGames = totGames 
+        this.window.setGraphTitle()
 
+        this.annotate(this.window.annotated)
 
         this.createLegend(this.window.mode)
         if ((this.window.plotType == 'bar' || this.window.plotType == 'zoom') && PREMIUM) {
