@@ -873,7 +873,7 @@ var _createClass = function() {
                         if (L) throw S;
                     }
                 }
-                var _ = {
+                var M = {
                     values: fillRange(0, hsClasses.length, 0),
                     labels: hsClasses.slice(),
                     marker: {
@@ -889,7 +889,7 @@ var _createClass = function() {
                     text: hsClasses.slice(),
                     type: "pie"
                 };
-                this.traces_pie.decks[w.buttonId] = [ T ], this.traces_pie.classes[w.buttonId] = [ _ ];
+                this.traces_pie.decks[w.buttonId] = [ T ], this.traces_pie.classes[w.buttonId] = [ M ];
             }
         } catch (t) {
             p = !0, b = t;
@@ -900,7 +900,7 @@ var _createClass = function() {
                 if (p) throw b;
             }
         }
-        var M = e.archetypes, I = e.gamesPerRank;
+        var _ = e.archetypes, I = e.gamesPerRank;
         this.rankSums = e.gamesPerRank;
         for (var D = this.smoothLadder(e.rankData, I.slice()), E = this.smoothLadder(e.classRankData, I.slice()), q = 0; q < hsRanks; q++) {
             q % 5 == 0 ? this.rankLabels.push(q + "  ") : this.rankLabels.push(""), this.totGames += I[q];
@@ -918,8 +918,8 @@ var _createClass = function() {
             }
         }
         this.rankLabels[0] = "L  ";
-        for (q = 0; q < M.length; q++) {
-            var P = [], z = [], G = [], N = 0, U = M[q][1] + " " + M[q][0].replace("§", ""), X = hsClasses.indexOf(M[q][0]), Y = this.window.getArchColor(M[q][0], M[q][1], this.f), V = Y.fontColor;
+        for (q = 0; q < _.length; q++) {
+            var P = [], z = [], G = [], N = 0, U = _[q][1] + " " + _[q][0].replace("§", ""), X = hsClasses.indexOf(_[q][0]), Y = this.window.getArchColor(_[q][0], _[q][1], this.f), V = Y.fontColor;
             Y = Y.color;
             for (st = 0; st < hsRanks; st++) {
                 nt = D[st][q];
@@ -959,7 +959,7 @@ var _createClass = function() {
                 },
                 type: "bar",
                 winrate: 0,
-                hsClass: M[q][0] + M[q][1]
+                hsClass: _[q][0] + _[q][1]
             }, et = {
                 x: range(0, hsRanks),
                 y: z.slice(),
@@ -976,18 +976,18 @@ var _createClass = function() {
                 type: "scatter",
                 mode: "lines",
                 winrate: 0,
-                hsClass: M[q][0] + M[q][1],
+                hsClass: _[q][0] + _[q][1],
                 fr: N
             };
             this.traces_bar.decks.push(tt), this.traces_line.decks.push(et), this.archLegend.push({
                 name: U,
-                hsClass: M[q][0],
+                hsClass: _[q][0],
                 color: Y,
                 fontColor: V,
                 fr: N
             }), this.archetypes.push({
                 name: U,
-                hsClass: M[q][0],
+                hsClass: _[q][0],
                 fr: N,
                 data: z.slice(),
                 color: Y,
@@ -1208,14 +1208,14 @@ var _createClass = function() {
                 t: 30
             }
         };
-        var _t = function(t, e) {
+        var Mt = function(t, e) {
             return t.hsClass < e.hsClass ? -1 : t.hsClass > e.hsClass ? 1 : 0;
-        }, Mt = function(t, e) {
+        }, _t = function(t, e) {
             return t.fr > e.fr ? -1 : t.fr < e.fr ? 1 : 0;
         };
-        this.traces_bar.classes.sort(_t), this.traces_line.classes.sort(Mt), this.traces_line.classes.splice(this.maxLines), 
-        this.traces_bar.decks.sort(_t), this.traces_line.decks.sort(Mt), this.traces_line.decks.splice(this.maxLines), 
-        this.archLegend.sort(Mt), this.archetypes.sort(Mt);
+        this.traces_bar.classes.sort(Mt), this.traces_line.classes.sort(_t), this.traces_line.classes.splice(this.maxLines), 
+        this.traces_bar.decks.sort(Mt), this.traces_line.decks.sort(_t), this.traces_line.decks.splice(this.maxLines), 
+        this.archLegend.sort(_t), this.archetypes.sort(_t);
     }
     return _createClass(t, [ {
         key: "smoothLadder",
@@ -1367,9 +1367,11 @@ var _createClass = function() {
         key: "createNumbersFooter",
         value: function() {
             for (var t = document.querySelector("#ladderWindow .chart-footer"); t.firstChild; ) t.removeChild(t.firstChild);
-            var e = document.createElement("button");
-            e.innerHTML = "Download <div class='fa fa-cloud-download'></div>", e.className = "download", 
-            e.addEventListener("click", this.downloadCSV.bind(this)), t.appendChild(e);
+            if (PREMIUM) {
+                var e = document.createElement("button");
+                e.innerHTML = "Download <div class='fa fa-cloud-download'></div>", e.className = "download", 
+                e.addEventListener("click", this.downloadCSV.bind(this)), t.appendChild(e);
+            }
         }
     }, {
         key: "downloadCSV",
@@ -1889,7 +1891,7 @@ var _createClass = function() {
     Warrior: [ "#ba1419", "#f83f4a", "#ec191d", "#ea5e53", "#fc736b" ]
 }, hsFontColors = {
     Druid: "#fff",
-    Hunter: "#fff",
+    Hunter: "#222",
     Mage: "#222",
     Paladin: "#222",
     Priest: "#222",
@@ -2023,7 +2025,7 @@ var _createClass = function() {
             for (E = 0; E < hsRanks; E++) {
                 var r = !0, a = !1, s = void 0;
                 try {
-                    for (var n, o = this.tiers[Symbol.iterator](); !(r = (n = o.next()).done); r = !0) (M = n.value).start <= E && M.end >= E && (M.games[t] += this.data.rankSums[t][E]);
+                    for (var n, o = this.tiers[Symbol.iterator](); !(r = (n = o.next()).done); r = !0) (_ = n.value).start <= E && _.end >= E && (_.games[t] += this.data.rankSums[t][E]);
                 } catch (t) {
                     a = !0, s = t;
                 } finally {
@@ -2066,21 +2068,21 @@ var _createClass = function() {
                         });
                         var L = !0, S = !1, W = void 0;
                         try {
-                            for (var B, _ = this.tiers[Symbol.iterator](); !(L = (B = _.next()).done); L = !0) {
-                                var M = B.value, I = this.tierData[t][M.name];
-                                E == M.start && I.push({
+                            for (var B, M = this.tiers[Symbol.iterator](); !(L = (B = M.next()).done); L = !0) {
+                                var _ = B.value, I = this.tierData[t][_.name];
+                                E == _.start && I.push({
                                     name: y.name,
                                     wr: v,
                                     fr: y.data[E],
                                     color: y.color,
                                     fontColor: y.fontColor
-                                }), E > M.start && E <= M.end && (I[I.length - 1].wr += v), E == M.end && (I[I.length - 1].wr /= M.end - M.start + 1);
+                                }), E > _.start && E <= _.end && (I[I.length - 1].wr += v), E == _.end && (I[I.length - 1].wr /= _.end - _.start + 1);
                             }
                         } catch (t) {
                             S = !0, W = t;
                         } finally {
                             try {
-                                !L && _.return && _.return();
+                                !L && M.return && M.return();
                             } finally {
                                 if (S) throw W;
                             }
@@ -2102,8 +2104,8 @@ var _createClass = function() {
             var q = !0, H = !1, F = void 0;
             try {
                 for (var A, R = this.tiers[Symbol.iterator](); !(q = (A = R.next()).done); q = !0) {
-                    M = A.value;
-                    this.tierData[t][M.name].sort(D);
+                    _ = A.value;
+                    this.tierData[t][_.name].sort(D);
                 }
             } catch (t) {
                 H = !0, F = t;
@@ -2622,10 +2624,12 @@ var Table = function() {
                     if (g) throw k;
                 }
             }
-            document.querySelector("#tableWindow .downloadTable").addEventListener("click", function() {
-                this.data[this.f][this.t][this.r].downloadCSV();
-            }.bind(this)), this.questionBtn.addEventListener("click", this.toggleOverlay.bind(this)), 
-            this.overlayDiv.addEventListener("click", this.toggleOverlay.bind(this)), this.nrGamesBtn.onclick = this.annotate.bind(this);
+            if (this.questionBtn.addEventListener("click", this.toggleOverlay.bind(this)), this.overlayDiv.addEventListener("click", this.toggleOverlay.bind(this)), 
+            this.nrGamesBtn.onclick = this.annotate.bind(this), PREMIUM) {
+                document.querySelector("#tableWindow .downloadTable").addEventListener("click", function() {
+                    this.data[this.f][this.t][this.r].downloadCSV();
+                }.bind(this));
+            }
         }
     }, {
         key: "plot",

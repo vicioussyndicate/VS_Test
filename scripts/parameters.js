@@ -284,7 +284,7 @@ const hsArchColors = { // switch switch
 
 var hsFontColors = {
     Druid:      '#fff',
-    Hunter:     '#fff',
+    Hunter:     '#222',
     Mage:       '#222',
     Paladin:    '#222',
     Priest:     '#222',

@@ -129,12 +129,16 @@ class TableWindow {
             document.querySelector('#tableWindow .content-header #sortFolder .dropdown').appendChild(btn)
         }
 
-        var dlCSV = function () {this.data[this.f][this.t][this.r].downloadCSV()}
-        document.querySelector('#tableWindow .downloadTable').addEventListener('click',dlCSV.bind(this))
+        
         this.questionBtn.addEventListener('click',this.toggleOverlay.bind(this))
         this.overlayDiv.addEventListener('click',this.toggleOverlay.bind(this))
         //this.windowInfo.addEventListener('click',this.annotate.bind(this))
         this.nrGamesBtn.onclick = this.annotate.bind(this)
+
+        if (PREMIUM) {
+            var dlCSV = function () {this.data[this.f][this.t][this.r].downloadCSV()}
+            document.querySelector('#tableWindow .downloadTable').addEventListener('click',dlCSV.bind(this))
+        }
     }
 
 

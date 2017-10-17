@@ -706,6 +706,9 @@ class Ladder {
     createNumbersFooter() {
         var chartFooter = document.querySelector('#ladderWindow .chart-footer')
         while (chartFooter.firstChild) {chartFooter.removeChild(chartFooter.firstChild);}
+
+        if (!PREMIUM) {return}
+            
         var csvBtn = document.createElement('button')
         
         csvBtn.innerHTML = "Download <div class='fa fa-cloud-download'></div>"
