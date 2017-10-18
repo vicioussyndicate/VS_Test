@@ -21,21 +21,25 @@
             font-weight bold
             letter-spacing 2px
             overflow: hidden
-            transition background 0.3s ease, color 0.3s ease
+            //transition background 0.3s ease, color 0.3s ease
             &#ladder
                 background-color: $midColor
+                background: linear-gradient(#1e6b97,#1b6086)
                 //color $darkColor
             &#power
                 background-color: $midColor2
+                background: linear-gradient(#398ab9,#3279a2)
             &#table
                 background-color: $midColor3
+                background linear-gradient(#599fb5,#5396ad)
             &#decks
                 background-color: $midColor4
+                background linear-gradient(#7fb0b4,#719da0)
             &#info
                 background-color transparent
                 color $darkColor
             &:hover
                 cursor pointer
             &.highlighted
-                background-color $nav_hi_bgColor !important
+                background $nav_hi_bgColor !important
                 color $nav_hi_fColor !important
