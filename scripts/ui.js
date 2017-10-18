@@ -165,7 +165,7 @@ class UI {
 
 const overlayText1 = `
 
-<span style='font-size:180%;padding-left:2rem'>Greetings Travelers,</span><br><br><br>
+<span style='font-size:200%;font-weight:bold;padding-left:2rem;'>Greetings Travelers,</span><br><br><br>
 
 Welcome to the VS Live web app where you can explore the newest Hearthstone data and find 
 
@@ -200,7 +200,7 @@ To give feedback simply click on the discord link below:<br><br><br>
 
 const overlayText2 = `
 
-<span style='font-size:180%;padding-left:2rem'>Greetings Travelers,</span><br><br><br>
+<span style='font-size:200%;font-weight:bold;padding-left:2rem'>Greetings Travelers,</span><br><br><br>
 
 Welcome to the VS Live web app where you can explore the newest Hearthstone data and find 
 

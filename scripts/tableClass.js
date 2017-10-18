@@ -433,7 +433,7 @@ class Table {
 
     getAnnotations() {
 
-        var toFixed = 1
+        var toFixed = (ui.width >= 900 ) ? 1:0
         
         var tr = {
             x: [],
