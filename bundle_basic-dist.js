@@ -51,7 +51,7 @@ function reloadBasic() {
 function finishedLoading() {
     tableWindow.fullyLoaded && ladderWindow.fullyLoaded && (powerWindow = new PowerWindow(), 
     decksWindow = new DecksWindow(hsFormats), powerWindow.plot(), tableWindow.plot(), 
-    ui.fullyLoaded = !0, ui.hideLoader(), console.log("App initializing took " + (performance.now() - t0) + " ms."));
+    ladderWindow.plot(), ui.fullyLoaded = !0, ui.hideLoader(), console.log("App initializing took " + (performance.now() - t0) + " ms."));
 }
 
 function choice(t) {
