@@ -142,9 +142,9 @@ class PowerWindow {
                 this.data[f][rank].push({name:arch.name, wr:totWr, fr:arch.data[rank], color: arch.color, fontColor: arch.fontColor})
                 for (var tier of this.tiers) {
                     var data = this.tierData[f][tier.name]
-                    if (rank == tier.start) {data.push({name:arch.name, wr:totWr, fr:arch.data[rank], color: arch.color, fontColor: arch.fontColor})}
-                    if (rank > tier.start && rank <= tier.end) { data[data.length-1].wr += totWr }
-                    if (rank == tier.end) { data[data.length-1].wr /= (tier.end - tier.start +1) }
+                    if (rank == tier.start) {data.push({name:arch.name, wr:totWr, fr:arch.data[rank], color: arch.color, fontColor: arch.fontColor, count:(totWr>0)?1:0})}
+                    if (rank > tier.start && rank <= tier.end) { data[data.length-1].wr += totWr; data[data.length-1].count += (totWr>0)?1:0 }
+                    if (rank == tier.end && data[data.length-1].count > 0) { data[data.length-1].wr /= data[data.length-1].count }
                 }
 
 
@@ -280,7 +280,7 @@ class PowerWindow {
 
                 var arch = this.tierData[f][tier.name][i]
 
-                if (tier.games[f] <= this.minGames || arch == undefined) { 
+                if (tier.games[f] <= this.minGames || arch == undefined) { 
                     var div = document.createElement('div')
                     div.className = 'blank'
                     this.grid.appendChild(div)
