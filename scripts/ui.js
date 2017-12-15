@@ -12,6 +12,7 @@ class UI {
         this.folderButtons = document.querySelectorAll('.folder-toggle');
         this.loader = document.getElementById('loader')
         this.logo = document.querySelector('#vsLogoDiv')
+        this.refresh = document.querySelector('.refreshArrow')
         this.overlayText = document.querySelector('#overlay .overlayText')
         this.infoWindow = document.querySelector('#infoWindow .content .infoText')
 
@@ -39,6 +40,7 @@ class UI {
         this.logo.addEventListener('click', this.toggleOverlay.bind(this))
         document.querySelector('#overlay').addEventListener('click', this.toggleOverlay.bind(this))
 
+        this.refresh.addEventListener('click', reloadApp)
 
         window.addEventListener('orientationchange', this.getWindowSize.bind(this));
         window.addEventListener('resize', this.getWindowSize.bind(this))
@@ -49,6 +51,7 @@ class UI {
         this.renderWindows()
         this.toggleOverlay()
     } // close constructor
+
 
     getWindowSize() {
         this.width = parseInt(Math.max(document.documentElement.clientWidth, window.innerWidth || 0))
@@ -137,9 +140,11 @@ class UI {
     }
 
     renderWindows() {
+        console.log('active window',this.activeWindow.id)
+        if (this.activeWindow.id == 'decksWindow' && !decksWindow.fullyLoaded) { decksWindow.loadData() }
         for (var w of this.windows) {
             if (w != this.activeWindow) {w.style.display = 'none'}
-            else {w.style.display = 'inline-block'}
+            else { w.style.display = 'inline-block' }
         }
     }
 
@@ -186,9 +191,6 @@ Upgrade to vS Gold to visit the gold version of this app. Check the link more in
 </a>
 
 <br><br>
-Please Take a minute to vote on the VS Live color scheme:
-<a href="https://docs.google.com/forms/d/e/1FAIpQLSel6ym_rJHduxkgeimzf9HdNbBMB5Kak7Fmk0Bl2O7O8XhVGg/viewform?usp=sf_link"
-   target="_blank"><img class='googleFormsLogo' src="Images/googleForms.png"></a><br><br>
 
 To give feedback simply click on the discord link below:<br><br><br>
 
@@ -216,10 +218,6 @@ Thank you for using vS Live Gold.
 
 <br><br>
 
-Please Take a minute to vote on the VS Live color scheme:
-<a href="https://docs.google.com/forms/d/e/1FAIpQLSel6ym_rJHduxkgeimzf9HdNbBMB5Kak7Fmk0Bl2O7O8XhVGg/viewform?usp=sf_link"
-   target="_blank"><img class='googleFormsLogo' src="Images/googleForms.png"></a><br><br>
-
 To give feedback simply click on the discord link below:<br><br><br>
 
 <a href=${discordLink}
@@ -231,11 +229,6 @@ To give feedback simply click on the discord link below:<br><br><br>
 const infoWindowText = `
 
 Greetings and thank you for checking out the VS Live Beta!<br><br>
-
-
-Please Take a minute to vote on the VS Live color scheme:
-<a href="https://docs.google.com/forms/d/e/1FAIpQLSel6ym_rJHduxkgeimzf9HdNbBMB5Kak7Fmk0Bl2O7O8XhVGg/viewform?usp=sf_link"
-   target="_blank"><img class='googleFormsLogo' src="Images/googleForms.png"></a><br><br>
 
    To give feedback simply click on the discord link below:<br><br>
    

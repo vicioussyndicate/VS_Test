@@ -57,11 +57,12 @@ class DecksWindow {
                 this.data[f][hsClass].text = ''
         }}
 
-        this.loadData()
         this.renderOptions()
 
         this.questionBtn.addEventListener('click',this.toggleOverlay.bind(this))
         this.overlayDiv.addEventListener('click',this.toggleOverlay.bind(this))
+
+        //this.loadData() // only load when switching to decks
     }// close constructor
 
 
@@ -149,6 +150,9 @@ class DecksWindow {
 
 
     deckLink(archName, hsFormat = 'Standard') {
+
+        if (!this.fullyLoaded) { this.loadData() }
+
         var hsClass
         var hsArch
         this.mode = 'decklists'
