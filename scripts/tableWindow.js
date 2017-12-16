@@ -25,6 +25,7 @@ class TableWindow {
         this.top = 16
         this.annotated = false
         this.nrGames = 0
+        this.colorTheme = 0 // 0: red blue,  1: red green
 
         this.overlayText = `
             Here you can see how your deck on the left hand side performs against any other deck on the top. 
@@ -206,6 +207,7 @@ class TableWindow {
     }
 
     switchColorScale() { this.data[this.f][this.t][this.r].switchColorScale() }
+    updateColorTheme() { this.data[this.f][this.t][this.r].updateColorTheme(this.colorTheme); console.log('updateColorTheme') }
 
 } // close LadderWindow
 

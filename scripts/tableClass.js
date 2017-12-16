@@ -44,6 +44,15 @@ class Table {
             [1, '#28733d']
         ]
 
+        this.colorScale2 =  [
+            [0, '#000'],
+            [0.3, '#222'],
+            [0.5, '#FFFFFF'],
+            [0.7,'#888'],
+            [1, '#999']
+        ];
+
+        this.colorThemes = [ this.colorScale, this.colorScale2]
 
         this.table = []
         this.textTable = []
@@ -481,8 +490,14 @@ class Table {
                 tr.y.push(this.archetypes[j])
                 tr.text.push((100*this.table[j][i]).toFixed(toFixed)+'%')
         }}
-
         return tr
+    }
+
+    updateColorTheme(themeIdx) { // Currently not possible to restyle colorscale to custom ones
+        console.log('updateColorTheme class')
+        themeIdx = 2
+        let update = { colorscale: this.colorScale, showscale: false  }
+        Plotly.restyle('chart2',update)
     }
 
 }// close Table

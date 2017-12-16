@@ -238,7 +238,8 @@ class Ladder {
                 if (a.hsClass != hsClass) {continue}
                 var text = []
                 var overall = []
-                for (var rank=0;rank<hsRanks;rank++) { fr_tot[rank] += a.data[rank]; text.push(''); overall.push(a.data[rank]) }
+                var fr_avg = 0
+                for (var rank=0;rank<hsRanks;rank++) { fr_tot[rank] += a.data[rank]; text.push(''); overall.push(a.data[rank]); fr_avg += a.data[rank] }
                 var bar_zoom = {
                     x: range(0,hsRanks),
                     y: a.data.slice(),
@@ -250,6 +251,7 @@ class Ladder {
                     winrate: 0,
                     hsClass: hsClass,
                     overall: overall,
+                    fr_avg: fr_avg/hsRanks,
                 }
 
                 this.traces_zoom[hsClass].push(bar_zoom)
@@ -494,6 +496,37 @@ class Ladder {
         this.window.hideRankFolder()
 
 
+        switch(this.window.plotType) {
+        
+            case 'pie':
+                this.window.showRankFolder()
+                layout = this.layout_pie
+                data = this.traces_pie[this.window.mode][this.window.r]
+                break
+            
+            case 'number':
+                this.createTable(this.window.mode)
+                this.window.setGraphTitle()
+                return
+        
+            case 'bar':
+                layout = this.layout_bar
+                data = this.traces_bar[this.window.mode]
+                break
+                
+            case 'zoom':
+                layout = this.layout_bar
+                data = this.traces_zoom[this.window.zoomClass]
+                break
+                
+            case 'line':
+                layout = this.layout_line
+                data = this.traces_line[this.window.mode]
+                break
+        }
+
+
+        /*
         if (this.window.plotType == 'pie') {
             this.window.showRankFolder()
             layout = this.layout_pie
@@ -521,7 +554,7 @@ class Ladder {
         if (this.window.plotType == 'line') {
             layout = this.layout_line
             data = this.traces_line[this.window.mode]
-        }
+        }*/
 
         if (MOBILE == 'portrait' && this.window.plotTyp != 'pie') {
             layout.width = ui.width*2
@@ -539,7 +572,7 @@ class Ladder {
         this.annotate(this.window.annotated)
 
         this.createLegend(this.window.mode)
-        if ((this.window.plotType == 'bar' || this.window.plotType == 'zoom') && PREMIUM) {
+        if ((this.window.plotType == 'bar' || this.window.plotType == 'zoom') && PREMIUM) {
             document.getElementById('chart1').on('plotly_click', this.zoomToggle.bind(this))
         }
     }
@@ -560,14 +593,14 @@ class Ladder {
 
     annotate(bool) {
         var plotType = this.window.plotType
-        if (plotType == 'pie' || plotType == 'number' || plotType == 'timeline') {return}
+        if (plotType == 'pie' || plotType == 'number' || plotType == 'timeline') {return}
         var update
         var heights = {
             bar: 0.5,
             zoom: 0.5,
             line: 0.05,
         }
-        var textangle = (plotType == 'bar' || plotType == 'zoom') ? 90:0
+        var textangle = (plotType == 'bar' || plotType == 'zoom') ? 90:0
         if (bool) {
             var annotations = []
             for (var i=0;i<hsRanks;i++) {
@@ -675,6 +708,7 @@ class Ladder {
         this.createNumbersFooter()
     }
 
+
     createLegend(mode) {
 
         if (this.window.plotType == 'zoom') {this.createZoomLegend(); return}
@@ -698,10 +732,11 @@ class Ladder {
         }
     }
 
+
     createZoomLegend() {
         var hsClass = this.window.zoomClass
         this.window.clearChartFooter()
-        for (var arch of this.traces_zoom[hsClass]) { this.window.addLegendItem(arch.name) }
+        for (var arch of this.traces_zoom[hsClass]) { if (arch.fr_avg > 0) { this.window.addLegendItem(arch.name) } }
     }
 
 
