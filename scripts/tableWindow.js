@@ -205,5 +205,7 @@ class TableWindow {
             this.overlay = true}
     }
 
+    switchColorScale() { this.data[this.f][this.t][this.r].switchColorScale() }
+
 } // close LadderWindow
 

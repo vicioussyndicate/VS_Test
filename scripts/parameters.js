@@ -1,6 +1,7 @@
 
-const discordLink = 'https://discord.gg/ZeAfz3'
-
+const DISCORDLINK = 'https://discord.gg/ZeAfz3'
+const POLLLINK = 'https://docs.google.com/forms/d/e/1FAIpQLSel6ym_rJHduxkgeimzf9HdNbBMB5Kak7Fmk0Bl2O7O8XhVGg/viewform?usp=sf_link'
+const VSGOLDINFOLINK = 'https://www.vicioussyndicate.com/membership/vs-gold/'
 
 
 // Global Variables

@@ -32,6 +32,17 @@ class Table {
             [0.7,'#00a2bc'],
             [1, '#055c7a']
         ];
+        this.currentColorScale = 0
+        this.colorScale2 = [
+            [0, '#a04608'],
+            [0.3, '#d65900'],
+            [0.5, '#FFFFFF'],
+            // [this.whiteTile, '#FFFFFF'],
+            // [this.blackTile, '#222222'],
+            // [this.blackTile+0.0000001,'#FFFFFF'],
+            [0.7,'#279e27'],
+            [1, '#28733d']
+        ]
 
 
         this.table = []
@@ -256,7 +267,19 @@ class Table {
     }
 
 
+    switchColorScale() {
+        var update
+        if (this.currentColorScale == 0) {
+            update = { colorscale: this.colorScale2 }
+            this.currentColorScale = 1
+        } else {
+            update = { colorscale: this.colorScale }
+            this.currentColorScale = 0
+        }
 
+        Plotly.update('chart2', update, [0])
+
+    }
 
     subPlotFR() { Plotly.restyle('chart2',this.freqPlotData,1) }
 
@@ -433,7 +456,7 @@ class Table {
 
     getAnnotations() {
 
-        var toFixed = 1
+        var toFixed = (ui.width >= 900 ) ? 1:0
         
         var tr = {
             x: [],

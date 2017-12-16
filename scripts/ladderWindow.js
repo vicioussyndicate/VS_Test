@@ -315,8 +315,9 @@ class LadderWindow {
         if (archName in this.archColors[hsFormat]) { return {color: hsArchColors[hsClass][this.archColors[hsFormat][archName]], fontColor: hsFontColors[hsClass] } }
         else {
             this.archColors[hsFormat][archName] = this.archColors[hsFormat][hsClass].count
-            this.archColors[hsFormat][hsClass].count += 1
-            if (this.archColors[hsFormat][hsClass].count > 4) {this.archColors[hsFormat][hsClass].count = 4}
+            this.archColors[hsFormat][hsClass].count = (this.archColors[hsFormat][hsClass].count + 1)%5
+            
+            //if (this.archColors[hsFormat][hsClass].count > 4) {this.archColors[hsFormat][hsClass].count = 4}
             var color = hsArchColors[hsClass][this.archColors[hsFormat][archName]]
             return {color: color, fontColor: hsFontColors[hsClass]}
         }

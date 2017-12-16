@@ -165,7 +165,7 @@ class UI {
 
 const overlayText1 = `
 
-<span style='font-size:180%;padding-left:2rem'>Greetings Travelers,</span><br><br><br>
+<span style='font-size:200%;font-weight:bold;padding-left:2rem;'>Greetings Travelers,</span><br><br><br>
 
 Welcome to the VS Live web app where you can explore the newest Hearthstone data and find 
 
@@ -177,22 +177,22 @@ To get more information on the current tab simply click on the
 
 icon in the top right corner.<br><br>
 
-Upgrade to vS Gold to visit the gold version of this app. Check the link more inforomation:<br><br><br>
+Upgrade to vS Gold to visit the gold version of this app. Check the link more information:<br><br><br>
 
 <button id='basicBtn'>BASIC</button>
 <img src='Images/arrow.png' class='arrow'>
-<a href="https://www.vicioussyndicate.com/membership/ad-free-viewing/" target="_blank">
+<a href=${VSGOLDINFOLINK} target="_blank">
 <button id='premiumBtn'>GOLD</button>
 </a>
 
 <br><br>
 Please Take a minute to vote on the VS Live color scheme:
-<a href="https://docs.google.com/forms/d/e/1FAIpQLSel6ym_rJHduxkgeimzf9HdNbBMB5Kak7Fmk0Bl2O7O8XhVGg/viewform?usp=sf_link"
+<a href=${POLLLINK}
    target="_blank"><img class='googleFormsLogo' src="Images/googleForms.png"></a><br><br>
 
 To give feedback simply click on the discord link below:<br><br><br>
 
-<a href=${discordLink}
+<a href=${DISCORDLINK}
    target="_blank"><img class='discordLogo' src="Images/discordLogo.png"></a><br><br>
 
 `
@@ -200,7 +200,7 @@ To give feedback simply click on the discord link below:<br><br><br>
 
 const overlayText2 = `
 
-<span style='font-size:180%;padding-left:2rem'>Greetings Travelers,</span><br><br><br>
+<span style='font-size:200%;font-weight:bold;padding-left:2rem'>Greetings Travelers,</span><br><br><br>
 
 Welcome to the VS Live web app where you can explore the newest Hearthstone data and find 
 
@@ -217,12 +217,12 @@ Thank you for using vS Live Gold.
 <br><br>
 
 Please Take a minute to vote on the VS Live color scheme:
-<a href="https://docs.google.com/forms/d/e/1FAIpQLSel6ym_rJHduxkgeimzf9HdNbBMB5Kak7Fmk0Bl2O7O8XhVGg/viewform?usp=sf_link"
+<a href=${POLLLINK}
    target="_blank"><img class='googleFormsLogo' src="Images/googleForms.png"></a><br><br>
 
 To give feedback simply click on the discord link below:<br><br><br>
 
-<a href=${discordLink}
+<a href=${DISCORDLINK}
    target="_blank"><img class='discordLogo' src="Images/discordLogo.png"></a><br><br>
 
 `
@@ -234,12 +234,12 @@ Greetings and thank you for checking out the VS Live Beta!<br><br>
 
 
 Please Take a minute to vote on the VS Live color scheme:
-<a href="https://docs.google.com/forms/d/e/1FAIpQLSel6ym_rJHduxkgeimzf9HdNbBMB5Kak7Fmk0Bl2O7O8XhVGg/viewform?usp=sf_link"
+<a href=${POLLLINK}
    target="_blank"><img class='googleFormsLogo' src="Images/googleForms.png"></a><br><br>
 
    To give feedback simply click on the discord link below:<br><br>
    
-<a href=${discordLink}
+<a href=${DISCORDLINK}
    target="_blank"><img class='discordLogo' src="Images/discordLogo.png"></a><br><br>
 `
 
