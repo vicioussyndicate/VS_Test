@@ -230,6 +230,12 @@ const infoWindowText = `
 
 Greetings and thank you for checking out the VS Live Beta!<br><br>
 
+    Update 16-12-2017:<br><br>
+    - App refresh button in the top right corner added<br>
+    - Chose color theme for the matchup table added<br>
+    - Outdated archetypes no longer show in the overview page<br>
+    - Fixed win rates in the win rates page when data is insufficient<br><br>
+
    To give feedback simply click on the discord link below:<br><br>
    
 <a href=${discordLink}

@@ -472,9 +472,8 @@ class Table {
 
     updateColorTheme(themeIdx) { // Currently not possible to restyle colorscale to custom ones
         console.log('updateColorTheme class')
-        themeIdx = 2
-        let update = { colorscale: this.colorScale, showscale: false  }
-        Plotly.restyle('chart2',update)
+        this.colorScale = this.colorScale2
+        this.plot()
     }
 
 }// close Table

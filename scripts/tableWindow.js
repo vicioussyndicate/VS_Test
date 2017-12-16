@@ -135,9 +135,11 @@ class TableWindow {
         this.overlayDiv.addEventListener('click',this.toggleOverlay.bind(this))
         //this.windowInfo.addEventListener('click',this.annotate.bind(this))
         this.nrGamesBtn.onclick = this.annotate.bind(this)
+        let changeColors = function () {this.updateColorTheme()}
+        document.querySelector('#tableWindow .changeColors').addEventListener('click',changeColors.bind(this))
 
         if (PREMIUM) {
-            var dlCSV = function () {this.data[this.f][this.t][this.r].downloadCSV()}
+            let dlCSV = function () {this.data[this.f][this.t][this.r].downloadCSV()}
             document.querySelector('#tableWindow .downloadTable').addEventListener('click',dlCSV.bind(this))
         }
     }
