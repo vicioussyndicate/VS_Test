@@ -319,6 +319,7 @@ class LadderWindow {
             this.archColors[hsFormat][hsClass].count = (count + 1)%5
             //if (this.archColors[hsFormat][hsClass].count > 4) {this.archColors[hsFormat][hsClass].count = 4}
             let color = hsArchColors[hsClass][this.archColors[hsFormat][archName]]
+
             return {color: color, fontColor: hsFontColors[hsClass]}
         }
     }

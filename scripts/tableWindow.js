@@ -136,11 +136,14 @@ class TableWindow {
         //this.windowInfo.addEventListener('click',this.annotate.bind(this))
         this.nrGamesBtn.onclick = this.annotate.bind(this)
         let changeColors = function () {this.updateColorTheme()}
-        document.querySelector('#tableWindow .changeColors').addEventListener('click',changeColors.bind(this))
+        document.querySelector('#tableWindow .changeColorBtn').addEventListener('click',changeColors.bind(this))
+
+        let equilibrium = function () {this.equilibrium()}
+        document.querySelector('#tableWindow .equilibriumBtn').addEventListener('click',equilibrium.bind(this))
 
         if (PREMIUM) {
             let dlCSV = function () {this.data[this.f][this.t][this.r].downloadCSV()}
-            document.querySelector('#tableWindow .downloadTable').addEventListener('click',dlCSV.bind(this))
+            document.querySelector('#tableWindow .downloadBtn').addEventListener('click',dlCSV.bind(this))
         }
     }
 
@@ -208,7 +211,11 @@ class TableWindow {
             this.overlay = true}
     }
 
-    updateColorTheme() { this.data[this.f][this.t][this.r].updateColorTheme(this.colorTheme); console.log('updateColorTheme') }
+    updateColorTheme() { 
+        MU_COLOR_IDX = (MU_COLOR_IDX + 1) % 3
+        this.data[this.f][this.t][this.r].plot();
+    }
+    equilibrium() { this.data[this.f][this.t][this.r].equilibrium() }
 
 } // close LadderWindow
 

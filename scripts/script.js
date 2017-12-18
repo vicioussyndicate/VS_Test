@@ -55,6 +55,7 @@ function finishedLoading() {
     decksWindow = new DecksWindow(hsFormats)
     powerWindow.plot()
     tableWindow.plot()
+    ladderWindow.plot()
 
     ui.fullyLoaded = true
     ui.hideLoader()

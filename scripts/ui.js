@@ -182,11 +182,11 @@ To get more information on the current tab simply click on the
 
 icon in the top right corner.<br><br>
 
-Upgrade to vS Gold to visit the gold version of this app. Check the link more inforomation:<br><br><br>
+Upgrade to vS Gold to visit the gold version of this app. Check the link more information:<br><br><br>
 
 <button id='basicBtn'>BASIC</button>
 <img src='Images/arrow.png' class='arrow'>
-<a href="https://www.vicioussyndicate.com/membership/ad-free-viewing/" target="_blank">
+<a href=${VSGOLDINFOLINK} target="_blank">
 <button id='premiumBtn'>GOLD</button>
 </a>
 
@@ -194,7 +194,7 @@ Upgrade to vS Gold to visit the gold version of this app. Check the link more in
 
 To give feedback simply click on the discord link below:<br><br><br>
 
-<a href=${discordLink}
+<a href=${DISCORDLINK}
    target="_blank"><img class='discordLogo' src="Images/discordLogo.png"></a><br><br>
 
 `
@@ -220,7 +220,7 @@ Thank you for using vS Live Gold.
 
 To give feedback simply click on the discord link below:<br><br><br>
 
-<a href=${discordLink}
+<a href=${DISCORDLINK}
    target="_blank"><img class='discordLogo' src="Images/discordLogo.png"></a><br><br>
 
 `
@@ -238,7 +238,7 @@ Greetings and thank you for checking out the VS Live Beta!<br><br>
 
    To give feedback simply click on the discord link below:<br><br>
    
-<a href=${discordLink}
+<a href=${DISCORDLINK}
    target="_blank"><img class='discordLogo' src="Images/discordLogo.png"></a><br><br>
 `
 

@@ -1,6 +1,8 @@
 
-const discordLink = 'https://discordapp.com/invite/0oxwpa5Mtc2VA2xC'
 
+const DISCORDLINK = 'https://discordapp.com/invite/0oxwpa5Mtc2VA2xC'
+const POLLLINK = 'https://docs.google.com/forms/d/e/1FAIpQLSel6ym_rJHduxkgeimzf9HdNbBMB5Kak7Fmk0Bl2O7O8XhVGg/viewform?usp=sf_link'
+const VSGOLDINFOLINK = 'https://www.vicioussyndicate.com/membership/vs-gold/'
 
 
 // Global Variables
@@ -24,7 +26,7 @@ const table_ranks =   ['ranks_all']
 const table_ranks_premium = ['ranks_all','ranks_L_5','ranks_6_15']
 
 
-
+var MU_COLOR_IDX = 0
 
 const hsRanks =       21
 const hsClasses =     ['Druid',"Hunter","Mage","Paladin","Priest","Rogue","Shaman","Warlock","Warrior"]

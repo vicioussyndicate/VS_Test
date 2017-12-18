@@ -27,32 +27,48 @@
     .chart-footer
         height 5%
         flex-direction row-reverse
+        justify-content normal
+        .chartFooterBtn
+            position relative
+            margin-left 1rem
+            background-color: #57a1c1; 
+            color #ebebeb
+            padding: 0.2rem 0.6rem 0.2rem 0.6rem
+            font-size:0.8rem;
+            text-align:center;
+            right 0
+            button
+                height 100%
+                background-color transparent
+                font-weight bold 
+            &:hover
+                background-color 
         //z-index 50
-        button
-            color black
-            font-size: 0.7rem
-            font-weight: bold
-            //padding 0.3rem
-            margin 0 auto
-            border 0.1rem solid #92fc64
-            border-radius 3%
-            &:hover
-                cursor:  pointer
-        .colorTheme
-            background-color #92fc64
-            left 0
-            position absolute
-            height 1.5rem
-            .changeColors
-                background-color #92fc64
-            &:hover
-                background-color: #b7ff54
-                border-color: #b7ff54
-        .downloadTable
-            border 0.1rem solid rgb(87, 161, 193)
-            background-color rgb(87, 161, 193)
-            color $lightColor
-            height 1.5rem
-            &:hover
-                background-color: rgb(100, 170, 200)
-                border-color: rgb(100, 170, 200)
+        // button
+        //     color black
+        //     font-size: 0.7rem
+        //     font-weight: bold
+        //     //padding 0.3rem
+        //     margin 0 auto
+        //     border 0.1rem solid #92fc64
+        //     border-radius 3%
+        //     &:hover
+        //         cursor:  pointer
+        // .colorTheme
+        //     background-color #92fc64
+        //     left 0
+        //     position absolute
+        //     height 1.5rem
+        //     .changeColors
+        //         background-color #92fc64
+        //     &:hover
+        //         background-color: #b7ff54
+        //         border-color: #b7ff54
+        // .downloadTable
+        //     border 0.1rem solid rgb(87, 161, 193)
+        //     background-color rgb(87, 161, 193)
+        //     color $lightColor
+        //     height 1.5rem
+        //     &:hover
+        //         background-color: rgb(100, 170, 200)
+        //         border-color: rgb(100, 170, 200)

@@ -22,7 +22,7 @@ class Table {
         this.minGames = 20
         this.whiteTile = 0.50000001
         this.blackTile = 0.51
-        this.colorScale =  [
+        let cs_1 =  [ // Green Blue
             [0, '#a04608'],
             [0.3, '#d65900'],
             [0.5, '#FFFFFF'],
@@ -31,9 +31,16 @@ class Table {
             // [this.blackTile+0.0000001,'#FFFFFF'],
             [0.7,'#00a2bc'],
             [1, '#055c7a']
-        ];
+        ]
+        let cs_2 = [
+            [0, '#a04608'],
+            [0.3, '#d65900'],
+            [0.5, '#FFFFFF'],
+            [0.7,'#279e27'],
+            [1, '#28733d']
+        ]
 
-        this.colorScale2 =  [
+        let cs_3 =  [
             [0, '#000'],
             [0.3, '#222'],
             [0.5, '#FFFFFF'],
@@ -41,7 +48,7 @@ class Table {
             [1, '#999']
         ];
 
-        this.colorThemes = [ this.colorScale, this.colorScale2]
+        this.colorScales = [ cs_1, cs_2, cs_3]
 
         this.table = []
         this.textTable = []
@@ -223,7 +230,7 @@ class Table {
             y: arch,
             text: textTable,
             hoverinfo: 'text',
-            colorscale: this.colorScale,
+            colorscale: this.colorScales[MU_COLOR_IDX],
             showscale: false,
         }
 
@@ -252,7 +259,7 @@ class Table {
         if (this.window.annotated) {data.push(this.getAnnotations())}
 
         Plotly.newPlot('chart2',data,this.layout,{displayModeBar: false})
-        if (PREMIUM) {
+        if (PREMIUM) { // enable zoom in for premium users
             document.getElementById('chart2').on('plotly_click', this.zoomToggle.bind(this))
         }
 
@@ -263,8 +270,6 @@ class Table {
         this.window.setTotGames()
        
     }
-
-
 
 
     subPlotFR() { Plotly.restyle('chart2',this.freqPlotData,1) }
@@ -470,14 +475,112 @@ class Table {
         return tr
     }
 
-    updateColorTheme(themeIdx) { // Currently not possible to restyle colorscale to custom ones
-        console.log('updateColorTheme class')
-        this.colorScale = this.colorScale2
-        this.plot()
+    equilibrium() {
+        ui.showLoader()
+        let data = this.freqPlotData
+        let arch_names = data.x[0]
+        let arch_freq = data.y[0]
+        let totFr = 0
+        for (let a of arch_freq) {totFr += a}
+        let matrix = this.table
+        let max_itt = 1000*50
+        let layout = {
+                xaxis: {
+                    type: 'log',
+                    autorange: true
+                },
+                yaxis: { range: [0,1] },
+                hovermode: 'closest',
+                plot_bgcolor: 'transparent',
+                paper_bgcolor: this.bgColor,
+            
+        }
+
+        let archetypes = []
+        for (let i=0;i<arch_names.length;i++) {
+            archetypes.push({
+                idx: i,
+                itt: 0,
+                name: arch_names[i],
+                fr: arch_freq[i]/totFr,
+                trace: [],
+                wr: 0.5,
+            })
+        }
+
+        // Iterate
+        for (var i=0;i<max_itt;i++) {
+            //if (i%1000== 0) {console.log(i)}
+            this.eq_wr(archetypes,matrix)
+            this.eq_fr(archetypes)
+        }
+
+        // traces
+        let traces = []
+        for (let i=0;i<archetypes.length; i++) {
+            let a = archetypes[i]
+            let color = ladderWindow.getArchColor(null, a.name, this.f).color
+            let trace = {
+                name: a.name,
+                x: range(0,max_itt),
+                y: a.trace,
+                fill: 'tonexty',
+                fillcolor: color,
+                type: 'scatter',
+                mode: 'none',
+                marker: {
+                    size: 0,
+                    line: {size: 0},
+                }
+            }
+            traces.push(trace)
+        }
+        Plotly.newPlot('chart2', this.stackedArea(traces), layout);
+        ui.hideLoader()
+    }
+
+    stackedArea(traces) {
+        for(var i=1; i<traces.length; i++) {
+            for(var j=0; j<(Math.min(traces[i]['y'].length, traces[i-1]['y'].length)); j++) {
+                traces[i]['y'][j] += traces[i-1]['y'][j];
+            }
+        }
+        return traces;
+    }
+
+    eq_wr(archetypes,matrix) {
+        let freq = archetypes.map(a => a.fr);
+        for (let i=0;i<archetypes.length;i++) {
+            archetypes[i].wr = 0
+            for (let j=0;j<archetypes.length;j++) { archetypes[i].wr += matrix[i][j]*freq[j] }
+        }
+    }
+
+    eq_fr(archetypes) {
+        let fr_min = 0.0001
+        let damping = 0.1 // Damping
+        var sortByIdx = function (a,b) {return a.idx > b.idx ? -1: a.idx < b.idx ? 1 : 0 ;}
+        var sortByWr = function (a,b) {return a.wr < b.wr ? -1: a.wr > b.wr ? 1 : 0 ;}
+
+        archetypes.sort(sortByWr) // 0: smallest wr
+        let frTot = 0
+        for (let i=0;i<archetypes.length;i++) { archetypes[i].trace.push(archetypes[i].fr) }
+        for (let i=0;i<archetypes.length;i++) {
+
+            let a = archetypes[i]
+            if (a.wr > 0.5) { continue }
+
+            let d_fr = a.fr*(0.5 - a.wr)*damping
+            d_fr = (a.fr - d_fr >= fr_min) ? d_fr : a.fr - fr_min
+            a.fr -= d_fr
+
+            let d_fr_prop = d_fr/ (archetypes.length - i -1)
+            for (let j=i+1; j<archetypes.length;j++) { archetypes[j].fr += d_fr_prop }
+        }
+        archetypes.sort(sortByIdx)
     }
 
 }// close Table
-
 
 
 

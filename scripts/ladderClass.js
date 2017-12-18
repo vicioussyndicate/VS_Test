@@ -536,6 +536,8 @@ class Ladder {
         if (this.window.plotType == 'number') {
             this.createTable(this.window.mode)
             this.window.setGraphTitle()
+            this.window.nrGames = this.totGames 
+            this.window.setGraphTitle()
             return
         }
 

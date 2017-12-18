@@ -54,7 +54,7 @@ function reloadBasic() {
 function finishedLoading() {
     tableWindow.fullyLoaded && ladderWindow.fullyLoaded && (powerWindow = new PowerWindow(), 
     decksWindow = new DecksWindow(hsFormats), powerWindow.plot(), tableWindow.plot(), 
-    ui.fullyLoaded = !0, ui.hideLoader(), console.log("App initializing took " + (performance.now() - t0) + " ms."));
+    ladderWindow.plot(), ui.fullyLoaded = !0, ui.hideLoader(), console.log("App initializing took " + (performance.now() - t0) + " ms."));
 }
 
 function choice(t) {
@@ -389,9 +389,9 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                                         var w = this.data[n][u].archetypes.length - 1, g = t[n][u].archetypes[k], T = Object.keys(g), x = !0, C = !1, L = void 0;
                                         try {
                                             for (var S, W = T[Symbol.iterator](); !(x = (S = W.next()).done); x = !0) {
-                                                var M = S.value;
-                                                g[M];
-                                                this.data[n][u].archetypes[w].decklists.push(g[M]);
+                                                var _ = S.value;
+                                                g[_];
+                                                this.data[n][u].archetypes[w].decklists.push(g[_]);
                                             }
                                         } catch (t) {
                                             C = !0, L = t;
@@ -861,18 +861,18 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                 this.totGamesRanks[T.buttonId] = 0;
                 var x = [], C = !0, L = !1, S = void 0;
                 try {
-                    for (var W, M = hsClasses[Symbol.iterator](); !(C = (W = M.next()).done); C = !0) v = W.value, 
+                    for (var W, _ = hsClasses[Symbol.iterator](); !(C = (W = _.next()).done); C = !0) v = W.value, 
                     x.push(hsColors[v]);
                 } catch (t) {
                     L = !0, S = t;
                 } finally {
                     try {
-                        !C && M.return && M.return();
+                        !C && _.return && _.return();
                     } finally {
                         if (L) throw S;
                     }
                 }
-                var B = {
+                var M = {
                     values: fillRange(0, hsClasses.length, 0),
                     labels: hsClasses.slice(),
                     marker: {
@@ -906,7 +906,7 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                     },
                     text: [],
                     type: "pie"
-                } ], this.traces_pie.classes[T.buttonId] = [ B ];
+                } ], this.traces_pie.classes[T.buttonId] = [ M ];
             }
         } catch (t) {
             b = !0, k = t;
@@ -917,52 +917,52 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                 if (b) throw k;
             }
         }
-        var _ = e.archetypes, I = e.gamesPerRank;
+        var B = e.archetypes, I = e.gamesPerRank;
         this.rankSums = e.gamesPerRank;
-        for (var D = this.smoothLadder(e.rankData, I.slice()), E = this.smoothLadder(e.classRankData, I.slice()), q = 0; q < hsRanks; q++) {
-            q % 5 == 0 ? this.rankLabels.push(q + "  ") : this.rankLabels.push(""), this.totGames += I[q];
-            var H = !0, F = !1, A = void 0;
+        for (var D = this.smoothLadder(e.rankData, I.slice()), q = this.smoothLadder(e.classRankData, I.slice()), E = 0; E < hsRanks; E++) {
+            E % 5 == 0 ? this.rankLabels.push(E + "  ") : this.rankLabels.push(""), this.totGames += I[E];
+            var F = !0, H = !1, A = void 0;
             try {
-                for (var R, O = this.tiers[Symbol.iterator](); !(H = (R = O.next()).done); H = !0) {
-                    q >= (T = R.value).start && q <= T.end && (this.totGamesRanks[T.buttonId] += I[q]);
+                for (var R, O = this.tiers[Symbol.iterator](); !(F = (R = O.next()).done); F = !0) {
+                    E >= (T = R.value).start && E <= T.end && (this.totGamesRanks[T.buttonId] += I[E]);
                 }
             } catch (t) {
-                F = !0, A = t;
+                H = !0, A = t;
             } finally {
                 try {
-                    !H && O.return && O.return();
+                    !F && O.return && O.return();
                 } finally {
-                    if (F) throw A;
+                    if (H) throw A;
                 }
             }
         }
         this.rankLabels[0] = "L  ";
-        for (q = 0; q < _.length; q++) {
-            var P = [], z = [], G = [], N = 0, U = _[q][1] + " " + _[q][0].replace("§", ""), Y = hsClasses.indexOf(_[q][0]), X = this.window.getArchColor(_[q][0], _[q][1], this.f), V = X.fontColor;
-            X = X.color;
-            for (var j = 0; j < hsRanks; j++) {
-                var Z = D[j][q];
-                z.push(Z), G.push("<b>" + U + "     </b><br>freq: " + (100 * Z).toFixed(1) + "%"), 
-                Z < this.fr_min && q > 8 && (this.traces_bar.decks[Y].y[j] += Z, Z = 0), N += Z, 
-                P.push(Z);
-                var K = !0, J = !1, Q = void 0;
+        for (E = 0; E < B.length; E++) {
+            var P = [], z = [], G = [], N = 0, U = B[E][1] + " " + B[E][0].replace("§", ""), X = hsClasses.indexOf(B[E][0]), Y = this.window.getArchColor(B[E][0], B[E][1], this.f), V = Y.fontColor;
+            Y = Y.color;
+            for (var K = 0; K < hsRanks; K++) {
+                var j = D[K][E];
+                z.push(j), G.push("<b>" + U + "     </b><br>freq: " + (100 * j).toFixed(1) + "%"), 
+                j < this.fr_min && E > 8 && (this.traces_bar.decks[X].y[K] += j, j = 0), N += j, 
+                P.push(j);
+                var Z = !0, J = !1, Q = void 0;
                 try {
-                    for (var $, tt = this.tiers[Symbol.iterator](); !(K = ($ = tt.next()).done); K = !0) {
-                        if (j == (T = $.value).start && (this.traces_pie.decks[T.buttonId][0].values.push(Z), 
-                        this.traces_pie.decks[T.buttonId][0].labels.push(U), this.traces_pie.decks[T.buttonId][0].marker.colors.push(X)), 
-                        j > T.start && j <= T.end && (this.traces_pie.decks[T.buttonId][0].values[q] += Z), 
-                        j == T.end) {
-                            this.traces_pie.decks[T.buttonId][0].values[q] /= T.end - T.start + 1, this.traces_pie.decks[T.buttonId][0].text.push(U);
-                            var et = this.traces_pie.decks[T.buttonId][0].values[q];
-                            et < this.fr_min && q > 8 && (this.traces_pie.decks[T.buttonId][0].values[q] = 0, 
-                            this.traces_pie.decks[T.buttonId][0].values[Y] += et);
+                    for (var $, tt = this.tiers[Symbol.iterator](); !(Z = ($ = tt.next()).done); Z = !0) {
+                        if (K == (T = $.value).start && (this.traces_pie.decks[T.buttonId][0].values.push(j), 
+                        this.traces_pie.decks[T.buttonId][0].labels.push(U), this.traces_pie.decks[T.buttonId][0].marker.colors.push(Y)), 
+                        K > T.start && K <= T.end && (this.traces_pie.decks[T.buttonId][0].values[E] += j), 
+                        K == T.end) {
+                            this.traces_pie.decks[T.buttonId][0].values[E] /= T.end - T.start + 1, this.traces_pie.decks[T.buttonId][0].text.push(U);
+                            var et = this.traces_pie.decks[T.buttonId][0].values[E];
+                            et < this.fr_min && E > 8 && (this.traces_pie.decks[T.buttonId][0].values[E] = 0, 
+                            this.traces_pie.decks[T.buttonId][0].values[X] += et);
                         }
                     }
                 } catch (t) {
                     J = !0, Q = t;
                 } finally {
                     try {
-                        !K && tt.return && tt.return();
+                        !Z && tt.return && tt.return();
                     } finally {
                         if (J) throw Q;
                     }
@@ -976,11 +976,11 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                 text: G,
                 hoverinfo: "text",
                 marker: {
-                    color: X
+                    color: Y
                 },
                 type: "bar",
                 winrate: 0,
-                hsClass: _[q][0] + _[q][1]
+                hsClass: B[E][0] + B[E][1]
             }, rt = {
                 x: range(0, hsRanks),
                 y: z.slice(),
@@ -989,7 +989,7 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                 hoverinfo: "text",
                 orientation: "h",
                 marker: {
-                    color: X
+                    color: Y
                 },
                 line: {
                     width: this.lineWidth
@@ -997,35 +997,35 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                 type: "scatter",
                 mode: "lines",
                 winrate: 0,
-                hsClass: _[q][0] + _[q][1],
+                hsClass: B[E][0] + B[E][1],
                 fr: N
             };
             this.traces_bar.decks.push(it), this.traces_line.decks.push(rt), this.archLegend.push({
                 name: U,
-                hsClass: _[q][0],
-                color: X,
+                hsClass: B[E][0],
+                color: Y,
                 fontColor: V,
                 fr: N
             }), this.archetypes.push({
                 name: U,
-                hsClass: _[q][0],
+                hsClass: B[E][0],
                 fr: N,
                 data: z.slice(),
-                color: X,
+                color: Y,
                 fontColor: V
             });
         }
-        for (q = 0; q < 9; q++) {
-            v = hsClasses[q];
+        for (E = 0; E < 9; E++) {
+            v = hsClasses[E];
             var at = [], st = [];
-            for (N = 0, j = 0; j < hsRanks; j++) {
-                Z = E[j][q];
-                at.push(Z), st.push(v + " " + (100 * Z).toFixed(2) + "%"), N += Z;
+            for (N = 0, K = 0; K < hsRanks; K++) {
+                j = q[K][E];
+                at.push(j), st.push(v + " " + (100 * j).toFixed(2) + "%"), N += j;
                 var nt = !0, ot = !1, lt = void 0;
                 try {
                     for (var ht, dt = this.tiers[Symbol.iterator](); !(nt = (ht = dt.next()).done); nt = !0) {
-                        j >= (T = ht.value).start && j <= T.end && (this.traces_pie.classes[T.buttonId][0].values[q] += Z), 
-                        j == T.end && (this.traces_pie.classes[T.buttonId][0].values[q] /= T.end - T.start + 1);
+                        K >= (T = ht.value).start && K <= T.end && (this.traces_pie.classes[T.buttonId][0].values[E] += j), 
+                        K == T.end && (this.traces_pie.classes[T.buttonId][0].values[E] /= T.end - T.start + 1);
                     }
                 } catch (t) {
                     ot = !0, lt = t;
@@ -1042,8 +1042,8 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                 for (var mt, vt = this.archetypes[Symbol.iterator](); !(ut = (mt = vt.next()).done); ut = !0) {
                     if ((Lt = mt.value).hsClass == v) {
                         var pt = [], bt = [];
-                        for (N = 0, j = 0; j < hsRanks; j++) ct[j] += Lt.data[j], pt.push(""), bt.push(Lt.data[j]), 
-                        N += Lt.data[j];
+                        for (N = 0, K = 0; K < hsRanks; K++) ct[K] += Lt.data[K], pt.push(""), bt.push(Lt.data[K]), 
+                        N += Lt.data[K];
                         var kt = {
                             x: range(0, hsRanks),
                             y: Lt.data.slice(),
@@ -1075,7 +1075,7 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
             try {
                 for (var xt, Ct = this.traces_zoom[v][Symbol.iterator](); !(wt = (xt = Ct.next()).done); wt = !0) {
                     var Lt = xt.value;
-                    for (j = 0; j < hsRanks; j++) Lt.y[j] /= ct[j] > 0 ? ct[j] : 1, Lt.text[j] = Lt.name + "<br>" + (100 * Lt.y[j]).toFixed(1) + "% of " + Lt.hsClass + "<br>" + (100 * Lt.overall[j]).toFixed(1) + "% overall";
+                    for (K = 0; K < hsRanks; K++) Lt.y[K] /= ct[K] > 0 ? ct[K] : 1, Lt.text[K] = Lt.name + "<br>" + (100 * Lt.y[K]).toFixed(1) + "% of " + Lt.hsClass + "<br>" + (100 * Lt.overall[K]).toFixed(1) + "% overall";
                 }
             } catch (t) {
                 gt = !0, Tt = t;
@@ -1239,14 +1239,14 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                 t: 30
             }
         };
-        var Mt = function(t, e) {
+        var _t = function(t, e) {
             return t.hsClass < e.hsClass ? -1 : t.hsClass > e.hsClass ? 1 : 0;
-        }, Bt = function(t, e) {
+        }, Mt = function(t, e) {
             return t.fr > e.fr ? -1 : t.fr < e.fr ? 1 : 0;
         };
-        this.traces_bar.classes.sort(Mt), this.traces_line.classes.sort(Bt), this.traces_line.classes.splice(this.maxLines), 
-        this.traces_bar.decks.sort(Mt), this.traces_line.decks.sort(Bt), this.traces_line.decks.splice(this.maxLines), 
-        this.archLegend.sort(Bt), this.archetypes.sort(Bt);
+        this.traces_bar.classes.sort(_t), this.traces_line.classes.sort(Mt), this.traces_line.classes.splice(this.maxLines), 
+        this.traces_bar.decks.sort(_t), this.traces_line.decks.sort(Mt), this.traces_line.decks.splice(this.maxLines), 
+        this.archLegend.sort(Mt), this.archetypes.sort(Mt);
     }
     return _createClass(t, [ {
         key: "smoothLadder",
@@ -1868,7 +1868,7 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
             for (;this.chartFooter.firstChild; ) this.chartFooter.removeChild(this.chartFooter.firstChild);
         }
     } ]), t;
-}(), discordLink = "https://discordapp.com/invite/0oxwpa5Mtc2VA2xC", ladder_times = [ "lastDay", "last2Weeks" ], ladder_times_premium = [ "last6Hours", "last12Hours", "lastDay", "last3Days", "lastWeek", "last2Weeks" ], ladder_ranks = [ "ranks_all" ], ladder_ranks_premium = [ "ranks_all", "ranks_L_5", "ranks_6_15" ], ladder_plotTypes = [], table_times = [ "last2Weeks" ], table_times_premium = [ "last3Days", "lastWeek", "last2Weeks" ], table_sortOptions = [ "frequency" ], table_sortOptions_premium = [ "frequency", "class", "winrate", "matchup" ], table_ranks = [ "ranks_all" ], table_ranks_premium = [ "ranks_all", "ranks_L_5", "ranks_6_15" ], hsRanks = 21, hsClasses = [ "Druid", "Hunter", "Mage", "Paladin", "Priest", "Rogue", "Shaman", "Warlock", "Warrior" ], hsFormats = [ "Standard", "Wild" ], rankRange = {
+}(), DISCORDLINK = "https://discordapp.com/invite/0oxwpa5Mtc2VA2xC", POLLLINK = "https://docs.google.com/forms/d/e/1FAIpQLSel6ym_rJHduxkgeimzf9HdNbBMB5Kak7Fmk0Bl2O7O8XhVGg/viewform?usp=sf_link", VSGOLDINFOLINK = "https://www.vicioussyndicate.com/membership/vs-gold/", ladder_times = [ "lastDay", "last2Weeks" ], ladder_times_premium = [ "last6Hours", "last12Hours", "lastDay", "last3Days", "lastWeek", "last2Weeks" ], ladder_ranks = [ "ranks_all" ], ladder_ranks_premium = [ "ranks_all", "ranks_L_5", "ranks_6_15" ], ladder_plotTypes = [], table_times = [ "last2Weeks" ], table_times_premium = [ "last3Days", "lastWeek", "last2Weeks" ], table_sortOptions = [ "frequency" ], table_sortOptions_premium = [ "frequency", "class", "winrate", "matchup" ], table_ranks = [ "ranks_all" ], table_ranks_premium = [ "ranks_all", "ranks_L_5", "ranks_6_15" ], MU_COLOR_IDX = 0, hsRanks = 21, hsClasses = [ "Druid", "Hunter", "Mage", "Paladin", "Priest", "Rogue", "Shaman", "Warlock", "Warrior" ], hsFormats = [ "Standard", "Wild" ], rankRange = {
     ranks_all: [ 0, 20 ],
     ranks_L: [ 0, 0 ],
     ranks_1_5: [ 1, 5 ],
@@ -2128,10 +2128,10 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                             color: f.color,
                             fontColor: f.fontColor
                         });
-                        var S = !0, W = !1, M = void 0;
+                        var S = !0, W = !1, _ = void 0;
                         try {
-                            for (var B, _ = this.tiers[Symbol.iterator](); !(S = (B = _.next()).done); S = !0) {
-                                var I = B.value, D = this.tierData[t][I.name];
+                            for (var M, B = this.tiers[Symbol.iterator](); !(S = (M = B.next()).done); S = !0) {
+                                var I = M.value, D = this.tierData[t][I.name];
                                 r == I.start && D.push({
                                     name: f.name,
                                     wr: p,
@@ -2143,12 +2143,12 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                                 r == I.end && D[D.length - 1].count > 0 && (D[D.length - 1].wr /= D[D.length - 1].count);
                             }
                         } catch (t) {
-                            W = !0, M = t;
+                            W = !0, _ = t;
                         } finally {
                             try {
-                                !S && _.return && _.return();
+                                !S && B.return && B.return();
                             } finally {
-                                if (W) throw M;
+                                if (W) throw _;
                             }
                         }
                     }
@@ -2162,23 +2162,23 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                     if (d) throw c;
                 }
             }
-            var E = function(t, e) {
+            var q = function(t, e) {
                 return t.wr > e.wr ? -1 : t.wr < e.wr ? 1 : 0;
             };
-            for (r = 0; r < hsRanks; r++) this.data[t][r].sort(E);
-            var q = !0, H = !1, F = void 0;
+            for (r = 0; r < hsRanks; r++) this.data[t][r].sort(q);
+            var E = !0, F = !1, H = void 0;
             try {
-                for (var A, R = this.tiers[Symbol.iterator](); !(q = (A = R.next()).done); q = !0) {
+                for (var A, R = this.tiers[Symbol.iterator](); !(E = (A = R.next()).done); E = !0) {
                     I = A.value;
-                    this.tierData[t][I.name].sort(E);
+                    this.tierData[t][I.name].sort(q);
                 }
             } catch (t) {
-                H = !0, F = t;
+                F = !0, H = t;
             } finally {
                 try {
-                    !q && R.return && R.return();
+                    !E && R.return && R.return();
                 } finally {
-                    if (H) throw F;
+                    if (F) throw H;
                 }
             }
         }
@@ -2287,11 +2287,10 @@ var Table = function() {
         _classCallCheck(this, t), this.DATA = e, this.f = i, this.t = r, this.r = a, this.window = s, 
         this.sortBy = "", this.numArch = this.window.top, this.bgColor = "transparent", 
         this.fontColor = "#22222", this.subplotRatio = .6, this.overallString = '<b style="font-size:130%">Overall</b>', 
-        this.minGames = 20, this.whiteTile = .50000001, this.blackTile = .51, this.colorScale = [ [ 0, "#a04608" ], [ .3, "#d65900" ], [ .5, "#FFFFFF" ], [ .7, "#00a2bc" ], [ 1, "#055c7a" ] ], 
-        this.colorScale2 = [ [ 0, "#000" ], [ .3, "#222" ], [ .5, "#FFFFFF" ], [ .7, "#888" ], [ 1, "#999" ] ], 
-        this.colorThemes = [ this.colorScale, this.colorScale2 ], this.table = [], this.textTable = [], 
-        this.frequency = [], this.archetypes = [], this.classPlusArch = [], this.winrates = [], 
-        this.totGames = 0, this.download = "";
+        this.minGames = 20, this.whiteTile = .50000001, this.blackTile = .51;
+        this.colorScales = [ [ [ 0, "#a04608" ], [ .3, "#d65900" ], [ .5, "#FFFFFF" ], [ .7, "#00a2bc" ], [ 1, "#055c7a" ] ], [ [ 0, "#a04608" ], [ .3, "#d65900" ], [ .5, "#FFFFFF" ], [ .7, "#279e27" ], [ 1, "#28733d" ] ], [ [ 0, "#000" ], [ .3, "#222" ], [ .5, "#FFFFFF" ], [ .7, "#888" ], [ 1, "#999" ] ] ], 
+        this.table = [], this.textTable = [], this.frequency = [], this.archetypes = [], 
+        this.classPlusArch = [], this.winrates = [], this.totGames = 0, this.download = "";
         var n = e.frequency.slice(), o = e.table.slice(), l = e.archetypes.slice();
         this.numArch > l.length && (this.numArch = l.length);
         var h = range(0, n.length);
@@ -2389,7 +2388,7 @@ var Table = function() {
                 y: i,
                 text: s,
                 hoverinfo: "text",
-                colorscale: this.colorScale,
+                colorscale: this.colorScales[MU_COLOR_IDX],
                 showscale: !1
             }, {
                 visible: !1,
@@ -2558,9 +2557,97 @@ var Table = function() {
             return e;
         }
     }, {
-        key: "updateColorTheme",
+        key: "equilibrium",
+        value: function() {
+            ui.showLoader();
+            var t = this.freqPlotData, e = t.x[0], i = t.y[0], r = 0, a = !0, s = !1, n = void 0;
+            try {
+                for (var o, l = i[Symbol.iterator](); !(a = (o = l.next()).done); a = !0) {
+                    r += o.value;
+                }
+            } catch (t) {
+                s = !0, n = t;
+            } finally {
+                try {
+                    !a && l.return && l.return();
+                } finally {
+                    if (s) throw n;
+                }
+            }
+            for (var h = this.table, d = {
+                xaxis: {
+                    type: "log",
+                    autorange: !0
+                },
+                yaxis: {
+                    range: [ 0, 1 ]
+                },
+                hovermode: "closest",
+                plot_bgcolor: "transparent",
+                paper_bgcolor: this.bgColor
+            }, c = [], u = 0; u < e.length; u++) c.push({
+                idx: u,
+                itt: 0,
+                name: e[u],
+                fr: i[u] / r,
+                trace: [],
+                wr: .5
+            });
+            for (var y = 0; y < 5e4; y++) this.eq_wr(c, h), this.eq_fr(c);
+            for (var f = [], m = 0; m < c.length; m++) {
+                var v = c[m], p = ladderWindow.getArchColor(null, v.name, this.f).color, b = {
+                    name: v.name,
+                    x: range(0, 5e4),
+                    y: v.trace,
+                    fill: "tonexty",
+                    fillcolor: p,
+                    type: "scatter",
+                    mode: "none",
+                    marker: {
+                        size: 0,
+                        line: {
+                            size: 0
+                        }
+                    }
+                };
+                f.push(b);
+            }
+            Plotly.newPlot("chart2", this.stackedArea(f), d), ui.hideLoader();
+        }
+    }, {
+        key: "stackedArea",
         value: function(t) {
-            console.log("updateColorTheme class"), this.colorScale = this.colorScale2, this.plot();
+            for (var e = 1; e < t.length; e++) for (var i = 0; i < Math.min(t[e].y.length, t[e - 1].y.length); i++) t[e].y[i] += t[e - 1].y[i];
+            return t;
+        }
+    }, {
+        key: "eq_wr",
+        value: function(t, e) {
+            for (var i = t.map(function(t) {
+                return t.fr;
+            }), r = 0; r < t.length; r++) {
+                t[r].wr = 0;
+                for (var a = 0; a < t.length; a++) t[r].wr += e[r][a] * i[a];
+            }
+        }
+    }, {
+        key: "eq_fr",
+        value: function(t) {
+            t.sort(function(t, e) {
+                return t.wr < e.wr ? -1 : t.wr > e.wr ? 1 : 0;
+            });
+            for (var e = 0; e < t.length; e++) t[e].trace.push(t[e].fr);
+            for (var i = 0; i < t.length; i++) {
+                var r = t[i];
+                if (!(r.wr > .5)) {
+                    var a = r.fr * (.5 - r.wr) * .1;
+                    a = r.fr - a >= 1e-4 ? a : r.fr - 1e-4, r.fr -= a;
+                    for (var s = a / (t.length - i - 1), n = i + 1; n < t.length; n++) t[n].fr += s;
+                }
+            }
+            t.sort(function(t, e) {
+                return t.idx > e.idx ? -1 : t.idx < e.idx ? 1 : 0;
+            });
         }
     } ]), t;
 }(), TableWindow = function() {
@@ -2707,12 +2794,15 @@ var Table = function() {
                     if (w) throw g;
                 }
             }
-            if (this.questionBtn.addEventListener("click", this.toggleOverlay.bind(this)), this.overlayDiv.addEventListener("click", this.toggleOverlay.bind(this)), 
-            this.nrGamesBtn.onclick = this.annotate.bind(this), changeColors = function() {
+            this.questionBtn.addEventListener("click", this.toggleOverlay.bind(this)), this.overlayDiv.addEventListener("click", this.toggleOverlay.bind(this)), 
+            this.nrGamesBtn.onclick = this.annotate.bind(this);
+            document.querySelector("#tableWindow .changeColorBtn").addEventListener("click", function() {
                 this.updateColorTheme();
-            }, document.querySelector("#tableWindow .changeColors").addEventListener("click", changeColors.bind(this)), 
-            PREMIUM) {
-                document.querySelector("#tableWindow .downloadTable").addEventListener("click", function() {
+            }.bind(this));
+            if (document.querySelector("#tableWindow .equilibriumBtn").addEventListener("click", function() {
+                this.equilibrium();
+            }.bind(this)), PREMIUM) {
+                document.querySelector("#tableWindow .downloadBtn").addEventListener("click", function() {
                     this.data[this.f][this.t][this.r].downloadCSV();
                 }.bind(this));
             }
@@ -2821,7 +2911,12 @@ var Table = function() {
     }, {
         key: "updateColorTheme",
         value: function() {
-            this.data[this.f][this.t][this.r].updateColorTheme(this.colorTheme), console.log("updateColorTheme");
+            MU_COLOR_IDX = (MU_COLOR_IDX + 1) % 3, this.data[this.f][this.t][this.r].plot();
+        }
+    }, {
+        key: "equilibrium",
+        value: function() {
+            this.data[this.f][this.t][this.r].equilibrium();
         }
     } ]), t;
 }(), UI = function() {
@@ -2998,4 +3093,4 @@ var Table = function() {
             this.overlay = !0);
         }
     } ]), t;
-}(), overlayText1 = "\n\n<span style='font-size:200%;font-weight:bold;padding-left:2rem;'>Greetings Travelers,</span><br><br><br>\n\nWelcome to the VS Live web app where you can explore the newest Hearthstone data and find \n\nout about frequency and win rates of your favorite decks.<br><br>\n\nTo get more information on the current tab simply click on the \n\n    <div class='fa fa-question-circle' style='display:inline-block'></div>\n\nicon in the top right corner.<br><br>\n\nUpgrade to vS Gold to visit the gold version of this app. Check the link more inforomation:<br><br><br>\n\n<button id='basicBtn'>BASIC</button>\n<img src='Images/arrow.png' class='arrow'>\n<a href=\"https://www.vicioussyndicate.com/membership/ad-free-viewing/\" target=\"_blank\">\n<button id='premiumBtn'>GOLD</button>\n</a>\n\n<br><br>\n\nTo give feedback simply click on the discord link below:<br><br><br>\n\n<a href=" + discordLink + '\n   target="_blank"><img class=\'discordLogo\' src="Images/discordLogo.png"></a><br><br>\n\n', overlayText2 = "\n\n<span style='font-size:200%;font-weight:bold;padding-left:2rem'>Greetings Travelers,</span><br><br><br>\n\nWelcome to the VS Live web app where you can explore the newest Hearthstone data and find \n\nout about frequency and win rates of your favorite decks.<br><br>\n\nTo get more information on the current tab simply click on the \n\n    <div class='fa fa-question-circle' style='display:inline-block'></div>\n\nicon in the top right corner.<br><br>\n\nThank you for using vS Live Gold.\n\n<br><br>\n\nTo give feedback simply click on the discord link below:<br><br><br>\n\n<a href=" + discordLink + '\n   target="_blank"><img class=\'discordLogo\' src="Images/discordLogo.png"></a><br><br>\n\n', infoWindowText = "\n\nGreetings and thank you for checking out the VS Live Beta!<br><br>\n\n    Update 16-12-2017:<br><br>\n    - App refresh button in the top right corner added<br>\n    - Chose color theme for the matchup table added<br>\n    - Outdated archetypes no longer show in the overview page<br>\n    - Fixed win rates in the win rates page when data is insufficient<br><br>\n\n   To give feedback simply click on the discord link below:<br><br>\n   \n<a href=" + discordLink + '\n   target="_blank"><img class=\'discordLogo\' src="Images/discordLogo.png"></a><br><br>\n';
+}(), overlayText1 = "\n\n<span style='font-size:200%;font-weight:bold;padding-left:2rem;'>Greetings Travelers,</span><br><br><br>\n\nWelcome to the VS Live web app where you can explore the newest Hearthstone data and find \n\nout about frequency and win rates of your favorite decks.<br><br>\n\nTo get more information on the current tab simply click on the \n\n    <div class='fa fa-question-circle' style='display:inline-block'></div>\n\nicon in the top right corner.<br><br>\n\nUpgrade to vS Gold to visit the gold version of this app. Check the link more information:<br><br><br>\n\n<button id='basicBtn'>BASIC</button>\n<img src='Images/arrow.png' class='arrow'>\n<a href=" + VSGOLDINFOLINK + " target=\"_blank\">\n<button id='premiumBtn'>GOLD</button>\n</a>\n\n<br><br>\n\nTo give feedback simply click on the discord link below:<br><br><br>\n\n<a href=" + DISCORDLINK + '\n   target="_blank"><img class=\'discordLogo\' src="Images/discordLogo.png"></a><br><br>\n\n', overlayText2 = "\n\n<span style='font-size:200%;font-weight:bold;padding-left:2rem'>Greetings Travelers,</span><br><br><br>\n\nWelcome to the VS Live web app where you can explore the newest Hearthstone data and find \n\nout about frequency and win rates of your favorite decks.<br><br>\n\nTo get more information on the current tab simply click on the \n\n    <div class='fa fa-question-circle' style='display:inline-block'></div>\n\nicon in the top right corner.<br><br>\n\nThank you for using vS Live Gold.\n\n<br><br>\n\nTo give feedback simply click on the discord link below:<br><br><br>\n\n<a href=" + DISCORDLINK + '\n   target="_blank"><img class=\'discordLogo\' src="Images/discordLogo.png"></a><br><br>\n\n', infoWindowText = "\n\nGreetings and thank you for checking out the VS Live Beta!<br><br>\n\n    Update 16-12-2017:<br><br>\n    - App refresh button in the top right corner added<br>\n    - Chose color theme for the matchup table added<br>\n    - Outdated archetypes no longer show in the overview page<br>\n    - Fixed win rates in the win rates page when data is insufficient<br><br>\n\n   To give feedback simply click on the discord link below:<br><br>\n   \n<a href=" + DISCORDLINK + '\n   target="_blank"><img class=\'discordLogo\' src="Images/discordLogo.png"></a><br><br>\n';
