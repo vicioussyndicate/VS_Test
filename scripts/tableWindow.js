@@ -22,7 +22,7 @@ class TableWindow {
         this.hsTimes = hsTimes
         this.ranks = table_ranks
         this.sortOptions = sortOptions //['frequency','winrate','matchup','class']
-        this.top = 16
+        this.numArch = 16
         this.annotated = false
         this.nrGames = 0
         this.colorTheme = 0 // 0: red blue,  1: red green
@@ -30,7 +30,7 @@ class TableWindow {
         this.overlayText = `
             Here you can see how your deck on the left hand side performs against any other deck on the top. 
             The colors range  from favorable <span class='blue'>blue</span> to unfavorable <span class='red'>red</span>.<br><br>
-            The matchup table lists the top ${this.top} most frequent decks within the selected time and rank brackets.<br><br>
+            The matchup table lists the top ${this.numArch} most frequent decks within the selected time and rank brackets.<br><br>
             The hover info lists the number of games recorded for that specific matchup in the (parenthesis).<br><br>
             The 'Overall' line at the bottom shows the overall winrate of the opposing decks in the specified time and rank bracket.<br><br>
             Sorting the table displays the most frequent/ highest winrate deck in the top left. Changing the format, time or rank brackets automatically sorts the table.<br><br>
@@ -138,10 +138,10 @@ class TableWindow {
         let changeColors = function () {this.updateColorTheme()}
         document.querySelector('#tableWindow .changeColorBtn').addEventListener('click',changeColors.bind(this))
 
-        let equilibrium = function () {this.equilibrium()}
-        document.querySelector('#tableWindow .equilibriumBtn').addEventListener('click',equilibrium.bind(this))
-
         if (PREMIUM) {
+            let equilibrium = function () {this.equilibrium()}
+            document.querySelector('#tableWindow .equilibriumBtn').addEventListener('click',equilibrium.bind(this))
+
             let dlCSV = function () {this.data[this.f][this.t][this.r].downloadCSV()}
             document.querySelector('#tableWindow .downloadBtn').addEventListener('click',dlCSV.bind(this))
         }

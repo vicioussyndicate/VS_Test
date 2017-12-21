@@ -405,15 +405,15 @@ class Ladder {
 
         // LAYOUT Pie
         this.layout_pie = {
-		    showlegend: false,
-		    displayModeBar: false,
+            showlegend: false,
+            displayModeBar: false,
             autosize: true,
             textinfo: 'label+percent',
             
-		    hovermode: 'closest',
+            hovermode: 'closest',
             
-		    
-		    plot_bgcolor: 'transparent',//this.bgColor, 
+            
+            plot_bgcolor: 'transparent',//this.bgColor, 
             paper_bgcolor: 'transparent',//this.bgColor,
             margin: {l:70,r:20,b:30,t:30,},
         }

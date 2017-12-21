@@ -41,6 +41,12 @@ const rankRange = {
     ranks_6_15:     [6,15],
 }
 
+function tier_classifier(wr) {
+    if (wr < 0.47) {return 4}
+    if (wr < 0.5)  {return 3}
+    if (wr < 0.52) {return 2}
+    return 1
+}
 
 
 const cardDust = {

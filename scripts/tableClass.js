@@ -14,7 +14,7 @@ class Table {
         this.window = window
 
         this.sortBy = ''
-        this.numArch = (f == 'Standard') ? this.window.top : this.window.top;
+        this.numArch = (f == 'Standard') ? this.window.numArch : this.window.numArch;
         this.bgColor = 'transparent'
         this.fontColor = '#22222'
         this.subplotRatio = 0.6
@@ -65,7 +65,11 @@ class Table {
         var FR =            DATA.frequency.slice()
         var TABLE =         DATA.table.slice()
         var ARCHETYPES =    DATA.archetypes.slice()
-        if (this.numArch > ARCHETYPES.length) {this.numArch = ARCHETYPES.length}    
+        if (this.numArch > ARCHETYPES.length) {this.numArch = ARCHETYPES.length}
+
+        // this.m_raw =    DATA.table.slice()
+        // this.fr_raw =   Data.frequency.slice()
+        // this.arch_raw = Data.archetypes.slice()
     
 
         // Take only the most common
@@ -475,6 +479,22 @@ class Table {
         return tr
     }
 
+    getWr(archname) {
+        let data = this.freqPlotData
+        let arch_names = data.x[0]
+        let arch_freq = data.y[0]
+
+
+        let idx = arch_names.indexOf(archname)
+        if (idx < 0) { return 0 }
+
+        let matrix = this.table
+        let wr = 0
+
+        for (let i=0; i<arch_names.length; i++) { wr += matrix[idx][i] * arch_freq[i] }
+        return wr
+    }
+
     equilibrium() {
         ui.showLoader()
         let data = this.freqPlotData
@@ -485,15 +505,21 @@ class Table {
         let matrix = this.table
         let max_itt = 1000*50
         let layout = {
+                title: 'Meta Simulation',
                 xaxis: {
                     type: 'log',
-                    autorange: true
+                    autorange: true,
+                    title: 'Iteration step of simulation (logarithmically)',
+                    opacity: 0.5,
                 },
-                yaxis: { range: [0,1] },
+                yaxis: { 
+                    range: [0,1],
+                    title: 'Share of Meta',
+                    opacity: 0.5,
+                },
                 hovermode: 'closest',
                 plot_bgcolor: 'transparent',
                 paper_bgcolor: this.bgColor,
-            
         }
 
         let archetypes = []
@@ -549,17 +575,18 @@ class Table {
     }
 
     eq_wr(archetypes,matrix) {
-        let freq = archetypes.map(a => a.fr);
         for (let i=0;i<archetypes.length;i++) {
             archetypes[i].wr = 0
-            for (let j=0;j<archetypes.length;j++) { archetypes[i].wr += matrix[i][j]*freq[j] }
+            for (let j=0;j<archetypes.length;j++) { 
+                archetypes[i].wr += matrix[i][j]*archetypes[j].fr
+            }
         }
     }
 
     eq_fr(archetypes) {
         let fr_min = 0.0001
         let damping = 0.1 // Damping
-        var sortByIdx = function (a,b) {return a.idx > b.idx ? -1: a.idx < b.idx ? 1 : 0 ;}
+        var sortByIdx = function (a,b) {return a.idx < b.idx ? -1: a.idx > b.idx ? 1 : 0 ;}
         var sortByWr = function (a,b) {return a.wr < b.wr ? -1: a.wr > b.wr ? 1 : 0 ;}
 
         archetypes.sort(sortByWr) // 0: smallest wr

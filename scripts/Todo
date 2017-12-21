@@ -7,12 +7,4 @@ Matchup table: insufficient data download -> empty
 
 
 
-updated 19.10.17
 
-- gradient for header/navigation
-- rotating colors for archetypes
-- switch colorscale for matchup -> buggy
-- moved links to parameter.js
-- Typo fix in welcom page
-- Bug which did not display game numbers in the "numbers" table
-- 

@@ -41,6 +41,10 @@ function loadFireData() {
     ladderWindow = new LadderWindow(hsFormats, ladder_times, ladder_ranks), tableWindow = new TableWindow(hsFormats, table_times, table_ranks, table_sortOptions));
 }
 
+function tier_classifier(t) {
+    return t < .47 ? 4 : t < .5 ? 3 : t < .52 ? 2 : 1;
+}
+
 function reloadApp() {
     ui.showLoader(), ui.loggedIn = !1, setupFirebase();
 }
@@ -79,6 +83,35 @@ function shuffle(t) {
     for (var e, i, r = t.length; 0 !== r; ) i = Math.floor(Math.random() * r), e = t[r -= 1], 
     t[r] = t[i], t[i] = e;
     return t;
+}
+
+function normalize(t) {
+    var e = 0, i = !0, r = !1, a = void 0;
+    try {
+        for (var s, n = t[Symbol.iterator](); !(i = (s = n.next()).done); i = !0) {
+            var o = s.value;
+            e += Math.abs(o);
+        }
+    } catch (t) {
+        r = !0, a = t;
+    } finally {
+        try {
+            !i && n.return && n.return();
+        } finally {
+            if (r) throw a;
+        }
+    }
+    if (1 == e || 0 == e) return t;
+    for (var l = 0; l < t.length; l++) t[l] /= e;
+    return t;
+}
+
+function matrixXvector(t, e) {
+    for (var i = [], r = normalize(e), a = 0; a < e.length; a++) {
+        for (var s = 0, n = 0; n < e.length; n++) s += r[n] * t[a][n];
+        i.push(s);
+    }
+    return i;
 }
 
 function detectswipe(t, e) {
@@ -137,52 +170,61 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
             }
         }), this.decklist = document.createElement("div"), this.decklist.className = "decklist", 
         this.decklist.id = e.name;
-        var s = !0, n = !1, o = void 0;
+        var s = {
+            Free: 0,
+            Basic: 0,
+            Common: 0,
+            Rare: 0,
+            Epic: 0,
+            Legendary: 0
+        }, n = !0, o = !1, l = void 0;
         try {
-            for (var l, h = e.cards[Symbol.iterator](); !(s = (l = h.next()).done); s = !0) {
-                var d = l.value;
-                this.cardNames.push(d.name);
-                var c = new CardDiv(d);
-                c.hoverDiv.onmouseover = this.window.highlight.bind(this.window), c.hoverDiv.onmouseout = this.window.highlight.bind(this.window), 
-                this.cards.push(c), this.dust += c.dust * c.quantity;
-                var u = c.cost >= 10 ? 10 : c.cost;
-                this.manaBin[u] += parseInt(c.quantity), this.decklist.appendChild(c.div);
+            for (var h, d = e.cards[Symbol.iterator](); !(n = (h = d.next()).done); n = !0) {
+                var c = h.value;
+                this.cardNames.push(c.name), s[c.rarity] += 1;
+                var u = new CardDiv(c);
+                u.hoverDiv.onmouseover = this.window.highlight.bind(this.window), u.hoverDiv.onmouseout = this.window.highlight.bind(this.window), 
+                this.cards.push(u), this.dust += u.dust * u.quantity;
+                var y = u.cost >= 10 ? 10 : u.cost;
+                this.manaBin[y] += parseInt(u.quantity), this.decklist.appendChild(u.div);
             }
         } catch (t) {
-            n = !0, o = t;
+            o = !0, l = t;
         } finally {
             try {
-                !s && h.return && h.return();
+                !n && d.return && d.return();
             } finally {
-                if (n) throw o;
+                if (o) throw l;
             }
         }
         this.deckinfo = document.createElement("div"), this.deckinfo.className = "decklist deckinfo", 
         this.deckinfo.id = e.name;
-        var y = document.createElement("p");
-        y.innerHTML = "Manacurve", y.className = "manacurve", this.deckinfo.appendChild(y), 
+        var f = document.createElement("p");
+        f.innerHTML = "Manacurve", f.className = "manacurve", this.deckinfo.appendChild(f), 
         this.chart = document.createElement("div"), this.chartId = "chartId:" + randint(0, 1e8), 
         this.chart.id = this.chartId, this.chart.className = "manaChart", this.deckinfo.appendChild(this.chart);
-        var f = document.createElement("div"), m = document.createElement("p");
+        var v = document.createElement("div"), m = document.createElement("p");
         m.innerHTML = this.dust + "  ", m.className = "dustInfo";
-        var v = document.createElement("img");
-        v.src = "Images/dust.png", v.className = "dustImg", f.appendChild(m), f.appendChild(v), 
-        this.deckinfo.appendChild(f);
-        var p = document.createElement("p");
-        p.className = "cardtypes";
-        var b = "";
-        e.cardTypes.Minion >= 10 ? b += e.cardTypes.Minion + " Minions<br>" : 1 == e.cardTypes.Minion ? b += e.cardTypes.Minion + "  Minion<br>" : b += e.cardTypes.Minion + "  Minions<br>", 
-        e.cardTypes.Spell >= 10 ? b += e.cardTypes.Spell + " Spells<br>" : 1 == e.cardTypes.Spell ? b += e.cardTypes.Spell + "  Spell<br>" : b += e.cardTypes.Spell + "  Spells<br>", 
-        e.cardTypes.Weapon && (b += e.cardTypes.Weapon + "  Weapons<br>"), e.cardTypes.Hero && (b += e.cardTypes.Hero + "  Hero<br>"), 
-        p.innerHTML = b, this.deckinfo.appendChild(p);
-        var k = document.createElement("p");
-        k.className = "author", k.innerHTML = "Author: " + e.author, this.deckinfo.appendChild(k);
+        var p = document.createElement("img");
+        p.src = "Images/dust.png", p.className = "dustImg";
+        var b = document.createElement("p");
+        b.innerHTML = "L: " + s.Legendary + " E: " + s.Epic + " \n                                R: " + s.Rare + " C: " + s.Common + " \n                                B: " + (s.Basic + s.Free), 
+        b.className = "dustInfo", v.appendChild(m), v.appendChild(p), this.deckinfo.appendChild(v);
         var w = document.createElement("p");
-        if (w.className = "timestamp", w.innerHTML = "Updated " + e.timestamp, this.deckinfo.appendChild(w), 
+        w.className = "cardtypes";
+        var k = "";
+        e.cardTypes.Minion >= 10 ? k += e.cardTypes.Minion + " Minions<br>" : 1 == e.cardTypes.Minion ? k += e.cardTypes.Minion + "  Minion<br>" : k += e.cardTypes.Minion + "  Minions<br>", 
+        e.cardTypes.Spell >= 10 ? k += e.cardTypes.Spell + " Spells<br>" : 1 == e.cardTypes.Spell ? k += e.cardTypes.Spell + "  Spell<br>" : k += e.cardTypes.Spell + "  Spells<br>", 
+        e.cardTypes.Weapon && (k += e.cardTypes.Weapon + "  Weapons<br>"), e.cardTypes.Hero && (k += e.cardTypes.Hero + "  Hero<br>"), 
+        w.innerHTML = k, this.deckinfo.appendChild(w);
+        var g = document.createElement("p");
+        g.className = "author", g.innerHTML = "Author: " + e.author, this.deckinfo.appendChild(g);
+        var x = document.createElement("p");
+        if (x.className = "timestamp", x.innerHTML = "Updated " + e.timestamp, this.deckinfo.appendChild(x), 
         "" != e.gameplay) {
-            var g = document.createElement("a");
-            g.href = "https://www.reddit.com/r/ViciousSyndicate/comments/6yqj62/vs_live_web_app_feedback_thread/", 
-            g.target = "_blank", g.className = "gameplay", g.innerHTML = "Gameplay", this.deckinfo.appendChild(g);
+            var T = document.createElement("a");
+            T.href = "https://www.reddit.com/r/ViciousSyndicate/comments/6yqj62/vs_live_web_app_feedback_thread/", 
+            T.target = "_blank", T.className = "gameplay", T.innerHTML = "Gameplay", this.deckinfo.appendChild(T);
         }
         this.div.appendChild(this.deckTitle), this.div.appendChild(this.decklist), this.div.appendChild(this.deckinfo);
     }
@@ -254,59 +296,145 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
     this.quantity > 1 && ((n = document.createElement("div")).innerHTML = "x" + this.quantity, 
     n.className = "quantity"), i.appendChild(r), i.appendChild(a), this.div.appendChild(i), 
     this.div.appendChild(s), this.quantity > 1 && this.div.appendChild(n), this.div.appendChild(this.hoverDiv);
-}, DecksWindow = function() {
+}, Sidebar = function() {
+    function t(e, i) {
+        _classCallCheck(this, t), this.div = e, this.titleDiv = document.createElement("div"), 
+        this.titleDiv.className = "title", this.setTitle(i), this.div.appendChild(this.titleDiv), 
+        this.archBtnsDiv = document.createElement("div"), this.archBtnsDiv.className = "archBtnList", 
+        this.div.appendChild(this.archBtnsDiv), this.archList = [], this.archBtns = [], 
+        this.hidden = !1;
+    }
+    return _createClass(t, [ {
+        key: "setTitle",
+        value: function(t) {
+            this.titleDiv.innerHTML = t;
+        }
+    }, {
+        key: "loadClass",
+        value: function(t) {
+            this.removeBtn(), this.archetypes = t.archetypes;
+            var e = !0, i = !1, r = void 0;
+            try {
+                for (var a, s = this.archetypes[Symbol.iterator](); !(e = (a = s.next()).done); e = !0) {
+                    var n = a.value;
+                    this.addArchBtn(n);
+                }
+            } catch (t) {
+                i = !0, r = t;
+            } finally {
+                try {
+                    !e && s.return && s.return();
+                } finally {
+                    if (i) throw r;
+                }
+            }
+        }
+    }, {
+        key: "addArchBtn",
+        value: function(t) {
+            var e = document.createElement("div");
+            e.className = "archBtnWrapper";
+            var i = document.createElement("div");
+            i.id = t.name, i.className = "archBtn", i.style.color = hsFontColors[t.hsClass], 
+            i.style.backgroundColor = hsColors[t.hsClass], i.innerHTML = t.name, i.addEventListener("click", decksWindow.buttonTrigger.bind(decksWindow)), 
+            e.appendChild(i);
+            var r = document.createElement("div");
+            r.className = "wrDiv", r.innerHTML = "Tier " + tier_classifier(t.wr), e.appendChild(r), 
+            this.archBtns.push(e), this.archBtnsDiv.appendChild(e);
+        }
+    }, {
+        key: "removeBtn",
+        value: function() {
+            for (var t = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : null, e = 0; e < this.archBtns.length; e++) {
+                var i = this.archList[e], r = this.archBtns[e];
+                if (null == t) return this.archBtnsDiv.innerHTML = "", void (this.archList = []);
+                if (i.name == t) return this.archList.del(i), void this.archBtnsDiv.removeChild(r);
+            }
+        }
+    }, {
+        key: "hide",
+        value: function() {
+            this.hidden || (this.div.classList.add("hidden"), this.hidden = !1);
+        }
+    }, {
+        key: "show",
+        value: function() {
+            this.div.classList.remove("hidden"), this.hidden = !0;
+        }
+    } ]), t;
+}(), DecksWindow = function() {
     function t(e) {
-        _classCallCheck(this, t), this.hsFormats = e, this.archDiv = document.querySelector("#decksWindow .content .archetypes .archetypeList"), 
+        _classCallCheck(this, t), this.hsFormats = e, this.chartDiv = document.querySelector("#decksWindow .content .chart"), 
         this.descriptionBox = document.querySelector("#decksWindow .content .descriptionBox"), 
         this.decksDiv = document.querySelector("#decksWindow .content .decklists"), this.description = document.querySelector("#decksWindow .content .descriptionBox .description"), 
         this.overlayDiv = document.querySelector("#decksWindow .overlay"), this.overlayP = document.querySelector("#decksWindow .overlayText"), 
-        this.questionBtn = document.querySelector("#decksWindow .question"), this.overlayText = "\n            Select <span class='optionBtn'>Description</span> to see the latest report on that class.\n            Select <span class='optionBtn'>Deck Lists</span> to see the latest deck lists on that class.<br><br>\n            Select any archetype on the left side to see all the decklists of that archetype.<br><br>\n            Hover over the deck title to copy or get more information on that decklist.<br><br>\n            <img src='Images/clickOnDeckTitle.png'><br><br>\n            Tips:<br><br>\n            • When you hover over a card of a decklist it highlights all cards with the same name in the other decklists.<br><br>\n        ", 
+        this.questionBtn = document.querySelector("#decksWindow .question"), this.subWindows = [ this.descriptionBox, this.decksDiv, this.chartDiv ];
+        var i = document.querySelector("#decksWindow .content .sidebar.left"), r = document.querySelector("#decksWindow .content .sidebar.right1"), a = document.querySelector("#decksWindow .content .sidebar.right2");
+        this.sidebarLeft = new Sidebar(i, "Archetypes"), this.sidebarRightTop = new Sidebar(r, "Best vs"), 
+        this.sidebarRightBot = new Sidebar(a, "Worst vs"), this.overlayText = "\n            Select <span class='optionBtn'>Description</span> to see the latest report on that class.\n            Select <span class='optionBtn'>Deck Lists</span> to see the latest deck lists on that class.<br><br>\n            Select any archetype on the left side to see all the decklists of that archetype.<br><br>\n            Hover over the deck title to copy or get more information on that decklist.<br><br>\n            <img src='Images/clickOnDeckTitle.png'><br><br>\n            Tips:<br><br>\n            • When you hover over a card of a decklist it highlights all cards with the same name in the other decklists.<br><br>\n        ", 
         this.firebasePath = "deckData", this.archButtons = [], this.optionButtons = document.querySelectorAll("#decksWindow .optionBtn");
-        var i = !0, r = !1, a = void 0;
+        var s = !0, n = !1, o = void 0;
         try {
-            for (var s, n = this.optionButtons[Symbol.iterator](); !(i = (s = n.next()).done); i = !0) {
-                s.value.addEventListener("click", this.buttonTrigger.bind(this));
+            for (var l, h = this.optionButtons[Symbol.iterator](); !(s = (l = h.next()).done); s = !0) {
+                l.value.addEventListener("click", this.buttonTrigger.bind(this));
             }
         } catch (t) {
-            r = !0, a = t;
+            n = !0, o = t;
         } finally {
             try {
-                !i && n.return && n.return();
+                !s && h.return && h.return();
             } finally {
-                if (r) throw a;
+                if (n) throw o;
             }
         }
         this.f = "Standard", this.hsClass = "Druid", this.hsArch = null, this.mode = "description", 
-        this.deckWidth = "12rem", this.fullyLoaded = !1, this.overlay = !1, this.decklists = [], 
-        this.data = {};
-        var o = !0, l = !1, h = void 0;
+        this.deckWidth = "12rem", this.fullyLoaded = !1, this.overlay = !1, this.MU_table = {}, 
+        this.MU_archNames = {}, this.MU_fr = {}, this.MU_wr = {}, this.data = {};
+        var d = tableWindow.hsTimes.slice(-1)[0], c = ladder_ranks[0], u = !0, y = !1, f = void 0;
         try {
-            for (var d, c = this.hsFormats[Symbol.iterator](); !(o = (d = c.next()).done); o = !0) {
-                var u = d.value;
-                this.data[u] = {};
-                var y = !0, f = !1, m = void 0;
+            for (var v, m = this.hsFormats[Symbol.iterator](); !(u = (v = m.next()).done); u = !0) {
+                var p = v.value, b = tableWindow.data[p][d][c];
+                this.data[p] = {}, this.data[p].data = b.DATA, this.MU_archNames[p] = b.freqPlotData.x[0], 
+                this.MU_table[p] = b.table, this.MU_fr[p] = b.freqPlotData.y[0], this.MU_wr[p] = matrixXvector(this.MU_table[p], this.MU_fr[p]);
+            }
+        } catch (t) {
+            y = !0, f = t;
+        } finally {
+            try {
+                !u && m.return && m.return();
+            } finally {
+                if (y) throw f;
+            }
+        }
+        this.decklists = [], this.allArchetypes = {};
+        var w = !0, k = !1, g = void 0;
+        try {
+            for (var x, T = this.hsFormats[Symbol.iterator](); !(w = (x = T.next()).done); w = !0) {
+                var C = x.value;
+                this.allArchetypes[C] = [];
+                var L = !0, S = !1, W = void 0;
                 try {
-                    for (var v, p = hsClasses[Symbol.iterator](); !(y = (v = p.next()).done); y = !0) {
-                        var b = v.value;
-                        this.data[u][b] = {}, this.data[u][b].archetypes = [], this.data[u][b].text = "";
+                    for (var _, M = hsClasses[Symbol.iterator](); !(L = (_ = M.next()).done); L = !0) {
+                        var B = _.value;
+                        this.data[C][B] = {}, this.data[C][B].archetypes = [], this.data[C][B].text = "";
                     }
                 } catch (t) {
-                    f = !0, m = t;
+                    S = !0, W = t;
                 } finally {
                     try {
-                        !y && p.return && p.return();
+                        !L && M.return && M.return();
                     } finally {
-                        if (f) throw m;
+                        if (S) throw W;
                     }
                 }
             }
         } catch (t) {
-            l = !0, h = t;
+            k = !0, g = t;
         } finally {
             try {
-                !o && c.return && c.return();
+                !w && T.return && T.return();
             } finally {
-                if (l) throw h;
+                if (k) throw g;
             }
         }
         this.renderOptions(), this.questionBtn.addEventListener("click", this.toggleOverlay.bind(this)), 
@@ -317,9 +445,39 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
         value: function(t) {
             var e = t.target.id;
             t.target.classList.contains("archBtn") && this.deckLink(e, this.f), -1 != hsClasses.indexOf(e) && (this.hsArch = null, 
-            this.loadClass(e)), "decklists" == e && this.loadDecklists(), "description" == e && this.loadDescription(), 
-            "Standard" == e && this.loadFormat("Standard"), "Wild" == e && this.loadFormat("Wild"), 
-            this.renderOptions();
+            this.loadClass(e)), "overview" == e && this.plotDustWr(), "decklists" == e && this.loadDecklists(), 
+            "description" == e && this.loadDescription(), "Standard" == e && this.loadFormat("Standard"), 
+            "Wild" == e && this.loadFormat("Wild"), this.renderWindows(), this.renderOptions();
+        }
+    }, {
+        key: "renderWindows",
+        value: function() {
+            var t = !0, e = !1, i = void 0;
+            try {
+                for (var r, a = this.subWindows[Symbol.iterator](); !(t = (r = a.next()).done); t = !0) {
+                    r.value.style.display = "none";
+                }
+            } catch (t) {
+                e = !0, i = t;
+            } finally {
+                try {
+                    !t && a.return && a.return();
+                } finally {
+                    if (e) throw i;
+                }
+            }
+            switch (this.mode) {
+              case "description":
+                this.descriptionBox.style.display = "inline";
+                break;
+
+              case "decklists":
+                this.decksDiv.style.display = "grid";
+                break;
+
+              case "overview":
+                this.chartDiv.style.display = "inline-block";
+            }
         }
     }, {
         key: "renderOptions",
@@ -376,40 +534,43 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                             for (var d, c = hsClasses[Symbol.iterator](); !(o = (d = c.next()).done); o = !0) {
                                 var u = d.value;
                                 this.data[n][u].text = t[n][u].text;
-                                var y = Object.keys(t[n][u].archetypes), f = !0, m = !1, v = void 0;
+                                var y = Object.keys(t[n][u].archetypes), f = !0, v = !1, m = void 0;
                                 try {
                                     for (var p, b = y[Symbol.iterator](); !(f = (p = b.next()).done); f = !0) {
-                                        var k = p.value;
-                                        this.data[n][u].archetypes.push({
-                                            name: k,
+                                        var w = p.value, k = 0, g = 0, x = this.MU_archNames[n].indexOf(w);
+                                        x >= 0 && (k = this.MU_wr[n][x], g = this.MU_fr[n][x]);
+                                        var T = {
+                                            name: w,
                                             hsClass: u,
                                             hsFormat: n,
-                                            decklists: []
-                                        });
-                                        var w = this.data[n][u].archetypes.length - 1, g = t[n][u].archetypes[k], T = Object.keys(g), x = !0, C = !1, L = void 0;
+                                            decklists: [],
+                                            wr: k,
+                                            fr: g
+                                        };
+                                        this.allArchetypes[n].push(T), this.data[n][u].archetypes.push(T);
+                                        var C = this.data[n][u].archetypes.length - 1, L = t[n][u].archetypes[w], S = Object.keys(L), W = !0, _ = !1, M = void 0;
                                         try {
-                                            for (var S, W = T[Symbol.iterator](); !(x = (S = W.next()).done); x = !0) {
-                                                var _ = S.value;
-                                                g[_];
-                                                this.data[n][u].archetypes[w].decklists.push(g[_]);
+                                            for (var B, D = S[Symbol.iterator](); !(W = (B = D.next()).done); W = !0) {
+                                                var I = B.value, E = new Decklist(L[I], u, this);
+                                                this.data[n][u].archetypes[C].decklists.push(E);
                                             }
                                         } catch (t) {
-                                            C = !0, L = t;
+                                            _ = !0, M = t;
                                         } finally {
                                             try {
-                                                !x && W.return && W.return();
+                                                !W && D.return && D.return();
                                             } finally {
-                                                if (C) throw L;
+                                                if (_) throw M;
                                             }
                                         }
                                     }
                                 } catch (t) {
-                                    m = !0, v = t;
+                                    v = !0, m = t;
                                 } finally {
                                     try {
                                         !f && b.return && b.return();
                                     } finally {
-                                        if (m) throw v;
+                                        if (v) throw m;
                                     }
                                 }
                             }
@@ -450,10 +611,10 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                     -1 != t.indexOf(h) && (i = h);
                     var d = this.data[e][h].archetypes, c = !0, u = !1, y = void 0;
                     try {
-                        for (var f, m = d[Symbol.iterator](); !(c = (f = m.next()).done); c = !0) {
-                            var v = f.value;
-                            if (v.name == t) {
-                                i = h, r = v;
+                        for (var f, v = d[Symbol.iterator](); !(c = (f = v.next()).done); c = !0) {
+                            var m = f.value;
+                            if (m.name == t) {
+                                i = h, r = m;
                                 break;
                             }
                         }
@@ -461,7 +622,7 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                         u = !0, y = t;
                     } finally {
                         try {
-                            !c && m.return && m.return();
+                            !c && v.return && v.return();
                         } finally {
                             if (u) throw y;
                         }
@@ -482,7 +643,7 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
     }, {
         key: "plot",
         value: function() {
-            this.fullyLoaded && this.loadFormat(this.f);
+            this.fullyLoaded && (this.mode, this.loadFormat(this.f));
         }
     }, {
         key: "loadFormat",
@@ -493,45 +654,33 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
         key: "loadClass",
         value: function(t) {
             this.hsClass = t, "description" == this.mode && this.loadDescription(), "decklists" == this.mode && this.loadDecklists(), 
-            this.archDiv.innerHTML = "";
-            var e = this.data[this.f][this.hsClass].archetypes, i = !0, r = !1, a = void 0;
-            try {
-                for (var s, n = e[Symbol.iterator](); !(i = (s = n.next()).done); i = !0) {
-                    var o = s.value;
-                    this.addArchetypeBtn(o);
-                }
-            } catch (t) {
-                r = !0, a = t;
-            } finally {
-                try {
-                    !i && n.return && n.return();
-                } finally {
-                    if (r) throw a;
-                }
-            }
+            this.sidebarLeft.loadClass(this.data[this.f][this.hsClass]);
+            var e = this.data[this.f][this.hsClass].archetypes;
             e.length > 0 && null == this.hsArch && (this.hsArch = e[0]);
         }
     }, {
         key: "loadDescription",
         value: function() {
-            this.mode = "description";
+            this.mode = "description", this.renderWindows();
             var t = this.data[this.f][this.hsClass];
-            this.addDescription(this.hsClass, t.text), this.descriptionBox.style.display = "inline", 
-            this.decksDiv.style.display = "none";
+            this.addDescription(this.hsClass, t.text);
+        }
+    }, {
+        key: "addDescription",
+        value: function(t, e) {
+            this.description.innerHTML = '<p class="title">' + t + '</p><p class="text">' + e + "</p>";
         }
     }, {
         key: "loadDecklists",
         value: function() {
-            if (this.mode = "decklists", this.decklists = [], this.decksDiv.innerHTML = "", 
+            if (this.mode = "decklists", this.renderWindows(), this.decklists = [], this.decksDiv.innerHTML = "", 
             null == this.hsArch && (this.hsArch = this.data[this.f][this.hsClass].archetypes[0]), 
             void 0 != this.hsArch) {
                 var t = "", e = !0, i = !1, r = void 0;
                 try {
                     for (var a, s = this.hsArch.decklists[Symbol.iterator](); !(e = (a = s.next()).done); e = !0) {
                         var n = a.value;
-                        t += this.deckWidth + " ";
-                        var o = new Decklist(n, this.hsClass, this);
-                        this.decklists.push(o), this.decksDiv.appendChild(o.div);
+                        t += this.deckWidth + " ", this.decklists.push(n), this.decksDiv.appendChild(n.div);
                     }
                 } catch (t) {
                     i = !0, r = t;
@@ -542,9 +691,98 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                         if (i) throw r;
                     }
                 }
-                this.descriptionBox.style.display = "none", this.decksDiv.style.display = "grid", 
-                this.decksDiv.style.gridTemplateColumns = t;
+                this.decksDiv.style.gridTemplateColumns = t, this.loadDecklistsMatchups(this.hsArch);
             } else this.hsArch = null;
+        }
+    }, {
+        key: "findArch",
+        value: function(t) {
+            var e = !0, i = !1, r = void 0;
+            try {
+                for (var a, s = hsClasses[Symbol.iterator](); !(e = (a = s.next()).done); e = !0) {
+                    var n = a.value, o = !0, l = !1, h = void 0;
+                    try {
+                        for (var d, c = this.data[this.f][n].archetypes[Symbol.iterator](); !(o = (d = c.next()).done); o = !0) {
+                            var u = d.value;
+                            if (u.name == t) return u;
+                        }
+                    } catch (t) {
+                        l = !0, h = t;
+                    } finally {
+                        try {
+                            !o && c.return && c.return();
+                        } finally {
+                            if (l) throw h;
+                        }
+                    }
+                }
+            } catch (t) {
+                i = !0, r = t;
+            } finally {
+                try {
+                    !e && s.return && s.return();
+                } finally {
+                    if (i) throw r;
+                }
+            }
+        }
+    }, {
+        key: "loadDecklistsMatchups",
+        value: function(t) {
+            var e = [], i = [];
+            if (t.wr > 0) {
+                var r = this.MU_table[this.f], a = this.MU_archNames[this.f], s = a.indexOf(t.name);
+                -1 == s && (t.wr = 0, this.loadDecklistsMatchups(t));
+                for (var n = 0; n < 3; n++) {
+                    var o = .48, l = .52;
+                    e.push(null), i.push(null);
+                    for (var h = 0; h < a.length; h++) {
+                        if (console.log("mu:", r[s][h]), r[s][h] > l) {
+                            if (-1 == e.indexOf(a[h])) break;
+                            console.log("-- Succes!", e), e[n] = a[h], console.log(e), l = r[s][h];
+                        }
+                        r[s][h] < o && -1 != i.indexOf(a[h]) && (console.log("Success 2"), i[n] = a[h], 
+                        o = r[s][h]);
+                    }
+                }
+                this.sidebarRightTop.removeBtn(), this.sidebarRightBot.removeBtn(), console.log("matchups:", e, i);
+                var d = !0, c = !1, u = void 0;
+                try {
+                    for (var y, f = e[Symbol.iterator](); !(d = (y = f.next()).done); d = !0) {
+                        var v = y.value;
+                        if (null != v) {
+                            var m = this.findArch(v);
+                            this.sidebarRightTop.addArchBtn(m);
+                        }
+                    }
+                } catch (t) {
+                    c = !0, u = t;
+                } finally {
+                    try {
+                        !d && f.return && f.return();
+                    } finally {
+                        if (c) throw u;
+                    }
+                }
+                var p = !0, b = !1, w = void 0;
+                try {
+                    for (var k, g = i[Symbol.iterator](); !(p = (k = g.next()).done); p = !0) {
+                        var x = k.value;
+                        if (null != x) {
+                            var T = this.findArch(x);
+                            this.sidebarRightBot.addArchBtn(T);
+                        }
+                    }
+                } catch (t) {
+                    b = !0, w = t;
+                } finally {
+                    try {
+                        !p && g.return && g.return();
+                    } finally {
+                        if (b) throw w;
+                    }
+                }
+            }
         }
     }, {
         key: "highlight",
@@ -584,22 +822,100 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
             }
         }
     }, {
-        key: "highlightUnique",
+        key: "plotDustWr",
+        value: function() {
+            this.mode = "overview", this.renderWindows();
+            var t = this.allArchetypes[this.f], e = [], i = 48e3, r = 0, a = !0, s = !1, n = void 0;
+            try {
+                for (var o, l = t[Symbol.iterator](); !(a = (o = l.next()).done); a = !0) {
+                    var h = o.value;
+                    if (0 != h.wr) {
+                        var d = !0, c = !1, u = void 0;
+                        try {
+                            for (var y, f = h.decklists[Symbol.iterator](); !(d = (y = f.next()).done); d = !0) {
+                                var v = y.value;
+                                v.dust < i && (i = v.dust), v.dust > r && (r = v.dust), e.push({
+                                    x: [ v.dust ],
+                                    y: [ h.wr ],
+                                    text: "<b>" + v.name + "</b><br>Winrate: " + (100 * h.wr).toFixed(2) + "%<br>Dust Cost: " + v.dust,
+                                    hoverinfo: "text",
+                                    name: v.name,
+                                    mode: "markers",
+                                    type: "scatter",
+                                    marker: {
+                                        color: hsColors[h.hsClass],
+                                        size: 15,
+                                        line: {
+                                            color: "#3e3e3e80",
+                                            width: 1
+                                        }
+                                    }
+                                });
+                            }
+                        } catch (t) {
+                            c = !0, u = t;
+                        } finally {
+                            try {
+                                !d && f.return && f.return();
+                            } finally {
+                                if (c) throw u;
+                            }
+                        }
+                    }
+                }
+            } catch (t) {
+                s = !0, n = t;
+            } finally {
+                try {
+                    !a && l.return && l.return();
+                } finally {
+                    if (s) throw n;
+                }
+            }
+            console.log("traces:", e);
+            var m = {
+                autosize: !0,
+                showlegend: !1,
+                hovermode: "closest",
+                plot_bgcolor: "transparent",
+                paper_bgcolor: "transparent",
+                displayModeBar: !1,
+                xaxis: {
+                    title: "Dust Cost",
+                    range: [ .9 * i, 1.1 * r ]
+                },
+                yaxis: {
+                    tickformat: ",.0%",
+                    title: "Winrate"
+                },
+                shapes: [ {
+                    type: "line",
+                    x0: i,
+                    y0: .5,
+                    x1: r,
+                    y1: .5,
+                    line: {
+                        color: "rgba(50,50,50,0.5)",
+                        width: 1.5,
+                        dash: "dot",
+                        opacity: .5
+                    }
+                } ],
+                margin: {
+                    r: 0,
+                    t: 0
+                }
+            };
+            Plotly.newPlot("chart3", e, m);
+            document.getElementById("chart3").on("plotly_click", function(t) {
+                console.log("clickHandler:", t);
+                var e = t.points[0].data.name;
+                console.log(e);
+            }.bind(this));
+        }
+    }, {
+        key: "loadOverviewSidebar",
         value: function() {}
-    }, {
-        key: "addDescription",
-        value: function(t, e) {
-            this.description.innerHTML = '<p class="title">' + t + '</p><p class="text">' + e + "</p>";
-        }
-    }, {
-        key: "addArchetypeBtn",
-        value: function(t) {
-            var e = document.createElement("button");
-            e.style.backgroundColor = hsColors[t.hsClass], e.style.color = hsFontColors[t.hsClass], 
-            e.innerHTML = t.name, e.id = t.name, e.style.padding = "0.2rem", e.style.marginTop = "0.2rem", 
-            e.className = "archBtn", e.addEventListener("click", this.buttonTrigger.bind(this)), 
-            this.archButtons.push(e), this.archDiv.appendChild(e);
-        }
     }, {
         key: "toggleOverlay",
         value: function() {
@@ -658,11 +974,11 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                 t: 0
             }
         }, this.top = 9, this.timeFrame = {
-            last6Hours: 6,
-            last12Hours: 12,
+            last6Hours: 24,
+            last12Hours: 24,
             lastDay: 24,
-            last3Days: 3,
-            lastWeek: 7,
+            last3Days: 14,
+            lastWeek: 14,
             last2Weeks: 14,
             last3Weeks: 21,
             lastMonth: 30
@@ -674,14 +990,14 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
             this.window.chartDiv.innerHTML = "", document.querySelector("#ladderWindow .content-header #rankBtn").style.display = "inline";
             var t = this.window.f, e = this.window.t, i = "lastDay" == this.window.t || "last12Hours" == this.window.t || "last6Hours" == this.window.t ? "lastHours" : "lastDays", r = "lastHours" == i ? "Hour" : "Day", a = "lastHours" == i ? 2 : 0, s = this.timeFrame[e], n = this.window.r, o = this.window.mode, l = range(a, s), h = this.data[t][i][n][o], d = 0, c = [], u = [], y = [], f = 0;
             this.annotations = [];
-            for (var m = h[h.length - 1].data.slice(), v = a; v < s && v < m.length; v++) {
-                f += m[v];
+            for (var v = h[h.length - 1].data.slice(), m = a; m < s && m < v.length; m++) {
+                f += v[m];
                 var p = {
-                    x: v,
+                    x: m,
                     y: .05,
                     xref: "x",
                     yref: "y",
-                    text: m[v],
+                    text: v[m],
                     showarrow: !1,
                     bgcolor: "rgba(0,0,0,0.3)",
                     font: {
@@ -694,33 +1010,33 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
             var b = h.slice().sort(function(t, e) {
                 return t.avg > e.avg ? -1 : t.avg < e.avg ? 1 : 0;
             });
-            for (v = 0; v < this.top; v++) {
-                var k, w = b[v].name;
-                k = "classes" == o ? {
-                    color: hsColors[w],
-                    fontColor: hsFontColors[w]
-                } : this.window.getArchColor(0, w, this.window.f), y.push({
-                    name: w,
-                    color: k.color,
-                    fontColor: k.fontColor
+            for (m = 0; m < this.top; m++) {
+                var w, k = b[m].name;
+                w = "classes" == o ? {
+                    color: hsColors[k],
+                    fontColor: hsFontColors[k]
+                } : this.window.getArchColor(0, k, this.window.f), y.push({
+                    name: k,
+                    color: w.color,
+                    fontColor: w.fontColor
                 });
-                var g = "lastHours" == i ? this.smoothData(b[v].data) : b[v].data.slice();
+                var g = "lastHours" == i ? this.smoothData(b[m].data) : b[m].data.slice();
                 g = g.slice(a, s);
-                for (var T = [], x = 0; x < l.length; x++) {
-                    var C = x > 0 ? r + "s" : r;
-                    T.push(b[v].name + " (" + (100 * g[x]).toFixed(1) + "% )<br>" + l[x] + " " + C + " ago"), 
-                    g[x] > d && (d = g[x]);
+                for (var x = [], T = 0; T < l.length; T++) {
+                    var C = T > 0 ? r + "s" : r;
+                    x.push(b[m].name + " (" + (100 * g[T]).toFixed(1) + "% )<br>" + l[T] + " " + C + " ago"), 
+                    g[T] > d && (d = g[T]);
                 }
                 u.push({
                     x: l.slice(),
                     y: fillRange(0, g.length, 0),
-                    text: T,
+                    text: x,
                     line: {
                         width: 2.5,
                         simplify: !1
                     },
                     marker: {
-                        color: k.color
+                        color: w.color
                     },
                     type: "scatter",
                     mode: "lines",
@@ -728,12 +1044,12 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                 }), c.push({
                     x: l.slice(),
                     y: g.slice(),
-                    text: T,
+                    text: x,
                     line: {
                         width: 2.5
                     },
                     marker: {
-                        color: k.color
+                        color: w.color
                     },
                     type: "scatter",
                     mode: "lines",
@@ -743,13 +1059,13 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
             var L = [];
             if ("lastHours" == i) {
                 var S = new Date().getHours();
-                for (v = 0; v < l.length; v++) if (v % 3 == 0 || 1 == v) {
-                    var W = parseInt((S + 24 - l[v]) % 24);
+                for (m = 0; m < l.length; m++) if (m % 3 == 0 || 1 == m) {
+                    var W = parseInt((S + 24 - l[m]) % 24);
                     L.push(W + ":00");
                 } else L.push("");
             }
-            if ("lastDays" == i) for (v = 0; v < l.length; v++) if (v % 4 == 0 || 0 == v) {
-                (S = new Date()).setDate(S.getDate() - v), L.push(S.getDate() + "." + (S.getMonth() + 1) + ".");
+            if ("lastDays" == i) for (m = 0; m < l.length; m++) if (m % 4 == 0 || 0 == m) {
+                (S = new Date()).setDate(S.getDate() - m), L.push(S.getDate() + "." + (S.getMonth() + 1) + ".");
             } else L.push("");
             this.layout.yaxis.range = [ 0, 1.1 * d ], this.layout.xaxis.tickvals = range(a, l.length + a), 
             this.layout.xaxis.ticktext = L, Plotly.newPlot("chart1", u, this.layout, {
@@ -841,28 +1157,28 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
         this.tier = this.tiers[0];
         var c = !0, u = !1, y = void 0;
         try {
-            for (var f, m = hsClasses[Symbol.iterator](); !(c = (f = m.next()).done); c = !0) {
-                var v = f.value;
-                this.traces_zoom[v] = [];
+            for (var f, v = hsClasses[Symbol.iterator](); !(c = (f = v.next()).done); c = !0) {
+                var m = f.value;
+                this.traces_zoom[m] = [];
             }
         } catch (t) {
             u = !0, y = t;
         } finally {
             try {
-                !c && m.return && m.return();
+                !c && v.return && v.return();
             } finally {
                 if (u) throw y;
             }
         }
-        var p = !0, b = !1, k = void 0;
+        var p = !0, b = !1, w = void 0;
         try {
-            for (var w, g = this.tiers[Symbol.iterator](); !(p = (w = g.next()).done); p = !0) {
-                var T = w.value;
-                this.totGamesRanks[T.buttonId] = 0;
-                var x = [], C = !0, L = !1, S = void 0;
+            for (var k, g = this.tiers[Symbol.iterator](); !(p = (k = g.next()).done); p = !0) {
+                var x = k.value;
+                this.totGamesRanks[x.buttonId] = 0;
+                var T = [], C = !0, L = !1, S = void 0;
                 try {
-                    for (var W, _ = hsClasses[Symbol.iterator](); !(C = (W = _.next()).done); C = !0) v = W.value, 
-                    x.push(hsColors[v]);
+                    for (var W, _ = hsClasses[Symbol.iterator](); !(C = (W = _.next()).done); C = !0) m = W.value, 
+                    T.push(hsColors[m]);
                 } catch (t) {
                     L = !0, S = t;
                 } finally {
@@ -876,7 +1192,7 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                     values: fillRange(0, hsClasses.length, 0),
                     labels: hsClasses.slice(),
                     marker: {
-                        colors: x
+                        colors: T
                     },
                     hoverinfo: "label+percent",
                     insidetextfont: {
@@ -888,7 +1204,7 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                     text: hsClasses.slice(),
                     type: "pie"
                 };
-                this.traces_pie.decks[T.buttonId] = [ {
+                this.traces_pie.decks[x.buttonId] = [ {
                     values: [],
                     labels: [],
                     marker: {
@@ -906,56 +1222,56 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                     },
                     text: [],
                     type: "pie"
-                } ], this.traces_pie.classes[T.buttonId] = [ M ];
+                } ], this.traces_pie.classes[x.buttonId] = [ M ];
             }
         } catch (t) {
-            b = !0, k = t;
+            b = !0, w = t;
         } finally {
             try {
                 !p && g.return && g.return();
             } finally {
-                if (b) throw k;
+                if (b) throw w;
             }
         }
-        var B = e.archetypes, I = e.gamesPerRank;
+        var B = e.archetypes, D = e.gamesPerRank;
         this.rankSums = e.gamesPerRank;
-        for (var D = this.smoothLadder(e.rankData, I.slice()), q = this.smoothLadder(e.classRankData, I.slice()), E = 0; E < hsRanks; E++) {
-            E % 5 == 0 ? this.rankLabels.push(E + "  ") : this.rankLabels.push(""), this.totGames += I[E];
-            var F = !0, H = !1, A = void 0;
+        for (var I = this.smoothLadder(e.rankData, D.slice()), E = this.smoothLadder(e.classRankData, D.slice()), q = 0; q < hsRanks; q++) {
+            q % 5 == 0 ? this.rankLabels.push(q + "  ") : this.rankLabels.push(""), this.totGames += D[q];
+            var A = !0, F = !1, H = void 0;
             try {
-                for (var R, O = this.tiers[Symbol.iterator](); !(F = (R = O.next()).done); F = !0) {
-                    E >= (T = R.value).start && E <= T.end && (this.totGamesRanks[T.buttonId] += I[E]);
+                for (var R, O = this.tiers[Symbol.iterator](); !(A = (R = O.next()).done); A = !0) {
+                    q >= (x = R.value).start && q <= x.end && (this.totGamesRanks[x.buttonId] += D[q]);
                 }
             } catch (t) {
-                H = !0, A = t;
+                F = !0, H = t;
             } finally {
                 try {
-                    !F && O.return && O.return();
+                    !A && O.return && O.return();
                 } finally {
-                    if (H) throw A;
+                    if (F) throw H;
                 }
             }
         }
         this.rankLabels[0] = "L  ";
-        for (E = 0; E < B.length; E++) {
-            var P = [], z = [], G = [], N = 0, U = B[E][1] + " " + B[E][0].replace("§", ""), X = hsClasses.indexOf(B[E][0]), Y = this.window.getArchColor(B[E][0], B[E][1], this.f), V = Y.fontColor;
+        for (q = 0; q < B.length; q++) {
+            var P = [], z = [], N = [], G = 0, U = B[q][1] + " " + B[q][0].replace("§", ""), X = hsClasses.indexOf(B[q][0]), Y = this.window.getArchColor(B[q][0], B[q][1], this.f), V = Y.fontColor;
             Y = Y.color;
             for (var K = 0; K < hsRanks; K++) {
-                var j = D[K][E];
-                z.push(j), G.push("<b>" + U + "     </b><br>freq: " + (100 * j).toFixed(1) + "%"), 
-                j < this.fr_min && E > 8 && (this.traces_bar.decks[X].y[K] += j, j = 0), N += j, 
+                var j = I[K][q];
+                z.push(j), N.push("<b>" + U + "     </b><br>freq: " + (100 * j).toFixed(1) + "%"), 
+                j < this.fr_min && q > 8 && (this.traces_bar.decks[X].y[K] += j, j = 0), G += j, 
                 P.push(j);
                 var Z = !0, J = !1, Q = void 0;
                 try {
                     for (var $, tt = this.tiers[Symbol.iterator](); !(Z = ($ = tt.next()).done); Z = !0) {
-                        if (K == (T = $.value).start && (this.traces_pie.decks[T.buttonId][0].values.push(j), 
-                        this.traces_pie.decks[T.buttonId][0].labels.push(U), this.traces_pie.decks[T.buttonId][0].marker.colors.push(Y)), 
-                        K > T.start && K <= T.end && (this.traces_pie.decks[T.buttonId][0].values[E] += j), 
-                        K == T.end) {
-                            this.traces_pie.decks[T.buttonId][0].values[E] /= T.end - T.start + 1, this.traces_pie.decks[T.buttonId][0].text.push(U);
-                            var et = this.traces_pie.decks[T.buttonId][0].values[E];
-                            et < this.fr_min && E > 8 && (this.traces_pie.decks[T.buttonId][0].values[E] = 0, 
-                            this.traces_pie.decks[T.buttonId][0].values[X] += et);
+                        if (K == (x = $.value).start && (this.traces_pie.decks[x.buttonId][0].values.push(j), 
+                        this.traces_pie.decks[x.buttonId][0].labels.push(U), this.traces_pie.decks[x.buttonId][0].marker.colors.push(Y)), 
+                        K > x.start && K <= x.end && (this.traces_pie.decks[x.buttonId][0].values[q] += j), 
+                        K == x.end) {
+                            this.traces_pie.decks[x.buttonId][0].values[q] /= x.end - x.start + 1, this.traces_pie.decks[x.buttonId][0].text.push(U);
+                            var et = this.traces_pie.decks[x.buttonId][0].values[q];
+                            et < this.fr_min && q > 8 && (this.traces_pie.decks[x.buttonId][0].values[q] = 0, 
+                            this.traces_pie.decks[x.buttonId][0].values[X] += et);
                         }
                     }
                 } catch (t) {
@@ -968,24 +1284,24 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                     }
                 }
             }
-            N /= hsRanks;
+            G /= hsRanks;
             var it = {
                 x: range(0, hsRanks),
                 y: P.slice(),
                 name: U,
-                text: G,
+                text: N,
                 hoverinfo: "text",
                 marker: {
                     color: Y
                 },
                 type: "bar",
                 winrate: 0,
-                hsClass: B[E][0] + B[E][1]
+                hsClass: B[q][0] + B[q][1]
             }, rt = {
                 x: range(0, hsRanks),
                 y: z.slice(),
                 name: U,
-                text: G,
+                text: N,
                 hoverinfo: "text",
                 orientation: "h",
                 marker: {
@@ -997,35 +1313,35 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                 type: "scatter",
                 mode: "lines",
                 winrate: 0,
-                hsClass: B[E][0] + B[E][1],
-                fr: N
+                hsClass: B[q][0] + B[q][1],
+                fr: G
             };
             this.traces_bar.decks.push(it), this.traces_line.decks.push(rt), this.archLegend.push({
                 name: U,
-                hsClass: B[E][0],
+                hsClass: B[q][0],
                 color: Y,
                 fontColor: V,
-                fr: N
+                fr: G
             }), this.archetypes.push({
                 name: U,
-                hsClass: B[E][0],
-                fr: N,
+                hsClass: B[q][0],
+                fr: G,
                 data: z.slice(),
                 color: Y,
                 fontColor: V
             });
         }
-        for (E = 0; E < 9; E++) {
-            v = hsClasses[E];
+        for (q = 0; q < 9; q++) {
+            m = hsClasses[q];
             var at = [], st = [];
-            for (N = 0, K = 0; K < hsRanks; K++) {
-                j = q[K][E];
-                at.push(j), st.push(v + " " + (100 * j).toFixed(2) + "%"), N += j;
+            for (G = 0, K = 0; K < hsRanks; K++) {
+                j = E[K][q];
+                at.push(j), st.push(m + " " + (100 * j).toFixed(2) + "%"), G += j;
                 var nt = !0, ot = !1, lt = void 0;
                 try {
                     for (var ht, dt = this.tiers[Symbol.iterator](); !(nt = (ht = dt.next()).done); nt = !0) {
-                        K >= (T = ht.value).start && K <= T.end && (this.traces_pie.classes[T.buttonId][0].values[E] += j), 
-                        K == T.end && (this.traces_pie.classes[T.buttonId][0].values[E] /= T.end - T.start + 1);
+                        K >= (x = ht.value).start && K <= x.end && (this.traces_pie.classes[x.buttonId][0].values[q] += j), 
+                        K == x.end && (this.traces_pie.classes[x.buttonId][0].values[q] /= x.end - x.start + 1);
                     }
                 } catch (t) {
                     ot = !0, lt = t;
@@ -1039,12 +1355,12 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
             }
             var ct = fillRange(0, hsRanks, 0), ut = !0, yt = !1, ft = void 0;
             try {
-                for (var mt, vt = this.archetypes[Symbol.iterator](); !(ut = (mt = vt.next()).done); ut = !0) {
-                    if ((Lt = mt.value).hsClass == v) {
+                for (var vt, mt = this.archetypes[Symbol.iterator](); !(ut = (vt = mt.next()).done); ut = !0) {
+                    if ((Lt = vt.value).hsClass == m) {
                         var pt = [], bt = [];
-                        for (N = 0, K = 0; K < hsRanks; K++) ct[K] += Lt.data[K], pt.push(""), bt.push(Lt.data[K]), 
-                        N += Lt.data[K];
-                        var kt = {
+                        for (G = 0, K = 0; K < hsRanks; K++) ct[K] += Lt.data[K], pt.push(""), bt.push(Lt.data[K]), 
+                        G += Lt.data[K];
+                        var wt = {
                             x: range(0, hsRanks),
                             y: Lt.data.slice(),
                             name: Lt.name,
@@ -1055,58 +1371,58 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                             },
                             type: "bar",
                             winrate: 0,
-                            hsClass: v,
+                            hsClass: m,
                             overall: bt,
-                            fr_avg: N / hsRanks
+                            fr_avg: G / hsRanks
                         };
-                        this.traces_zoom[v].push(kt);
+                        this.traces_zoom[m].push(wt);
                     }
                 }
             } catch (t) {
                 yt = !0, ft = t;
             } finally {
                 try {
-                    !ut && vt.return && vt.return();
+                    !ut && mt.return && mt.return();
                 } finally {
                     if (yt) throw ft;
                 }
             }
-            var wt = !0, gt = !1, Tt = void 0;
+            var kt = !0, gt = !1, xt = void 0;
             try {
-                for (var xt, Ct = this.traces_zoom[v][Symbol.iterator](); !(wt = (xt = Ct.next()).done); wt = !0) {
-                    var Lt = xt.value;
+                for (var Tt, Ct = this.traces_zoom[m][Symbol.iterator](); !(kt = (Tt = Ct.next()).done); kt = !0) {
+                    var Lt = Tt.value;
                     for (K = 0; K < hsRanks; K++) Lt.y[K] /= ct[K] > 0 ? ct[K] : 1, Lt.text[K] = Lt.name + "<br>" + (100 * Lt.y[K]).toFixed(1) + "% of " + Lt.hsClass + "<br>" + (100 * Lt.overall[K]).toFixed(1) + "% overall";
                 }
             } catch (t) {
-                gt = !0, Tt = t;
+                gt = !0, xt = t;
             } finally {
                 try {
-                    !wt && Ct.return && Ct.return();
+                    !kt && Ct.return && Ct.return();
                 } finally {
-                    if (gt) throw Tt;
+                    if (gt) throw xt;
                 }
             }
-            N /= hsRanks, this.c_data[v] = at.slice();
+            G /= hsRanks, this.c_data[m] = at.slice();
             var St = {
                 x: range(0, hsRanks),
                 y: at.slice(),
-                name: v,
+                name: m,
                 text: st.slice(),
                 hoverinfo: "text",
                 marker: {
-                    color: hsColors[v]
+                    color: hsColors[m]
                 },
                 type: "bar",
                 winrate: 0,
-                hsClass: v
+                hsClass: m
             }, Wt = {
                 x: range(0, hsRanks),
                 y: at.slice(),
-                name: v,
+                name: m,
                 text: st.slice(),
                 hoverinfo: "text",
                 marker: {
-                    color: hsColors[v]
+                    color: hsColors[m]
                 },
                 line: {
                     width: this.lineWidth
@@ -1114,12 +1430,12 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                 type: "scatter",
                 mode: "lines",
                 winrate: 0,
-                hsClass: v,
-                fr: N
+                hsClass: m,
+                fr: G
             };
             this.traces_bar.classes.push(St), this.traces_line.classes.push(Wt), this.classLegend.push({
-                name: v,
-                color: hsColors[v]
+                name: m,
+                color: hsColors[m]
             });
         }
         this.layout_bar = {
@@ -1492,8 +1808,8 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                 var d = !0, c = !1, u = void 0;
                 try {
                     for (var y, f = hsClasses[Symbol.iterator](); !(d = (y = f.next()).done); d = !0) {
-                        var m = y.value;
-                        this.archColors[h][m] = {
+                        var v = y.value;
+                        this.archColors[h][v] = {
                             count: 0
                         };
                     }
@@ -1519,24 +1835,24 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
         this.f = "Standard", this.t = "lastDay", this.r = "ranks_all", this.plotType = "bar", 
         this.plotTypes = [ "bar", "line", "pie", "number", "timeline" ], this.mode = "classes", 
         this.fullyLoaded = !1, this.history = null, this.zoomClass = null, this.nrGames = 0;
-        var v = !0, p = !1, b = void 0;
+        var m = !0, p = !1, b = void 0;
         try {
-            for (var k, w = this.hsFormats[Symbol.iterator](); !(v = (k = w.next()).done); v = !0) {
-                h = k.value;
+            for (var w, k = this.hsFormats[Symbol.iterator](); !(m = (w = k.next()).done); m = !0) {
+                h = w.value;
                 this.data[h] = {};
-                var g = !0, T = !1, x = void 0;
+                var g = !0, x = !1, T = void 0;
                 try {
                     for (var C, L = this.hsTimes[Symbol.iterator](); !(g = (C = L.next()).done); g = !0) {
                         var S = C.value;
                         this.data[h][S] = null;
                     }
                 } catch (t) {
-                    T = !0, x = t;
+                    x = !0, T = t;
                 } finally {
                     try {
                         !g && L.return && L.return();
                     } finally {
-                        if (T) throw x;
+                        if (x) throw T;
                     }
                 }
             }
@@ -1544,7 +1860,7 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
             p = !0, b = t;
         } finally {
             try {
-                !v && w.return && w.return();
+                !m && k.return && k.return();
             } finally {
                 if (p) throw b;
             }
@@ -1557,7 +1873,7 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
             var t = !0, e = !1, i = void 0;
             try {
                 for (var r, a = this.optionButtons[Symbol.iterator](); !(t = (r = a.next()).done); t = !0) {
-                    (T = r.value).addEventListener("click", this.buttonTrigger.bind(this));
+                    (x = r.value).addEventListener("click", this.buttonTrigger.bind(this));
                 }
             } catch (t) {
                 e = !0, i = t;
@@ -1573,11 +1889,11 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
             try {
                 for (var l, h = this.hsFormats[Symbol.iterator](); !(s = (l = h.next()).done); s = !0) {
                     var d = l.value;
-                    (T = document.createElement("button")).className = "optionBtn folderBtn", T.innerHTML = d, 
-                    T.id = d;
-                    T.onclick = function(t) {
+                    (x = document.createElement("button")).className = "optionBtn folderBtn", x.innerHTML = d, 
+                    x.id = d;
+                    x.onclick = function(t) {
                         this.f = t.target.id, this.plot();
-                    }.bind(this), document.querySelector("#ladderWindow #formatFolder .dropdown").appendChild(T);
+                    }.bind(this), document.querySelector("#ladderWindow #formatFolder .dropdown").appendChild(x);
                 }
             } catch (t) {
                 n = !0, o = t;
@@ -1591,41 +1907,41 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
             document.querySelector("#ladderWindow #timeFolder .dropdown").innerHTML = "";
             var c = !0, u = !1, y = void 0;
             try {
-                for (var f, m = this.hsTimes[Symbol.iterator](); !(c = (f = m.next()).done); c = !0) {
-                    var v = f.value;
-                    (T = document.createElement("button")).className = "optionBtn folderBtn", T.innerHTML = btnIdToText[v], 
-                    T.id = v;
-                    T.onclick = function(t) {
+                for (var f, v = this.hsTimes[Symbol.iterator](); !(c = (f = v.next()).done); c = !0) {
+                    var m = f.value;
+                    (x = document.createElement("button")).className = "optionBtn folderBtn", x.innerHTML = btnIdToText[m], 
+                    x.id = m;
+                    x.onclick = function(t) {
                         this.t = t.target.id, this.plot();
-                    }.bind(this), document.querySelector("#ladderWindow #timeFolder .dropdown").appendChild(T);
+                    }.bind(this), document.querySelector("#ladderWindow #timeFolder .dropdown").appendChild(x);
                 }
             } catch (t) {
                 u = !0, y = t;
             } finally {
                 try {
-                    !c && m.return && m.return();
+                    !c && v.return && v.return();
                 } finally {
                     if (u) throw y;
                 }
             }
             document.querySelector("#ladderWindow #rankFolder .dropdown").innerHTML = "";
-            var p = !0, b = !1, k = void 0;
+            var p = !0, b = !1, w = void 0;
             try {
-                for (var w, g = this.ranks[Symbol.iterator](); !(p = (w = g.next()).done); p = !0) {
-                    var T, x = w.value;
-                    (T = document.createElement("button")).className = "optionBtn folderBtn", T.innerHTML = btnIdToText[x], 
-                    T.id = x;
-                    T.onclick = function(t) {
+                for (var k, g = this.ranks[Symbol.iterator](); !(p = (k = g.next()).done); p = !0) {
+                    var x, T = k.value;
+                    (x = document.createElement("button")).className = "optionBtn folderBtn", x.innerHTML = btnIdToText[T], 
+                    x.id = T;
+                    x.onclick = function(t) {
                         this.r = t.target.id, this.plot();
-                    }.bind(this), document.querySelector("#ladderWindow #rankFolder .dropdown").appendChild(T);
+                    }.bind(this), document.querySelector("#ladderWindow #rankFolder .dropdown").appendChild(x);
                 }
             } catch (t) {
-                b = !0, k = t;
+                b = !0, w = t;
             } finally {
                 try {
                     !p && g.return && g.return();
                 } finally {
-                    if (b) throw k;
+                    if (b) throw w;
                 }
             }
             var C = PREMIUM ? "flex" : "none";
@@ -2086,7 +2402,7 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                 var a = !0, s = !1, n = void 0;
                 try {
                     for (var o, l = this.tiers[Symbol.iterator](); !(a = (o = l.next()).done); a = !0) {
-                        (I = o.value).start <= r && I.end >= r && (I.games[t] += this.data.rankSums[t][r]);
+                        (D = o.value).start <= r && D.end >= r && (D.games[t] += this.data.rankSums[t][r]);
                     }
                 } catch (t) {
                     s = !0, n = t;
@@ -2101,27 +2417,27 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
             var h = !0, d = !1, c = void 0;
             try {
                 for (var u, y = e[Symbol.iterator](); !(h = (u = y.next()).done); h = !0) {
-                    var f = u.value, m = i.archetypes.indexOf(f.name);
-                    if (-1 != m) for (r = 0; r < hsRanks; r++) {
-                        var v = 0, p = 0, b = !0, k = !1, w = void 0;
+                    var f = u.value, v = i.archetypes.indexOf(f.name);
+                    if (-1 != v) for (r = 0; r < hsRanks; r++) {
+                        var m = 0, p = 0, b = !0, w = !1, k = void 0;
                         try {
-                            for (var g, T = e[Symbol.iterator](); !(b = (g = T.next()).done); b = !0) {
-                                var x = g.value, C = i.archetypes.indexOf(x.name);
+                            for (var g, x = e[Symbol.iterator](); !(b = (g = x.next()).done); b = !0) {
+                                var T = g.value, C = i.archetypes.indexOf(T.name);
                                 if (-1 != C) {
-                                    var L = x.data[r];
-                                    v += L, p += L * i.table[m][C];
+                                    var L = T.data[r];
+                                    m += L, p += L * i.table[v][C];
                                 }
                             }
                         } catch (t) {
-                            k = !0, w = t;
+                            w = !0, k = t;
                         } finally {
                             try {
-                                !b && T.return && T.return();
+                                !b && x.return && x.return();
                             } finally {
-                                if (k) throw w;
+                                if (w) throw k;
                             }
                         }
-                        0 != v ? p /= v : p = 0, this.data[t][r].push({
+                        0 != m ? p /= m : p = 0, this.data[t][r].push({
                             name: f.name,
                             wr: p,
                             fr: f.data[r],
@@ -2131,16 +2447,16 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                         var S = !0, W = !1, _ = void 0;
                         try {
                             for (var M, B = this.tiers[Symbol.iterator](); !(S = (M = B.next()).done); S = !0) {
-                                var I = M.value, D = this.tierData[t][I.name];
-                                r == I.start && D.push({
+                                var D = M.value, I = this.tierData[t][D.name];
+                                r == D.start && I.push({
                                     name: f.name,
                                     wr: p,
                                     fr: f.data[r],
                                     color: f.color,
                                     fontColor: f.fontColor,
                                     count: p > 0 ? 1 : 0
-                                }), r > I.start && r <= I.end && (D[D.length - 1].wr += p, D[D.length - 1].count += p > 0 ? 1 : 0), 
-                                r == I.end && D[D.length - 1].count > 0 && (D[D.length - 1].wr /= D[D.length - 1].count);
+                                }), r > D.start && r <= D.end && (I[I.length - 1].wr += p, I[I.length - 1].count += p > 0 ? 1 : 0), 
+                                r == D.end && I[I.length - 1].count > 0 && (I[I.length - 1].wr /= I[I.length - 1].count);
                             }
                         } catch (t) {
                             W = !0, _ = t;
@@ -2162,23 +2478,23 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                     if (d) throw c;
                 }
             }
-            var q = function(t, e) {
+            var E = function(t, e) {
                 return t.wr > e.wr ? -1 : t.wr < e.wr ? 1 : 0;
             };
-            for (r = 0; r < hsRanks; r++) this.data[t][r].sort(q);
-            var E = !0, F = !1, H = void 0;
+            for (r = 0; r < hsRanks; r++) this.data[t][r].sort(E);
+            var q = !0, A = !1, F = void 0;
             try {
-                for (var A, R = this.tiers[Symbol.iterator](); !(E = (A = R.next()).done); E = !0) {
-                    I = A.value;
-                    this.tierData[t][I.name].sort(q);
+                for (var H, R = this.tiers[Symbol.iterator](); !(q = (H = R.next()).done); q = !0) {
+                    D = H.value;
+                    this.tierData[t][D.name].sort(E);
                 }
             } catch (t) {
-                F = !0, H = t;
+                A = !0, F = t;
             } finally {
                 try {
-                    !E && R.return && R.return();
+                    !q && R.return && R.return();
                 } finally {
-                    if (F) throw H;
+                    if (A) throw F;
                 }
             }
         }
@@ -2226,8 +2542,8 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
             try {
                 for (var n, o = this.tiers[Symbol.iterator](); !(r = (n = o.next()).done); r = !0) {
                     var l = n.value;
-                    (v = document.createElement("div")).className = "header columnTitle", v.innerHTML = l.name, 
-                    this.grid.appendChild(v);
+                    (m = document.createElement("div")).className = "header columnTitle", m.innerHTML = l.name, 
+                    this.grid.appendChild(m);
                 }
             } catch (t) {
                 a = !0, s = t;
@@ -2246,14 +2562,14 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                         if (!(this.tierData[t][l.name].length <= i)) {
                             var f = this.tierData[t][l.name][i];
                             if (l.games[t] <= this.minGames || void 0 == f) {
-                                (v = document.createElement("div")).className = "blank", this.grid.appendChild(v), 
+                                (m = document.createElement("div")).className = "blank", this.grid.appendChild(m), 
                                 this.grid.appendChild(document.createElement("div"));
                             } else {
-                                var m = (100 * f.wr).toFixed(1) + "%", v = document.createElement("div"), p = document.createElement("button"), b = document.createElement("span");
+                                var v = (100 * f.wr).toFixed(1) + "%", m = document.createElement("div"), p = document.createElement("button"), b = document.createElement("span");
                                 b.className = "tooltipText", b.innerHTML = "#" + (i + 1) + " " + f.name, p.className = "archBtn tooltip", 
                                 p.id = f.name, p.style.backgroundColor = f.color, p.style.color = f.fontColor, p.style.marginLeft = "0.5rem", 
-                                p.innerHTML = f.name, p.onclick = this.pressButton.bind(this), v.className = "winrate", 
-                                v.innerHTML = m, this.grid.appendChild(p), this.grid.appendChild(v);
+                                p.innerHTML = f.name, p.onclick = this.pressButton.bind(this), m.className = "winrate", 
+                                m.innerHTML = v, this.grid.appendChild(p), this.grid.appendChild(m);
                             }
                         }
                     }
@@ -2285,7 +2601,7 @@ window.onload = function() {
 var Table = function() {
     function t(e, i, r, a, s) {
         _classCallCheck(this, t), this.DATA = e, this.f = i, this.t = r, this.r = a, this.window = s, 
-        this.sortBy = "", this.numArch = this.window.top, this.bgColor = "transparent", 
+        this.sortBy = "", this.numArch = this.window.numArch, this.bgColor = "transparent", 
         this.fontColor = "#22222", this.subplotRatio = .6, this.overallString = '<b style="font-size:130%">Overall</b>', 
         this.minGames = 20, this.whiteTile = .50000001, this.blackTile = .51;
         this.colorScales = [ [ [ 0, "#a04608" ], [ .3, "#d65900" ], [ .5, "#FFFFFF" ], [ .7, "#00a2bc" ], [ 1, "#055c7a" ] ], [ [ 0, "#a04608" ], [ .3, "#d65900" ], [ .5, "#FFFFFF" ], [ .7, "#279e27" ], [ 1, "#28733d" ] ], [ [ 0, "#000" ], [ .3, "#222" ], [ .5, "#FFFFFF" ], [ .7, "#888" ], [ 1, "#999" ] ] ], 
@@ -2303,16 +2619,16 @@ var Table = function() {
             var c = h[d];
             this.frequency.push(n[c]), this.archetypes.push(l[c][1] + " " + l[c][0]), this.classPlusArch.push(l[c][0] + l[c][1]);
             for (var u = d; u < this.numArch; u++) {
-                var y = h[u], f = 0, m = 0, v = 0, p = o[c][y][0], b = o[c][y][1];
-                p + b > 0 && (m = p / (p + b));
-                var k = o[y][c][1], w = o[y][c][0];
-                k + w > 0 && (v = k / (k + w));
-                var g = p + k + b + w;
-                d == u ? (m = .5, v = .5, f = .5) : f = g < this.minGames ? .5 : p + b > 0 && k + w > 0 ? (m + v) / 2 : p + b == 0 ? v : m;
-                var T = l[c][1] + " " + l[c][0], x = l[y][1] + " " + l[y][0];
-                this.table[u][d] = 1 - f, this.table[d][u] = f, this.totGames += g, g >= this.minGames ? (this.textTable[d][u] = T + "<br><b>vs:</b> " + x + "<br><b>wr:</b>  " + (100 * f).toFixed(1) + "%  (" + g + ")", 
-                this.textTable[u][d] = x + "<br><b>vs:</b> " + T + "<br><b>wr:</b>  " + (100 * (1 - f)).toFixed(1) + "%  (" + g + ")") : (this.textTable[d][u] = T + "<br><b>vs:</b> " + x + "<br><b>wr:</b>  Not enough games", 
-                this.textTable[u][d] = x + "<br><b>vs:</b> " + T + "<br><b>wr:</b>  Not enough games");
+                var y = h[u], f = 0, v = 0, m = 0, p = o[c][y][0], b = o[c][y][1];
+                p + b > 0 && (v = p / (p + b));
+                var w = o[y][c][1], k = o[y][c][0];
+                w + k > 0 && (m = w / (w + k));
+                var g = p + w + b + k;
+                d == u ? (v = .5, m = .5, f = .5) : f = g < this.minGames ? .5 : p + b > 0 && w + k > 0 ? (v + m) / 2 : p + b == 0 ? m : v;
+                var x = l[c][1] + " " + l[c][0], T = l[y][1] + " " + l[y][0];
+                this.table[u][d] = 1 - f, this.table[d][u] = f, this.totGames += g, g >= this.minGames ? (this.textTable[d][u] = x + "<br><b>vs:</b> " + T + "<br><b>wr:</b>  " + (100 * f).toFixed(1) + "%  (" + g + ")", 
+                this.textTable[u][d] = T + "<br><b>vs:</b> " + x + "<br><b>wr:</b>  " + (100 * (1 - f)).toFixed(1) + "%  (" + g + ")") : (this.textTable[d][u] = x + "<br><b>vs:</b> " + T + "<br><b>wr:</b>  Not enough games", 
+                this.textTable[u][d] = T + "<br><b>vs:</b> " + x + "<br><b>wr:</b>  Not enough games");
             }
         }
         var C = 0;
@@ -2511,7 +2827,7 @@ var Table = function() {
                 for (var s = [], n = [], o = [], l = [], h = [], d = [], c = 0; c < i.numArch; c++) {
                     var u = r[c];
                     d.push(i.classPlusArch[u]), o.push(i.archetypes[u]), l.push(i.frequency[u]), h.push(i.winrates[u]);
-                    for (var y = [], f = [], m = 0; m < i.numArch; m++) y.push(i.table[u][r[m]]), f.push(i.textTable[u][r[m]]);
+                    for (var y = [], f = [], v = 0; v < i.numArch; v++) y.push(i.table[u][r[v]]), f.push(i.textTable[u][r[v]]);
                     s.push(y), n.push(f);
                 }
                 this.table = s, this.textTable = n, this.archetypes = o, this.classPlusArch = d, 
@@ -2557,6 +2873,14 @@ var Table = function() {
             return e;
         }
     }, {
+        key: "getWr",
+        value: function(t) {
+            var e = this.freqPlotData, i = e.x[0], r = e.y[0], a = i.indexOf(t);
+            if (a < 0) return 0;
+            for (var s = this.table, n = 0, o = 0; o < i.length; o++) n += s[a][o] * r[o];
+            return n;
+        }
+    }, {
         key: "equilibrium",
         value: function() {
             ui.showLoader();
@@ -2575,12 +2899,17 @@ var Table = function() {
                 }
             }
             for (var h = this.table, d = {
+                title: "Meta Simulation",
                 xaxis: {
                     type: "log",
-                    autorange: !0
+                    autorange: !0,
+                    title: "Iteration step of simulation (logarithmically)",
+                    opacity: .5
                 },
                 yaxis: {
-                    range: [ 0, 1 ]
+                    range: [ 0, 1 ],
+                    title: "Share of Meta",
+                    opacity: .5
                 },
                 hovermode: "closest",
                 plot_bgcolor: "transparent",
@@ -2594,11 +2923,11 @@ var Table = function() {
                 wr: .5
             });
             for (var y = 0; y < 5e4; y++) this.eq_wr(c, h), this.eq_fr(c);
-            for (var f = [], m = 0; m < c.length; m++) {
-                var v = c[m], p = ladderWindow.getArchColor(null, v.name, this.f).color, b = {
-                    name: v.name,
+            for (var f = [], v = 0; v < c.length; v++) {
+                var m = c[v], p = ladderWindow.getArchColor(null, m.name, this.f).color, b = {
+                    name: m.name,
                     x: range(0, 5e4),
-                    y: v.trace,
+                    y: m.trace,
                     fill: "tonexty",
                     fillcolor: p,
                     type: "scatter",
@@ -2623,11 +2952,9 @@ var Table = function() {
     }, {
         key: "eq_wr",
         value: function(t, e) {
-            for (var i = t.map(function(t) {
-                return t.fr;
-            }), r = 0; r < t.length; r++) {
-                t[r].wr = 0;
-                for (var a = 0; a < t.length; a++) t[r].wr += e[r][a] * i[a];
+            for (var i = 0; i < t.length; i++) {
+                t[i].wr = 0;
+                for (var r = 0; r < t.length; r++) t[i].wr += e[i][r] * t[r].fr;
             }
         }
     }, {
@@ -2646,7 +2973,7 @@ var Table = function() {
                 }
             }
             t.sort(function(t, e) {
-                return t.idx > e.idx ? -1 : t.idx < e.idx ? 1 : 0;
+                return t.idx < e.idx ? -1 : t.idx > e.idx ? 1 : 0;
             });
         }
     } ]), t;
@@ -2658,7 +2985,7 @@ var Table = function() {
         this.overlayP = document.querySelector("#tableWindow .overlayText"), this.nrGamesP = document.querySelector("#tableWindow .nrGames"), 
         this.nrGamesBtn = document.querySelector("#tableWindow .content-header #nrGames"), 
         this.data = {}, this.hsFormats = e, this.hsTimes = i, this.ranks = r, this.sortOptions = a, 
-        this.top = 16, this.annotated = !1, this.nrGames = 0, this.colorTheme = 0, this.overlayText = "\n            Here you can see how your deck on the left hand side performs against any other deck on the top. \n            The colors range  from favorable <span class='blue'>blue</span> to unfavorable <span class='red'>red</span>.<br><br>\n            The matchup table lists the top " + this.top + " most frequent decks within the selected time and rank brackets.<br><br>\n            The hover info lists the number of games recorded for that specific matchup in the (parenthesis).<br><br>\n            The 'Overall' line at the bottom shows the overall winrate of the opposing decks in the specified time and rank bracket.<br><br>\n            Sorting the table displays the most frequent/ highest winrate deck in the top left. Changing the format, time or rank brackets automatically sorts the table.<br><br>\n            <img src='Images/muSort.png'></img>\n            \n            <br><br><br><br>\n            Click on a matchup to 'zoom in'. Click again to 'zoom out'.<br><br>\n            In the zoomed in view you see only one deck on the left side.<br><br>\n            Additionally there are 2 subplots displaying the frequency of the opposing decks (brown line chart) and the specific matchup as black bar charts.<br><br>\n            Changing any parameter (Format, time, rank, sorting) keeps you zoomed into the same archetype if possible.<br><br>\n            You can additionally sort 'by Matchup' while zoomed in.<br><br>\n        ", 
+        this.numArch = 16, this.annotated = !1, this.nrGames = 0, this.colorTheme = 0, this.overlayText = "\n            Here you can see how your deck on the left hand side performs against any other deck on the top. \n            The colors range  from favorable <span class='blue'>blue</span> to unfavorable <span class='red'>red</span>.<br><br>\n            The matchup table lists the top " + this.numArch + " most frequent decks within the selected time and rank brackets.<br><br>\n            The hover info lists the number of games recorded for that specific matchup in the (parenthesis).<br><br>\n            The 'Overall' line at the bottom shows the overall winrate of the opposing decks in the specified time and rank bracket.<br><br>\n            Sorting the table displays the most frequent/ highest winrate deck in the top left. Changing the format, time or rank brackets automatically sorts the table.<br><br>\n            <img src='Images/muSort.png'></img>\n            \n            <br><br><br><br>\n            Click on a matchup to 'zoom in'. Click again to 'zoom out'.<br><br>\n            In the zoomed in view you see only one deck on the left side.<br><br>\n            Additionally there are 2 subplots displaying the frequency of the opposing decks (brown line chart) and the specific matchup as black bar charts.<br><br>\n            Changing any parameter (Format, time, rank, sorting) keeps you zoomed into the same archetype if possible.<br><br>\n            You can additionally sort 'by Matchup' while zoomed in.<br><br>\n        ", 
         this.width = document.querySelector(".main-wrapper").offsetWidth - 40, this.height = .94 * document.querySelector("#ladderWindow .content").offsetHeight, 
         this.f = this.hsFormats[0], this.t = "last2Weeks", this.r = this.ranks[0], this.sortBy = this.sortOptions[0], 
         PREMIUM && (this.zoomIn = !1, this.zoomArch = null), this.fullyLoaded = !1, this.overlay = !1, 
@@ -2670,22 +2997,22 @@ var Table = function() {
                 this.data[d] = {};
                 var c = !0, u = !1, y = void 0;
                 try {
-                    for (var f, m = this.hsTimes[Symbol.iterator](); !(c = (f = m.next()).done); c = !0) {
-                        var v = f.value;
-                        this.data[d][v] = {};
-                        var p = !0, b = !1, k = void 0;
+                    for (var f, v = this.hsTimes[Symbol.iterator](); !(c = (f = v.next()).done); c = !0) {
+                        var m = f.value;
+                        this.data[d][m] = {};
+                        var p = !0, b = !1, w = void 0;
                         try {
-                            for (var w, g = this.ranks[Symbol.iterator](); !(p = (w = g.next()).done); p = !0) {
-                                var T = w.value;
-                                this.data[d][v][T] = null;
+                            for (var k, g = this.ranks[Symbol.iterator](); !(p = (k = g.next()).done); p = !0) {
+                                var x = k.value;
+                                this.data[d][m][x] = null;
                             }
                         } catch (t) {
-                            b = !0, k = t;
+                            b = !0, w = t;
                         } finally {
                             try {
                                 !p && g.return && g.return();
                             } finally {
-                                if (b) throw k;
+                                if (b) throw w;
                             }
                         }
                     }
@@ -2693,7 +3020,7 @@ var Table = function() {
                     u = !0, y = t;
                 } finally {
                     try {
-                        !c && m.return && m.return();
+                        !c && v.return && v.return();
                     } finally {
                         if (u) throw y;
                     }
@@ -2754,10 +3081,10 @@ var Table = function() {
                 }
             }
             document.querySelector("#tableWindow .content-header #rankFolder .dropdown").innerHTML = "";
-            var y = !0, f = !1, m = void 0;
+            var y = !0, f = !1, v = void 0;
             try {
-                for (var v, p = this.ranks[Symbol.iterator](); !(y = (v = p.next()).done); y = !0) {
-                    var b = v.value;
+                for (var m, p = this.ranks[Symbol.iterator](); !(y = (m = p.next()).done); y = !0) {
+                    var b = m.value;
                     (C = document.createElement("button")).innerHTML = btnIdToText[b], C.id = b, C.className = "folderBtn optionBtn";
                     n = function(t) {
                         this.r = t.target.id, this.plot(), this.renderOptions();
@@ -2765,19 +3092,19 @@ var Table = function() {
                     C.onclick = n.bind(this), document.querySelector("#tableWindow .content-header #rankFolder .dropdown").appendChild(C);
                 }
             } catch (t) {
-                f = !0, m = t;
+                f = !0, v = t;
             } finally {
                 try {
                     !y && p.return && p.return();
                 } finally {
-                    if (f) throw m;
+                    if (f) throw v;
                 }
             }
             document.querySelector("#tableWindow .content-header #sortFolder .dropdown").innerHTML = "";
-            var k = !0, w = !1, g = void 0;
+            var w = !0, k = !1, g = void 0;
             try {
-                for (var T, x = this.sortOptions[Symbol.iterator](); !(k = (T = x.next()).done); k = !0) {
-                    var C, L = T.value;
+                for (var x, T = this.sortOptions[Symbol.iterator](); !(w = (x = T.next()).done); w = !0) {
+                    var C, L = x.value;
                     (C = document.createElement("button")).innerHTML = btnIdToText[L], C.id = L, C.className = "folderBtn optionBtn";
                     n = function(t) {
                         this.sortBy = t.target.id, this.data[this.f][this.t][this.r].sortTableBy(this.sortBy), 
@@ -2786,22 +3113,22 @@ var Table = function() {
                     C.onclick = n.bind(this), document.querySelector("#tableWindow .content-header #sortFolder .dropdown").appendChild(C);
                 }
             } catch (t) {
-                w = !0, g = t;
+                k = !0, g = t;
             } finally {
                 try {
-                    !k && x.return && x.return();
+                    !w && T.return && T.return();
                 } finally {
-                    if (w) throw g;
+                    if (k) throw g;
                 }
             }
             this.questionBtn.addEventListener("click", this.toggleOverlay.bind(this)), this.overlayDiv.addEventListener("click", this.toggleOverlay.bind(this)), 
             this.nrGamesBtn.onclick = this.annotate.bind(this);
-            document.querySelector("#tableWindow .changeColorBtn").addEventListener("click", function() {
+            if (document.querySelector("#tableWindow .changeColorBtn").addEventListener("click", function() {
                 this.updateColorTheme();
-            }.bind(this));
-            if (document.querySelector("#tableWindow .equilibriumBtn").addEventListener("click", function() {
-                this.equilibrium();
             }.bind(this)), PREMIUM) {
+                document.querySelector("#tableWindow .equilibriumBtn").addEventListener("click", function() {
+                    this.equilibrium();
+                }.bind(this));
                 document.querySelector("#tableWindow .downloadBtn").addEventListener("click", function() {
                     this.data[this.f][this.t][this.r].downloadCSV();
                 }.bind(this));
@@ -2863,19 +3190,19 @@ var Table = function() {
                         var o = s.value, l = !0, h = !1, d = void 0;
                         try {
                             for (var c, u = this.hsTimes[Symbol.iterator](); !(l = (c = u.next()).done); l = !0) {
-                                var y = c.value, f = !0, m = !1, v = void 0;
+                                var y = c.value, f = !0, v = !1, m = void 0;
                                 try {
                                     for (var p, b = this.ranks[Symbol.iterator](); !(f = (p = b.next()).done); f = !0) {
-                                        var k = p.value;
-                                        this.data[o][y][k] = new Table(e[o][y][k], o, y, k, this);
+                                        var w = p.value;
+                                        this.data[o][y][w] = new Table(e[o][y][w], o, y, w, this);
                                     }
                                 } catch (t) {
-                                    m = !0, v = t;
+                                    v = !0, m = t;
                                 } finally {
                                     try {
                                         !f && b.return && b.return();
                                     } finally {
-                                        if (m) throw v;
+                                        if (v) throw m;
                                     }
                                 }
                             }
@@ -2959,14 +3286,14 @@ var Table = function() {
         if (MOBILE) {
             var c = !0, u = !1, y = void 0;
             try {
-                for (var f, m = this.mobileBtns[Symbol.iterator](); !(c = (f = m.next()).done); c = !0) {
+                for (var f, v = this.mobileBtns[Symbol.iterator](); !(c = (f = v.next()).done); c = !0) {
                     f.value.addEventListener("click", this.mobileMenu.bind(this));
                 }
             } catch (t) {
                 u = !0, y = t;
             } finally {
                 try {
-                    !c && m.return && m.return();
+                    !c && v.return && v.return();
                 } finally {
                     if (u) throw y;
                 }

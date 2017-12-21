@@ -56,10 +56,19 @@ class Decklist {
         this.decklist = document.createElement('div')
         this.decklist.className = 'decklist'
         this.decklist.id = dl.name
+        let rarityDist = {
+            Free: 0,
+            Basic: 0,
+            Common: 0,
+            Rare: 0,
+            Epic: 0,
+            Legendary: 0,
+        }
 
         for (var card of dl.cards) {
 
             this.cardNames.push(card.name)
+            rarityDist[card.rarity] += 1
 
             var c = new CardDiv(card)
             c.hoverDiv.onmouseover = this.window.highlight.bind(this.window)
@@ -96,9 +105,15 @@ class Decklist {
         var dustImg = document.createElement('img')
         dustImg.src = 'Images/dust.png'
         dustImg.className = 'dustImg'
+        var dust_dist = document.createElement('p')
+        dust_dist.innerHTML = `L: ${rarityDist['Legendary']} E: ${rarityDist['Epic']} 
+                                R: ${rarityDist['Rare']} C: ${rarityDist['Common']} 
+                                B: ${rarityDist['Basic']+rarityDist['Free']}`
+        dust_dist.className = 'dustInfo'
         dustDiv.appendChild(dustInfo)
         dustDiv.appendChild(dustImg)
         this.deckinfo.appendChild(dustDiv)
+
 
         var cardTypes = document.createElement('p')
         cardTypes.className = 'cardtypes'
@@ -115,6 +130,11 @@ class Decklist {
         if (dl.cardTypes.Hero) { ct_txt += dl.cardTypes.Hero+'  Hero<br>' }
         cardTypes.innerHTML = ct_txt
         this.deckinfo.appendChild(cardTypes)
+
+        // var winrate = document.createElement('p')
+        // winrate.className = 'winrate'
+        // winrate.innerHTML = 'Win Rate: '+ dl.wr
+        // this.deckinfo.appendChild(winrate)
 
         var author = document.createElement('p')
         author.className = 'author'
@@ -254,6 +274,105 @@ class CardDiv {
 
 
     }
+}// class Card
 
 
-}
+
+class Sidebar {
+    constructor(div,title) {
+
+        this.div = div
+        this.titleDiv = document.createElement('div')
+        this.titleDiv.className = 'title'
+        this.setTitle(title)
+        this.div.appendChild(this.titleDiv)
+
+        this.archBtnsDiv = document.createElement('div')
+        this.archBtnsDiv.className = 'archBtnList'
+        this.div.appendChild(this.archBtnsDiv)
+
+        this.archList = [] // list arch object
+        this.archBtns = [] // list of btnDiv
+        this.hidden = false
+    } 
+
+    setTitle(title) { this.titleDiv.innerHTML = title }
+
+    loadClass(classData) {
+        this.removeBtn()
+        //this.setTitle(classData.hsClass+' Archetypes')
+        this.archetypes = classData.archetypes
+        for (let a of this.archetypes) { this.addArchBtn(a) }
+    }
+    
+
+    addArchBtn(hsArch) {
+        let btnWrapper = document.createElement('div')
+        btnWrapper.className = 'archBtnWrapper'
+
+        let btn = document.createElement('div')
+        btn.id = hsArch.name
+        btn.className = 'archBtn'
+        btn.style.color = hsFontColors[hsArch.hsClass]
+        btn.style.backgroundColor = hsColors[hsArch.hsClass]
+        btn.innerHTML = hsArch.name
+
+        btn.addEventListener("click", decksWindow.buttonTrigger.bind(decksWindow))
+        btnWrapper.appendChild(btn)
+
+        let wrDiv = document.createElement('div')
+        wrDiv.className = 'wrDiv'
+        //wrDiv.innerHTML = (100*hsArch.wr).toFixed(1)+'%'
+        wrDiv.innerHTML = 'Tier '+tier_classifier(hsArch.wr)
+        btnWrapper.appendChild(wrDiv)
+    
+
+        this.archBtns.push(btnWrapper)
+        this.archBtnsDiv.appendChild(btnWrapper)
+    }
+
+    removeBtn(archName = null) {
+
+        for (let i=0; i < this.archBtns.length; i++) {
+            let a = this.archList[i]
+            let btn = this.archBtns[i]
+
+            if (archName == null) { 
+                this.archBtnsDiv.innerHTML = ''
+                this.archList = []
+                return
+            }
+
+            else if ( a.name == archName ) {
+                this.archList.del(a)
+                this.archBtnsDiv.removeChild(btn)
+                return
+            }
+        }
+    }// clear arch
+
+    hide() { if (!this.hidden) {this.div.classList.add('hidden'); this.hidden = false } }
+    show() { this.div.classList.remove('hidden'); this.hidden = true}
+
+}// class Sidebar
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

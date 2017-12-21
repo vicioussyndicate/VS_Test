@@ -50,11 +50,11 @@ class History {
             
             this.top = 9
             this.timeFrame = {
-                'last6Hours': 6,
-                'last12Hours':12,
+                'last6Hours': 24,
+                'last12Hours':24,
                 'lastDay': 24,
-                'last3Days':3,
-                'lastWeek': 7,
+                'last3Days':14,
+                'lastWeek': 14,
                 'last2Weeks':14,
                 'last3Weeks':21,
                 'lastMonth':30,

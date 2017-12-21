@@ -129,7 +129,7 @@ html(lang='en')
               .colorTheme.chartFooterBtn
                 button.changeColorBtn Change Colors
               .equilibrium.chartFooterBtn
-                button.equilibriumBtn Equilibrium
+                button.equilibriumBtn Simulation
               .download.chartFooterBtn
                 button.downloadBtn Download Table
                   .fa.fa-cloud-download
@@ -155,6 +155,7 @@ html(lang='en')
                   button#Warlock.optionBtn.folderBtn Warlock
                   button#Warrior.optionBtn.folderBtn Warrior
             .displayOptions.optionBar
+              button#overview.optionBtn Overview
               button#description.optionBtn Description
               button#decklists.optionBtn Deck Lists
               //button#classRadar.optionBtn Class Radar
@@ -162,12 +163,20 @@ html(lang='en')
             p.overlayText
           .content
             .question.fa.fa-question-circle
-            .archetypes
-              p.title Archetypes
-              .archetypeList
+            .sidebar.left
+              //p.title Archetypes
+              //.archetypeList
             .descriptionBox
               .description
-            .decklists 
+            .decklists
+            #chart3.chart
+            .sidebarWrapper
+              .sidebar.right1
+              .sidebar.right2
+              //p.title Good vs
+              //.archetypeList
+              //p.title Bad vs
+              //.archetypeList
           .content-footer
             
           

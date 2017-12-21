@@ -113,6 +113,24 @@ function shuffle(array) {
   return array;
 }
 
+function normalize(vector) {
+  let s = 0
+  for (let v of vector) {s += Math.abs(v)}
+  if (s==1 || s==0) {return vector}
+  for (let i=0; i<vector.length; i++) {vector[i] /= s}
+  return vector
+}
+
+function matrixXvector(matrix,fr) {
+        let wr = []
+        let fr_n = normalize(fr)
+        for (let i=0; i<fr.length;i++) {
+            let w = 0
+            for (let j=0; j<fr.length;j++) { w += fr_n[j] * matrix[i][j] }
+            wr.push(w)
+        }
+        return wr
+    }
 
 
 // MOBILE
