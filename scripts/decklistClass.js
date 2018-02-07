@@ -154,13 +154,6 @@ class Decklist {
             gameplay.innerHTML = 'Gameplay'
             this.deckinfo.appendChild(gameplay)
         }
-           
-        
-
-        // this.copyBtn = document.createElement('buttton')
-        // this.copyBtn.innerHTML = 'Copy To Clipboard'
-        // this.copyBtn.className = 'copyDL'
-        // this.copyBtn.id = 'dl'+randint(0,10000000) // unique button id for clipboard
         
         
         this.div.appendChild(this.deckTitle)
@@ -275,6 +268,8 @@ class CardDiv {
 
     }
 }// class Card
+
+
 
 
 

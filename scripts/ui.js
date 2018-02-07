@@ -25,6 +25,14 @@ class UI {
         this.overlay = false
         this.loggedIn = false
 
+        this.windowClasses = {
+            'decksWindow': decksWindow,
+            'tableWindow': tableWindow,
+            'ladderWindow': ladderWindow,
+            'powerWindow': powerWindow,
+            'infoWindow': infoWindow
+        }
+
         for(var tab of this.tabs) { tab.addEventListener("click", this.toggleTabs.bind(this)) }
         for(var fBtn of this.folderButtons) { fBtn.addEventListener("click", this.toggleDropDown.bind(this)) }
 
@@ -114,11 +122,13 @@ class UI {
     toggleTabs (e) {
 
         this.activeTab = e.target
-        this.activeWindow = document.getElementById(e.target.id+'Window')
+        let windowName = e.target.id+'Window'
 
-        this.renderTabs()
-        this.renderWindows()
-
+        if (windowName != this.activeWindow.id) {
+            this.activeWindow = document.getElementById(windowName)
+            this.renderTabs()
+            this.renderWindows()
+        }
     }
 
     deckLink(arch, hsFormat) {

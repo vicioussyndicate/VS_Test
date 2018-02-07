@@ -222,7 +222,11 @@ class Table {
         var table = this.table.concat([overallWR])
         var arch = this.archetypes.concat([this.overallString])
         var textRow = []
-        for (var i=0;i<table[0].length;i++) { textRow.push(`${this.archetypes[i]}<br>Overall wr: ${(100*overallWR[i]).toFixed(1)}%`) }
+
+        for (var i=0;i<table[0].length;i++) { textRow.push(
+            `${this.archetypes[i]}<br>Overall wr: ${(100*overallWR[i]).toFixed(1)}%`
+            ) }
+
         var textTable = this.textTable.concat([textRow])
 
 
@@ -276,7 +280,7 @@ class Table {
     }
 
 
-    subPlotFR() { Plotly.restyle('chart2',this.freqPlotData,1) }
+    subPlotFR() { Plotly.restyle('chart2',this.freqPlotData, 1) }
 
     subPlotWR (idx) {
         var wr
@@ -303,6 +307,7 @@ class Table {
     }
 
     zoomToggle (data) {
+        console.log('click')
         var arch = data.points[0].y
         if (this.window.zoomIn == false) { this.zoomIn(arch) }
         else { this.zoomOut()}
@@ -424,6 +429,7 @@ class Table {
         if (plot) { this.plot() }
     } // close SortBy    
 
+
     downloadCSV() {
         this.download = ' %2C'
         for (var i=0;i<this.numArch;i++) { this.download += this.archetypes[i]+'%2C' }
@@ -437,6 +443,10 @@ class Table {
         // Overall
         this.download += 'Overall%2C'
         for (var i=0;i<this.numArch;i++) { this.download += this.winrates[i] + '%2C' }
+
+        // Frequency
+        this.download += 'Frequency%2C'
+        for (var i=0;i<this.numArch;i++) { this.download += this.freqPlotData.y[i] + '%2C' }        
 
         var dlink = document.createElement('a')
         dlink.setAttribute('href', 'data:text/plain;charset=utf-8,' + this.download)
@@ -565,6 +575,7 @@ class Table {
         ui.hideLoader()
     }
 
+    // Stack equilibrium charts
     stackedArea(traces) {
         for(var i=1; i<traces.length; i++) {
             for(var j=0; j<(Math.min(traces[i]['y'].length, traces[i-1]['y'].length)); j++) {
@@ -574,6 +585,7 @@ class Table {
         return traces;
     }
 
+    // Equilibrium Winrate
     eq_wr(archetypes,matrix) {
         for (let i=0;i<archetypes.length;i++) {
             archetypes[i].wr = 0
@@ -583,6 +595,7 @@ class Table {
         }
     }
 
+    // Equilibrium Frequency
     eq_fr(archetypes) {
         let fr_min = 0.0001
         let damping = 0.1 // Damping
