@@ -244,7 +244,6 @@ class CardDiv {
         if (this.cost >= 10) {
             cost.style.fontSize = '75%'
             cost.style.paddingLeft = '0.2rem'
-            cost.style.paddingTop = '0.4rem'
         }
 
         var name = document.createElement('div')
@@ -274,7 +273,7 @@ class CardDiv {
 
 
 class Sidebar {
-    constructor(div,title) {
+    constructor(div,title,options) {
 
         this.div = div
         this.titleDiv = document.createElement('div')
@@ -302,8 +301,10 @@ class Sidebar {
     
 
     addArchBtn(hsArch) {
+        if (hsArch == undefined) {return}
         let btnWrapper = document.createElement('div')
         btnWrapper.className = 'archBtnWrapper'
+        btnWrapper.id = hsArch.name
 
         let btn = document.createElement('div')
         btn.id = hsArch.name
@@ -312,7 +313,13 @@ class Sidebar {
         btn.style.backgroundColor = hsColors[hsArch.hsClass]
         btn.innerHTML = hsArch.name
 
-        btn.addEventListener("click", decksWindow.buttonTrigger.bind(decksWindow))
+        let self = this
+        let trigger = function(e) {
+            self.highlight(hsArch.name)
+            app.ui.decksWindow.buttonTrigger(e) 
+        }
+
+        btn.addEventListener("click", trigger.bind(app.ui.decksWindow))
         btnWrapper.appendChild(btn)
 
         let wrDiv = document.createElement('div')
@@ -324,6 +331,14 @@ class Sidebar {
 
         this.archBtns.push(btnWrapper)
         this.archBtnsDiv.appendChild(btnWrapper)
+    }
+
+    highlight(archName) {
+        for (let btn of this.archBtns) {
+            if (btn.id == archName && !btn.classList.contains('highlighted')) {
+                btn.classList.add('highlighted')
+            } else { btn.classList.remove('highlighted') }
+        }
     }
 
     removeBtn(archName = null) {
@@ -344,17 +359,22 @@ class Sidebar {
                 return
             }
         }
-    }// clear arch
+    }// remove Btn
 
     hide() { if (!this.hidden) {this.div.classList.add('hidden'); this.hidden = false } }
     show() { this.div.classList.remove('hidden'); this.hidden = true}
 
-}// class Sidebar
+}// Sidebar
 
 
 
 
+class ArchBtn {
 
+    constructor() {
+        this.div = document.createElement('div')
+    }
+}
 
 
 

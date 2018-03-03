@@ -4,78 +4,14 @@ var t0 = performance.now();
 
 
 
-// Global Data
-var DATABASE
 var MOBILE = false
-
-// Windows
-var powerWindow
-var decksWindow
-var tableWindow
-var ladderWindow
-var infoWindow
-var ui
-
-
-
+var app
 
 
 window.onload = function() {
     if (window.innerWidth <= 756) { MOBILE = true; console.log('mobile')}
-    ui = new UI()
-    ui.showLoader()
-    setupFirebase()
+    app = new App()
 }
-
-
-function reloadApp() {
-  ui.showLoader()
-  ui.loggedIn = false
-  setupFirebase()
-}
-
-function reloadPremium() {
-}
-
-function reloadBasic() {
-  if (!PREMIUM) {return}
-  //PREMIUM = false
-  ui.showLoader()
-  ui.loggedIn = false
-  setupFirebase()
-}
-
-
-function finishedLoading() {
-
-    if (!(tableWindow.fullyLoaded && ladderWindow.fullyLoaded)) {return}
-    
-
-    powerWindow = new PowerWindow()
-    decksWindow = new DecksWindow(hsFormats)
-    powerWindow.plot()
-    tableWindow.plot()
-    ladderWindow.plot()
-
-    ui.fullyLoaded = true
-    ui.hideLoader()
-    console.log("App initializing took " + (performance.now() - t0) + " ms.")
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

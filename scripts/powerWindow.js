@@ -5,6 +5,8 @@ class PowerWindow {
 
     constructor () {
 
+        this.div = document.querySelector('#powerWindow')
+        this.tab = document.querySelector('#power.tab')
         this.grid = document.querySelector('#powerGrid')
         this.optionButtons = document.querySelectorAll('#powerWindow .optionBtn')
         this.questionBtn = document.querySelector('#powerWindow .question')
@@ -13,11 +15,12 @@ class PowerWindow {
         
 
         this.f = 'Standard'
-        this.mode = 'tiers'
+        this.mode = 'brackets'
         this.t_ladder = {Standard: 'lastDay', Wild: 'last2Weeks'}
-        if(PREMIUM) {this.t_ladder.Wild = 'lastWeek'}
+        if (PREMIUM) {this.t_ladder.Wild = 'lastWeek'}
         this.t_table = 'last2Weeks'
-        this.top = 5
+        this.maxElementsPerRank = 5
+        this.maxElementsPerBracket = (PREMIUM) ? 16 : 5
         this.minGames = 50
         
         this.overlayText = `
@@ -29,48 +32,41 @@ class PowerWindow {
             Click on a deck to get to it's deck list in the "Decks" tab.<br><br>        
         `
 
-        this.data = {Standard:[], Wild:[], rankSums: {Standard:[], Wild:[]}} // [rank0=[{name: druid, wr: x, fr: x}]]
-        for (var rank=0; rank<hsRanks;rank++) {this.data['Standard'].push([])}
-        for (var rank=0; rank<hsRanks;rank++) {this.data['Wild'].push([])}
-        for (let i=0;i<this.optionButtons.length;i++) { this.optionButtons[i].addEventListener("click", this.buttonTrigger.bind(this)) }
-
-        this.tierData = {}
-        this.tiers = [
-            {name:'All Ranks',
-            games:{Standard:0,Wild:0},
-            start:0,
-            end: 15},
-            {name:'L',
-            games:{Standard:0,Wild:0},
-            start: 0,
-            end: 0},
-            {name:'1-5',
-            games:{Standard:0,Wild:0},
-            start: 1,
-            end: 5},
-            {name:'6-15',
-            games:{Standard:0,Wild:0},
-            start: 6,
-            end: 15},
-        ]
-        this.maxTierElements = (PREMIUM) ? 16 : 5 ;
-        for (var f of ['Standard','Wild']) {
-            this.tierData[f] = {}
-            for (var tier of this.tiers) {
-                this.tierData[f][tier.name] = []
-            }
+        this.rankData = {rankSums: {}, fullyLoaded: {}} // {Standard:[], Wild:[], rankSums: {Standard:[], Wild:[]}}
+        for (let f of hsFormats) {
+            this.rankData[f] = []
+            for (let rank of range(0,hsRanks)) { this.rankData[f].push([]) }
+            this.rankData.rankSums[f] = []
+            this.rankData.fullyLoaded[f] = false
         }
+
+        this.bracketData = {}
+        this.rankBrackets = [
+            {name:'All Ranks',  games:{}, start: 0, end: 15},
+            {name:'L',          games:{}, start: 0, end: 0},
+            {name:'1-5',        games:{}, start: 1, end: 5},
+            {name:'6-15',       games:{}, start: 6, end: 15},
+        ]
+
+        
+        for (let f of hsFormats) {
+            this.bracketData[f] = {}
+            for (let bracket of this.rankBrackets) { 
+                bracket.games[f] = 0
+                this.bracketData[f][bracket.name] = [] 
+        }}
+
         this.overlay = false
-        this.addData('Standard')
-        this.addData('Wild')
+        this.addData('Standard',_=>{})
         this.setupUI()
         this.renderOptions()
-    }// close constructor
+    }// constructor
 
 
     setupUI() {
-        var disp = (PREMIUM) ? 'inline':'none'
-        document.querySelector('#powerWindow .content-header #top').style.display = disp
+        for (let i=0;i<this.optionButtons.length;i++) { this.optionButtons[i].addEventListener("click", this.buttonTrigger.bind(this)) }
+        let disp = (PREMIUM) ? 'inline':'none'
+        document.querySelector('#powerWindow .content-header #brackets').style.display = disp
         this.questionBtn.addEventListener('click',this.toggleOverlay.bind(this))
         this.overlayDiv.addEventListener('click',this.toggleOverlay.bind(this))
     }
@@ -82,14 +78,16 @@ class PowerWindow {
         if (btnID == 'Standard')    {this.f = 'Standard'}
         if (btnID == 'Wild')        {this.f = 'Wild'}
 
-        if (btnID == 'top')         {this.mode = 'top'}
-        if (btnID == 'tiers')       {this.mode = 'tiers'}
+        if (btnID == 'ranks')       {this.mode = 'ranks'}
+        if (btnID == 'brackets')    {this.mode = 'brackets'}
         
         this.plot()
         this.renderOptions()
-    }// button Handler
+    }// buttonTrigger
 
-    pressButton(e) {ui.deckLink(e.target.id, this.f) }
+    pressButton(e) {
+        app.ui.deckLink(e.target.id, this.f) 
+    }
 
 
     renderOptions() {
@@ -104,78 +102,127 @@ class PowerWindow {
 
 
 
-    addData (f) {
-        var ladder = ladderWindow.data[f][this.t_ladder[f]].archetypes
-        var table = tableWindow.data[f][this.t_table]['ranks_all']
+    addData (f,callback) {
+        let ladderData = app.ui.ladderWindow.data[f][this.t_ladder[f]]
+        let tableData = app.ui.tableWindow.data[f][this.t_table]['ranks_all']
 
-        this.data.rankSums[f] = ladderWindow.data[f][this.t_ladder[f]].rankSums
-        for (var rank=0; rank<hsRanks;rank++) {
-            for (var tier of this.tiers) {
-                if (tier.start<=rank && tier.end>=rank) { 
-                    tier.games[f] += this.data.rankSums[f][rank]
-        }}}
+        let ladderArchetypes = ladderData.archetypes
+        let tableArchetypes = tableData.archetypes
+        let table = tableData.table
+        let rankSums = app.ui.ladderWindow.data[f][this.t_ladder[f]].rankSums
+        
+        this.rankData.rankSums[f] = app.ui.ladderWindow.data[f][this.t_ladder[f]].rankSums
+        for (let rank of range(0,hsRanks)) {
+            for (let bracket of this.rankBrackets) {
+                if (bracket.start <= rank && bracket.end >= rank) { bracket.games[f] += this.rankData.rankSums[f][rank] }
+        }}
 
-        for (var arch of ladder) {
+        for (let arch of ladderArchetypes) {
 
-            var idx = table.archetypes.indexOf(arch.name)
-            if (idx == -1) {continue}
+            let idx = tableArchetypes.indexOf(arch.name)
+            if (idx == -1) { continue }
 
-            for (var rank=0; rank<hsRanks;rank++) {
+            for (let rank of range(0,hsRanks)) {
 
-                var totFreq = 0
-                var totWr = 0
+                let totFreq = 0
+                let totWr = 0
 
-                for (var opp of ladder) {
+                for (let opp of ladderArchetypes) {
 
-                    var idxOpp = table.archetypes.indexOf(opp.name)
-                    if (idxOpp == -1) {continue}
+                    let idxOpp = tableArchetypes.indexOf(opp.name)
+                    if (idxOpp == -1) { continue }
 
-                    var freqOpp = opp.data[rank]
-                    var mu = table.table[idx][idxOpp]
+                    let freqOpp = opp.fr_ranks[rank]
+                    let mu = table[idx][idxOpp]
                     totFreq += freqOpp
                     totWr += freqOpp * mu                
                 }
 
-                if (totFreq != 0) {totWr /= totFreq}
-                else {totWr = 0}
+                totWr = (totFreq > 0) ? totWr/totFreq : 0
 
-                this.data[f][rank].push({name:arch.name, wr:totWr, fr:arch.data[rank], color: arch.color, fontColor: arch.fontColor})
-                for (var tier of this.tiers) {
-                    var data = this.tierData[f][tier.name]
-                    if (rank == tier.start) {data.push({name:arch.name, wr:totWr, fr:arch.data[rank], color: arch.color, fontColor: arch.fontColor, count:(totWr>0)?1:0})}
-                    if (rank > tier.start && rank <= tier.end) { data[data.length-1].wr += totWr; data[data.length-1].count += (totWr>0)?1:0 }
-                    if (rank == tier.end && data[data.length-1].count > 0) { data[data.length-1].wr /= data[data.length-1].count }
+                this.rankData[f][rank].push({name:arch.name, wr:totWr, fr: arch.fr_ranks[rank], color: arch.color, fontColor: arch.fontColor})
+                for (var bracket of this.rankBrackets) {
+                    let data = this.bracketData[f][bracket.name]
+                    if (rank == bracket.start) {data.push({name:arch.name, wr: totWr, fr: arch.fr_ranks[rank], color: arch.color, fontColor: arch.fontColor, count:(totWr>0)?1:0})}
+                    if (rank > bracket.start && rank <= bracket.end) { data[data.length-1].wr += totWr; data[data.length-1].count += (totWr>0)?1:0 }
+                    if (rank == bracket.end && data[data.length-1].count > 0) { data[data.length-1].wr /= data[data.length-1].count }
                 }
-
 
             } // close for ranks
         } // close for arch
 
 
-        var sortByWr = function (a,b) { return a.wr > b.wr ? -1 : a.wr < b.wr ? 1 : 0; }
-        for (var rank=0;rank<hsRanks;rank++) { this.data[f][rank].sort(sortByWr) }
-        for (var tier of this.tiers) { this.tierData[f][tier.name].sort(sortByWr) }
+        let sortByWr = function (a,b) { return a.wr > b.wr ? -1 : a.wr < b.wr ? 1 : 0; }
+        for (let rank of range(0,hsRanks)) { this.rankData[f][rank].sort(sortByWr) }
+        for (let bracket of this.rankBrackets) { this.bracketData[f][bracket.name].sort(sortByWr) }
+        this.rankData.fullyLoaded[f] = true
+        if (callback != undefined) { return callback.apply(this) }
     } // close add Data
 
 
 
+    checkLoadData(callback) {
+
+        let back = (callback != undefined)
+        console.log('checkLoadData',back,callback)
+
+        if (this.rankData.fullyLoaded[this.f]) {
+            // all loaded
+            return (back) ?  callback.apply(this) : true
+        }
+
+        if (!app.ui.ladderWindow.data[this.f].fullyLoaded) {
+            console.log('load ladder data from power window')
+            let callback2 = function() { app.ui.powerWindow.checkLoadData(callback) }
+            if (back) { return app.ui.ladderWindow.loadData(this.f, callback2) }
+            else { return false }
+        }
+
+        if (!app.ui.tableWindow.data[this.f].fullyLoaded) {
+            console.log('load table data from power window')
+            let callback2 = function() { app.ui.powerWindow.checkLoadData(callback) }
+            if (back) { return app.ui.tableWindow.loadData(this.f, callback2) }
+            else { return false }       
+        }
+
+        if (app.ui.ladderWindow.data[this.f].fullyLoaded && app.ui.tableWindow.data[this.f].fullyLoaded) {
+            console.log('all checks ok')
+            this.addData(this.f, callback)   
+        }
+    }
 
 
 
     plot() {
-        if (this.mode == 'top') {this.plotTop(this.f)}
-        if (this.mode == 'tiers') {this.plotTiers(this.f)}
+        if (!this.checkLoadData()) { 
+            this.renderOptions()
+            return this.checkLoadData( _ => { app.ui.powerWindow.plot() }) 
+        }
+        if (this.mode == 'ranks') {this.plotRanks(this.f)}
+        if (this.mode == 'brackets') {this.plotBrackets(this.f)}
     }
 
-    plotTop (f) {
+    display(bool) {
+        if (bool) {
+            this.div.style.display = 'inline-block'
+            this.f = app.path.hsFormat
+            this.plot()
+
+        } else {
+            this.div.style.display = 'none'
+            app.path.hsFormat = this.f
+        }
+    }
+
+    plotRanks (f) {
 
         while (this.grid.firstChild) {this.grid.removeChild(this.grid.firstChild);}
         
-        var ranks = range(0,hsRanks)
+        let ranks = range(0,hsRanks)
         ranks[0] = 'L'
     
-        var columnTemplate = '1fr '
-        for (var i=0;i<this.top;i++) {columnTemplate += '4fr 1fr '}
+        let columnTemplate = '1fr '
+        for (let i of range(0,this.maxElementsPerRank)) {columnTemplate += '4fr 1fr '}
 
         this.grid.style.gridTemplateColumns = columnTemplate
         this.grid.style.gridGap = '0.1rem'
@@ -189,7 +236,7 @@ class PowerWindow {
 
 
         //Header
-        for (var i=0;i<this.top;i++) { 
+        for (var i=0;i<this.maxElementsPerRank;i++) { 
             var div = document.createElement('div')
             div.className = 'header columnTitle'
             div.innerHTML = 'Top '+(i+1)
@@ -204,8 +251,8 @@ class PowerWindow {
             div.innerHTML = ranks[i]
             this.grid.appendChild(div)
 
-            if (this.data.rankSums[f][i] < this.minGames) { 
-                for (var j=0;j<this.top;j++) { 
+            if (this.rankData.rankSums[f][i] < this.minGames) { 
+                for (var j=0;j<this.maxElementsPerRank;j++) { 
                     var div = document.createElement('div')
                     div.className = 'blank'
                     this.grid.appendChild(div)
@@ -214,11 +261,11 @@ class PowerWindow {
                 continue
             }
 
-            for (var j=0;j<this.top;j++) {
-                var archName = this.data[f][i][j].name
-                var wr = (100*this.data[f][i][j].wr).toFixed(1)+ '%'
-                var color = this.data[f][i][j].color
-                var fontColor = this.data[f][i][j].fontColor
+            for (var j=0;j<this.maxElementsPerRank;j++) {
+                var archName = this.rankData[f][i][j].name
+                var wr = (100*this.rankData[f][i][j].wr).toFixed(1)+ '%'
+                var color = this.rankData[f][i][j].color
+                var fontColor = this.rankData[f][i][j].fontColor
 
                 var div = document.createElement('div')
                 var btn = document.createElement('button')
@@ -243,45 +290,45 @@ class PowerWindow {
             }
         }
         //this.grid.innerHTML = gridHTML
-    }// close plotTop
+    }// close plotRanks
 
 
 
 
 
 
-    plotTiers (f) {
+    plotBrackets (f) {
     
         while (this.grid.firstChild) {this.grid.removeChild(this.grid.firstChild);}
         
-        var ranks = range(0,hsRanks)
+        let ranks = range(0,hsRanks)
         ranks[0] = 'L'
     
-        var columnTemplate = ''
-        for (var i=0;i<this.tiers.length;i++) {columnTemplate += '4fr 1fr '}
+        let columnTemplate = ''
+        for (let b of this.rankBrackets) { columnTemplate += '4fr 1fr ' }
 
         this.grid.style.gridTemplateColumns = columnTemplate
         this.grid.style.gridGap = '0.3rem'
 
         //Header
-        for (var tier of this.tiers) { 
+        for (let bracket of this.rankBrackets) { 
             var div = document.createElement('div')
             div.className = 'header columnTitle'
-            div.innerHTML = tier.name
+            div.innerHTML = bracket.name
             this.grid.appendChild(div)
         }
 
 
-        for (var i=0;i<this.maxTierElements;i++) {
+        for (let i = 0; i < this.maxElementsPerBracket; i++ ) {
 
-            for (var tier of this.tiers) {
+            for (let bracket of this.rankBrackets) {
 
-                if (this.tierData[f][tier.name].length <= i) {continue}
+                if (this.bracketData[f][bracket.name].length <= i) {continue}
 
-                var arch = this.tierData[f][tier.name][i]
+                let arch = this.bracketData[f][bracket.name][i]
 
-                if (tier.games[f] <= this.minGames || arch == undefined) { 
-                    var div = document.createElement('div')
+                if (bracket.games[f] <= this.minGames || arch == undefined) { 
+                    let div = document.createElement('div')
                     div.className = 'blank'
                     this.grid.appendChild(div)
                     this.grid.appendChild(document.createElement('div'))
@@ -289,11 +336,11 @@ class PowerWindow {
                 }
                 
 
-                var wr = (100*arch.wr).toFixed(1)+ '%'
+                let wr = (100*arch.wr).toFixed(1)+ '%'
 
-                var div = document.createElement('div')
-                var btn = document.createElement('button')
-                var tooltip = document.createElement('span')
+                let div = document.createElement('div')
+                let btn = document.createElement('button')
+                let tooltip = document.createElement('span')
 
                 
 
@@ -317,7 +364,6 @@ class PowerWindow {
                 this.grid.appendChild(div)
             }
         }
-        //this.grid.innerHTML = gridHTML
     } // close plot Tiers
 
 

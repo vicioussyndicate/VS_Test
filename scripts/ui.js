@@ -8,36 +8,40 @@ class UI {
 
         this.tabs = document.querySelectorAll('button.tab');
         this.mobileBtns = document.querySelectorAll('button.mobileBtn');
-        this.windows = document.querySelectorAll('.tabWindow');
+        this.windowTabs = document.querySelectorAll('.tabWindow');
         this.folderButtons = document.querySelectorAll('.folder-toggle');
         this.loader = document.getElementById('loader')
         this.logo = document.querySelector('#vsLogoDiv')
-        this.refresh = document.querySelector('.refreshArrow')
         this.overlayText = document.querySelector('#overlay .overlayText')
-        this.infoWindow = document.querySelector('#infoWindow .content .infoText')
+        
+        for (let w of this.windowTabs) { w.style.display = 'none' }
+        this.windowTabs[0].style.display = 'inline-block'
+
 
         this.getWindowSize()
 
         this.tabIdx = 0
-        this.activeTab =    this.tabs[0]
-        this.activeWindow = document.querySelector('#ladderWindow')
         this.openFolder = null
         this.overlay = false
-        this.loggedIn = false
+        
+        this.decksWindow = null
+        this.tableWindow = null
+        this.ladderWindow = null
+        this.powerWindow = null
+        this.infoWindow = null
 
-        this.windowClasses = {
-            'decksWindow': decksWindow,
-            'tableWindow': tableWindow,
-            'ladderWindow': ladderWindow,
-            'powerWindow': powerWindow,
-            'infoWindow': infoWindow
+        this.archetypeColors = {}
+        for (let f of hsFormats) { 
+            this.archetypeColors[f] = {}
+            for (let c of hsClasses) { this.archetypeColors[f][c] = {count:0} }
         }
+
 
         for(var tab of this.tabs) { tab.addEventListener("click", this.toggleTabs.bind(this)) }
         for(var fBtn of this.folderButtons) { fBtn.addEventListener("click", this.toggleDropDown.bind(this)) }
 
-        if (MOBILE) {
 
+        if (MOBILE) {
             for(var mBtn of this.mobileBtns) { mBtn.addEventListener("click", this.mobileMenu.bind(this)) }
             detectswipe('.navbar',this.swipeTab.bind(this))
             document.querySelector('#ladderWindow .content-header .nrGames').style.display = 'none'
@@ -47,20 +51,42 @@ class UI {
 
         this.logo.addEventListener('click', this.toggleOverlay.bind(this))
         document.querySelector('#overlay').addEventListener('click', this.toggleOverlay.bind(this))
-
-        this.refresh.addEventListener('click', reloadApp)
-
         window.addEventListener('orientationchange', this.getWindowSize.bind(this));
         window.addEventListener('resize', this.getWindowSize.bind(this))
 
-        this.infoWindow.innerHTML = infoWindowText
-
-        this.renderTabs()
-        this.renderWindows()
         this.toggleOverlay()
-    } // close constructor
+    } // constructor
+
+    
+
+    toggleTabs (e) {
+        if (app.phase == 0) { return }
+        if (e.target != app.path.window.tab) { this.display(e.target.id+'Window') }
+    }
 
 
+    display(windowName) {
+        console.log('load',windowName)
+        if (this[windowName] == app.path.window) { return }
+        if (app.path.window != null) { app.path.window.display(false) }
+        app.path.window = this[windowName]
+        app.path.window.display(true)
+        this.renderTabs()
+    }
+
+    deckLink(arch, hsFormat) {
+        app.path.arch = arch
+        this.display('decksWindow')      
+    }
+
+    renderTabs() {
+        for (var tab of this.tabs) { tab.classList.remove('highlighted') }
+        app.path.window.tab.classList.add('highlighted')
+
+        // if (MOBILE && tab.classList.contains('highlighted')) {tab.style.display = 'inline'}
+        // if (MOBILE && !tab.classList.contains('highlighted')) {tab.style.display = 'none'}
+    }
+    
     getWindowSize() {
         this.width = parseInt(Math.max(document.documentElement.clientWidth, window.innerWidth || 0))
         this.height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
@@ -81,10 +107,10 @@ class UI {
             if (this.tabIdx >= this.tabs.length) {this.tabIdx = 0}
         }
 
-        this.activeTab = this.tabs[this.tabIdx]
-        this.activeWindow = document.getElementById(this.activeTab.id+'Window')
-        this.renderTabs()
-        this.renderWindows()
+        //this.activeTab = this.tabs[this.tabIdx]
+        //this.activeWindow = document.getElementById(this.activeTab.id+'Window')
+        //this.renderTabs()
+        //this.renderWindows()
     }
 
 
@@ -118,45 +144,7 @@ class UI {
         }       
     }
 
-
-    toggleTabs (e) {
-
-        this.activeTab = e.target
-        let windowName = e.target.id+'Window'
-
-        if (windowName != this.activeWindow.id) {
-            this.activeWindow = document.getElementById(windowName)
-            this.renderTabs()
-            this.renderWindows()
-        }
-    }
-
-    deckLink(arch, hsFormat) {
-        this.activeTab = document.querySelector('.navbar #decks.tab')
-        this.activeWindow = document.getElementById('decksWindow')
-        this.renderTabs()
-        this.renderWindows()        
-        decksWindow.deckLink(arch, hsFormat)
-    }
-
-    renderTabs() {
-        for (var tab of this.tabs) {
-            if (tab != this.activeTab) {tab.classList.remove('highlighted')}
-            else {tab.classList.add('highlighted')}
-
-            if (MOBILE && tab.classList.contains('highlighted')) {tab.style.display = 'inline'}
-            if (MOBILE && !tab.classList.contains('highlighted')) {tab.style.display = 'none'}
-        }
-    }
-
-    renderWindows() {
-        console.log('active window',this.activeWindow.id)
-        if (this.activeWindow.id == 'decksWindow' && !decksWindow.fullyLoaded) { decksWindow.loadData() }
-        for (var w of this.windows) {
-            if (w != this.activeWindow) {w.style.display = 'none'}
-            else { w.style.display = 'inline-block' }
-        }
-    }
+    
 
     showLoader() { this.loader.style.display = 'block'}
     hideLoader() { this.loader.style.display = 'none' }
@@ -167,13 +155,30 @@ class UI {
         else {
             document.getElementById("overlay").style.display = "block"; 
             this.overlay = true
-            //document.querySelector('#overlay #basicBtn').addEventListener('click',reloadBasic)
-            //document.querySelector('#overlay #premiumBtn').addEventListener('click',reloadPremium)
         }
     }
 
-    
+    getArchColor(hsClass, arch, hsFormat) {
+        
+        if (hsClasses.indexOf(arch) != -1) {return {color:hsColors[arch], fontColor: hsFontColors[arch]}}
 
+        let archName
+        if (hsClass) { archName = arch +' '+hsClass }
+        else {
+            archName = arch;
+            for (let c of hsClasses) {if (archName.indexOf(c) != -1) {hsClass = c; break} }
+        }
+
+        if (archName in this.archetypeColors[hsFormat]) { return {color: hsArchColors[hsClass][this.archetypeColors[hsFormat][archName]], fontColor: hsFontColors[hsClass] } }
+        else {
+            this.archetypeColors[hsFormat][archName] = this.archetypeColors[hsFormat][hsClass].count
+            let count = this.archetypeColors[hsFormat][hsClass].count
+            this.archetypeColors[hsFormat][hsClass].count = (count + 1)%5
+            //if (this.archetypeColors[hsFormat][hsClass].count > 4) {this.archetypeColors[hsFormat][hsClass].count = 4}
+            let color = hsArchColors[hsClass][this.archetypeColors[hsFormat][archName]]
+            return {color: color, fontColor: hsFontColors[hsClass]}
+        }
+    } // get archColor
 } // close UI
 
 
@@ -236,21 +241,7 @@ To give feedback simply click on the discord link below:<br><br><br>
 `
 
 
-const infoWindowText = `
 
-Greetings and thank you for checking out the VS Live Beta!<br><br>
-
-    Update 16-12-2017:<br><br>
-    - App refresh button in the top right corner added<br>
-    - Chose color theme for the matchup table added<br>
-    - Outdated archetypes no longer show in the overview page<br>
-    - Fixed win rates in the win rates page when data is insufficient<br><br>
-
-   To give feedback simply click on the discord link below:<br><br>
-   
-<a href=${DISCORDLINK}
-   target="_blank"><img class='discordLogo' src="Images/discordLogo.png"></a><br><br>
-`
 
 
 

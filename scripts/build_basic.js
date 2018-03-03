@@ -1,5 +1,5 @@
 
-
+// Determines bundle.js -> what information can be accessed
 
 
 const PREMIUM = false

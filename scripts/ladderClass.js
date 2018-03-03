@@ -8,9 +8,6 @@ class Ladder {
         this.maxLegendEntries = 9
         this.maxLines = 10 // max archetypes shown for the line chart
 
-        this.bgColor = 'transparent'
-        this.fontColor = window.fontColor
-        this.fontColorLight = window.fontColorLight
         this.lineWidth = 2.7
         this.fr_min = 0.03
 
@@ -20,52 +17,42 @@ class Ladder {
         this.window = window
         
         this.archetypes = []
-        this.c_data = {}
-
-        this.traces_bar =   {classes: [], decks:[]}
-        this.traces_line =  {classes: [], decks:[]}
-        this.traces_zoom =  {}
-        this.traces_pie =   {classes: {}, decks:{}}      
-
-        this.archLegend = []
-        this.classLegend = []
+        this.classFr = {} // ??
         this.totGames = 0
-        this.totGamesRanks = {}
+        this.totGamesBrackets = {} // needs bracket in name
         this.download = {classes:'',decks:''}
 
-        this.rankLabels = []
-        this.tiers = []
 
+        this.traces = {
+            bar:    {classes: [], decks:[]},
+            line:   {classes: [], decks:[]},
+            zoom:   {},
+            pie:    {classes: [], decks:[]},
+            map:    {}
+        }
+
+        for (let hsClass of hsClasses) { this.traces.zoom[hsClass] = [] }
+
+        
+        
+        // Bracket setup
+        this.rankBrackets = []
         for (var r of this.window.ranks) {
-            this.tiers.push({
-                name: btnIdToText[r],
-                buttonId: r,
+            this.traces.map[r] = null
+            this.rankBrackets.push({
+                name: r,//btnIdToText[r],
                 start: rankRange[r][0],
                 end: rankRange[r][1],
             })
         }
 
-        this.tier = this.tiers[0]
+        this.bracket = this.rankBrackets[0] // current bracket
 
-        for (var hsClass of hsClasses) {this.traces_zoom[hsClass] = []}
+        for (let bracket of this.rankBrackets) {
 
-        for (var tier of this.tiers) {
+            this.totGamesBrackets[bracket.name] = 0
 
-            this.totGamesRanks[tier.buttonId] = 0
-
-            var trace_decks = {
-                values: [],
-                labels:[],
-                marker: {colors: []},
-                textfont: {color: []},
-                hoverinfo: 'label+percent',
-                insidetextfont: {color:'white'},
-                outsidetextfont: {color:'transparent'},
-                text: [],
-                type:'pie',
-            }
-
-            var color_classes = []
+            let color_classes = []
             for (hsClass of hsClasses) { color_classes.push(hsColors[hsClass])}
 
             var trace_classes =  {
@@ -79,9 +66,20 @@ class Ladder {
                 type: 'pie',
             }
 
-            this.traces_pie['decks'][tier.buttonId] = [trace_decks]
-            this.traces_pie['classes'][tier.buttonId] = [trace_classes]
-            
+            let trace_decks = {
+                values: [],
+                labels:[],
+                marker: {colors: []},
+                textfont: {color: []},
+                hoverinfo: 'label+percent',
+                insidetextfont: {color:'white'},
+                outsidetextfont: {color:'transparent'},
+                text: [],
+                type:'pie',
+            }
+
+            this.traces.pie['decks'][bracket.name] = [trace_decks]
+            this.traces.pie['classes'][bracket.name] = [trace_classes]
         }
 
 
@@ -90,81 +88,73 @@ class Ladder {
 
 
 
-        var ARCHETYPES =    DATA.archetypes
-        var rankSums =      DATA.gamesPerRank
-        this.rankSums = DATA.gamesPerRank
-        var rankData =      this.smoothLadder(DATA.rankData,rankSums.slice())
-        var classRankData = this.smoothLadder(DATA.classRankData,rankSums.slice())
+        let ARCHETYPES =    DATA.archetypes
+        let rankSums =      DATA.gamesPerRank
+        this.rankSums =     DATA.gamesPerRank
+        let rankData =      this.smoothLadder(DATA.rankData,rankSums.slice())
+        let classRankData = this.smoothLadder(DATA.classRankData,rankSums.slice())
         
 
 
-        // Game Sums and rank labels
+        // Game Sums
         for (var i=0;i<hsRanks;i++) {
-            if (i%5==0) {this.rankLabels.push(i+'  ')}
-            else {this.rankLabels.push('')}
             this.totGames += rankSums[i]
-            for (var tier of this.tiers) {
-                if (i >= tier.start && i <= tier.end) { this.totGamesRanks[tier.buttonId] += rankSums[i] }
+            for (var bracket of this.rankBrackets) {
+                if (i >= bracket.start && i <= bracket.end) { this.totGamesBrackets[bracket.name] += rankSums[i] }
             }
         }
         
-        this.rankLabels[0] = 'L  '
-
 
 
         // Arch Traces
-        for (var i=0;i<ARCHETYPES.length;i++) {
+        for (let i = 0; i < ARCHETYPES.length; i++) {
     
-            var archFR = []
-            var archFR_line = [] // without merging 
-            var archTxt = []
-            var fr_avg = 0
-            var archName = ARCHETYPES[i][1] + " " + ARCHETYPES[i][0].replace('§', '');
-            var classIdx = hsClasses.indexOf(ARCHETYPES[i][0])
-            var color = this.window.getArchColor(ARCHETYPES[i][0],ARCHETYPES[i][1],this.f)            
-            var fontColor = color.fontColor
-            color = color.color
-
-            // var color = hsColors[ARCHETYPES[i][0]]
-            // var fontColor = hsFontColors[ARCHETYPES[i][0]]
+            let archFr = []
+            let archFr_raw = [] // without merging
+            let archFr_brackets = {}
+            let archTxt = []
+            let fr_avg = 0
+            let archName = ARCHETYPES[i][1] + " " + ARCHETYPES[i][0].replace('§', '');
+            let classIdx = hsClasses.indexOf(ARCHETYPES[i][0])
+            let uiColor = app.ui.getArchColor(ARCHETYPES[i][0],ARCHETYPES[i][1],this.f)            
+            let fontColor = uiColor.fontColor
+            let color = uiColor.color
 
 
-            for (var rank=0;rank<hsRanks;rank++) {
-                var fr = rankData[rank][i]
-                archFR_line.push(fr)                
+            for (let rank of range(0,hsRanks)) {
+
+                let fr = rankData[rank][i]
+                archFr_raw.push(fr)                
                 archTxt.push(`<b>${archName}     </b><br>freq: ${(fr*100).toFixed(1)}%`)
 
                 // Merge
                 if (fr < this.fr_min && i>8) {
-                    this.traces_bar.decks[classIdx].y[rank] += fr
+                    this.traces.bar.decks[classIdx].y[rank] += fr
                     fr = 0
                 }
-                
                 fr_avg += fr
-                archFR.push(fr)
-             
+                archFr.push(fr)
                 
-                
-
-                for (var tier of this.tiers) {
-                    if (rank == tier.start) {
-                        
-                        this.traces_pie['decks'][tier.buttonId][0].values.push(fr)
-                        this.traces_pie['decks'][tier.buttonId][0].labels.push(archName)
-                        this.traces_pie['decks'][tier.buttonId][0].marker.colors.push(color)
+                for (let bracket of this.rankBrackets) {
+                    if (rank == bracket.start) {
+                        // !!! bracket.name < bracket.name
+                        this.traces.pie['decks'][bracket.name][0].values.push(fr)
+                        this.traces.pie['decks'][bracket.name][0].labels.push(archName)
+                        this.traces.pie['decks'][bracket.name][0].marker.colors.push(color)
                     }
-                    if (rank > tier.start && rank <= tier.end) {
-                        this.traces_pie['decks'][tier.buttonId][0].values[i] += fr
+                    if (rank > bracket.start && rank <= bracket.end) {
+                        this.traces.pie['decks'][bracket.name][0].values[i] += fr
                     }
-                    if (rank == tier.end) {
-                        this.traces_pie.decks[tier.buttonId][0].values[i] /= (tier.end - tier.start + 1)
-                        this.traces_pie['decks'][tier.buttonId][0].text.push(archName)
+                    if (rank == bracket.end) {
+                        this.traces.pie.decks[bracket.name][0].values[i] /= (bracket.end - bracket.start + 1)
+                        this.traces.pie['decks'][bracket.name][0].text.push(archName)
+                        archFr_brackets[bracket.name] = this.traces.pie.decks[bracket.name][0].values[i]
 
                         // Merge Pie
-                        var fr_pie = this.traces_pie.decks[tier.buttonId][0].values[i]
+                        var fr_pie = this.traces.pie.decks[bracket.name][0].values[i]
                         if (fr_pie <this.fr_min && i>8) {
-                            this.traces_pie.decks[tier.buttonId][0].values[i] = 0
-                            this.traces_pie.decks[tier.buttonId][0].values[classIdx] += fr_pie
+                            this.traces.pie.decks[bracket.name][0].values[i] = 0
+                            this.traces.pie.decks[bracket.name][0].values[classIdx] += fr_pie
                         } 
                     }
                 }
@@ -173,16 +163,13 @@ class Ladder {
             fr_avg /= hsRanks
 
 
-
             var arch_bar = {
                 x:range(0,hsRanks),
-                y:archFR.slice(),
+                y:archFr.slice(),
                 name: archName,
                 text: archTxt,
                 hoverinfo: 'text',
-                marker: {color: color,
-                    //line: {color: '#ebebeb',width: 1}
-                },
+                marker: { color: color },
                 type: 'bar',
                 winrate: 0,
                 hsClass: ARCHETYPES[i][0]+ARCHETYPES[i][1],
@@ -190,7 +177,7 @@ class Ladder {
             
             var arch_line = {
                 x: range(0,hsRanks),
-                y: archFR_line.slice(),
+                y: archFr_raw.slice(),
                 name: archName,
                 text: archTxt,
                 hoverinfo: 'text',
@@ -205,44 +192,55 @@ class Ladder {
             }
 
 
-            this.traces_bar.decks.push(arch_bar)
-            this.traces_line.decks.push(arch_line)
+            this.traces.bar.decks.push(arch_bar)
+            this.traces.line.decks.push(arch_line)
 
-            this.archLegend.push({name: archName, hsClass: ARCHETYPES[i][0], color: color, fontColor: fontColor, fr: fr_avg})
-            this.archetypes.push({name:archName, hsClass: ARCHETYPES[i][0], fr:fr_avg, data: archFR_line.slice(), color: color, fontColor: fontColor})
+            let archetype = {
+                name: archName, 
+                hsClass: ARCHETYPES[i][0], 
+                fr: fr_avg, 
+                fr_ranks: archFr_raw.slice(),
+                fr_brackets: archFr_brackets,
+                color: color, 
+                fontColor: fontColor
+            }
 
+            this.archetypes.push(archetype)
         } // close for ARCHETYPES
                 
+
         // Class Traces
-        for (var i=0;i<9;i++) {
+        for (var i of range(0,9)) {
             var hsClass = hsClasses[i]
             var classFR = []
             var classTxt = []
             var fr_avg = 0
 
-            for (var rank=0;rank<hsRanks;rank++) {                
-                var fr = classRankData[rank][i]
+            for (let rank of range(0,hsRanks)) {                
+                let fr = classRankData[rank][i]
                 classFR.push(fr)
                 classTxt.push(hsClass+" "+(fr*100).toFixed(2)+"%")
                 fr_avg += fr
 
-                for (var tier of this.tiers) {
-                    if (rank >= tier.start && rank <= tier.end) { this.traces_pie['classes'][tier.buttonId][0].values[i] += fr }
-                    if (rank == tier.end) { this.traces_pie['classes'][tier.buttonId][0].values[i] /= (tier.end-tier.start +1) }
+                for (var bracket of this.rankBrackets) {
+                    if (rank >= bracket.start && rank <= bracket.end) { this.traces.pie['classes'][bracket.name][0].values[i] += fr }
+                    if (rank == bracket.end) { this.traces.pie['classes'][bracket.name][0].values[i] /= (bracket.end-bracket.start +1) }
                 }
             }
 
             // push zoom traces
-            var fr_tot = fillRange(0,hsRanks,0)
-            for (var a of this.archetypes) {
+            let fr_tot = fillRange(0,hsRanks,0)
+            for (let a of this.archetypes) {
                 if (a.hsClass != hsClass) {continue}
                 var text = []
-                var overall = []
-                var fr_avg = 0
-                for (var rank=0;rank<hsRanks;rank++) { fr_tot[rank] += a.data[rank]; text.push(''); overall.push(a.data[rank]); fr_avg += a.data[rank] }
+                for (let rank of range(0,hsRanks)) {
+                    fr_tot[rank] += a.fr_ranks[rank]
+                    text.push(''); 
+                }
+
                 var bar_zoom = {
                     x: range(0,hsRanks),
-                    y: a.data.slice(),
+                    y: a.fr_ranks.slice(),
                     name: a.name,
                     text: text,
                     hoverinfo: 'text',
@@ -250,14 +248,14 @@ class Ladder {
                     type: 'bar',
                     winrate: 0,
                     hsClass: hsClass,
-                    overall: overall,
-                    fr_avg: fr_avg/hsRanks,
+                    overall: a.fr_ranks.slice(),
+                    fr_avg: a.fr,
                 }
 
-                this.traces_zoom[hsClass].push(bar_zoom)
+                this.traces.zoom[hsClass].push(bar_zoom)
             }
 
-            for (var a of this.traces_zoom[hsClass]) {
+            for (var a of this.traces.zoom[hsClass]) {
                 for (var rank=0;rank<hsRanks;rank++) { 
                     a.y[rank] /= (fr_tot[rank]>0) ? fr_tot[rank] : 1
                     a.text[rank] = a.name+'<br>'+(100*a.y[rank]).toFixed(1)+'% of '+a.hsClass+'<br>'+(100*a.overall[rank]).toFixed(1)+'% overall'
@@ -266,7 +264,7 @@ class Ladder {
 
             
             fr_avg /= hsRanks
-            this.c_data[hsClass] = classFR.slice()
+            this.classFr[hsClass] = classFR.slice()
 
              
 
@@ -298,140 +296,24 @@ class Ladder {
              }
 
 
-            this.traces_bar.classes.push(class_bar)
-            this.traces_line.classes.push(class_line)
+            this.traces.bar.classes.push(class_bar)
+            this.traces.line.classes.push(class_line)
 
-            this.classLegend.push({name:hsClass, color: hsColors[hsClass]})
+            //this.classLegend.push({name:hsClass, color: hsColors[hsClass]})
         }// close for Classes
         
 
+        let classSort = function (a, b) { return a.hsClass < b.hsClass ? -1 : a.hsClass > b.hsClass ? 1 : 0; }
+        let freqSort = function (a,b) { return a.fr > b.fr ? -1 : a.fr < b.fr ? 1 : 0;}
 
-
-
-
-        // LAYOUT BAR
-        this.layout_bar = {
-		    barmode: 'stack',
-		    showlegend: false,
-		    displayModeBar: false,
-            hovermode: 'closest',
-            annotations: [],
-		    xaxis: {
-                tickfont: {
-				    family: 'Arial, bold',
-				    size: 15,
-                    color: this.fontColor,
-			    },
-                visible: true, 
-                showgrid: false,
-                tickvals: range(0,hsRanks),
-			    ticktext: this.rankLabels,
-                ticklen: 5,
-                tickcolor: 'transparent',
-                hoverformat: '.1%',
-                range: [21,-1],
-                color: this.fontColor,
-                fixedrange: true,
-                zeroline: false,
-                autorange: 'reversed',
-            },
-		    yaxis: {
-                title: '[ % ]  of  Meta',
-			    showgrid: false,
-			    tickfont: {
-				    family: 'Arial, bold',
-				    size: 16,
-			    },
-                ticklen: 5,
-                tickcolor: 'transparent',
-                showticklabels: false,
-                fixedrange: true,
-                zeroline: false,
-			    color: this.fontColorLight,
-                tickformat: ',.0%',
-                hoverformat: ',.0%',
-                visible: !MOBILE, // not visible if mobile view
-		    },
-		    plot_bgcolor: 'transparent',//this.bgColor,
-            paper_bgcolor: 'transparent',//this.bgColor,
-            margin: MOBILE ? {l:10,r:10,b:35,t:0,} : {l:60,r:30,b:35,t:0,},
-        }
-
-
-
-        // LAYOUT LINE
-        this.layout_line = {
-		    showlegend: false,
-		    displayModeBar: false,
-            autosize: true,
-		    hovermode: 'closest',
-		    xaxis: {
-                tickfont: {
-				    family: 'Arial, bold',
-				    size: 15,
-                    color: this.fontColor,
-			    },
-                visible: true, 
-                showgrid: true,
-                tickvals: range(0,hsRanks),
-			    ticktext: this.rankLabels,
-                hoverformat: '.1%',
-                range: [21,-1],
-                color: this.fontColor,
-                fixedrange: true,
-                zeroline: false,
-                autorange: 'reversed',
-            },
-		    yaxis: {
-			    tickfont: {
-				    family: 'Arial, bold',
-				    size: 19,
-			    },
-                showgrid: true,
-                ticklen: 12,
-                tickcolor: 'transparent',
-                tickformat: ',.0%',
-                fixedrange: true,
-			    color: this.fontColorLight,
-		    },
-		    plot_bgcolor: 'transparent',//this.bgColor,
-            paper_bgcolor: this.bgColor,//this.bgColor2,
-            margin: (MOBILE) ? {l:60, r:10, b: 50, t: 0} : {l:70,r:20,b:30,t:0,},
-        }
-
-
-
+        this.traces.bar.classes.sort(classSort)
+        this.traces.line.classes.sort(freqSort)
+        this.traces.line.classes.splice(this.maxLines)
         
-
-        // LAYOUT Pie
-        this.layout_pie = {
-            showlegend: false,
-            displayModeBar: false,
-            autosize: true,
-            textinfo: 'label+percent',
-            
-            hovermode: 'closest',
-            
-            
-            plot_bgcolor: 'transparent',//this.bgColor, 
-            paper_bgcolor: 'transparent',//this.bgColor,
-            margin: {l:70,r:20,b:30,t:30,},
-        }
-
-
-       
-        var classSort = function (a, b) { return a.hsClass < b.hsClass ? -1 : a.hsClass > b.hsClass ? 1 : 0; }
-        var freqSort = function (a,b) { return a.fr > b.fr ? -1 : a.fr < b.fr ? 1 : 0;}
-
-        this.traces_bar.classes.sort(classSort)
-        this.traces_line.classes.sort(freqSort)
-        this.traces_line.classes.splice(this.maxLines)
+        this.traces.bar.decks.sort(classSort)
+        this.traces.line.decks.sort(freqSort)
+        this.traces.line.decks.splice(this.maxLines)
         
-        this.traces_bar.decks.sort(classSort)
-        this.traces_line.decks.sort(freqSort)
-        this.traces_line.decks.splice(this.maxLines)
-        
-        this.archLegend.sort(freqSort)
         this.archetypes.sort(freqSort)
     }// close constructor
 
@@ -492,69 +374,45 @@ class Ladder {
     plot() {
 
         document.getElementById('chart1').innerHTML = ""
-        var data, layout
         this.window.hideRankFolder()
+        this.window.setGraphTitle()
 
+        let plotType = this.window.plotType
+        let layout = this.window.layouts[plotType]
+        let data
 
-        switch(this.window.plotType) {
+        
+        switch(plotType) {
         
             case 'pie':
                 this.window.showRankFolder()
-                layout = this.layout_pie
-                data = this.traces_pie[this.window.mode][this.window.r]
+                data = this.traces.pie[this.window.mode][this.window.r]
                 break
             
             case 'number':
                 this.createTable(this.window.mode)
-                this.window.setGraphTitle()
                 return
         
             case 'bar':
-                layout = this.layout_bar
-                data = this.traces_bar[this.window.mode]
+                data = this.traces.bar[this.window.mode]
                 break
                 
             case 'zoom':
-                layout = this.layout_bar
-                data = this.traces_zoom[this.window.zoomClass]
+                data = this.traces.zoom[this.window.zoomClass]
                 break
                 
             case 'line':
-                layout = this.layout_line
-                data = this.traces_line[this.window.mode]
+                data = this.traces.line[this.window.mode]
                 break
+
+            case 'map':
+                this.window.showRankFolder()
+                data = this.traces.map[this.window.r]
+                this.window.mode = 'decks'
+                this.window.renderOptions()
+                if (data == null) { data = this.loadMap() }
         }
 
-
-        /*
-        if (this.window.plotType == 'pie') {
-            this.window.showRankFolder()
-            layout = this.layout_pie
-            data = this.traces_pie[this.window.mode][this.window.r]
-        }
-
-        if (this.window.plotType == 'number') {
-            this.createTable(this.window.mode)
-            this.window.setGraphTitle()
-            this.window.nrGames = this.totGames 
-            this.window.setGraphTitle()
-            return
-        }
-
-        if (this.window.plotType == 'bar') {
-            layout = this.layout_bar
-            data = this.traces_bar[this.window.mode]
-        }
-
-        if (this.window.plotType == 'zoom') {
-            layout = this.layout_bar
-            data = this.traces_zoom[this.window.zoomClass]
-        }
-
-        if (this.window.plotType == 'line') {
-            layout = this.layout_line
-            data = this.traces_line[this.window.mode]
-        }*/
 
         if (MOBILE == 'portrait' && this.window.plotTyp != 'pie') {
             layout.width = ui.width*2
@@ -563,15 +421,10 @@ class Ladder {
 
 
         Plotly.newPlot('chart1',data, layout, {displayModeBar: false,})
-        
-
-        var totGames = (this.window.plotType != 'pie') ? this.totGames : this.totGamesRanks[this.window.r]
-        this.window.nrGames = totGames 
-        this.window.setGraphTitle()
-
         this.annotate(this.window.annotated)
-
         this.createLegend(this.window.mode)
+
+        // Add zoom function
         if ((this.window.plotType == 'bar' || this.window.plotType == 'zoom') && PREMIUM) {
             document.getElementById('chart1').on('plotly_click', this.zoomToggle.bind(this))
         }
@@ -593,7 +446,7 @@ class Ladder {
 
     annotate(bool) {
         var plotType = this.window.plotType
-        if (plotType == 'pie' || plotType == 'number' || plotType == 'timeline') {return}
+        if (plotType == 'pie' || plotType == 'number' || plotType == 'timeline' || plotType == 'map') {return}
         var update
         var heights = {
             bar: 0.5,
@@ -621,16 +474,78 @@ class Ladder {
             update = { annotations: annotations};
         }
         else {update = { annotations: []};}
-
         Plotly.relayout('chart1', update)
     }
 
 
+    loadMap() { 
+
+        let r = this.window.r
+        let tableData = app.ui.tableWindow.data[this.f][table_times[0]][table_ranks[0]]
+        if (tableData == null) { console.log('ERROR table not loaded for Meta Score') }
+        //     let callback = function() { app.ui.ladderWindow.plot() }
+        //     app.ui.tableWindow.data.load('Wild',callback) 
+        // }
+        
+        this.traces.map[r] = []
+        let table = tableData.table
+        let tableArchetypes = tableData.archetypes
+        let ladderArchetypes = this.archetypes
+
+        let wrMax = 0
+        let frMax = 0
+
+        for (let arch of this.archetypes) {
+            let idx1 = tableArchetypes.indexOf(arch.name)
+            if ( idx1 == -1 ) { continue }
+
+            let frTot = 0
+            let wrTot = 0
+
+            for (let opp of ladderArchetypes) {
+                let idx2 = tableArchetypes.indexOf(opp.name)
+                if ( idx2 == -1 ) { continue }
+
+                let mu = table[idx1][idx2]
+                let fr = opp.fr_brackets[r]
+                
+                wrTot += mu*fr
+                frTot += fr
+            }
+            
+            let fr = arch.fr_brackets[r]
+            wrTot = (frTot > 0) ? wrTot/frTot : 0
+            wrMax = Math.max(wrTot, wrMax)
+            frMax = Math.max(fr, frMax)
+
+            this.traces.map[r].push({
+                name: arch.name,
+                type: 'scatter',
+                fr: fr,
+                wr: wrTot,
+                hoverinfo: 'text',
+                mode: 'markers',
+                marker: {
+                    size: 15,
+                    line: {size: 0},
+                    color: arch.color,
+                },
+            })
+        }
+
+        for (let a of this.traces.map[r]) {
+            a.x = [(a.wr + wrMax - 1)/ (2*wrMax -1)]
+            a.y = [a.fr/frMax]
+            let score = (a.x[0] + a.y[0])/2
+            a.text = `<b>${a.name}<br>Meta:</b> ${score.toFixed(2)}<br><b>WR:</b> ${a.wr.toFixed(2)} <b>Freq:</b> ${(a.fr*100).toFixed(0)}%`
+        }
+        return this.traces.map[r]
+    } // load Map
 
 
     createTable(mode) {
 
-        var maxArch = 20
+        let maxArch = 20
         if (this.archetypes.length < maxArch) {maxArch = this.archetypes.length}
         document.getElementById('chart1').innerHTML = ""
         
@@ -669,10 +584,10 @@ class Ladder {
                 row.appendChild(pivot)
                 for (var i=hsRanks-1;i>-1;i--) {
                     var item = document.createElement('td')
-                    item.style.backgroundColor = this.colorScale(arch.data[i])
-                    item.innerHTML = (arch.data[i]*100).toFixed(1) + '%'
+                    item.style.backgroundColor = this.colorScale(arch.fr_ranks[i])
+                    item.innerHTML = (arch.fr_ranks[i]*100).toFixed(1) + '%'
                     row.appendChild(item)
-                    row_dl += arch.data[i] + '%2C'
+                    row_dl += arch.fr_ranks[i] + '%2C'
                 }
                 table.appendChild(row)
                 this.download[mode] += row_dl+`%0A`
@@ -682,7 +597,7 @@ class Ladder {
         if (mode == 'classes') {
             for (var j=0; j<9; j++) {
                 var hsClass = hsClasses[j]
-                var data = this.c_data[hsClass]
+                var data = this.classFr[hsClass]
                 var row_dl = hsClass + '%2C'
                 var row = document.createElement('tr')
                 var pivot = document.createElement('td')
@@ -711,24 +626,17 @@ class Ladder {
 
     createLegend(mode) {
 
-        if (this.window.plotType == 'zoom') {this.createZoomLegend(); return}
-
+        if (this.window.plotType == 'zoom') { this.createZoomLegend(); return}
         this.window.clearChartFooter()
+
+        let archetypes = this.archetypes
         
-        var maxElements
-        var legend = this.archLegend
-        if (mode=='classes') {maxElements = 9}
-        if (mode=='decks') {
-            maxElements = this.maxLegendEntries;
-            if (maxElements > legend.length) {maxElements = legend.length}
-        }
+        let maxElements = ( mode == 'classes') ? this.maxLegendEntries : 9
+        if (maxElements > archetypes.length) {maxElements = archetypes.length}
 
-
-
-        for (var i=0;i<maxElements;i++) {
-
+        for (let i of range(0,maxElements)) {
             if (mode=='classes') { this.window.addLegendItem(hsClasses[i]) }
-            if (mode=='decks') { this.window.addLegendItem(legend[i].name) }
+            if (mode=='decks') { this.window.addLegendItem(archetypes[i].name) }
         }
     }
 
@@ -736,7 +644,7 @@ class Ladder {
     createZoomLegend() {
         var hsClass = this.window.zoomClass
         this.window.clearChartFooter()
-        for (var arch of this.traces_zoom[hsClass]) { if (arch.fr_avg > 0) { this.window.addLegendItem(arch.name) } }
+        for (var arch of this.traces.zoom[hsClass]) { if (arch.fr_avg > 0) { this.window.addLegendItem(arch.name) } }
     }
 
 

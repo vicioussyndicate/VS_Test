@@ -4,12 +4,14 @@
 
 class DecksWindow {
 
-    constructor (hsFormats) {
+    constructor (callback) {
 
         this.hsFormats = hsFormats
 
         //this.sidebarLeft = document.querySelector('#decksWindow .content .sidebar.left .archetypeList')
         //this.sidebarRight1 = document.querySelector('#decksWindow .content .sidebar.right .archetypeList')
+        this.div = document.querySelector('#decksWindow')
+        this.tab = document.querySelector('#decks.tab')
         this.chartDiv = document.querySelector('#decksWindow .content .chart')
         this.descriptionBox = document.querySelector('#decksWindow .content .descriptionBox')
         this.decksDiv = document.querySelector('#decksWindow .content .decklists')
@@ -45,7 +47,7 @@ class DecksWindow {
 
         this.archButtons = []
         this.optionButtons = document.querySelectorAll('#decksWindow .optionBtn')
-        for (var oBtn of this.optionButtons) { oBtn.addEventListener("click", this.buttonTrigger.bind(this)) }
+        for (let oBtn of this.optionButtons) { oBtn.addEventListener("click", this.buttonTrigger.bind(this)) }
 
 
 
@@ -55,45 +57,75 @@ class DecksWindow {
         this.hsArch = null
         this.mode = 'description' // decklists, description, overview
         this.deckWidth = '12rem'
-        this.fullyLoaded = false
+        this.fullyLoaded = true
         this.overlay = false
+        this.table_time = table_times[0]
+        this.table_rank = table_ranks[0]
 
-        this.MU_table = {}
-        this.MU_archNames = {}
-        this.MU_fr = {}
-        this.MU_wr = {}
+        this.mu = {}
         this.data = {}
-
-        let t_longest = tableWindow.hsTimes.slice(-1)[0]
-        let r_all = ladder_ranks[0]
-
-        for (let f of this.hsFormats) {
-            let tw = tableWindow.data[f][t_longest][r_all]
-            this.data[f] = {}
-            this.data[f]['data'] =  tw.DATA
-            this.MU_archNames[f] =  tw.freqPlotData.x[0]
-            this.MU_table[f] =      tw.table
-            this.MU_fr[f] =         tw.freqPlotData.y[0]
-            this.MU_wr[f] =         matrixXvector(this.MU_table[f],this.MU_fr[f])
-        }
-
         this.decklists = []
-        this.allArchetypes = {} // all archetypes for Standard and Wild
+        this.archetypes = {}
         
-        for (var f of this.hsFormats) {
-            this.allArchetypes[f] = []
-            for (var hsClass of hsClasses) {
+        for (let f of this.hsFormats) {
+            this.data[f] = { fullyLoaded: false }
+            this.archetypes[f] = []
+            this.mu[f] = { table: {}, archNames: {}, fr: {}, wr: {}, fullyLoaded: false }
+            for (let hsClass of hsClasses) {
                 this.data[f][hsClass] = {}
                 this.data[f][hsClass].archetypes = []
                 this.data[f][hsClass].text = ''
         }}
 
+        this.setupUI()
         this.renderOptions()
-
         this.questionBtn.addEventListener('click',this.toggleOverlay.bind(this))
         this.overlayDiv.addEventListener('click',this.toggleOverlay.bind(this))
 
+        callback.apply(this)
     }// close constructor
+
+    setupUI() {
+        this.dropdownFolders = {
+            format: document.querySelector('#decksWindow .content-header #formatFolder .dropdown'),
+            class: document.querySelector('#decksWindow .content-header #classFolder .dropdown'),
+        }
+
+        let mouseOut = function(event) { 
+            let e = event.toElement || event.relatedTarget;
+            if (e.parentNode == this || e == this) { return }
+            this.classList.add('hidden') 
+        }
+
+        for (let key in this.dropdownFolders) { 
+            let folder = this.dropdownFolders[key]
+            folder.onmouseout = mouseOut
+        }
+    }
+
+
+    plot() { 
+        if (!this.checkLoadData()) { return this.checkLoadData(_=>{ app.ui.decksWindow.plot() }) }
+        this.loadFormat(this.f) 
+        this.renderOptions()
+    }
+
+
+    display(bool) {
+        if (bool) {
+            console.log('first display')
+            this.div.style.display = 'inline-block'
+            this.f = app.path.hsFormat
+            this.plot()
+        } else {
+            app.path.hsFormat = this.f
+            this.div.style.display = 'none'
+        }
+    }
+
+
+
+
 
 
     
@@ -102,24 +134,35 @@ class DecksWindow {
         
         var btnID = e.target.id
 
-        if (e.target.classList.contains('archBtn')) { this.deckLink(btnID, this.f) }
+        if (btnID == 'Standard' || btnID == 'Wild') { this.f = btnID; this.plot() }
+
+        if (e.target.classList.contains('archBtn')) { 
+            this.hsArch = this.findArch(btnID)
+            if (this.hsArch != undefined) {
+                if (this.hsClass != this.hsArch.hsClass) { 
+                    this.hsClass = this.hsArch.hsClass
+                    this.loadClass(this.hsClass) 
+                }
+                else { this.loadDecklists() }
+            }
+
+            else { console.log('ERROR: archbtn not found', e) }
+        }
 
         if (hsClasses.indexOf(btnID) != -1) {
             this.hsArch = null
             this.loadClass(btnID)
         }        
 
-        if (btnID == 'overview')    {this.plotDustWr()}
-
-        if (btnID == 'decklists')   {this.loadDecklists()}
-        if (btnID == 'description') {this.loadDescription()}
-
-        if (btnID == 'Standard')    {this.loadFormat('Standard')}
-        if (btnID == 'Wild')        {this.loadFormat('Wild')}
+        if (btnID == 'overview')    { this.plotDustWr() }
+        if (btnID == 'decklists')   { this.loadDecklists() }
+        if (btnID == 'description') { this.loadDescription() }
         
         this.renderWindows()
         this.renderOptions()   
     }
+
+
 
 
     renderWindows() {
@@ -159,65 +202,118 @@ class DecksWindow {
 
     // Load DATA
 
-    loadData() {
-        var ref = DATABASE.ref(this.firebasePath)
-        ref.on('value', this.readData.bind(this), e => console.log('Could not load Deck Data',e))
+    checkLoadData(callback) {
+
+        let back = (callback != undefined)
+        console.log('checkLoadData',back,callback)
+
+        if (!app.ui.tableWindow.data[this.f].fullyLoaded) {
+            console.log('check 1')
+            let callback2 = function() { app.ui.decksWindow.checkLoadData(callback) }
+            if (back) { return app.ui.tableWindow.loadData(this.f, callback2)}
+            else { return false }
+        }
+
+        if (app.ui.tableWindow.data[this.f].fullyLoaded && !this.mu[this.f].fullyLoaded) { this.loadWinrate() }
+
+        if (!this.data[this.f].fullyLoaded) {
+            console.log('check 2')
+            let callback2 = function() { app.ui.decksWindow.checkLoadData(callback) }
+            if (back) { return this.loadData(this.f, callback2)}
+            else { return false }
+        }
+
+        if (this.data[this.f].fullyLoaded && app.ui.tableWindow.data[this.f].fullyLoaded) {
+            console.log('all checks clear')
+            if (back) { return callback.apply(this) }
+            else { return true }
+        }
+    }
+
+    loadWinrate() {
+        let tw = app.ui.tableWindow.data[this.f][this.table_time][this.table_rank]
+        if (tw == null) { console.log('ERROR table undefined'); return }
+        
+        this.mu[this.f].table =      tw.table
+        this.mu[this.f].archNames =  tw.freqPlotData.x[0]
+        this.mu[this.f].fr =         tw.freqPlotData.y[0]
+        this.mu[this.f].wr =         tw.winrates
+        this.mu[this.f].fullyLoaded = true
+    }
+
+
+    loadData(hsFormat,callback) {
+        this.fullyLoaded = false
+        let ref = app.fb_db.ref(this.firebasePath+'/'+hsFormat)
+        let reader = function (DATA) { this.readData(DATA,hsFormat,callback) }
+        ref.on('value', reader.bind(this), e => console.log('Could not load Deck Data',e))
     } 
 
 
-    readData(DATA) {
+    readData(DATA,hsFormat,callback) {
         if (this.fullyLoaded) {return}
-        var DATA = DATA.val()
-        
-        for (var f of this.hsFormats) {
-            for (var hsClass of hsClasses) {
-                this.data[f][hsClass].text = DATA[f][hsClass].text
+        let data = DATA.val()
+        let f = hsFormat
 
-                var keys = Object.keys(DATA[f][hsClass].archetypes)
-                for (var key of keys) {
+        for (let hsClass of hsClasses) {
+            this.data[f][hsClass].text = data[hsClass].text
+            if (!('archetypes' in data[hsClass])) { continue }
+            let keys = Object.keys(data[hsClass].archetypes)
+            for (let key of keys) {
 
-                    let wr = 0
-                    let fr = 0
-                    let mu_idx = this.MU_archNames[f].indexOf(key)
-                    if (mu_idx >= 0) {wr = this.MU_wr[f][mu_idx]; fr = this.MU_fr[f][mu_idx]}
+                let wr = 0
+                let fr = 0
+                let mu_idx = this.mu[f].archNames.indexOf(key)
+                if (mu_idx >= 0) {wr = this.mu[f].wr[mu_idx]; fr = this.mu[f].fr[mu_idx]}
 
-                    let archetype = { name:key, hsClass:hsClass, hsFormat:f,  decklists:[], wr: wr, fr: fr, }
-                    this.allArchetypes[f].push(archetype)
-                    this.data[f][hsClass].archetypes.push(archetype)
+                let archetype = { name:key, hsClass:hsClass, hsFormat:f,  decklists:[], wr: wr, fr: fr, }
+                this.archetypes[f].push(archetype)
+                this.data[f][hsClass].archetypes.push(archetype)
 
 
-                    let idx = this.data[f][hsClass].archetypes.length -1
+                let idx = this.data[f][hsClass].archetypes.length -1
 
-                    let arch = DATA[f][hsClass].archetypes[key]
-                    let deckKeys = Object.keys(arch)
-                    for (let deckKey of deckKeys) {
-                        let decklist  = new Decklist(arch[deckKey], hsClass, this)
-                        this.data[f][hsClass].archetypes[idx].decklists.push(decklist)
-        }}}}
+                let arch = data[hsClass].archetypes[key]
+                let deckKeys = Object.keys(arch)
+                for (let deckKey of deckKeys) {
+                    let decklist  = new Decklist(arch[deckKey], hsClass, this)
+                    this.data[f][hsClass].archetypes[idx].decklists.push(decklist)
+        }}}
         this.fullyLoaded = true
+        this.data[f].fullyLoaded = true
         console.log('decks loaded: '+ (performance.now()-t0).toFixed(2)+' ms')
-        this.plot()
+        callback.apply(this)
     }// add Data
 
 
 
+    
+   
 
+   
 
-    deckLink(archName, hsFormat = 'Standard') {
+     deckLink(archName, hsFormat = 'Standard') {
 
-        if (!this.fullyLoaded) { this.loadData() }
-
-        var hsClass
-        var hsArch
         this.mode = 'decklists'
         this.f = hsFormat
 
+        if (!this.checkLoadData()) {
+            let callback = function() { app.ui.decksWindow.deckLink(archName,hsFormat) }
+            return this.checkLoadData( _=>{ app.ui.decksWindow.deckLink(archName,hsFormat) } )
+        }
+
+        let hsClass, hsArch
+        this.hsArch = this.findArch(archName)
+        if (this.hsArch == undefined) {
+            for (let c of hsClasses) { if (archName.indexOf(c) != -1) { this.hsClass = c; break } }
+            if (this.hsClass == undefined) { this.hsClass = 'Druid' }
+            this.hsArch = this.data[this.f][this.hsClass].archetypes[0]
+        }
+
         for (var c of hsClasses) {
-
             if (archName.indexOf(c) != -1) {hsClass = c}
-
-            var archetypes = this.data[hsFormat][c].archetypes
-            for (var a of archetypes) { if (a.name == archName) { hsClass = c; hsArch = a; break } } 
+            let archetypes = this.data[hsFormat][c].archetypes
+            for (let a of archetypes) { if (a.name == archName) { hsClass = c; hsArch = a; break } } 
         }
         
         if (hsClass == undefined) { hsClass = 'Druid'}
@@ -225,30 +321,20 @@ class DecksWindow {
         
         this.hsClass = hsClass
         this.hsArch = hsArch
-        
 
-        this.plot()
+        this.display(true)
         this.renderOptions()
     }
 
 
+    loadFormat(hsFormat) { 
+        this.f = hsFormat; 
+        if (!this.data[hsFormat].fullyLoaded) {
+            let callback = function() { app.ui.decksWindow.loadFormat(hsFormat) }
+            this.loadData(hsFormat,callback)
+        }
+        this.loadClass(this.hsClass) }
 
-
-    
-    // LOAD FUNCTIONS
-
-    // plot -> load format -> load Class -> load description/ decks
-
-
-
-    plot() { 
-        if (!this.fullyLoaded) {return}
-        if (this.mode == 'overview') {}
-        this.loadFormat(this.f) 
-    }
-
-
-    loadFormat(hsFormat) { this.f = hsFormat; this.loadClass(this.hsClass) }
 
     loadClass(hsClass) {
 
@@ -257,16 +343,10 @@ class DecksWindow {
         if (this.mode == 'description') {this.loadDescription()}
         if (this.mode == 'decklists') {this.loadDecklists()}
 
-        this.sidebarLeft.loadClass(this.data[this.f][this.hsClass])
-        //this.sidebarRightTop.loadClass(this.data[this.f][this.hsClass])
-        //this.sidebarRightBot.loadClass(this.data[this.f][this.hsClass])
-        // for (var arch of archetypes) { 
-        //     let archBtn = this.addArchetypeBtn(arch)
-        //     this.sidebarLeft.append(archBtn)
-        // }
-        
-        var archetypes = this.data[this.f][this.hsClass].archetypes
-        if (archetypes.length > 0 && this.hsArch == null) {this.hsArch = archetypes[0]}
+        let data = this.data[this.f][this.hsClass]
+        this.sidebarLeft.loadClass(data)
+        if (data.archetypes.length > 0 && this.hsArch == null) { this.hsArch = data.archetypes[0] }
+        this.sidebarLeft.highlight(this.hsArch.name)
     }
 
 
@@ -277,12 +357,13 @@ class DecksWindow {
         this.renderWindows()
 
         var d = this.data[this.f][this.hsClass]
-        this.addDescription(this.hsClass,d.text)
+        this.description.innerHTML = '<p class="title">'+this.hsClass+'</p><p class="text">'+d.text+'</p>'
+        //this.addDescription(this.hsClass,d.text)
     }
 
-    addDescription(title,text) {
-        this.description.innerHTML = '<p class="title">'+title+'</p><p class="text">'+text+'</p>'
-    }
+    // addDescription(title,text) {
+    //     this.description.innerHTML = '<p class="title">'+title+'</p><p class="text">'+text+'</p>'
+    // }
 
 
 
@@ -293,8 +374,8 @@ class DecksWindow {
 
         this.decksDiv.innerHTML = ''
 
-        if (this.hsArch == null) {this.hsArch = this.data[this.f][this.hsClass].archetypes[0]}
-        if (this.hsArch == undefined) {this.hsArch = null; return}
+        if (this.hsArch == null) { this.hsArch = this.data[this.f][this.hsClass].archetypes[0]}
+        if (this.hsArch == undefined) { this.hsArch = null; return}
         
         var deckCards = []
         var gridTemplateColumns = ''
@@ -309,53 +390,45 @@ class DecksWindow {
         this.loadDecklistsMatchups(this.hsArch) // load deck list matchups
     } 
 
+
     findArch(archName) {
         for (let hsClass of hsClasses) {
             for (let a of this.data[this.f][hsClass].archetypes) {
                 if (a.name == archName) { return a }
         }}
+        return undefined
     }
 
+
     loadDecklistsMatchups(hsArch) { // load deck matchups in right sidebar
+        let f = this.f
         let wr = hsArch.wr
         let top = 3
-        var topArch = []
-        var botArch = []
+        let topArch = []
+        let botArch = []
 
         if (wr > 0) { // normal
-            let matrix = this.MU_table[this.f]
-            let archNames = this.MU_archNames[this.f]
+            let table = this.mu[f].table
+            let archNames = this.mu[f].archNames
             let idx = archNames.indexOf(hsArch.name)
-            if (idx == -1) { hsArch.wr = 0; this.loadDecklistsMatchups(hsArch) }
+            if (idx == -1) { hsArch.wr = 0; this.loadDecklistsMatchups(hsArch); return }
 
-            // best matchups
-            for (let t=0; t<top; t++) {
-                let mu_min = 0.48 // maxval
-                let mu_max = 0.52 // minval
-                topArch.push(null)
-                botArch.push(null)
+            let row = table[idx].slice()
+            row.sort()
+            top = Math.min(top,row.length)
 
-                for (let i=0; i<archNames.length; i++) {
-                    console.log('mu:',matrix[idx][i])
-                    if (matrix[idx][i] > mu_max ) { //&& topArch.indexOf(archNames[i]) != -1) {
-                        if (topArch.indexOf(archNames[i]) == -1) { break } // ?????
-                        console.log('-- Succes!',topArch)
-                        topArch[t] = archNames[i]
-                        console.log(topArch)
-                        mu_max = matrix[idx][i] 
-                    }
+            for (let t of range(0,top)) {
+                let mu = row[row.length-1-t]
+                let idx2 = table[idx].indexOf(mu)
+                topArch.push(archNames[idx2])
 
-                    if (matrix[idx][i] < mu_min && botArch.indexOf(archNames[i]) != -1) {
-                        console.log('Success 2')
-                        botArch[t] = archNames[i]
-                        mu_min = matrix[idx][i]
-                    }
-            }}
-
+                mu = row[t]
+                idx2 = table[idx].indexOf(mu)
+                botArch.push(archNames[idx2])
+            }
 
             this.sidebarRightTop.removeBtn()
             this.sidebarRightBot.removeBtn()
-            console.log('matchups:',topArch,botArch)
 
             // add to sidebar
             for (let archName of topArch) {
@@ -370,64 +443,6 @@ class DecksWindow {
                 this.sidebarRightBot.addArchBtn(arch)
             }
         } 
-        // if wr > 0
-        // else {
-
-        //     let matrix =        this.data[this.f].DATA.table
-        //     let archetypes =    this.data[this.f].DATA.archetypes
-        //     let idx = null
-            
-
-        //     for (let i=0;i<archetypes.length;i++) {
-        //         if (archetypes[i][1]+' '+archetypes[i][0] == hsArch) {
-        //             idx = i
-        //             break  
-        //     }}
-        //     if (idx == null) { return }
-
-        //     let sortArr = []
-
-        //     let wr = 0
-        //     for (let i=0; i<archetypes.length; i++) {
-        //         let m1 = matrix[idx][i][0]
-        //         let m2 = matrix[idx][i][1]
-        //         let m3 = matrix[i][idx][0]
-        //         let m4 = matrix[i][idx][1]
-
-        //         if (m1 == 0 && m2 == 0) { m2 = 1 }
-        //         if (m3 == 0 && m4 == 0) { m4 = 1 }
-
-        //         wr = (m1/(m1+m2) + m3/(m3+m4))/2
-        //         if (m1+m2+m3+m4 < 20) { wr = 0 }
-        //         if (i == idx) { wr = 0.5 }
-
-        //         sortArr.push({arch: archetypes[i], wr: wr})
-        //     }
-
-        //     var sortByWr = function (a,b) {return a.wr > b.wr ? -1: a.wr < b.wr ? 1 : 0 ;}
-        //     sortArr.sort(sortByWr)
-
-        //     for (let i=0;i<top;i++) {
-        //         if (sortArr[i].wr < 0.52) { continue }
-        //         let btn = this.addArchetypeBtn(sortArr[i].arch)
-        //         let archetype = { name:key, hsClass:hsClass, hsFormat:f,  decklists:[], wr: wr, fr: fr, }
-        //     }
-
-        //     for (let i=sortArr.length-1; i > sortArr.length - bottom ;i--) {
-        //         let a = sortArr[i]
-        //         if (a.wr > 0.48) { continue }
-
-        //         let archName = a.arch[1]+' '+a.arch[0]
-        //         if (allArchetypes.indexOf(archName) == -1) {
-        //             let archetype = { name: archName, hsClass: a.arch[0], hsFormat: this.f,  decklists:[], wr: a.wr, fr: 0}
-        //             let btn = this.addArchetypeBtn(a.arch)
-        //         }
-        //         else { btn = allArchetypes[archName]}
-
-
-        //         this.sidebar.appendChild(btn)
-        //     }
-        // }// else wr ==0 
     }
 
     highlight(e) {
@@ -455,8 +470,7 @@ class DecksWindow {
         this.mode = 'overview'
         this.renderWindows()
           
-
-        let archetypes = this.allArchetypes[this.f]
+        let archetypes = this.archetypes[this.f]
 
         let traces = []
         let x = []
@@ -481,20 +495,22 @@ class DecksWindow {
                     marker: {
                         color: hsColors[a.hsClass],
                         size: 15,
-                        line: { color: '#3e3e3e80', width: 1},
+                        line: { color: '#3e3e3e80', width: 3},
                     }
                 })
             }
         }
         console.log('traces:',traces)
 
+        let layout_line = { color: 'rgba(50,50,50,0.5)', width: 1.5, dash: 'dot', opacity: 0.5 }
         let layout = {
-            autosize: true,
             showlegend: false,
             hovermode: 'closest',
+            displayModeBar: false,
+            autosize: true,
+            margin: MOBILE ? {l:10,r:10,b:35,t:0,} : {l:60,r:30,b:50,t:0,},
             plot_bgcolor: 'transparent',
             paper_bgcolor: 'transparent',
-            displayModeBar: false,
             xaxis: {
                 title: 'Dust Cost',
                 range: [minCost*0.9,maxCost*1.1],
@@ -503,20 +519,7 @@ class DecksWindow {
                 tickformat: ',.0%',
                 title: 'Winrate',
             },
-            shapes: [{
-
-                type: 'line',
-                x0: minCost,
-                y0: 0.5,
-                x1: maxCost,
-                y1: 0.5,
-                line: {
-                    color: 'rgba(50,50,50,0.5)',
-                    width: 1.5,
-                    dash: 'dot',
-                    opacity: 0.5,
-                }
-            }],
+            shapes: [{ type: 'line', x0: minCost, y0: 0.5, x1: maxCost, y1: 0.5, line: layout_line}],
             margin: {r:0,t:0},
 
         }
@@ -537,31 +540,6 @@ class DecksWindow {
 
     }
 
-
-    // addArchetypeBtn(arch) {
-        
-    //     let archBtnDiv = document.createElement('div')
-    //     archBtnDiv.className = 'archBtnDiv'
-
-    //     let archBtn = document.createElement('div')
-    //     archBtn.style.backgroundColor = hsColors[arch.hsClass]
-    //     archBtn.style.color = hsFontColors[arch.hsClass]
-    //     archBtn.innerHTML = arch.name
-    //     archBtn.id = arch.name
-    //     archBtn.className = 'archBtn'
-    //     archBtn.addEventListener("click", this.buttonTrigger.bind(this))
-
-    //     let wrDiv = document.createElement('div')
-    //     let wr = 'Tier '+tier_classifier(arch.wr) //arch.wr ? (arch.wr*100).toFixed(1)+'%' : '?'
-    //     wrDiv.className = 'wrDiv'
-    //     wrDiv.innerHTML = wr
-
-    //     archBtnDiv.appendChild(archBtn)
-    //     archBtnDiv.appendChild(wrDiv)
-        
-    //     this.archButtons.push(archBtnDiv)
-    //     return archBtnDiv
-    // }
 
     toggleOverlay() {
         if (this.overlay) {this.overlayDiv.style.display = 'none'; this.overlay = false}

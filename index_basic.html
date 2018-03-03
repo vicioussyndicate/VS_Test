@@ -57,11 +57,11 @@
                 <button class="folder-toggle" id="rankBtn">All Ranks</button>
                 <div class="dropdown hidden" id="rankDropdown"></div>
               </div>
-              <button class="optionBtn" id="nrGames">Show Games</button>
             </div>
             <div class="classDeckOptions optionBar">
               <button class="optionBtn" id="classes">Classes</button>
               <button class="optionBtn" id="decks">Decks</button>
+              <button class="optionBtn fa fa-hashtag tooltip" id="showNumbers"><span class="tooltipText">Show Numbers</span></button>
             </div>
             <div class="option-folder" id="plotFolder">
               <button class="folder-toggle fa fa-bar-chart" id="plotBtn"></button>
@@ -78,6 +78,7 @@
               <button class="optionBtn fa fa-line-chart tooltip" id="line"><span class="tooltipText">Show Line Chart</span></button>
               <button class="optionBtn fa fa-pie-chart tooltip" id="pie"><span class="tooltipText">Show Pie Chart</span></button>
               <button class="optionBtn fa fa-percent tooltip" id="number"><span class="tooltipText">Show Numbers</span></button>
+              <button class="optionBtn fa fa-map tooltip" id="map"><span class="tooltipText">Show Power Map</span></button>
               <button class="optionBtn fa fa-clock-o tooltip" id="timeline"><span class="tooltipText">Show Timeline</span></button>
             </div>
           </div>
@@ -100,8 +101,8 @@
               <button class="optionBtn" id="Wild">Wild</button>
             </div>
             <div class="dispOptions optionBar">
-              <button class="optionBtn" id="tiers">Tier Lists</button>
-              <button class="optionBtn" id="top">Suggestions</button>
+              <button class="optionBtn" id="brackets">Tier Lists</button>
+              <button class="optionBtn" id="ranks">Ranks</button>
             </div>
           </div>
           <div class="overlay">
@@ -129,9 +130,6 @@
                 <button class="folder-toggle" id="ranksBtn">All Ranks</button>
                 <div class="dropdown hidden"></div>
               </div>
-            </div>
-            <div class="nrGamesOptions optionBar">
-              <button class="optionBtn" id="nrGames">Show Numbers</button>
               <p class="nrGames"></p>
             </div>
             <div class="graphOptions optionBar">
@@ -140,6 +138,8 @@
                 <button class="folder-toggle" id="sortBtn">Sort</button>
                 <div class="dropdown hidden"></div>
               </div>
+              <button class="optionBtn fa fa-paint-brush tooltip" id="changeColor"><span class="tooltipText">Change Color</span></button>
+              <button class="optionBtn fa fa-hashtag tooltip" id="showNumbers"><span class="tooltipText">Show Numbers</span></button>
             </div>
           </div>
           <div class="overlay">
@@ -150,9 +150,8 @@
             <div class="question fa fa-question-circle"></div>
             <div class="chart" id="chart2"></div>
             <div class="chart-footer">
-              <div class="colorTheme chartFooterBtn">
-                <button class="changeColorBtn">Change Colors</button>
-              </div>
+              <!--.colorTheme.chartFooterBtn-->
+              <!--  button.changeColorBtn Change Colors-->
               <!--.equilibrium-->
               <!--  button.equilibriumBtn Equilibrium-->
             </div>
@@ -162,14 +161,14 @@
         <div class="tabWindow" id="decksWindow">
           <div class="content-header">
             <div class="ftrOptions optionBar">
-              <div class="option-folder">
+              <div class="option-folder" id="formatFolder">
                 <button class="folder-toggle" id="formatBtn">Standard</button>
                 <div class="dropdown hidden">
                   <button class="optionBtn folderBtn" id="Standard">Standard</button>
                   <button class="optionBtn folderBtn" id="Wild">Wild</button>
                 </div>
               </div>
-              <div class="option-folder">
+              <div class="option-folder" id="classFolder">
                 <button class="folder-toggle" id="classBtn">Druid</button>
                 <div class="dropdown hidden">
                   <button class="optionBtn folderBtn" id="Druid">Druid </button>
@@ -187,7 +186,6 @@
             <div class="displayOptions optionBar">
               <button class="optionBtn" id="description">Description</button>
               <button class="optionBtn" id="decklists">Deck Lists</button>
-              <!--button#classRadar.optionBtn Class Radar-->
             </div>
           </div>
           <div class="overlay">
@@ -224,6 +222,5 @@
         </div>
       </div>
     </div>
-    <script src="bundle_basic-dist.js"></script>
   </body>
 </html>

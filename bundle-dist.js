@@ -1,64 +1,20 @@
 "use strict";
 
+function _defineProperty(t, e, a) {
+    return e in t ? Object.defineProperty(t, e, {
+        value: a,
+        enumerable: !0,
+        configurable: !0,
+        writable: !0
+    }) : t[e] = a, t;
+}
+
 function _classCallCheck(t, e) {
     if (!(t instanceof e)) throw new TypeError("Cannot call a class as a function");
 }
 
-function setupFirebase() {
-    firebase.apps.length || (firebase.initializeApp({
-        apiKey: "AIzaSyAt0uIAVOFjB42_bkwrEIqhSWkMT_VmluI",
-        authDomain: "data-reaper.firebaseapp.com",
-        databaseURL: "https://data-reaper.firebaseio.com",
-        projectId: "data-reaper",
-        storageBucket: "data-reaper.appspot.com",
-        messagingSenderId: "1079276848174"
-    }), DATABASE = firebase.database());
-    firebase.auth().signInWithEmailAndPassword(login.email, login.pw).then(function(t) {
-        if (!ui.loggedIn) if (t) {
-            ui.loggedIn = !0;
-            DATABASE.ref("premiumUsers/" + t.uid).on("value", function(t) {
-                !t.val() && PREMIUM && console.log("PERMISSION ERROR", t.val()), loadFireData();
-            }, function(t) {
-                return console.log("Could not load User Data", t);
-            }), console.log("user login " + (performance.now() - t0).toFixed(2) + " ms, Premium:", PREMIUM);
-        } else console.log("not logged in"), ui.loggedIn = !0, loadFireData();
-    });
-}
-
-function saveUser(t) {
-    console.log(t), firebase.database().ref("users/" + t.uid).set({
-        username: t.displayName,
-        email: t.email,
-        status: "premium"
-    });
-    var e = {};
-    e[t.uid] = !0, firebase.database().ref("premiumUsers").set(e);
-}
-
-function loadFireData() {
-    PREMIUM ? (console.log("load Premium"), ladderWindow = new LadderWindow(hsFormats, ladder_times_premium, ladder_ranks_premium), 
-    tableWindow = new TableWindow(hsFormats, table_times_premium, table_ranks_premium, table_sortOptions_premium)) : (console.log("load basic"), 
-    ladderWindow = new LadderWindow(hsFormats, ladder_times, ladder_ranks), tableWindow = new TableWindow(hsFormats, table_times, table_ranks, table_sortOptions));
-}
-
 function tier_classifier(t) {
     return t < .47 ? 4 : t < .5 ? 3 : t < .52 ? 2 : 1;
-}
-
-function reloadApp() {
-    ui.showLoader(), ui.loggedIn = !1, setupFirebase();
-}
-
-function reloadPremium() {}
-
-function reloadBasic() {
-    PREMIUM && (ui.showLoader(), ui.loggedIn = !1, setupFirebase());
-}
-
-function finishedLoading() {
-    tableWindow.fullyLoaded && ladderWindow.fullyLoaded && (powerWindow = new PowerWindow(), 
-    decksWindow = new DecksWindow(hsFormats), powerWindow.plot(), tableWindow.plot(), 
-    ladderWindow.plot(), ui.fullyLoaded = !0, ui.hideLoader(), console.log("App initializing took " + (performance.now() - t0) + " ms."));
 }
 
 function choice(t) {
@@ -70,35 +26,35 @@ function randint(t, e) {
 }
 
 function range(t, e) {
-    for (var i = [], r = t; r < e; r++) i.push(r);
-    return i;
+    for (var a = [], r = t; r < e; r++) a.push(r);
+    return a;
 }
 
-function fillRange(t, e, i) {
-    for (var r = [], a = t; a < e; a++) r.push(i);
+function fillRange(t, e, a) {
+    for (var r = [], i = t; i < e; i++) r.push(a);
     return r;
 }
 
 function shuffle(t) {
-    for (var e, i, r = t.length; 0 !== r; ) i = Math.floor(Math.random() * r), e = t[r -= 1], 
-    t[r] = t[i], t[i] = e;
+    for (var e, a, r = t.length; 0 !== r; ) a = Math.floor(Math.random() * r), e = t[r -= 1], 
+    t[r] = t[a], t[a] = e;
     return t;
 }
 
 function normalize(t) {
-    var e = 0, i = !0, r = !1, a = void 0;
+    var e = 0, a = !0, r = !1, i = void 0;
     try {
-        for (var s, n = t[Symbol.iterator](); !(i = (s = n.next()).done); i = !0) {
+        for (var s, n = t[Symbol.iterator](); !(a = (s = n.next()).done); a = !0) {
             var o = s.value;
             e += Math.abs(o);
         }
     } catch (t) {
-        r = !0, a = t;
+        r = !0, i = t;
     } finally {
         try {
-            !i && n.return && n.return();
+            !a && n.return && n.return();
         } finally {
-            if (r) throw a;
+            if (r) throw i;
         }
     }
     if (1 == e || 0 == e) return t;
@@ -107,28 +63,28 @@ function normalize(t) {
 }
 
 function matrixXvector(t, e) {
-    for (var i = [], r = normalize(e), a = 0; a < e.length; a++) {
-        for (var s = 0, n = 0; n < e.length; n++) s += r[n] * t[a][n];
-        i.push(s);
+    for (var a = [], r = normalize(e), i = 0; i < e.length; i++) {
+        for (var s = 0, n = 0; n < e.length; n++) s += r[n] * t[i][n];
+        a.push(s);
     }
-    return i;
+    return a;
 }
 
 function detectswipe(t, e) {
-    var i = {};
-    i.sX = 0, i.sY = 0, i.eX = 0, i.eY = 0;
-    var r = "", a = document.querySelector(t);
-    a.addEventListener("touchstart", function(t) {
+    var a = {};
+    a.sX = 0, a.sY = 0, a.eX = 0, a.eY = 0;
+    var r = "", i = document.querySelector(t);
+    i.addEventListener("touchstart", function(t) {
         var e = t.touches[0];
-        i.sX = e.screenX, i.sY = e.screenY;
-    }, !1), a.addEventListener("touchmove", function(t) {
+        a.sX = e.screenX, a.sY = e.screenY;
+    }, !1), i.addEventListener("touchmove", function(t) {
         t.preventDefault();
         var e = t.touches[0];
-        i.eX = e.screenX, i.eY = e.screenY;
-    }, !1), a.addEventListener("touchend", function(a) {
-        (i.eX - 30 > i.sX || i.eX + 30 < i.sX) && i.eY < i.sY + 60 && i.sY > i.eY - 60 && i.eX > 0 ? r = i.eX > i.sX ? "r" : "l" : (i.eY - 50 > i.sY || i.eY + 50 < i.sY) && i.eX < i.sX + 30 && i.sX > i.eX - 30 && i.eY > 0 && (r = i.eY > i.sY ? "d" : "u"), 
-        "" != r && "function" == typeof e && e(t, r), r = "", i.sX = 0, i.sY = 0, i.eX = 0, 
-        i.eY = 0;
+        a.eX = e.screenX, a.eY = e.screenY;
+    }, !1), i.addEventListener("touchend", function(i) {
+        (a.eX - 30 > a.sX || a.eX + 30 < a.sX) && a.eY < a.sY + 60 && a.sY > a.eY - 60 && a.eX > 0 ? r = a.eX > a.sX ? "r" : "l" : (a.eY - 50 > a.sY || a.eY + 50 < a.sY) && a.eX < a.sX + 30 && a.sX > a.eX - 30 && a.eY > 0 && (r = a.eY > a.sY ? "d" : "u"), 
+        "" != r && "function" == typeof e && e(t, r), r = "", a.sX = 0, a.sY = 0, a.eX = 0, 
+        a.eY = 0;
     }, !1);
 }
 
@@ -136,34 +92,34 @@ function myfunction(t, e) {
     alert("you swiped on element with id '" + t + "' to " + e + " direction");
 }
 
-var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, ui, _createClass = function() {
+var app, _createClass = function() {
     function t(t, e) {
-        for (var i = 0; i < e.length; i++) {
-            var r = e[i];
+        for (var a = 0; a < e.length; a++) {
+            var r = e[a];
             r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), 
             Object.defineProperty(t, r.key, r);
         }
     }
-    return function(e, i, r) {
-        return i && t(e.prototype, i), r && t(e, r), e;
+    return function(e, a, r) {
+        return a && t(e.prototype, a), r && t(e, r), e;
     };
 }(), PREMIUM = !0, login = {
     email: "premiumUser@vs.com",
     pw: "Nx:j5nvDFuAjL-)e"
 }, Decklist = function() {
-    function t(e, i, r) {
-        _classCallCheck(this, t), this.name = e.name, this.hsClass = i, this.window = r, 
+    function t(e, a, r) {
+        _classCallCheck(this, t), this.name = e.name, this.hsClass = a, this.window = r, 
         this.cards = [], this.cardNames = [], this.dust = 0, this.manaBin = fillRange(0, 11, 0), 
         this.showInfo = !1, this.div = document.createElement("div"), this.div.className = "deckBox", 
         this.div.id = e.name, this.deckTitle = document.createElement("div"), this.deckTitle.className = "deckTitle", 
         this.deckTitle.innerHTML = "<p>" + e.name + "</p>", this.deckTitle.style.backgroundColor = hsColors[this.hsClass], 
         this.deckTitle.style.color = hsFontColors[this.hsClass];
-        var a = document.createElement("div");
-        a.className = "titleHover", this.infoBtn = document.createElement("div"), this.infoBtn.className = "titleHover-content", 
+        var i = document.createElement("div");
+        i.className = "titleHover", this.infoBtn = document.createElement("div"), this.infoBtn.className = "titleHover-content", 
         this.infoBtn.innerHTML = "info", this.infoBtn.style.float = "right", this.infoBtn.addEventListener("click", this.toggleInfo.bind(this)), 
         this.copyBtn = document.createElement("div"), this.copyBtn.className = "titleHover-content", 
         this.copyBtn.innerHTML = "copy", this.copyBtn.style.float = "left", this.copyBtn.id = "dl" + randint(0, 1e9), 
-        a.appendChild(this.copyBtn), a.appendChild(this.infoBtn), this.deckTitle.appendChild(a), 
+        i.appendChild(this.copyBtn), i.appendChild(this.infoBtn), this.deckTitle.appendChild(i), 
         new Clipboard("#" + this.copyBtn.id, {
             text: function(t) {
                 return e.deckCode;
@@ -203,48 +159,48 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
         f.innerHTML = "Manacurve", f.className = "manacurve", this.deckinfo.appendChild(f), 
         this.chart = document.createElement("div"), this.chartId = "chartId:" + randint(0, 1e8), 
         this.chart.id = this.chartId, this.chart.className = "manaChart", this.deckinfo.appendChild(this.chart);
-        var v = document.createElement("div"), m = document.createElement("p");
-        m.innerHTML = this.dust + "  ", m.className = "dustInfo";
-        var p = document.createElement("img");
-        p.src = "Images/dust.png", p.className = "dustImg";
+        var p = document.createElement("div"), v = document.createElement("p");
+        v.innerHTML = this.dust + "  ", v.className = "dustInfo";
+        var m = document.createElement("img");
+        m.src = "Images/dust.png", m.className = "dustImg";
         var b = document.createElement("p");
         b.innerHTML = "L: " + s.Legendary + " E: " + s.Epic + " \n                                R: " + s.Rare + " C: " + s.Common + " \n                                B: " + (s.Basic + s.Free), 
-        b.className = "dustInfo", v.appendChild(m), v.appendChild(p), this.deckinfo.appendChild(v);
-        var w = document.createElement("p");
-        w.className = "cardtypes";
-        var k = "";
-        e.cardTypes.Minion >= 10 ? k += e.cardTypes.Minion + " Minions<br>" : 1 == e.cardTypes.Minion ? k += e.cardTypes.Minion + "  Minion<br>" : k += e.cardTypes.Minion + "  Minions<br>", 
-        e.cardTypes.Spell >= 10 ? k += e.cardTypes.Spell + " Spells<br>" : 1 == e.cardTypes.Spell ? k += e.cardTypes.Spell + "  Spell<br>" : k += e.cardTypes.Spell + "  Spells<br>", 
-        e.cardTypes.Weapon && (k += e.cardTypes.Weapon + "  Weapons<br>"), e.cardTypes.Hero && (k += e.cardTypes.Hero + "  Hero<br>"), 
-        w.innerHTML = k, this.deckinfo.appendChild(w);
+        b.className = "dustInfo", p.appendChild(v), p.appendChild(m), this.deckinfo.appendChild(p);
+        var k = document.createElement("p");
+        k.className = "cardtypes";
+        var w = "";
+        e.cardTypes.Minion >= 10 ? w += e.cardTypes.Minion + " Minions<br>" : 1 == e.cardTypes.Minion ? w += e.cardTypes.Minion + "  Minion<br>" : w += e.cardTypes.Minion + "  Minions<br>", 
+        e.cardTypes.Spell >= 10 ? w += e.cardTypes.Spell + " Spells<br>" : 1 == e.cardTypes.Spell ? w += e.cardTypes.Spell + "  Spell<br>" : w += e.cardTypes.Spell + "  Spells<br>", 
+        e.cardTypes.Weapon && (w += e.cardTypes.Weapon + "  Weapons<br>"), e.cardTypes.Hero && (w += e.cardTypes.Hero + "  Hero<br>"), 
+        k.innerHTML = w, this.deckinfo.appendChild(k);
         var g = document.createElement("p");
         g.className = "author", g.innerHTML = "Author: " + e.author, this.deckinfo.appendChild(g);
         var x = document.createElement("p");
         if (x.className = "timestamp", x.innerHTML = "Updated " + e.timestamp, this.deckinfo.appendChild(x), 
         "" != e.gameplay) {
-            var T = document.createElement("a");
-            T.href = "https://www.reddit.com/r/ViciousSyndicate/comments/6yqj62/vs_live_web_app_feedback_thread/", 
-            T.target = "_blank", T.className = "gameplay", T.innerHTML = "Gameplay", this.deckinfo.appendChild(T);
+            var L = document.createElement("a");
+            L.href = "https://www.reddit.com/r/ViciousSyndicate/comments/6yqj62/vs_live_web_app_feedback_thread/", 
+            L.target = "_blank", L.className = "gameplay", L.innerHTML = "Gameplay", this.deckinfo.appendChild(L);
         }
         this.div.appendChild(this.deckTitle), this.div.appendChild(this.decklist), this.div.appendChild(this.deckinfo);
     }
     return _createClass(t, [ {
         key: "highlight",
         value: function(t) {
-            var e = 0, i = !0, r = !1, a = void 0;
+            var e = 0, a = !0, r = !1, i = void 0;
             try {
-                for (var s, n = this.cards[Symbol.iterator](); !(i = (s = n.next()).done); i = !0) {
+                for (var s, n = this.cards[Symbol.iterator](); !(a = (s = n.next()).done); a = !0) {
                     var o = s.value, l = 0;
                     o.name + "x1" == t && (l = 1, e = 1), o.name + "x2" == t && (l = 2, e = 2), 0 != l ? l == o.quantity ? o.div.classList.add("highlighted") : o.div.classList.add("half-highlighted") : (o.div.classList.remove("highlighted"), 
                     o.div.classList.remove("half-highlighted"));
                 }
             } catch (t) {
-                r = !0, a = t;
+                r = !0, i = t;
             } finally {
                 try {
-                    !i && n.return && n.return();
+                    !a && n.return && n.return();
                 } finally {
-                    if (r) throw a;
+                    if (r) throw i;
                 }
             }
             return e;
@@ -283,23 +239,23 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
     this.div.className = "card", this.div.id = this.name, this.div.style.display = "block", 
     this.hoverDiv = document.createElement("div"), this.hoverDiv.className = "hoverDiv", 
     this.hoverDiv.id = this.name + "x" + this.quantity;
-    var i = document.createElement("div");
-    i.className = "costContainer";
+    var a = document.createElement("div");
+    a.className = "costContainer";
     var r = document.createElement("div");
     r.className = "hex " + this.rarity, r.innerHTML = "&#11042";
-    var a = document.createElement("div");
-    a.innerHTML = this.cost, a.className = "cost", this.cost >= 10 && (a.style.fontSize = "75%", 
-    a.style.paddingLeft = "0.2rem", a.style.paddingTop = "0.4rem");
+    var i = document.createElement("div");
+    i.innerHTML = this.cost, i.className = "cost", this.cost >= 10 && (i.style.fontSize = "75%", 
+    i.style.paddingLeft = "0.2rem");
     var s = document.createElement("div");
     s.innerHTML = this.name, s.className = "name";
     var n;
     this.quantity > 1 && ((n = document.createElement("div")).innerHTML = "x" + this.quantity, 
-    n.className = "quantity"), i.appendChild(r), i.appendChild(a), this.div.appendChild(i), 
+    n.className = "quantity"), a.appendChild(r), a.appendChild(i), this.div.appendChild(a), 
     this.div.appendChild(s), this.quantity > 1 && this.div.appendChild(n), this.div.appendChild(this.hoverDiv);
 }, Sidebar = function() {
-    function t(e, i) {
+    function t(e, a, r) {
         _classCallCheck(this, t), this.div = e, this.titleDiv = document.createElement("div"), 
-        this.titleDiv.className = "title", this.setTitle(i), this.div.appendChild(this.titleDiv), 
+        this.titleDiv.className = "title", this.setTitle(a), this.div.appendChild(this.titleDiv), 
         this.archBtnsDiv = document.createElement("div"), this.archBtnsDiv.className = "archBtnList", 
         this.div.appendChild(this.archBtnsDiv), this.archList = [], this.archBtns = [], 
         this.hidden = !1;
@@ -313,42 +269,66 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
         key: "loadClass",
         value: function(t) {
             this.removeBtn(), this.archetypes = t.archetypes;
-            var e = !0, i = !1, r = void 0;
+            var e = !0, a = !1, r = void 0;
             try {
-                for (var a, s = this.archetypes[Symbol.iterator](); !(e = (a = s.next()).done); e = !0) {
-                    var n = a.value;
+                for (var i, s = this.archetypes[Symbol.iterator](); !(e = (i = s.next()).done); e = !0) {
+                    var n = i.value;
                     this.addArchBtn(n);
                 }
             } catch (t) {
-                i = !0, r = t;
+                a = !0, r = t;
             } finally {
                 try {
                     !e && s.return && s.return();
                 } finally {
-                    if (i) throw r;
+                    if (a) throw r;
                 }
             }
         }
     }, {
         key: "addArchBtn",
         value: function(t) {
-            var e = document.createElement("div");
-            e.className = "archBtnWrapper";
-            var i = document.createElement("div");
-            i.id = t.name, i.className = "archBtn", i.style.color = hsFontColors[t.hsClass], 
-            i.style.backgroundColor = hsColors[t.hsClass], i.innerHTML = t.name, i.addEventListener("click", decksWindow.buttonTrigger.bind(decksWindow)), 
-            e.appendChild(i);
-            var r = document.createElement("div");
-            r.className = "wrDiv", r.innerHTML = "Tier " + tier_classifier(t.wr), e.appendChild(r), 
-            this.archBtns.push(e), this.archBtnsDiv.appendChild(e);
+            if (void 0 != t) {
+                var e = document.createElement("div");
+                e.className = "archBtnWrapper", e.id = t.name;
+                var a = document.createElement("div");
+                a.id = t.name, a.className = "archBtn", a.style.color = hsFontColors[t.hsClass], 
+                a.style.backgroundColor = hsColors[t.hsClass], a.innerHTML = t.name;
+                var r = this;
+                a.addEventListener("click", function(e) {
+                    r.highlight(t.name), app.ui.decksWindow.buttonTrigger(e);
+                }.bind(app.ui.decksWindow)), e.appendChild(a);
+                var i = document.createElement("div");
+                i.className = "wrDiv", i.innerHTML = "Tier " + tier_classifier(t.wr), e.appendChild(i), 
+                this.archBtns.push(e), this.archBtnsDiv.appendChild(e);
+            }
+        }
+    }, {
+        key: "highlight",
+        value: function(t) {
+            var e = !0, a = !1, r = void 0;
+            try {
+                for (var i, s = this.archBtns[Symbol.iterator](); !(e = (i = s.next()).done); e = !0) {
+                    var n = i.value;
+                    n.id != t || n.classList.contains("highlighted") ? n.classList.remove("highlighted") : n.classList.add("highlighted");
+                }
+            } catch (t) {
+                a = !0, r = t;
+            } finally {
+                try {
+                    !e && s.return && s.return();
+                } finally {
+                    if (a) throw r;
+                }
+            }
         }
     }, {
         key: "removeBtn",
         value: function() {
             for (var t = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : null, e = 0; e < this.archBtns.length; e++) {
-                var i = this.archList[e], r = this.archBtns[e];
+                var a = this.archList[e], r = this.archBtns[e];
                 if (null == t) return this.archBtnsDiv.innerHTML = "", void (this.archList = []);
-                if (i.name == t) return this.archList.del(i), void this.archBtnsDiv.removeChild(r);
+                if (a.name == t) return this.archList.del(a), void this.archBtnsDiv.removeChild(r);
             }
         }
     }, {
@@ -362,16 +342,19 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
             this.div.classList.remove("hidden"), this.hidden = !0;
         }
     } ]), t;
-}(), DecksWindow = function() {
+}(), ArchBtn = function t() {
+    _classCallCheck(this, t), this.div = document.createElement("div");
+}, DecksWindow = function() {
     function t(e) {
-        _classCallCheck(this, t), this.hsFormats = e, this.chartDiv = document.querySelector("#decksWindow .content .chart"), 
+        _classCallCheck(this, t), this.hsFormats = hsFormats, this.div = document.querySelector("#decksWindow"), 
+        this.tab = document.querySelector("#decks.tab"), this.chartDiv = document.querySelector("#decksWindow .content .chart"), 
         this.descriptionBox = document.querySelector("#decksWindow .content .descriptionBox"), 
         this.decksDiv = document.querySelector("#decksWindow .content .decklists"), this.description = document.querySelector("#decksWindow .content .descriptionBox .description"), 
         this.overlayDiv = document.querySelector("#decksWindow .overlay"), this.overlayP = document.querySelector("#decksWindow .overlayText"), 
         this.questionBtn = document.querySelector("#decksWindow .question"), this.subWindows = [ this.descriptionBox, this.decksDiv, this.chartDiv ];
-        var i = document.querySelector("#decksWindow .content .sidebar.left"), r = document.querySelector("#decksWindow .content .sidebar.right1"), a = document.querySelector("#decksWindow .content .sidebar.right2");
-        this.sidebarLeft = new Sidebar(i, "Archetypes"), this.sidebarRightTop = new Sidebar(r, "Best vs"), 
-        this.sidebarRightBot = new Sidebar(a, "Worst vs"), this.overlayText = "\n            Select <span class='optionBtn'>Description</span> to see the latest report on that class.\n            Select <span class='optionBtn'>Deck Lists</span> to see the latest deck lists on that class.<br><br>\n            Select any archetype on the left side to see all the decklists of that archetype.<br><br>\n            Hover over the deck title to copy or get more information on that decklist.<br><br>\n            <img src='Images/clickOnDeckTitle.png'><br><br>\n            Tips:<br><br>\n            • When you hover over a card of a decklist it highlights all cards with the same name in the other decklists.<br><br>\n        ", 
+        var a = document.querySelector("#decksWindow .content .sidebar.left"), r = document.querySelector("#decksWindow .content .sidebar.right1"), i = document.querySelector("#decksWindow .content .sidebar.right2");
+        this.sidebarLeft = new Sidebar(a, "Archetypes"), this.sidebarRightTop = new Sidebar(r, "Best vs"), 
+        this.sidebarRightBot = new Sidebar(i, "Worst vs"), this.overlayText = "\n            Select <span class='optionBtn'>Description</span> to see the latest report on that class.\n            Select <span class='optionBtn'>Deck Lists</span> to see the latest deck lists on that class.<br><br>\n            Select any archetype on the left side to see all the decklists of that archetype.<br><br>\n            Hover over the deck title to copy or get more information on that decklist.<br><br>\n            <img src='Images/clickOnDeckTitle.png'><br><br>\n            Tips:<br><br>\n            • When you hover over a card of a decklist it highlights all cards with the same name in the other decklists.<br><br>\n        ", 
         this.firebasePath = "deckData", this.archButtons = [], this.optionButtons = document.querySelectorAll("#decksWindow .optionBtn");
         var s = !0, n = !1, o = void 0;
         try {
@@ -388,82 +371,105 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
             }
         }
         this.f = "Standard", this.hsClass = "Druid", this.hsArch = null, this.mode = "description", 
-        this.deckWidth = "12rem", this.fullyLoaded = !1, this.overlay = !1, this.MU_table = {}, 
-        this.MU_archNames = {}, this.MU_fr = {}, this.MU_wr = {}, this.data = {};
-        var d = tableWindow.hsTimes.slice(-1)[0], c = ladder_ranks[0], u = !0, y = !1, f = void 0;
+        this.deckWidth = "12rem", this.fullyLoaded = !0, this.overlay = !1, this.table_time = table_times[0], 
+        this.table_rank = table_ranks[0], this.mu = {}, this.data = {}, this.decklists = [], 
+        this.archetypes = {};
+        var d = !0, c = !1, u = void 0;
         try {
-            for (var v, m = this.hsFormats[Symbol.iterator](); !(u = (v = m.next()).done); u = !0) {
-                var p = v.value, b = tableWindow.data[p][d][c];
-                this.data[p] = {}, this.data[p].data = b.DATA, this.MU_archNames[p] = b.freqPlotData.x[0], 
-                this.MU_table[p] = b.table, this.MU_fr[p] = b.freqPlotData.y[0], this.MU_wr[p] = matrixXvector(this.MU_table[p], this.MU_fr[p]);
-            }
-        } catch (t) {
-            y = !0, f = t;
-        } finally {
-            try {
-                !u && m.return && m.return();
-            } finally {
-                if (y) throw f;
-            }
-        }
-        this.decklists = [], this.allArchetypes = {};
-        var w = !0, k = !1, g = void 0;
-        try {
-            for (var x, T = this.hsFormats[Symbol.iterator](); !(w = (x = T.next()).done); w = !0) {
-                var C = x.value;
-                this.allArchetypes[C] = [];
-                var L = !0, S = !1, W = void 0;
+            for (var y, f = this.hsFormats[Symbol.iterator](); !(d = (y = f.next()).done); d = !0) {
+                var p = y.value;
+                this.data[p] = {
+                    fullyLoaded: !1
+                }, this.archetypes[p] = [], this.mu[p] = {
+                    table: {},
+                    archNames: {},
+                    fr: {},
+                    wr: {},
+                    fullyLoaded: !1
+                };
+                var v = !0, m = !1, b = void 0;
                 try {
-                    for (var _, M = hsClasses[Symbol.iterator](); !(L = (_ = M.next()).done); L = !0) {
-                        var B = _.value;
-                        this.data[C][B] = {}, this.data[C][B].archetypes = [], this.data[C][B].text = "";
+                    for (var k, w = hsClasses[Symbol.iterator](); !(v = (k = w.next()).done); v = !0) {
+                        var g = k.value;
+                        this.data[p][g] = {}, this.data[p][g].archetypes = [], this.data[p][g].text = "";
                     }
                 } catch (t) {
-                    S = !0, W = t;
+                    m = !0, b = t;
                 } finally {
                     try {
-                        !L && M.return && M.return();
+                        !v && w.return && w.return();
                     } finally {
-                        if (S) throw W;
+                        if (m) throw b;
                     }
                 }
             }
         } catch (t) {
-            k = !0, g = t;
+            c = !0, u = t;
         } finally {
             try {
-                !w && T.return && T.return();
+                !d && f.return && f.return();
             } finally {
-                if (k) throw g;
+                if (c) throw u;
             }
         }
-        this.renderOptions(), this.questionBtn.addEventListener("click", this.toggleOverlay.bind(this)), 
-        this.overlayDiv.addEventListener("click", this.toggleOverlay.bind(this));
+        this.setupUI(), this.renderOptions(), this.questionBtn.addEventListener("click", this.toggleOverlay.bind(this)), 
+        this.overlayDiv.addEventListener("click", this.toggleOverlay.bind(this)), e.apply(this);
     }
     return _createClass(t, [ {
+        key: "setupUI",
+        value: function() {
+            this.dropdownFolders = {
+                format: document.querySelector("#decksWindow .content-header #formatFolder .dropdown"),
+                class: document.querySelector("#decksWindow .content-header #classFolder .dropdown")
+            };
+            var t = function(t) {
+                var e = t.toElement || t.relatedTarget;
+                e.parentNode != this && e != this && this.classList.add("hidden");
+            };
+            for (var e in this.dropdownFolders) {
+                this.dropdownFolders[e].onmouseout = t;
+            }
+        }
+    }, {
+        key: "plot",
+        value: function() {
+            if (!this.checkLoadData()) return this.checkLoadData(function(t) {
+                app.ui.decksWindow.plot();
+            });
+            this.loadFormat(this.f), this.renderOptions();
+        }
+    }, {
+        key: "display",
+        value: function(t) {
+            t ? (console.log("first display"), this.div.style.display = "inline-block", this.f = app.path.hsFormat, 
+            this.plot()) : (app.path.hsFormat = this.f, this.div.style.display = "none");
+        }
+    }, {
         key: "buttonTrigger",
         value: function(t) {
             var e = t.target.id;
-            t.target.classList.contains("archBtn") && this.deckLink(e, this.f), -1 != hsClasses.indexOf(e) && (this.hsArch = null, 
-            this.loadClass(e)), "overview" == e && this.plotDustWr(), "decklists" == e && this.loadDecklists(), 
-            "description" == e && this.loadDescription(), "Standard" == e && this.loadFormat("Standard"), 
-            "Wild" == e && this.loadFormat("Wild"), this.renderWindows(), this.renderOptions();
+            "Standard" != e && "Wild" != e || (this.f = e, this.plot()), t.target.classList.contains("archBtn") && (this.hsArch = this.findArch(e), 
+            void 0 != this.hsArch ? this.hsClass != this.hsArch.hsClass ? (this.hsClass = this.hsArch.hsClass, 
+            this.loadClass(this.hsClass)) : this.loadDecklists() : console.log("ERROR: archbtn not found", t)), 
+            -1 != hsClasses.indexOf(e) && (this.hsArch = null, this.loadClass(e)), "overview" == e && this.plotDustWr(), 
+            "decklists" == e && this.loadDecklists(), "description" == e && this.loadDescription(), 
+            this.renderWindows(), this.renderOptions();
         }
     }, {
         key: "renderWindows",
         value: function() {
-            var t = !0, e = !1, i = void 0;
+            var t = !0, e = !1, a = void 0;
             try {
-                for (var r, a = this.subWindows[Symbol.iterator](); !(t = (r = a.next()).done); t = !0) {
+                for (var r, i = this.subWindows[Symbol.iterator](); !(t = (r = i.next()).done); t = !0) {
                     r.value.style.display = "none";
                 }
             } catch (t) {
-                e = !0, i = t;
+                e = !0, a = t;
             } finally {
                 try {
-                    !t && a.return && a.return();
+                    !t && i.return && i.return();
                 } finally {
-                    if (e) throw i;
+                    if (e) throw a;
                 }
             }
             switch (this.mode) {
@@ -482,18 +488,18 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
     }, {
         key: "renderOptions",
         value: function() {
-            var t = !0, e = !1, i = void 0;
+            var t = !0, e = !1, a = void 0;
             try {
-                for (var r, a = this.optionButtons[Symbol.iterator](); !(t = (r = a.next()).done); t = !0) {
+                for (var r, i = this.optionButtons[Symbol.iterator](); !(t = (r = i.next()).done); t = !0) {
                     (d = r.value).classList.remove("highlighted"), d.id == this.mode && d.classList.add("highlighted");
                 }
             } catch (t) {
-                e = !0, i = t;
+                e = !0, a = t;
             } finally {
                 try {
-                    !t && a.return && a.return();
+                    !t && i.return && i.return();
                 } finally {
-                    if (e) throw i;
+                    if (e) throw a;
                 }
             }
             var s = !0, n = !1, o = void 0;
@@ -515,160 +521,196 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
             document.querySelector("#decksWindow #classBtn").innerHTML = this.hsClass;
         }
     }, {
-        key: "loadData",
+        key: "checkLoadData",
+        value: function(t) {
+            var e = void 0 != t;
+            if (console.log("checkLoadData", e, t), !app.ui.tableWindow.data[this.f].fullyLoaded) {
+                console.log("check 1");
+                return !!e && app.ui.tableWindow.loadData(this.f, function() {
+                    app.ui.decksWindow.checkLoadData(t);
+                });
+            }
+            if (app.ui.tableWindow.data[this.f].fullyLoaded && !this.mu[this.f].fullyLoaded && this.loadWinrate(), 
+            !this.data[this.f].fullyLoaded) {
+                console.log("check 2");
+                return !!e && this.loadData(this.f, function() {
+                    app.ui.decksWindow.checkLoadData(t);
+                });
+            }
+            if (this.data[this.f].fullyLoaded && app.ui.tableWindow.data[this.f].fullyLoaded) return console.log("all checks clear"), 
+            !e || t.apply(this);
+        }
+    }, {
+        key: "loadWinrate",
         value: function() {
-            DATABASE.ref(this.firebasePath).on("value", this.readData.bind(this), function(t) {
+            var t = app.ui.tableWindow.data[this.f][this.table_time][this.table_rank];
+            null != t ? (this.mu[this.f].table = t.table, this.mu[this.f].archNames = t.freqPlotData.x[0], 
+            this.mu[this.f].fr = t.freqPlotData.y[0], this.mu[this.f].wr = t.winrates, this.mu[this.f].fullyLoaded = !0) : console.log("ERROR table undefined");
+        }
+    }, {
+        key: "loadData",
+        value: function(t, e) {
+            this.fullyLoaded = !1;
+            app.fb_db.ref(this.firebasePath + "/" + t).on("value", function(a) {
+                this.readData(a, t, e);
+            }.bind(this), function(t) {
                 return console.log("Could not load Deck Data", t);
             });
         }
     }, {
         key: "readData",
-        value: function(t) {
+        value: function(t, e, a) {
             if (!this.fullyLoaded) {
-                t = t.val();
-                var e = !0, i = !1, r = void 0;
+                var r = t.val(), i = e, s = !0, n = !1, o = void 0;
                 try {
-                    for (var a, s = this.hsFormats[Symbol.iterator](); !(e = (a = s.next()).done); e = !0) {
-                        var n = a.value, o = !0, l = !1, h = void 0;
-                        try {
-                            for (var d, c = hsClasses[Symbol.iterator](); !(o = (d = c.next()).done); o = !0) {
-                                var u = d.value;
-                                this.data[n][u].text = t[n][u].text;
-                                var y = Object.keys(t[n][u].archetypes), f = !0, v = !1, m = void 0;
-                                try {
-                                    for (var p, b = y[Symbol.iterator](); !(f = (p = b.next()).done); f = !0) {
-                                        var w = p.value, k = 0, g = 0, x = this.MU_archNames[n].indexOf(w);
-                                        x >= 0 && (k = this.MU_wr[n][x], g = this.MU_fr[n][x]);
-                                        var T = {
-                                            name: w,
-                                            hsClass: u,
-                                            hsFormat: n,
-                                            decklists: [],
-                                            wr: k,
-                                            fr: g
-                                        };
-                                        this.allArchetypes[n].push(T), this.data[n][u].archetypes.push(T);
-                                        var C = this.data[n][u].archetypes.length - 1, L = t[n][u].archetypes[w], S = Object.keys(L), W = !0, _ = !1, M = void 0;
+                    for (var l, h = hsClasses[Symbol.iterator](); !(s = (l = h.next()).done); s = !0) {
+                        var d = l.value;
+                        if (this.data[i][d].text = r[d].text, "archetypes" in r[d]) {
+                            var c = Object.keys(r[d].archetypes), u = !0, y = !1, f = void 0;
+                            try {
+                                for (var p, v = c[Symbol.iterator](); !(u = (p = v.next()).done); u = !0) {
+                                    var m = p.value, b = 0, k = 0, w = this.mu[i].archNames.indexOf(m);
+                                    w >= 0 && (b = this.mu[i].wr[w], k = this.mu[i].fr[w]);
+                                    var g = {
+                                        name: m,
+                                        hsClass: d,
+                                        hsFormat: i,
+                                        decklists: [],
+                                        wr: b,
+                                        fr: k
+                                    };
+                                    this.archetypes[i].push(g), this.data[i][d].archetypes.push(g);
+                                    var x = this.data[i][d].archetypes.length - 1, L = r[d].archetypes[m], C = Object.keys(L), T = !0, S = !1, D = void 0;
+                                    try {
+                                        for (var B, W = C[Symbol.iterator](); !(T = (B = W.next()).done); T = !0) {
+                                            var M = B.value, _ = new Decklist(L[M], d, this);
+                                            this.data[i][d].archetypes[x].decklists.push(_);
+                                        }
+                                    } catch (t) {
+                                        S = !0, D = t;
+                                    } finally {
                                         try {
-                                            for (var B, D = S[Symbol.iterator](); !(W = (B = D.next()).done); W = !0) {
-                                                var I = B.value, E = new Decklist(L[I], u, this);
-                                                this.data[n][u].archetypes[C].decklists.push(E);
-                                            }
-                                        } catch (t) {
-                                            _ = !0, M = t;
+                                            !T && W.return && W.return();
                                         } finally {
-                                            try {
-                                                !W && D.return && D.return();
-                                            } finally {
-                                                if (_) throw M;
-                                            }
+                                            if (S) throw D;
                                         }
                                     }
-                                } catch (t) {
-                                    v = !0, m = t;
-                                } finally {
-                                    try {
-                                        !f && b.return && b.return();
-                                    } finally {
-                                        if (v) throw m;
-                                    }
                                 }
-                            }
-                        } catch (t) {
-                            l = !0, h = t;
-                        } finally {
-                            try {
-                                !o && c.return && c.return();
+                            } catch (t) {
+                                y = !0, f = t;
                             } finally {
-                                if (l) throw h;
+                                try {
+                                    !u && v.return && v.return();
+                                } finally {
+                                    if (y) throw f;
+                                }
                             }
                         }
                     }
                 } catch (t) {
-                    i = !0, r = t;
+                    n = !0, o = t;
                 } finally {
                     try {
-                        !e && s.return && s.return();
+                        !s && h.return && h.return();
                     } finally {
-                        if (i) throw r;
+                        if (n) throw o;
                     }
                 }
-                this.fullyLoaded = !0, console.log("decks loaded: " + (performance.now() - t0).toFixed(2) + " ms"), 
-                this.plot();
+                this.fullyLoaded = !0, this.data[i].fullyLoaded = !0, console.log("decks loaded: " + (performance.now() - t0).toFixed(2) + " ms"), 
+                a.apply(this);
             }
         }
     }, {
         key: "deckLink",
         value: function(t) {
             var e = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : "Standard";
-            this.fullyLoaded || this.loadData();
-            var i, r;
-            this.mode = "decklists", this.f = e;
-            var a = !0, s = !1, n = void 0;
-            try {
-                for (var o, l = hsClasses[Symbol.iterator](); !(a = (o = l.next()).done); a = !0) {
-                    var h = o.value;
-                    -1 != t.indexOf(h) && (i = h);
-                    var d = this.data[e][h].archetypes, c = !0, u = !1, y = void 0;
+            if (this.mode = "decklists", this.f = e, !this.checkLoadData()) {
+                return this.checkLoadData(function(a) {
+                    app.ui.decksWindow.deckLink(t, e);
+                });
+            }
+            var a = void 0, r = void 0;
+            if (this.hsArch = this.findArch(t), void 0 == this.hsArch) {
+                var i = !0, s = !1, n = void 0;
+                try {
+                    for (var o, l = hsClasses[Symbol.iterator](); !(i = (o = l.next()).done); i = !0) {
+                        var h = o.value;
+                        if (-1 != t.indexOf(h)) {
+                            this.hsClass = h;
+                            break;
+                        }
+                    }
+                } catch (t) {
+                    s = !0, n = t;
+                } finally {
                     try {
-                        for (var f, v = d[Symbol.iterator](); !(c = (f = v.next()).done); c = !0) {
-                            var m = f.value;
-                            if (m.name == t) {
-                                i = h, r = m;
+                        !i && l.return && l.return();
+                    } finally {
+                        if (s) throw n;
+                    }
+                }
+                void 0 == this.hsClass && (this.hsClass = "Druid"), this.hsArch = this.data[this.f][this.hsClass].archetypes[0];
+            }
+            var d = !0, c = !1, u = void 0;
+            try {
+                for (var y, f = hsClasses[Symbol.iterator](); !(d = (y = f.next()).done); d = !0) {
+                    var p = y.value;
+                    -1 != t.indexOf(p) && (a = p);
+                    var v = this.data[e][p].archetypes, m = !0, b = !1, k = void 0;
+                    try {
+                        for (var w, g = v[Symbol.iterator](); !(m = (w = g.next()).done); m = !0) {
+                            var x = w.value;
+                            if (x.name == t) {
+                                a = p, r = x;
                                 break;
                             }
                         }
                     } catch (t) {
-                        u = !0, y = t;
+                        b = !0, k = t;
                     } finally {
                         try {
-                            !c && v.return && v.return();
+                            !m && g.return && g.return();
                         } finally {
-                            if (u) throw y;
+                            if (b) throw k;
                         }
                     }
                 }
             } catch (t) {
-                s = !0, n = t;
+                c = !0, u = t;
             } finally {
                 try {
-                    !a && l.return && l.return();
+                    !d && f.return && f.return();
                 } finally {
-                    if (s) throw n;
+                    if (c) throw u;
                 }
             }
-            void 0 == i && (i = "Druid"), void 0 == r && (r = null, this.mode = "description"), 
-            this.hsClass = i, this.hsArch = r, this.plot(), this.renderOptions();
-        }
-    }, {
-        key: "plot",
-        value: function() {
-            this.fullyLoaded && (this.mode, this.loadFormat(this.f));
+            void 0 == a && (a = "Druid"), void 0 == r && (r = null, this.mode = "description"), 
+            this.hsClass = a, this.hsArch = r, this.display(!0), this.renderOptions();
         }
     }, {
         key: "loadFormat",
         value: function(t) {
-            this.f = t, this.loadClass(this.hsClass);
+            if (this.f = t, !this.data[t].fullyLoaded) {
+                this.loadData(t, function() {
+                    app.ui.decksWindow.loadFormat(t);
+                });
+            }
+            this.loadClass(this.hsClass);
         }
     }, {
         key: "loadClass",
         value: function(t) {
-            this.hsClass = t, "description" == this.mode && this.loadDescription(), "decklists" == this.mode && this.loadDecklists(), 
-            this.sidebarLeft.loadClass(this.data[this.f][this.hsClass]);
-            var e = this.data[this.f][this.hsClass].archetypes;
-            e.length > 0 && null == this.hsArch && (this.hsArch = e[0]);
+            this.hsClass = t, "description" == this.mode && this.loadDescription(), "decklists" == this.mode && this.loadDecklists();
+            var e = this.data[this.f][this.hsClass];
+            this.sidebarLeft.loadClass(e), e.archetypes.length > 0 && null == this.hsArch && (this.hsArch = e.archetypes[0]), 
+            this.sidebarLeft.highlight(this.hsArch.name);
         }
     }, {
         key: "loadDescription",
         value: function() {
             this.mode = "description", this.renderWindows();
             var t = this.data[this.f][this.hsClass];
-            this.addDescription(this.hsClass, t.text);
-        }
-    }, {
-        key: "addDescription",
-        value: function(t, e) {
-            this.description.innerHTML = '<p class="title">' + t + '</p><p class="text">' + e + "</p>";
+            this.description.innerHTML = '<p class="title">' + this.hsClass + '</p><p class="text">' + t.text + "</p>";
         }
     }, {
         key: "loadDecklists",
@@ -676,19 +718,19 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
             if (this.mode = "decklists", this.renderWindows(), this.decklists = [], this.decksDiv.innerHTML = "", 
             null == this.hsArch && (this.hsArch = this.data[this.f][this.hsClass].archetypes[0]), 
             void 0 != this.hsArch) {
-                var t = "", e = !0, i = !1, r = void 0;
+                var t = "", e = !0, a = !1, r = void 0;
                 try {
-                    for (var a, s = this.hsArch.decklists[Symbol.iterator](); !(e = (a = s.next()).done); e = !0) {
-                        var n = a.value;
+                    for (var i, s = this.hsArch.decklists[Symbol.iterator](); !(e = (i = s.next()).done); e = !0) {
+                        var n = i.value;
                         t += this.deckWidth + " ", this.decklists.push(n), this.decksDiv.appendChild(n.div);
                     }
                 } catch (t) {
-                    i = !0, r = t;
+                    a = !0, r = t;
                 } finally {
                     try {
                         !e && s.return && s.return();
                     } finally {
-                        if (i) throw r;
+                        if (a) throw r;
                     }
                 }
                 this.decksDiv.style.gridTemplateColumns = t, this.loadDecklistsMatchups(this.hsArch);
@@ -697,10 +739,10 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
     }, {
         key: "findArch",
         value: function(t) {
-            var e = !0, i = !1, r = void 0;
+            var e = !0, a = !1, r = void 0;
             try {
-                for (var a, s = hsClasses[Symbol.iterator](); !(e = (a = s.next()).done); e = !0) {
-                    var n = a.value, o = !0, l = !1, h = void 0;
+                for (var i, s = hsClasses[Symbol.iterator](); !(e = (i = s.next()).done); e = !0) {
+                    var n = i.value, o = !0, l = !1, h = void 0;
                     try {
                         for (var d, c = this.data[this.f][n].archetypes[Symbol.iterator](); !(o = (d = c.next()).done); o = !0) {
                             var u = d.value;
@@ -717,69 +759,74 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                     }
                 }
             } catch (t) {
-                i = !0, r = t;
+                a = !0, r = t;
             } finally {
                 try {
                     !e && s.return && s.return();
                 } finally {
-                    if (i) throw r;
+                    if (a) throw r;
                 }
             }
         }
     }, {
         key: "loadDecklistsMatchups",
         value: function(t) {
-            var e = [], i = [];
+            var e = this.f, a = 3, r = [], i = [];
             if (t.wr > 0) {
-                var r = this.MU_table[this.f], a = this.MU_archNames[this.f], s = a.indexOf(t.name);
-                -1 == s && (t.wr = 0, this.loadDecklistsMatchups(t));
-                for (var n = 0; n < 3; n++) {
-                    var o = .48, l = .52;
-                    e.push(null), i.push(null);
-                    for (var h = 0; h < a.length; h++) {
-                        if (console.log("mu:", r[s][h]), r[s][h] > l) {
-                            if (-1 == e.indexOf(a[h])) break;
-                            console.log("-- Succes!", e), e[n] = a[h], console.log(e), l = r[s][h];
-                        }
-                        r[s][h] < o && -1 != i.indexOf(a[h]) && (console.log("Success 2"), i[n] = a[h], 
-                        o = r[s][h]);
-                    }
-                }
-                this.sidebarRightTop.removeBtn(), this.sidebarRightBot.removeBtn(), console.log("matchups:", e, i);
-                var d = !0, c = !1, u = void 0;
+                var s = this.mu[e].table, n = this.mu[e].archNames, o = n.indexOf(t.name);
+                if (-1 == o) return t.wr = 0, void this.loadDecklistsMatchups(t);
+                var l = s[o].slice();
+                l.sort(), a = Math.min(a, l.length);
+                var h = !0, d = !1, c = void 0;
                 try {
-                    for (var y, f = e[Symbol.iterator](); !(d = (y = f.next()).done); d = !0) {
-                        var v = y.value;
-                        if (null != v) {
-                            var m = this.findArch(v);
-                            this.sidebarRightTop.addArchBtn(m);
-                        }
+                    for (var u, y = range(0, a)[Symbol.iterator](); !(h = (u = y.next()).done); h = !0) {
+                        var f = u.value, p = l[l.length - 1 - f], v = s[o].indexOf(p);
+                        r.push(n[v]), p = l[f], v = s[o].indexOf(p), i.push(n[v]);
                     }
                 } catch (t) {
-                    c = !0, u = t;
+                    d = !0, c = t;
                 } finally {
                     try {
-                        !d && f.return && f.return();
+                        !h && y.return && y.return();
                     } finally {
-                        if (c) throw u;
+                        if (d) throw c;
                     }
                 }
-                var p = !0, b = !1, w = void 0;
+                this.sidebarRightTop.removeBtn(), this.sidebarRightBot.removeBtn();
+                var m = !0, b = !1, k = void 0;
                 try {
-                    for (var k, g = i[Symbol.iterator](); !(p = (k = g.next()).done); p = !0) {
-                        var x = k.value;
+                    for (var w, g = r[Symbol.iterator](); !(m = (w = g.next()).done); m = !0) {
+                        var x = w.value;
                         if (null != x) {
-                            var T = this.findArch(x);
-                            this.sidebarRightBot.addArchBtn(T);
+                            var L = this.findArch(x);
+                            this.sidebarRightTop.addArchBtn(L);
                         }
                     }
                 } catch (t) {
-                    b = !0, w = t;
+                    b = !0, k = t;
                 } finally {
                     try {
-                        !p && g.return && g.return();
+                        !m && g.return && g.return();
                     } finally {
-                        if (b) throw w;
+                        if (b) throw k;
+                    }
+                }
+                var C = !0, T = !1, S = void 0;
+                try {
+                    for (var D, B = i[Symbol.iterator](); !(C = (D = B.next()).done); C = !0) {
+                        var W = D.value;
+                        if (null != W) {
+                            var M = this.findArch(W);
+                            this.sidebarRightBot.addArchBtn(M);
+                        }
+                    }
+                } catch (t) {
+                    T = !0, S = t;
+                } finally {
+                    try {
+                        !C && B.return && B.return();
+                    } finally {
+                        if (T) throw S;
                     }
                 }
             }
@@ -788,27 +835,27 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
         key: "highlight",
         value: function(t) {
             if ("mouseover" == t.type) {
-                var e = t.target.id, i = t.target.parentElement.parentElement.id, r = !0, a = !1, s = void 0;
+                var e = t.target.id, a = t.target.parentElement.parentElement.id, r = !0, i = !1, s = void 0;
                 try {
                     for (var n, o = this.decklists[Symbol.iterator](); !(r = (n = o.next()).done); r = !0) {
-                        (y = n.value).name != i && y.highlight(e);
+                        (y = n.value).name != a && y.highlight(e);
                     }
                 } catch (t) {
-                    a = !0, s = t;
+                    i = !0, s = t;
                 } finally {
                     try {
                         !r && o.return && o.return();
                     } finally {
-                        if (a) throw s;
+                        if (i) throw s;
                     }
                 }
             } else {
-                i = t.target.parentElement.parentElement.id;
+                a = t.target.parentElement.parentElement.id;
                 var l = !0, h = !1, d = void 0;
                 try {
                     for (var c, u = this.decklists[Symbol.iterator](); !(l = (c = u.next()).done); l = !0) {
                         var y;
-                        (y = c.value).name != i && y.highlight(e);
+                        (y = c.value).name != a && y.highlight(e);
                     }
                 } catch (t) {
                     h = !0, d = t;
@@ -825,21 +872,21 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
         key: "plotDustWr",
         value: function() {
             this.mode = "overview", this.renderWindows();
-            var t = this.allArchetypes[this.f], e = [], i = 48e3, r = 0, a = !0, s = !1, n = void 0;
+            var t = this.archetypes[this.f], e = [], a = 48e3, r = 0, i = !0, s = !1, n = void 0;
             try {
-                for (var o, l = t[Symbol.iterator](); !(a = (o = l.next()).done); a = !0) {
+                for (var o, l = t[Symbol.iterator](); !(i = (o = l.next()).done); i = !0) {
                     var h = o.value;
                     if (0 != h.wr) {
                         var d = !0, c = !1, u = void 0;
                         try {
                             for (var y, f = h.decklists[Symbol.iterator](); !(d = (y = f.next()).done); d = !0) {
-                                var v = y.value;
-                                v.dust < i && (i = v.dust), v.dust > r && (r = v.dust), e.push({
-                                    x: [ v.dust ],
+                                var p = y.value;
+                                p.dust < a && (a = p.dust), p.dust > r && (r = p.dust), e.push({
+                                    x: [ p.dust ],
                                     y: [ h.wr ],
-                                    text: "<b>" + v.name + "</b><br>Winrate: " + (100 * h.wr).toFixed(2) + "%<br>Dust Cost: " + v.dust,
+                                    text: "<b>" + p.name + "</b><br>Winrate: " + (100 * h.wr).toFixed(2) + "%<br>Dust Cost: " + p.dust,
                                     hoverinfo: "text",
-                                    name: v.name,
+                                    name: p.name,
                                     mode: "markers",
                                     type: "scatter",
                                     marker: {
@@ -847,7 +894,7 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                                         size: 15,
                                         line: {
                                             color: "#3e3e3e80",
-                                            width: 1
+                                            width: 3
                                         }
                                     }
                                 });
@@ -867,22 +914,33 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                 s = !0, n = t;
             } finally {
                 try {
-                    !a && l.return && l.return();
+                    !i && l.return && l.return();
                 } finally {
                     if (s) throw n;
                 }
             }
             console.log("traces:", e);
-            var m = {
-                autosize: !0,
+            var v = _defineProperty({
                 showlegend: !1,
                 hovermode: "closest",
+                displayModeBar: !1,
+                autosize: !0,
+                margin: MOBILE ? {
+                    l: 10,
+                    r: 10,
+                    b: 35,
+                    t: 0
+                } : {
+                    l: 60,
+                    r: 30,
+                    b: 50,
+                    t: 0
+                },
                 plot_bgcolor: "transparent",
                 paper_bgcolor: "transparent",
-                displayModeBar: !1,
                 xaxis: {
                     title: "Dust Cost",
-                    range: [ .9 * i, 1.1 * r ]
+                    range: [ .9 * a, 1.1 * r ]
                 },
                 yaxis: {
                     tickformat: ",.0%",
@@ -890,7 +948,7 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                 },
                 shapes: [ {
                     type: "line",
-                    x0: i,
+                    x0: a,
                     y0: .5,
                     x1: r,
                     y1: .5,
@@ -900,13 +958,12 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                         dash: "dot",
                         opacity: .5
                     }
-                } ],
-                margin: {
-                    r: 0,
-                    t: 0
-                }
-            };
-            Plotly.newPlot("chart3", e, m);
+                } ]
+            }, "margin", {
+                r: 0,
+                t: 0
+            });
+            Plotly.newPlot("chart3", e, v);
             document.getElementById("chart3").on("plotly_click", function(t) {
                 console.log("clickHandler:", t);
                 var e = t.points[0].data.name;
@@ -924,8 +981,8 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
         }
     } ]), t;
 }(), History = function() {
-    function t(e, i) {
-        _classCallCheck(this, t), this.window = i, this.data = e, this.bgColor = "transparent", 
+    function t(e, a) {
+        _classCallCheck(this, t), this.window = a, this.data = e, this.bgColor = "transparent", 
         this.gridcolor = "white", this.annotations = [], this.layout = {
             showlegend: !1,
             displayModeBar: !1,
@@ -982,22 +1039,30 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
             last2Weeks: 14,
             last3Weeks: 21,
             lastMonth: 30
-        };
+        }, this.r2r = {
+            ranks_all: "ranks_all",
+            ranks_L_5: "ranks_1_4",
+            ranks_6_15: "ranks_5_14"
+        }, this.fullyLoaded = !0;
     }
     return _createClass(t, [ {
         key: "plot",
         value: function() {
             this.window.chartDiv.innerHTML = "", document.querySelector("#ladderWindow .content-header #rankBtn").style.display = "inline";
-            var t = this.window.f, e = this.window.t, i = "lastDay" == this.window.t || "last12Hours" == this.window.t || "last6Hours" == this.window.t ? "lastHours" : "lastDays", r = "lastHours" == i ? "Hour" : "Day", a = "lastHours" == i ? 2 : 0, s = this.timeFrame[e], n = this.window.r, o = this.window.mode, l = range(a, s), h = this.data[t][i][n][o], d = 0, c = [], u = [], y = [], f = 0;
+            this.window.f;
+            var t = this.window.t, e = "lastDay" == t || "last12Hours" == t || "last6Hours" == t ? "lastHours" : "lastDays", a = "lastHours" == e ? "Hour" : "Day", r = "lastHours" == e ? 2 : 0, i = this.timeFrame[t], s = this.r2r[this.window.r], n = this.window.mode, o = range(r, i);
+            console.log("plot History", e, s, n), console.log(this.data), console.log(this.data[e]), 
+            console.log(this.data[e][s]);
+            var l = this.data[e][s][n], h = 0, d = [], c = [], u = [], y = 0;
             this.annotations = [];
-            for (var v = h[h.length - 1].data.slice(), m = a; m < s && m < v.length; m++) {
-                f += v[m];
-                var p = {
-                    x: m,
+            for (var f = l[l.length - 1].data.slice(), p = r; p < i && p < f.length; p++) {
+                y += f[p];
+                var v = {
+                    x: p,
                     y: .05,
                     xref: "x",
                     yref: "y",
-                    text: v[m],
+                    text: f[p],
                     showarrow: !1,
                     bgcolor: "rgba(0,0,0,0.3)",
                     font: {
@@ -1005,75 +1070,75 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                     },
                     opacity: .8
                 };
-                this.annotations.push(p);
+                this.annotations.push(v);
             }
-            var b = h.slice().sort(function(t, e) {
+            var m = l.slice().sort(function(t, e) {
                 return t.avg > e.avg ? -1 : t.avg < e.avg ? 1 : 0;
             });
-            for (m = 0; m < this.top; m++) {
-                var w, k = b[m].name;
-                w = "classes" == o ? {
+            for (p = 0; p < this.top; p++) {
+                var b, k = m[p].name;
+                b = "classes" == n ? {
                     color: hsColors[k],
                     fontColor: hsFontColors[k]
-                } : this.window.getArchColor(0, k, this.window.f), y.push({
+                } : app.ui.getArchColor(0, k, this.window.f), u.push({
                     name: k,
-                    color: w.color,
-                    fontColor: w.fontColor
+                    color: b.color,
+                    fontColor: b.fontColor
                 });
-                var g = "lastHours" == i ? this.smoothData(b[m].data) : b[m].data.slice();
-                g = g.slice(a, s);
-                for (var x = [], T = 0; T < l.length; T++) {
-                    var C = T > 0 ? r + "s" : r;
-                    x.push(b[m].name + " (" + (100 * g[T]).toFixed(1) + "% )<br>" + l[T] + " " + C + " ago"), 
-                    g[T] > d && (d = g[T]);
+                var w = "lastHours" == e ? this.smoothData(m[p].data) : m[p].data.slice();
+                w = w.slice(r, i);
+                for (var g = [], x = 0; x < o.length; x++) {
+                    var L = x > 0 ? a + "s" : a;
+                    g.push(m[p].name + " (" + (100 * w[x]).toFixed(1) + "% )<br>" + o[x] + " " + L + " ago"), 
+                    w[x] > h && (h = w[x]);
                 }
-                u.push({
-                    x: l.slice(),
-                    y: fillRange(0, g.length, 0),
-                    text: x,
+                c.push({
+                    x: o.slice(),
+                    y: fillRange(0, w.length, 0),
+                    text: g,
                     line: {
                         width: 2.5,
                         simplify: !1
                     },
                     marker: {
-                        color: w.color
+                        color: b.color
                     },
                     type: "scatter",
                     mode: "lines",
                     hoverinfo: "text"
-                }), c.push({
-                    x: l.slice(),
-                    y: g.slice(),
-                    text: x,
+                }), d.push({
+                    x: o.slice(),
+                    y: w.slice(),
+                    text: g,
                     line: {
                         width: 2.5
                     },
                     marker: {
-                        color: w.color
+                        color: b.color
                     },
                     type: "scatter",
                     mode: "lines",
                     hoverinfo: "text"
                 });
             }
-            var L = [];
-            if ("lastHours" == i) {
-                var S = new Date().getHours();
-                for (m = 0; m < l.length; m++) if (m % 3 == 0 || 1 == m) {
-                    var W = parseInt((S + 24 - l[m]) % 24);
-                    L.push(W + ":00");
-                } else L.push("");
+            var C = [];
+            if ("lastHours" == e) {
+                var T = new Date().getHours();
+                for (p = 0; p < o.length; p++) if (p % 3 == 0 || 1 == p) {
+                    var S = parseInt((T + 24 - o[p]) % 24);
+                    C.push(S + ":00");
+                } else C.push("");
             }
-            if ("lastDays" == i) for (m = 0; m < l.length; m++) if (m % 4 == 0 || 0 == m) {
-                (S = new Date()).setDate(S.getDate() - m), L.push(S.getDate() + "." + (S.getMonth() + 1) + ".");
-            } else L.push("");
-            this.layout.yaxis.range = [ 0, 1.1 * d ], this.layout.xaxis.tickvals = range(a, l.length + a), 
-            this.layout.xaxis.ticktext = L, Plotly.newPlot("chart1", u, this.layout, {
+            if ("lastDays" == e) for (p = 0; p < o.length; p++) if (p % 4 == 0 || 0 == p) {
+                (T = new Date()).setDate(T.getDate() - p), C.push(T.getDate() + "." + (T.getMonth() + 1) + ".");
+            } else C.push("");
+            this.layout.yaxis.range = [ 0, 1.1 * h ], this.layout.xaxis.tickvals = range(r, o.length + r), 
+            this.layout.xaxis.ticktext = C, Plotly.newPlot("chart1", c, this.layout, {
                 displayModeBar: !1
-            }), this.window.nrGames = f, this.window.setGraphTitle(), this.createLegend(y), 
+            }), this.window.nrGames = y, this.window.setGraphTitle(), this.createLegend(u), 
             this.annotate(this.window.annotated), Plotly.animate("chart1", {
-                data: c,
-                traces: range(0, c.length),
+                data: d,
+                traces: range(0, d.length),
                 layout: {}
             }, {
                 transition: {
@@ -1087,9 +1152,9 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
         value: function(t) {
             var e = this.window.mode;
             this.window.clearChartFooter();
-            var i = 9;
-            "classes" == e && (i = 9), "decks" == e && (i = this.top) > t.length && (i = t.length);
-            for (var r = 0; r < i; r++) "classes" == e && this.window.addLegendItem(hsClasses[r]), 
+            var a = 9;
+            "classes" == e && (a = 9), "decks" == e && (a = this.top) > t.length && (a = t.length);
+            for (var r = 0; r < a; r++) "classes" == e && this.window.addLegendItem(hsClasses[r]), 
             "decks" == e && this.window.addLegendItem(t[r].name);
         }
     }, {
@@ -1105,45 +1170,54 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
     }, {
         key: "smoothData",
         value: function(t) {
-            for (var e = t.slice(), i = [], r = 0; r < e.length; r++) {
-                var a = 0, s = 0;
-                r > 0 && (s += .3 * e[r - 1], a += .3), r < e.length - 1 && (s += .3 * e[r + 1], 
-                a += .3), s += e[r] * (1 - a), i.push(s);
+            for (var e = t.slice(), a = [], r = 0; r < e.length; r++) {
+                var i = 0, s = 0;
+                r > 0 && (s += .3 * e[r - 1], i += .3), r < e.length - 1 && (s += .3 * e[r + 1], 
+                i += .3), s += e[r] * (1 - i), a.push(s);
             }
-            return i;
+            return a;
         }
     } ]), t;
-}(), InfoWindow = function t() {
-    _classCallCheck(this, t);
-}, Ladder = function() {
-    function t(e, i, r, a) {
-        _classCallCheck(this, t), this.maxLegendEntries = 9, this.maxLines = 10, this.bgColor = "transparent", 
-        this.fontColor = a.fontColor, this.fontColorLight = a.fontColorLight, this.lineWidth = 2.7, 
-        this.fr_min = .03, this.DATA = e, this.f = i, this.t = r, this.window = a, this.archetypes = [], 
-        this.c_data = {}, this.traces_bar = {
-            classes: [],
-            decks: []
-        }, this.traces_line = {
-            classes: [],
-            decks: []
-        }, this.traces_zoom = {}, this.traces_pie = {
-            classes: {},
-            decks: {}
-        }, this.archLegend = [], this.classLegend = [], this.totGames = 0, this.totGamesRanks = {}, 
-        this.download = {
+}(), InfoWindow = function() {
+    function t(e) {
+        _classCallCheck(this, t), this.div = document.querySelector("#infoWindow"), this.tab = document.querySelector("#info.tab"), 
+        this.infoText = document.querySelector("#infoWindow .content .infoText"), this.text = "\n                Greetings and thank you for checking out the VS Live Beta!<br><br>\n\n                    Update 16-12-2017:<br><br>\n                    - App refresh button in the top right corner added<br>\n                    - Chose color theme for the matchup table added<br>\n                    - Outdated archetypes no longer show in the overview page<br>\n                    - Fixed win rates in the win rates page when data is insufficient<br>\n                    - Simulation tool in Matchup tab (VS Gold only)<br><br>\n\n                    Update 1-3-2018:<br><br>\n                    - Loading only data needed<br>\n                    - Decks now show counters and best matchups<br>\n                    - Decks features a Dust vs Winrate plot<br>\n                    - VS Power Score in the Overview tab (map icon)<br>\n                    - New icons / wordings<br><br>\n\n                   To give feedback simply click on the discord link below:<br><br>\n                   \n                <a href=" + DISCORDLINK + '\n                   target="_blank"><img class=\'discordLogo\' src="Images/discordLogo.png"></a><br><br>\n                ', 
+        this.infoText.innerHTML = this.text;
+    }
+    return _createClass(t, [ {
+        key: "display",
+        value: function(t) {
+            this.div.style.display = t ? "inline-block" : "none";
+        }
+    } ]), t;
+}(), Ladder = function() {
+    function t(e, a, r, i) {
+        _classCallCheck(this, t), this.maxLegendEntries = 9, this.maxLines = 10, this.lineWidth = 2.7, 
+        this.fr_min = .03, this.DATA = e, this.f = a, this.t = r, this.window = i, this.archetypes = [], 
+        this.classFr = {}, this.totGames = 0, this.totGamesBrackets = {}, this.download = {
             classes: "",
             decks: ""
-        }, this.rankLabels = [], this.tiers = [];
+        }, this.traces = {
+            bar: {
+                classes: [],
+                decks: []
+            },
+            line: {
+                classes: [],
+                decks: []
+            },
+            zoom: {},
+            pie: {
+                classes: [],
+                decks: []
+            },
+            map: {}
+        };
         var s = !0, n = !1, o = void 0;
         try {
-            for (var l, h = this.window.ranks[Symbol.iterator](); !(s = (l = h.next()).done); s = !0) {
+            for (var l, h = hsClasses[Symbol.iterator](); !(s = (l = h.next()).done); s = !0) {
                 var d = l.value;
-                this.tiers.push({
-                    name: btnIdToText[d],
-                    buttonId: d,
-                    start: rankRange[d][0],
-                    end: rankRange[d][1]
-                });
+                this.traces.zoom[d] = [];
             }
         } catch (t) {
             n = !0, o = t;
@@ -1154,45 +1228,50 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                 if (n) throw o;
             }
         }
-        this.tier = this.tiers[0];
+        this.rankBrackets = [];
         var c = !0, u = !1, y = void 0;
         try {
-            for (var f, v = hsClasses[Symbol.iterator](); !(c = (f = v.next()).done); c = !0) {
-                var m = f.value;
-                this.traces_zoom[m] = [];
+            for (var f, p = this.window.ranks[Symbol.iterator](); !(c = (f = p.next()).done); c = !0) {
+                var v = f.value;
+                this.traces.map[v] = null, this.rankBrackets.push({
+                    name: v,
+                    start: rankRange[v][0],
+                    end: rankRange[v][1]
+                });
             }
         } catch (t) {
             u = !0, y = t;
         } finally {
             try {
-                !c && v.return && v.return();
+                !c && p.return && p.return();
             } finally {
                 if (u) throw y;
             }
         }
-        var p = !0, b = !1, w = void 0;
+        this.bracket = this.rankBrackets[0];
+        var m = !0, b = !1, k = void 0;
         try {
-            for (var k, g = this.tiers[Symbol.iterator](); !(p = (k = g.next()).done); p = !0) {
-                var x = k.value;
-                this.totGamesRanks[x.buttonId] = 0;
-                var T = [], C = !0, L = !1, S = void 0;
+            for (var w, g = this.rankBrackets[Symbol.iterator](); !(m = (w = g.next()).done); m = !0) {
+                var x = w.value;
+                this.totGamesBrackets[x.name] = 0;
+                var L = [], C = !0, T = !1, S = void 0;
                 try {
-                    for (var W, _ = hsClasses[Symbol.iterator](); !(C = (W = _.next()).done); C = !0) m = W.value, 
-                    T.push(hsColors[m]);
+                    for (var D, B = hsClasses[Symbol.iterator](); !(C = (D = B.next()).done); C = !0) kt = D.value, 
+                    L.push(hsColors[kt]);
                 } catch (t) {
-                    L = !0, S = t;
+                    T = !0, S = t;
                 } finally {
                     try {
-                        !C && _.return && _.return();
+                        !C && B.return && B.return();
                     } finally {
-                        if (L) throw S;
+                        if (T) throw S;
                     }
                 }
-                var M = {
+                var W = {
                     values: fillRange(0, hsClasses.length, 0),
                     labels: hsClasses.slice(),
                     marker: {
-                        colors: T
+                        colors: L
                     },
                     hoverinfo: "label+percent",
                     insidetextfont: {
@@ -1204,7 +1283,7 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                     text: hsClasses.slice(),
                     type: "pie"
                 };
-                this.traces_pie.decks[x.buttonId] = [ {
+                this.traces.pie.decks[x.name] = [ {
                     values: [],
                     labels: [],
                     marker: {
@@ -1222,90 +1301,98 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                     },
                     text: [],
                     type: "pie"
-                } ], this.traces_pie.classes[x.buttonId] = [ M ];
+                } ], this.traces.pie.classes[x.name] = [ W ];
             }
         } catch (t) {
-            b = !0, w = t;
+            b = !0, k = t;
         } finally {
             try {
-                !p && g.return && g.return();
+                !m && g.return && g.return();
             } finally {
-                if (b) throw w;
+                if (b) throw k;
             }
         }
-        var B = e.archetypes, D = e.gamesPerRank;
+        var M = e.archetypes, _ = e.gamesPerRank;
         this.rankSums = e.gamesPerRank;
-        for (var I = this.smoothLadder(e.rankData, D.slice()), E = this.smoothLadder(e.classRankData, D.slice()), q = 0; q < hsRanks; q++) {
-            q % 5 == 0 ? this.rankLabels.push(q + "  ") : this.rankLabels.push(""), this.totGames += D[q];
-            var A = !0, F = !1, H = void 0;
+        for (var E = this.smoothLadder(e.rankData, _.slice()), q = this.smoothLadder(e.classRankData, _.slice()), I = 0; I < hsRanks; I++) {
+            this.totGames += _[I];
+            var F = !0, R = !1, H = void 0;
             try {
-                for (var R, O = this.tiers[Symbol.iterator](); !(A = (R = O.next()).done); A = !0) {
-                    q >= (x = R.value).start && q <= x.end && (this.totGamesRanks[x.buttonId] += D[q]);
+                for (var A, O = this.rankBrackets[Symbol.iterator](); !(F = (A = O.next()).done); F = !0) {
+                    I >= (Ft = A.value).start && I <= Ft.end && (this.totGamesBrackets[Ft.name] += _[I]);
                 }
             } catch (t) {
-                F = !0, H = t;
+                R = !0, H = t;
             } finally {
                 try {
-                    !A && O.return && O.return();
+                    !F && O.return && O.return();
                 } finally {
-                    if (F) throw H;
+                    if (R) throw H;
                 }
             }
         }
-        this.rankLabels[0] = "L  ";
-        for (q = 0; q < B.length; q++) {
-            var P = [], z = [], N = [], G = 0, U = B[q][1] + " " + B[q][0].replace("§", ""), X = hsClasses.indexOf(B[q][0]), Y = this.window.getArchColor(B[q][0], B[q][1], this.f), V = Y.fontColor;
-            Y = Y.color;
-            for (var K = 0; K < hsRanks; K++) {
-                var j = I[K][q];
-                z.push(j), N.push("<b>" + U + "     </b><br>freq: " + (100 * j).toFixed(1) + "%"), 
-                j < this.fr_min && q > 8 && (this.traces_bar.decks[X].y[K] += j, j = 0), G += j, 
-                P.push(j);
-                var Z = !0, J = !1, Q = void 0;
-                try {
-                    for (var $, tt = this.tiers[Symbol.iterator](); !(Z = ($ = tt.next()).done); Z = !0) {
-                        if (K == (x = $.value).start && (this.traces_pie.decks[x.buttonId][0].values.push(j), 
-                        this.traces_pie.decks[x.buttonId][0].labels.push(U), this.traces_pie.decks[x.buttonId][0].marker.colors.push(Y)), 
-                        K > x.start && K <= x.end && (this.traces_pie.decks[x.buttonId][0].values[q] += j), 
-                        K == x.end) {
-                            this.traces_pie.decks[x.buttonId][0].values[q] /= x.end - x.start + 1, this.traces_pie.decks[x.buttonId][0].text.push(U);
-                            var et = this.traces_pie.decks[x.buttonId][0].values[q];
-                            et < this.fr_min && q > 8 && (this.traces_pie.decks[x.buttonId][0].values[q] = 0, 
-                            this.traces_pie.decks[x.buttonId][0].values[X] += et);
+        for (var P = 0; P < M.length; P++) {
+            var z = [], N = [], G = {}, U = [], X = 0, Y = M[P][1] + " " + M[P][0].replace("§", ""), V = hsClasses.indexOf(M[P][0]), j = app.ui.getArchColor(M[P][0], M[P][1], this.f), K = j.fontColor, Z = j.color, J = !0, Q = !1, $ = void 0;
+            try {
+                for (var tt, et = range(0, hsRanks)[Symbol.iterator](); !(J = (tt = et.next()).done); J = !0) {
+                    var at = tt.value, rt = E[at][P];
+                    N.push(rt), U.push("<b>" + Y + "     </b><br>freq: " + (100 * rt).toFixed(1) + "%"), 
+                    rt < this.fr_min && P > 8 && (this.traces.bar.decks[V].y[at] += rt, rt = 0), X += rt, 
+                    z.push(rt);
+                    var it = !0, st = !1, nt = void 0;
+                    try {
+                        for (var ot, lt = this.rankBrackets[Symbol.iterator](); !(it = (ot = lt.next()).done); it = !0) {
+                            var ht = ot.value;
+                            if (at == ht.start && (this.traces.pie.decks[ht.name][0].values.push(rt), this.traces.pie.decks[ht.name][0].labels.push(Y), 
+                            this.traces.pie.decks[ht.name][0].marker.colors.push(Z)), at > ht.start && at <= ht.end && (this.traces.pie.decks[ht.name][0].values[P] += rt), 
+                            at == ht.end) {
+                                this.traces.pie.decks[ht.name][0].values[P] /= ht.end - ht.start + 1, this.traces.pie.decks[ht.name][0].text.push(Y), 
+                                G[ht.name] = this.traces.pie.decks[ht.name][0].values[P];
+                                var dt = this.traces.pie.decks[ht.name][0].values[P];
+                                dt < this.fr_min && P > 8 && (this.traces.pie.decks[ht.name][0].values[P] = 0, this.traces.pie.decks[ht.name][0].values[V] += dt);
+                            }
+                        }
+                    } catch (t) {
+                        st = !0, nt = t;
+                    } finally {
+                        try {
+                            !it && lt.return && lt.return();
+                        } finally {
+                            if (st) throw nt;
                         }
                     }
-                } catch (t) {
-                    J = !0, Q = t;
+                }
+            } catch (t) {
+                Q = !0, $ = t;
+            } finally {
+                try {
+                    !J && et.return && et.return();
                 } finally {
-                    try {
-                        !Z && tt.return && tt.return();
-                    } finally {
-                        if (J) throw Q;
-                    }
+                    if (Q) throw $;
                 }
             }
-            G /= hsRanks;
-            var it = {
+            X /= hsRanks;
+            var ct = {
                 x: range(0, hsRanks),
-                y: P.slice(),
-                name: U,
-                text: N,
+                y: z.slice(),
+                name: Y,
+                text: U,
                 hoverinfo: "text",
                 marker: {
-                    color: Y
+                    color: Z
                 },
                 type: "bar",
                 winrate: 0,
-                hsClass: B[q][0] + B[q][1]
-            }, rt = {
+                hsClass: M[P][0] + M[P][1]
+            }, ut = {
                 x: range(0, hsRanks),
-                y: z.slice(),
-                name: U,
-                text: N,
+                y: N.slice(),
+                name: Y,
+                text: U,
                 hoverinfo: "text",
                 orientation: "h",
                 marker: {
-                    color: Y
+                    color: Z
                 },
                 line: {
                     width: this.lineWidth
@@ -1313,326 +1400,239 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                 type: "scatter",
                 mode: "lines",
                 winrate: 0,
-                hsClass: B[q][0] + B[q][1],
-                fr: G
+                hsClass: M[P][0] + M[P][1],
+                fr: X
             };
-            this.traces_bar.decks.push(it), this.traces_line.decks.push(rt), this.archLegend.push({
-                name: U,
-                hsClass: B[q][0],
-                color: Y,
-                fontColor: V,
-                fr: G
-            }), this.archetypes.push({
-                name: U,
-                hsClass: B[q][0],
-                fr: G,
-                data: z.slice(),
-                color: Y,
-                fontColor: V
-            });
+            this.traces.bar.decks.push(ct), this.traces.line.decks.push(ut);
+            var yt = {
+                name: Y,
+                hsClass: M[P][0],
+                fr: X,
+                fr_ranks: N.slice(),
+                fr_brackets: G,
+                color: Z,
+                fontColor: K
+            };
+            this.archetypes.push(yt);
         }
-        for (q = 0; q < 9; q++) {
-            m = hsClasses[q];
-            var at = [], st = [];
-            for (G = 0, K = 0; K < hsRanks; K++) {
-                j = E[K][q];
-                at.push(j), st.push(m + " " + (100 * j).toFixed(2) + "%"), G += j;
-                var nt = !0, ot = !1, lt = void 0;
+        var ft = !0, pt = !1, vt = void 0;
+        try {
+            for (var mt, bt = range(0, 9)[Symbol.iterator](); !(ft = (mt = bt.next()).done); ft = !0) {
+                I = mt.value;
+                var kt = hsClasses[I], wt = [], gt = [], xt = 0, Lt = !0, Ct = !1, Tt = void 0;
                 try {
-                    for (var ht, dt = this.tiers[Symbol.iterator](); !(nt = (ht = dt.next()).done); nt = !0) {
-                        K >= (x = ht.value).start && K <= x.end && (this.traces_pie.classes[x.buttonId][0].values[q] += j), 
-                        K == x.end && (this.traces_pie.classes[x.buttonId][0].values[q] /= x.end - x.start + 1);
+                    for (var St, Dt = range(0, hsRanks)[Symbol.iterator](); !(Lt = (St = Dt.next()).done); Lt = !0) {
+                        var Bt = St.value, Wt = q[Bt][I];
+                        wt.push(Wt), gt.push(kt + " " + (100 * Wt).toFixed(2) + "%"), xt += Wt;
+                        var Mt = !0, _t = !1, Et = void 0;
+                        try {
+                            for (var qt, It = this.rankBrackets[Symbol.iterator](); !(Mt = (qt = It.next()).done); Mt = !0) {
+                                var Ft;
+                                Bt >= (Ft = qt.value).start && Bt <= Ft.end && (this.traces.pie.classes[Ft.name][0].values[I] += Wt), 
+                                Bt == Ft.end && (this.traces.pie.classes[Ft.name][0].values[I] /= Ft.end - Ft.start + 1);
+                            }
+                        } catch (t) {
+                            _t = !0, Et = t;
+                        } finally {
+                            try {
+                                !Mt && It.return && It.return();
+                            } finally {
+                                if (_t) throw Et;
+                            }
+                        }
                     }
                 } catch (t) {
-                    ot = !0, lt = t;
+                    Ct = !0, Tt = t;
                 } finally {
                     try {
-                        !nt && dt.return && dt.return();
+                        !Lt && Dt.return && Dt.return();
                     } finally {
-                        if (ot) throw lt;
+                        if (Ct) throw Tt;
                     }
                 }
-            }
-            var ct = fillRange(0, hsRanks, 0), ut = !0, yt = !1, ft = void 0;
-            try {
-                for (var vt, mt = this.archetypes[Symbol.iterator](); !(ut = (vt = mt.next()).done); ut = !0) {
-                    if ((Lt = vt.value).hsClass == m) {
-                        var pt = [], bt = [];
-                        for (G = 0, K = 0; K < hsRanks; K++) ct[K] += Lt.data[K], pt.push(""), bt.push(Lt.data[K]), 
-                        G += Lt.data[K];
-                        var wt = {
-                            x: range(0, hsRanks),
-                            y: Lt.data.slice(),
-                            name: Lt.name,
-                            text: pt,
-                            hoverinfo: "text",
-                            marker: {
-                                color: Lt.color
-                            },
-                            type: "bar",
-                            winrate: 0,
-                            hsClass: m,
-                            overall: bt,
-                            fr_avg: G / hsRanks
-                        };
-                        this.traces_zoom[m].push(wt);
+                var Rt = fillRange(0, hsRanks, 0), Ht = !0, At = !1, Ot = void 0;
+                try {
+                    for (var Pt, zt = this.archetypes[Symbol.iterator](); !(Ht = (Pt = zt.next()).done); Ht = !0) {
+                        var Nt = Pt.value;
+                        if (Nt.hsClass == kt) {
+                            var Gt = [], Ut = !0, Xt = !1, Yt = void 0;
+                            try {
+                                for (var Vt, jt = range(0, hsRanks)[Symbol.iterator](); !(Ut = (Vt = jt.next()).done); Ut = !0) {
+                                    var Kt = Vt.value;
+                                    Rt[Kt] += Nt.fr_ranks[Kt], Gt.push("");
+                                }
+                            } catch (t) {
+                                Xt = !0, Yt = t;
+                            } finally {
+                                try {
+                                    !Ut && jt.return && jt.return();
+                                } finally {
+                                    if (Xt) throw Yt;
+                                }
+                            }
+                            var Zt = {
+                                x: range(0, hsRanks),
+                                y: Nt.fr_ranks.slice(),
+                                name: Nt.name,
+                                text: Gt,
+                                hoverinfo: "text",
+                                marker: {
+                                    color: Nt.color
+                                },
+                                type: "bar",
+                                winrate: 0,
+                                hsClass: kt,
+                                overall: Nt.fr_ranks.slice(),
+                                fr_avg: Nt.fr
+                            };
+                            this.traces.zoom[kt].push(Zt);
+                        }
+                    }
+                } catch (t) {
+                    At = !0, Ot = t;
+                } finally {
+                    try {
+                        !Ht && zt.return && zt.return();
+                    } finally {
+                        if (At) throw Ot;
                     }
                 }
-            } catch (t) {
-                yt = !0, ft = t;
-            } finally {
+                var Jt = !0, Qt = !1, $t = void 0;
                 try {
-                    !ut && mt.return && mt.return();
+                    for (var te, ee = this.traces.zoom[kt][Symbol.iterator](); !(Jt = (te = ee.next()).done); Jt = !0) for (var ae = te.value, re = 0; re < hsRanks; re++) ae.y[re] /= Rt[re] > 0 ? Rt[re] : 1, 
+                    ae.text[re] = ae.name + "<br>" + (100 * ae.y[re]).toFixed(1) + "% of " + ae.hsClass + "<br>" + (100 * ae.overall[re]).toFixed(1) + "% overall";
+                } catch (t) {
+                    Qt = !0, $t = t;
                 } finally {
-                    if (yt) throw ft;
+                    try {
+                        !Jt && ee.return && ee.return();
+                    } finally {
+                        if (Qt) throw $t;
+                    }
                 }
+                xt /= hsRanks, this.classFr[kt] = wt.slice();
+                var ie = {
+                    x: range(0, hsRanks),
+                    y: wt.slice(),
+                    name: kt,
+                    text: gt.slice(),
+                    hoverinfo: "text",
+                    marker: {
+                        color: hsColors[kt]
+                    },
+                    type: "bar",
+                    winrate: 0,
+                    hsClass: kt
+                }, se = {
+                    x: range(0, hsRanks),
+                    y: wt.slice(),
+                    name: kt,
+                    text: gt.slice(),
+                    hoverinfo: "text",
+                    marker: {
+                        color: hsColors[kt]
+                    },
+                    line: {
+                        width: this.lineWidth
+                    },
+                    type: "scatter",
+                    mode: "lines",
+                    winrate: 0,
+                    hsClass: kt,
+                    fr: xt
+                };
+                this.traces.bar.classes.push(ie), this.traces.line.classes.push(se);
             }
-            var kt = !0, gt = !1, xt = void 0;
+        } catch (t) {
+            pt = !0, vt = t;
+        } finally {
             try {
-                for (var Tt, Ct = this.traces_zoom[m][Symbol.iterator](); !(kt = (Tt = Ct.next()).done); kt = !0) {
-                    var Lt = Tt.value;
-                    for (K = 0; K < hsRanks; K++) Lt.y[K] /= ct[K] > 0 ? ct[K] : 1, Lt.text[K] = Lt.name + "<br>" + (100 * Lt.y[K]).toFixed(1) + "% of " + Lt.hsClass + "<br>" + (100 * Lt.overall[K]).toFixed(1) + "% overall";
-                }
-            } catch (t) {
-                gt = !0, xt = t;
+                !ft && bt.return && bt.return();
             } finally {
-                try {
-                    !kt && Ct.return && Ct.return();
-                } finally {
-                    if (gt) throw xt;
-                }
+                if (pt) throw vt;
             }
-            G /= hsRanks, this.c_data[m] = at.slice();
-            var St = {
-                x: range(0, hsRanks),
-                y: at.slice(),
-                name: m,
-                text: st.slice(),
-                hoverinfo: "text",
-                marker: {
-                    color: hsColors[m]
-                },
-                type: "bar",
-                winrate: 0,
-                hsClass: m
-            }, Wt = {
-                x: range(0, hsRanks),
-                y: at.slice(),
-                name: m,
-                text: st.slice(),
-                hoverinfo: "text",
-                marker: {
-                    color: hsColors[m]
-                },
-                line: {
-                    width: this.lineWidth
-                },
-                type: "scatter",
-                mode: "lines",
-                winrate: 0,
-                hsClass: m,
-                fr: G
-            };
-            this.traces_bar.classes.push(St), this.traces_line.classes.push(Wt), this.classLegend.push({
-                name: m,
-                color: hsColors[m]
-            });
         }
-        this.layout_bar = {
-            barmode: "stack",
-            showlegend: !1,
-            displayModeBar: !1,
-            hovermode: "closest",
-            annotations: [],
-            xaxis: {
-                tickfont: {
-                    family: "Arial, bold",
-                    size: 15,
-                    color: this.fontColor
-                },
-                visible: !0,
-                showgrid: !1,
-                tickvals: range(0, hsRanks),
-                ticktext: this.rankLabels,
-                ticklen: 5,
-                tickcolor: "transparent",
-                hoverformat: ".1%",
-                range: [ 21, -1 ],
-                color: this.fontColor,
-                fixedrange: !0,
-                zeroline: !1,
-                autorange: "reversed"
-            },
-            yaxis: {
-                title: "[ % ]  of  Meta",
-                showgrid: !1,
-                tickfont: {
-                    family: "Arial, bold",
-                    size: 16
-                },
-                ticklen: 5,
-                tickcolor: "transparent",
-                showticklabels: !1,
-                fixedrange: !0,
-                zeroline: !1,
-                color: this.fontColorLight,
-                tickformat: ",.0%",
-                hoverformat: ",.0%",
-                visible: !MOBILE
-            },
-            plot_bgcolor: "transparent",
-            paper_bgcolor: "transparent",
-            margin: MOBILE ? {
-                l: 10,
-                r: 10,
-                b: 35,
-                t: 0
-            } : {
-                l: 60,
-                r: 30,
-                b: 35,
-                t: 0
-            }
-        }, this.layout_line = {
-            showlegend: !1,
-            displayModeBar: !1,
-            autosize: !0,
-            hovermode: "closest",
-            xaxis: {
-                tickfont: {
-                    family: "Arial, bold",
-                    size: 15,
-                    color: this.fontColor
-                },
-                visible: !0,
-                showgrid: !0,
-                tickvals: range(0, hsRanks),
-                ticktext: this.rankLabels,
-                hoverformat: ".1%",
-                range: [ 21, -1 ],
-                color: this.fontColor,
-                fixedrange: !0,
-                zeroline: !1,
-                autorange: "reversed"
-            },
-            yaxis: {
-                tickfont: {
-                    family: "Arial, bold",
-                    size: 19
-                },
-                showgrid: !0,
-                ticklen: 12,
-                tickcolor: "transparent",
-                tickformat: ",.0%",
-                fixedrange: !0,
-                color: this.fontColorLight
-            },
-            plot_bgcolor: "transparent",
-            paper_bgcolor: this.bgColor,
-            margin: MOBILE ? {
-                l: 60,
-                r: 10,
-                b: 50,
-                t: 0
-            } : {
-                l: 70,
-                r: 20,
-                b: 30,
-                t: 0
-            }
-        }, this.layout_pie = {
-            showlegend: !1,
-            displayModeBar: !1,
-            autosize: !0,
-            textinfo: "label+percent",
-            hovermode: "closest",
-            plot_bgcolor: "transparent",
-            paper_bgcolor: "transparent",
-            margin: {
-                l: 70,
-                r: 20,
-                b: 30,
-                t: 30
-            }
-        };
-        var _t = function(t, e) {
+        var ne = function(t, e) {
             return t.hsClass < e.hsClass ? -1 : t.hsClass > e.hsClass ? 1 : 0;
-        }, Mt = function(t, e) {
+        }, oe = function(t, e) {
             return t.fr > e.fr ? -1 : t.fr < e.fr ? 1 : 0;
         };
-        this.traces_bar.classes.sort(_t), this.traces_line.classes.sort(Mt), this.traces_line.classes.splice(this.maxLines), 
-        this.traces_bar.decks.sort(_t), this.traces_line.decks.sort(Mt), this.traces_line.decks.splice(this.maxLines), 
-        this.archLegend.sort(Mt), this.archetypes.sort(Mt);
+        this.traces.bar.classes.sort(ne), this.traces.line.classes.sort(oe), this.traces.line.classes.splice(this.maxLines), 
+        this.traces.bar.decks.sort(ne), this.traces.line.decks.sort(oe), this.traces.line.decks.splice(this.maxLines), 
+        this.archetypes.sort(oe);
     }
     return _createClass(t, [ {
         key: "smoothLadder",
         value: function(t, e) {
-            var i = [ t[0].slice() ];
+            var a = [ t[0].slice() ];
             0 == e[0] && (e[0] = 1), 0 == e[1] && (e[1] = 1);
-            for (var r, a, s = 1; s < hsRanks - 1; s++) {
-                0 == e[s + 1] && (e[s + 1] = 1), a = e[s - 1] / e[s], r = e[s + 1] / e[s], a > 7 && (a = 7), 
-                r > 7 && (r = 7), s % 5 == 0 && (r = 0), s % 5 == 1 && (a = 0);
-                for (var n = 3.5 + r + a, o = [], l = 0; l < t[s].length; l++) {
+            for (var r, i, s = 1; s < hsRanks - 1; s++) {
+                0 == e[s + 1] && (e[s + 1] = 1), i = e[s - 1] / e[s], r = e[s + 1] / e[s], i > 7 && (i = 7), 
+                r > 7 && (r = 7), s % 5 == 0 && (r = 0), s % 5 == 1 && (i = 0);
+                for (var n = 3.5 + r + i, o = [], l = 0; l < t[s].length; l++) {
                     var h = t[s][l] / e[s], d = t[s + 1][l] / e[s + 1], c = t[s - 1][l] / e[s - 1];
-                    o.push((3.5 * h + d * r + c * a) / n);
+                    o.push((3.5 * h + d * r + c * i) / n);
                 }
-                i.push(o);
+                a.push(o);
             }
-            i.push(t[hsRanks - 1].slice());
-            for (var u = 0; u < i[0].length; u++) i[0][u] /= e[0];
-            for (u = 0; u < t[hsRanks - 1].length; u++) i[hsRanks - 1][u] /= e[hsRanks - 1];
-            return i;
+            a.push(t[hsRanks - 1].slice());
+            for (var u = 0; u < a[0].length; u++) a[0][u] /= e[0];
+            for (u = 0; u < t[hsRanks - 1].length; u++) a[hsRanks - 1][u] /= e[hsRanks - 1];
+            return a;
         }
     }, {
         key: "plot",
         value: function() {
-            document.getElementById("chart1").innerHTML = "";
-            var t, e;
-            switch (this.window.hideRankFolder(), this.window.plotType) {
+            document.getElementById("chart1").innerHTML = "", this.window.hideRankFolder(), 
+            this.window.setGraphTitle();
+            var t = this.window.plotType, e = this.window.layouts[t], a = void 0;
+            switch (t) {
               case "pie":
-                this.window.showRankFolder(), e = this.layout_pie, t = this.traces_pie[this.window.mode][this.window.r];
+                this.window.showRankFolder(), a = this.traces.pie[this.window.mode][this.window.r];
                 break;
 
               case "number":
-                return this.createTable(this.window.mode), void this.window.setGraphTitle();
+                return void this.createTable(this.window.mode);
 
               case "bar":
-                e = this.layout_bar, t = this.traces_bar[this.window.mode];
+                a = this.traces.bar[this.window.mode];
                 break;
 
               case "zoom":
-                e = this.layout_bar, t = this.traces_zoom[this.window.zoomClass];
+                a = this.traces.zoom[this.window.zoomClass];
                 break;
 
               case "line":
-                e = this.layout_line, t = this.traces_line[this.window.mode];
+                a = this.traces.line[this.window.mode];
+                break;
+
+              case "map":
+                this.window.showRankFolder(), a = this.traces.map[this.window.r], this.window.mode = "decks", 
+                this.window.renderOptions(), null == a && (a = this.loadMap());
             }
             "portrait" == MOBILE && "pie" != this.window.plotTyp && (e.width = 2 * ui.width, 
-            e.height = .6 * ui.height), Plotly.newPlot("chart1", t, e, {
+            e.height = .6 * ui.height), Plotly.newPlot("chart1", a, e, {
                 displayModeBar: !1
-            });
-            var i = "pie" != this.window.plotType ? this.totGames : this.totGamesRanks[this.window.r];
-            this.window.nrGames = i, this.window.setGraphTitle(), this.annotate(this.window.annotated), 
-            this.createLegend(this.window.mode), "bar" != this.window.plotType && "zoom" != this.window.plotType || !PREMIUM || document.getElementById("chart1").on("plotly_click", this.zoomToggle.bind(this));
+            }), this.annotate(this.window.annotated), this.createLegend(this.window.mode), "bar" != this.window.plotType && "zoom" != this.window.plotType || !PREMIUM || document.getElementById("chart1").on("plotly_click", this.zoomToggle.bind(this));
         }
     }, {
         key: "colorScale",
         value: function(t) {
-            var e = this.window.colorScale_c1, i = this.window.colorScale_c2, r = [];
+            var e = this.window.colorScale_c1, a = this.window.colorScale_c2, r = [];
             (t /= this.window.colorScale_f) > 1 && (t = 1);
-            for (var a = 0; a < 3; a++) r.push(parseInt(e[a] + (i[a] - e[a]) * t));
+            for (var i = 0; i < 3; i++) r.push(parseInt(e[i] + (a[i] - e[i]) * t));
             return "rgb(" + r[0] + "," + r[1] + "," + r[2] + ")";
         }
     }, {
         key: "annotate",
         value: function(t) {
             var e = this.window.plotType;
-            if ("pie" != e && "number" != e && "timeline" != e) {
-                var i, r = {
+            if ("pie" != e && "number" != e && "timeline" != e && "map" != e) {
+                var a, r = {
                     bar: .5,
                     zoom: .5,
                     line: .05
-                }, a = "bar" == e || "zoom" == e ? 90 : 0;
+                }, i = "bar" == e || "zoom" == e ? 90 : 0;
                 if (t) {
                     for (var s = [], n = 0; n < hsRanks; n++) {
                         var o = {
@@ -1640,7 +1640,7 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                             y: r[e],
                             xref: "x",
                             yref: "y",
-                            textangle: a,
+                            textangle: i,
                             text: this.rankSums[n],
                             showarrow: !1,
                             bgcolor: "rgba(0,0,0,0.3)",
@@ -1651,63 +1651,150 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                         };
                         s.push(o);
                     }
-                    i = {
+                    a = {
                         annotations: s
                     };
-                } else i = {
+                } else a = {
                     annotations: []
                 };
-                Plotly.relayout("chart1", i);
+                Plotly.relayout("chart1", a);
             }
+        }
+    }, {
+        key: "loadMap",
+        value: function() {
+            var t = this.window.r, e = app.ui.tableWindow.data[this.f][table_times[0]][table_ranks[0]];
+            null == e && console.log("ERROR table not loaded for Meta Score"), this.traces.map[t] = [];
+            var a = e.table, r = e.archetypes, i = this.archetypes, s = 0, n = 0, o = !0, l = !1, h = void 0;
+            try {
+                for (var d, c = this.archetypes[Symbol.iterator](); !(o = (d = c.next()).done); o = !0) {
+                    var u = d.value, y = r.indexOf(u.name);
+                    if (-1 != y) {
+                        var f = 0, p = 0, v = !0, m = !1, b = void 0;
+                        try {
+                            for (var k, w = i[Symbol.iterator](); !(v = (k = w.next()).done); v = !0) {
+                                var g = k.value, x = r.indexOf(g.name);
+                                if (-1 != x) {
+                                    var L = a[y][x], C = g.fr_brackets[t];
+                                    p += L * C, f += C;
+                                }
+                            }
+                        } catch (t) {
+                            m = !0, b = t;
+                        } finally {
+                            try {
+                                !v && w.return && w.return();
+                            } finally {
+                                if (m) throw b;
+                            }
+                        }
+                        var T = u.fr_brackets[t];
+                        p = f > 0 ? p / f : 0, s = Math.max(p, s), n = Math.max(T, n), this.traces.map[t].push({
+                            name: u.name,
+                            type: "scatter",
+                            fr: T,
+                            wr: p,
+                            hoverinfo: "text",
+                            mode: "markers",
+                            marker: {
+                                size: 15,
+                                line: {
+                                    size: 0
+                                },
+                                color: u.color
+                            }
+                        });
+                    }
+                }
+            } catch (t) {
+                l = !0, h = t;
+            } finally {
+                try {
+                    !o && c.return && c.return();
+                } finally {
+                    if (l) throw h;
+                }
+            }
+            var S = !0, D = !1, B = void 0;
+            try {
+                for (var W, M = this.traces.map[t][Symbol.iterator](); !(S = (W = M.next()).done); S = !0) {
+                    var _ = W.value;
+                    _.x = [ (_.wr + s - 1) / (2 * s - 1) ], _.y = [ _.fr / n ];
+                    var E = (_.x[0] + _.y[0]) / 2;
+                    _.text = "<b>" + _.name + "<br>Meta:</b> " + E.toFixed(2) + "<br><b>WR:</b> " + _.wr.toFixed(2) + " <b>Freq:</b> " + (100 * _.fr).toFixed(0) + "%";
+                }
+            } catch (t) {
+                D = !0, B = t;
+            } finally {
+                try {
+                    !S && M.return && M.return();
+                } finally {
+                    if (D) throw B;
+                }
+            }
+            return this.traces.map[t];
         }
     }, {
         key: "createTable",
         value: function(t) {
             var e = 20;
             this.archetypes.length < e && (e = this.archetypes.length), document.getElementById("chart1").innerHTML = "";
-            var i = document.createElement("table");
-            i.id = "numberTable";
+            var a = document.createElement("table");
+            a.id = "numberTable";
             var r = document.createElement("tr");
             this.download[t] = [ [] ];
             (u = document.createElement("th")).className = "pivot", u.innerHTML = "Rank ->", 
             r.appendChild(u), this.download[t] += "Rank%2C";
-            for (var a = hsRanks - 1; a >= 0; a--) {
-                (u = document.createElement("th")).innerHTML = a > 0 ? a : "L", r.appendChild(u), 
-                this.download[t] += a > 0 ? a : "L", this.download[t] += "%2C";
+            for (var i = hsRanks - 1; i >= 0; i--) {
+                (u = document.createElement("th")).innerHTML = i > 0 ? i : "L", r.appendChild(u), 
+                this.download[t] += i > 0 ? i : "L", this.download[t] += "%2C";
             }
-            if (i.appendChild(r), this.download[t] += "%0A", "decks" == t) for (var s = 0; s < e; s++) {
+            if (a.appendChild(r), this.download[t] += "%0A", "decks" == t) for (var s = 0; s < e; s++) {
                 var n = this.archetypes[s], o = n.name + "%2C", l = document.createElement("tr");
                 (h = document.createElement("td")).className = "pivot", h.style.backgroundColor = n.color, 
                 h.style.color = n.fontColor, h.innerHTML = n.name, l.appendChild(h);
-                for (a = hsRanks - 1; a > -1; a--) {
-                    (u = document.createElement("td")).style.backgroundColor = this.colorScale(n.data[a]), 
-                    u.innerHTML = (100 * n.data[a]).toFixed(1) + "%", l.appendChild(u), o += n.data[a] + "%2C";
+                for (i = hsRanks - 1; i > -1; i--) {
+                    (u = document.createElement("td")).style.backgroundColor = this.colorScale(n.fr_ranks[i]), 
+                    u.innerHTML = (100 * n.fr_ranks[i]).toFixed(1) + "%", l.appendChild(u), o += n.fr_ranks[i] + "%2C";
                 }
-                i.appendChild(l), this.download[t] += o + "%0A";
+                a.appendChild(l), this.download[t] += o + "%0A";
             }
             if ("classes" == t) for (s = 0; s < 9; s++) {
-                var h, d = hsClasses[s], c = this.c_data[d];
+                var h, d = hsClasses[s], c = this.classFr[d];
                 o = d + "%2C", l = document.createElement("tr");
                 (h = document.createElement("td")).className = "pivot", h.style.backgroundColor = hsColors[d], 
                 h.style.color = hsFontColors[d], h.innerHTML = d, l.appendChild(h);
-                for (a = hsRanks - 1; a > -1; a--) {
+                for (i = hsRanks - 1; i > -1; i--) {
                     var u;
-                    (u = document.createElement("td")).style.backgroundColor = this.colorScale(c[a]), 
-                    u.innerHTML = (100 * c[a]).toFixed(1) + "%", l.appendChild(u), o += c[a] + "%2C";
+                    (u = document.createElement("td")).style.backgroundColor = this.colorScale(c[i]), 
+                    u.innerHTML = (100 * c[i]).toFixed(1) + "%", l.appendChild(u), o += c[i] + "%2C";
                 }
-                i.appendChild(l), this.download[t] += o + "%0A";
+                a.appendChild(l), this.download[t] += o + "%0A";
             }
-            document.getElementById("chart1").appendChild(i), this.createNumbersFooter();
+            document.getElementById("chart1").appendChild(a), this.createNumbersFooter();
         }
     }, {
         key: "createLegend",
         value: function(t) {
             if ("zoom" != this.window.plotType) {
                 this.window.clearChartFooter();
-                var e, i = this.archLegend;
-                "classes" == t && (e = 9), "decks" == t && (e = this.maxLegendEntries) > i.length && (e = i.length);
-                for (var r = 0; r < e; r++) "classes" == t && this.window.addLegendItem(hsClasses[r]), 
-                "decks" == t && this.window.addLegendItem(i[r].name);
+                var e = this.archetypes, a = "classes" == t ? this.maxLegendEntries : 9;
+                a > e.length && (a = e.length);
+                var r = !0, i = !1, s = void 0;
+                try {
+                    for (var n, o = range(0, a)[Symbol.iterator](); !(r = (n = o.next()).done); r = !0) {
+                        var l = n.value;
+                        "classes" == t && this.window.addLegendItem(hsClasses[l]), "decks" == t && this.window.addLegendItem(e[l].name);
+                    }
+                } catch (t) {
+                    i = !0, s = t;
+                } finally {
+                    try {
+                        !r && o.return && o.return();
+                    } finally {
+                        if (i) throw s;
+                    }
+                }
             } else this.createZoomLegend();
         }
     }, {
@@ -1715,19 +1802,19 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
         value: function() {
             var t = this.window.zoomClass;
             this.window.clearChartFooter();
-            var e = !0, i = !1, r = void 0;
+            var e = !0, a = !1, r = void 0;
             try {
-                for (var a, s = this.traces_zoom[t][Symbol.iterator](); !(e = (a = s.next()).done); e = !0) {
-                    var n = a.value;
+                for (var i, s = this.traces.zoom[t][Symbol.iterator](); !(e = (i = s.next()).done); e = !0) {
+                    var n = i.value;
                     n.fr_avg > 0 && this.window.addLegendItem(n.name);
                 }
             } catch (t) {
-                i = !0, r = t;
+                a = !0, r = t;
             } finally {
                 try {
                     !e && s.return && s.return();
                 } finally {
-                    if (i) throw r;
+                    if (a) throw r;
                 }
             }
         }
@@ -1756,9 +1843,9 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
             this.window.plotType = "zoom";
             var e = t.points[0].data.hsClass;
             if (-1 == hsClasses.indexOf(e)) {
-                var i = !0, r = !1, a = void 0;
+                var a = !0, r = !1, i = void 0;
                 try {
-                    for (var s, n = hsClasses[Symbol.iterator](); !(i = (s = n.next()).done); i = !0) {
+                    for (var s, n = hsClasses[Symbol.iterator](); !(a = (s = n.next()).done); a = !0) {
                         var o = s.value;
                         if (-1 != e.indexOf(o)) {
                             this.window.zoomClass = o;
@@ -1766,12 +1853,12 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
                         }
                     }
                 } catch (t) {
-                    r = !0, a = t;
+                    r = !0, i = t;
                 } finally {
                     try {
-                        !i && n.return && n.return();
+                        !a && n.return && n.return();
                     } finally {
-                        if (r) throw a;
+                        if (r) throw i;
                     }
                 }
             } else this.window.zoomClass = e;
@@ -1779,10 +1866,10 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
         }
     } ]), t;
 }(), LadderWindow = function() {
-    function t(e, i, r) {
-        _classCallCheck(this, t), this.window = document.querySelector("#ladderWindow"), 
+    function t(e) {
+        _classCallCheck(this, t), this.div = document.querySelector("#ladderWindow"), this.tab = document.querySelector("#ladder.tab"), 
         this.chartDiv = document.querySelector("#ladderWindow #chart1"), this.classDeckOptions = document.querySelector("#ladderWindow .content-header .classDeckOptions"), 
-        this.nrGamesBtn = document.querySelector("#ladderWindow .content-header #nrGames"), 
+        this.nrGamesBtn = document.querySelector("#ladderWindow .content-header #showNumbers"), 
         this.graphTitle = document.querySelector("#ladderWindow .graphTitle"), this.graphLabel = document.querySelector("#ladderWindow .graphLabel"), 
         this.rankFolder = document.querySelector("#ladderWindow .content-header #rankBtn"), 
         this.optionButtons = document.querySelectorAll("#ladderWindow .optionBtn"), this.questionBtn = document.querySelector("#ladderWindow .question"), 
@@ -1794,167 +1881,153 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
         this.overlayText.pie = "\n        This pie graph displays the class/ deck frequencies as pie slices. You can vary the rank brackets in the header.<br><br>\n        In <span class='optionBtn'>Decks</span> mode decks with 3% or lower frequencies have been merged with the 'Other' decks of that class.<br><br>\n        Tips:<br><br>\n        • Click on a class or deck button at the bottom of the graph to get to the respective description or decklist.<br><br>\n        ", 
         this.overlayText.number = "\n        This table displays the class/ deck frequencies over ladder ranks (rank 20 - Legend). You can vary the rank brackets in the header.<br><br>\n        In <span class='optionBtn'>Decks</span> mode decks with 3% or lower frequencies have been merged with the 'Other' decks of that class.<br><br>\n        Click on the \"download\" button at the bottom of the graph to download the data as '.csv' file.<br><br>\n        ", 
         this.overlayText.timeline = "\n        This line graph displays the class/ deck frequencies on the y-axis and time (in hours or days) on the x-axis.<br><br>\n        If you choose 'Last Day', 'Last 6 Hours' or 'Last 12 Hours' the time unit is in 'Hours' whereas for 'Last 3 Days' etc. it's in 'Days'.<br><br>\n        The 'Hours' lines have been averaged between +/- 1 Hour to make for a smoother curve.<br><br>\n        In <span class='optionBtn'>Decks</span> mode the chart displays the 9 most frequent decks.<br><br>\n        Tips:<br><br>\n        • Click on a class or deck button at the bottom of the graph to get to the respective description or decklist.<br><br>\n        ", 
+        this.overlayText.map = "\n        The VS Meta Score aims to give a broad overview over the current state of the ladder meta.<br><br>\n        Each archetype is represented as a colored dot and plotted according to its winrate (x-axis) and frequency (y-axis).\n        Both axis are scaled from 0 to 1.<br><br> \n        &#8226 Frequency is scaled from 0% of the meta (0 on the plot) to the highest frequency of any archetype (1 on the plot) <br><br>\n        &#8226 Winrates are scaled from the highest winrate among all archetypes (1 on the plot) to 50% - delta where delta is the \n        distance of the highest winrate above 50%<br><br>\n        ", 
         this.fontColor = "#222", this.fontColorLight = "#999", this.overlay = !1, this.annotated = !1, 
         this.colorScale_c1 = [ 255, 255, 255 ], this.colorScale_c2 = [ 87, 125, 186 ], this.colorScale_f = .15, 
-        this.archetypeColors = {
-            Standard: {},
-            Wild: {}
-        }, this.data = {}, this.hsFormats = e, this.hsTimes = i, this.ranks = r, this.archColors = {};
-        var a = !0, s = !1, n = void 0;
+        this.data = {}, this.hsFormats = hsFormats, this.hsTimes = PREMIUM ? ladder_times_premium : ladder_times, 
+        this.ranks = PREMIUM ? ladder_ranks_premium : ladder_ranks, this.layouts = {}, this.f = "Standard", 
+        this.t = "lastDay", this.r = "ranks_all", this.plotType = "bar", this.plotTypes = [ "bar", "line", "pie", "number", "timeline" ], 
+        this.mode = "classes", this.fullyLoaded = !1, this.history = {}, this.zoomClass = null;
+        var a = !0, r = !1, i = void 0;
         try {
-            for (var o, l = this.hsFormats[Symbol.iterator](); !(a = (o = l.next()).done); a = !0) {
-                var h = o.value;
-                this.archColors[h] = {};
-                var d = !0, c = !1, u = void 0;
+            for (var s, n = this.hsFormats[Symbol.iterator](); !(a = (s = n.next()).done); a = !0) {
+                var o = s.value;
+                this.data[o] = {
+                    fullyLoaded: !1
+                }, this.history[o] = {
+                    fullyLoaded: !1
+                };
+                var l = !0, h = !1, d = void 0;
                 try {
-                    for (var y, f = hsClasses[Symbol.iterator](); !(d = (y = f.next()).done); d = !0) {
-                        var v = y.value;
-                        this.archColors[h][v] = {
-                            count: 0
-                        };
+                    for (var c, u = this.hsTimes[Symbol.iterator](); !(l = (c = u.next()).done); l = !0) {
+                        var y = c.value;
+                        this.data[o][y] = null;
                     }
                 } catch (t) {
-                    c = !0, u = t;
+                    h = !0, d = t;
                 } finally {
                     try {
-                        !d && f.return && f.return();
+                        !l && u.return && u.return();
                     } finally {
-                        if (c) throw u;
+                        if (h) throw d;
                     }
                 }
             }
         } catch (t) {
-            s = !0, n = t;
+            r = !0, i = t;
         } finally {
             try {
-                !a && l.return && l.return();
+                !a && n.return && n.return();
             } finally {
-                if (s) throw n;
+                if (r) throw i;
             }
         }
-        this.f = "Standard", this.t = "lastDay", this.r = "ranks_all", this.plotType = "bar", 
-        this.plotTypes = [ "bar", "line", "pie", "number", "timeline" ], this.mode = "classes", 
-        this.fullyLoaded = !1, this.history = null, this.zoomClass = null, this.nrGames = 0;
-        var m = !0, p = !1, b = void 0;
-        try {
-            for (var w, k = this.hsFormats[Symbol.iterator](); !(m = (w = k.next()).done); m = !0) {
-                h = w.value;
-                this.data[h] = {};
-                var g = !0, x = !1, T = void 0;
-                try {
-                    for (var C, L = this.hsTimes[Symbol.iterator](); !(g = (C = L.next()).done); g = !0) {
-                        var S = C.value;
-                        this.data[h][S] = null;
-                    }
-                } catch (t) {
-                    x = !0, T = t;
-                } finally {
-                    try {
-                        !g && L.return && L.return();
-                    } finally {
-                        if (x) throw T;
-                    }
-                }
-            }
-        } catch (t) {
-            p = !0, b = t;
-        } finally {
-            try {
-                !m && k.return && k.return();
-            } finally {
-                if (p) throw b;
-            }
-        }
-        this.loadData(), this.setupUI(), this.renderOptions();
+        this.loadData("Standard", e), this.setupUI(), this.renderOptions();
     }
     return _createClass(t, [ {
         key: "setupUI",
         value: function() {
-            var t = !0, e = !1, i = void 0;
+            var t = !0, e = !1, a = void 0;
             try {
-                for (var r, a = this.optionButtons[Symbol.iterator](); !(t = (r = a.next()).done); t = !0) {
-                    (x = r.value).addEventListener("click", this.buttonTrigger.bind(this));
+                for (var r, i = this.optionButtons[Symbol.iterator](); !(t = (r = i.next()).done); t = !0) {
+                    (T = r.value).addEventListener("click", this.buttonTrigger.bind(this));
                 }
             } catch (t) {
-                e = !0, i = t;
+                e = !0, a = t;
             } finally {
                 try {
-                    !t && a.return && a.return();
+                    !t && i.return && i.return();
                 } finally {
-                    if (e) throw i;
+                    if (e) throw a;
                 }
             }
-            document.querySelector("#ladderWindow #formatFolder .dropdown").innerHTML = "";
-            var s = !0, n = !1, o = void 0;
+            this.setupLayouts(), this.dropdownFolders = {
+                format: document.querySelector("#ladderWindow #formatFolder .dropdown"),
+                time: document.querySelector("#ladderWindow #timeFolder .dropdown"),
+                rank: document.querySelector("#ladderWindow #rankFolder .dropdown")
+            };
+            var s = function(t) {
+                var e = t.toElement || t.relatedTarget;
+                e.parentNode != this && e != this && this.classList.add("hidden");
+            };
+            for (var n in this.dropdownFolders) {
+                var o = this.dropdownFolders[n];
+                o.innerHTML = "", o.onmouseout = s;
+            }
+            var l = !0, h = !1, d = void 0;
             try {
-                for (var l, h = this.hsFormats[Symbol.iterator](); !(s = (l = h.next()).done); s = !0) {
-                    var d = l.value;
-                    (x = document.createElement("button")).className = "optionBtn folderBtn", x.innerHTML = d, 
-                    x.id = d;
-                    x.onclick = function(t) {
+                for (var c, u = this.hsFormats[Symbol.iterator](); !(l = (c = u.next()).done); l = !0) {
+                    var y = c.value;
+                    (T = document.createElement("button")).className = "optionBtn folderBtn", T.innerHTML = y, 
+                    T.id = y;
+                    T.onclick = function(t) {
                         this.f = t.target.id, this.plot();
-                    }.bind(this), document.querySelector("#ladderWindow #formatFolder .dropdown").appendChild(x);
+                    }.bind(this), this.dropdownFolders.format.appendChild(T);
                 }
             } catch (t) {
-                n = !0, o = t;
+                h = !0, d = t;
             } finally {
                 try {
-                    !s && h.return && h.return();
+                    !l && u.return && u.return();
                 } finally {
-                    if (n) throw o;
+                    if (h) throw d;
                 }
             }
-            document.querySelector("#ladderWindow #timeFolder .dropdown").innerHTML = "";
-            var c = !0, u = !1, y = void 0;
+            var f = !0, p = !1, v = void 0;
             try {
-                for (var f, v = this.hsTimes[Symbol.iterator](); !(c = (f = v.next()).done); c = !0) {
-                    var m = f.value;
-                    (x = document.createElement("button")).className = "optionBtn folderBtn", x.innerHTML = btnIdToText[m], 
-                    x.id = m;
-                    x.onclick = function(t) {
+                for (var m, b = this.hsTimes[Symbol.iterator](); !(f = (m = b.next()).done); f = !0) {
+                    var k = m.value;
+                    (T = document.createElement("button")).className = "optionBtn folderBtn", T.innerHTML = btnIdToText[k], 
+                    T.id = k;
+                    T.onclick = function(t) {
                         this.t = t.target.id, this.plot();
-                    }.bind(this), document.querySelector("#ladderWindow #timeFolder .dropdown").appendChild(x);
+                    }.bind(this), this.dropdownFolders.time.appendChild(T);
                 }
             } catch (t) {
-                u = !0, y = t;
+                p = !0, v = t;
             } finally {
                 try {
-                    !c && v.return && v.return();
+                    !f && b.return && b.return();
                 } finally {
-                    if (u) throw y;
+                    if (p) throw v;
                 }
             }
-            document.querySelector("#ladderWindow #rankFolder .dropdown").innerHTML = "";
-            var p = !0, b = !1, w = void 0;
+            var w = !0, g = !1, x = void 0;
             try {
-                for (var k, g = this.ranks[Symbol.iterator](); !(p = (k = g.next()).done); p = !0) {
-                    var x, T = k.value;
-                    (x = document.createElement("button")).className = "optionBtn folderBtn", x.innerHTML = btnIdToText[T], 
-                    x.id = T;
-                    x.onclick = function(t) {
+                for (var L, C = this.ranks[Symbol.iterator](); !(w = (L = C.next()).done); w = !0) {
+                    var T, S = L.value;
+                    (T = document.createElement("button")).className = "optionBtn folderBtn", T.innerHTML = btnIdToText[S], 
+                    T.id = S;
+                    T.onclick = function(t) {
                         this.r = t.target.id, this.plot();
-                    }.bind(this), document.querySelector("#ladderWindow #rankFolder .dropdown").appendChild(x);
+                    }.bind(this), this.dropdownFolders.rank.appendChild(T);
                 }
             } catch (t) {
-                b = !0, w = t;
+                g = !0, x = t;
             } finally {
                 try {
-                    !p && g.return && g.return();
+                    !w && C.return && C.return();
                 } finally {
-                    if (b) throw w;
+                    if (g) throw x;
                 }
             }
-            var C = PREMIUM ? "flex" : "none";
+            var D = PREMIUM ? "flex" : "none";
             this.questionBtn.addEventListener("click", this.toggleOverlay.bind(this)), this.overlayDiv.addEventListener("click", this.toggleOverlay.bind(this)), 
-            this.classDeckOptions.style.display = C, document.querySelector("#ladderWindow .content-header .graphOptions #line").style.display = C, 
-            document.querySelector("#ladderWindow .content-header .graphOptions #timeline").style.display = C, 
+            this.classDeckOptions.style.display = D, document.querySelector("#ladderWindow .content-header .graphOptions #line").style.display = D, 
+            document.querySelector("#ladderWindow .content-header .graphOptions #timeline").style.display = D, 
             this.nrGamesBtn.onclick = this.annotate.bind(this), this.optionButtons = document.querySelectorAll("#ladderWindow .optionBtn");
+        }
+    }, {
+        key: "display",
+        value: function(t) {
+            t ? (this.div.style.display = "inline-block", this.f = app.path.hsFormat, this.plot()) : (app.path.hsFormat = this.f, 
+            this.div.style.display = "none");
         }
     }, {
         key: "annotate",
         value: function() {
-            "pie" != this.plotType && "number" != this.plotType && (this.annotated ? ("timeline" == this.plotType ? this.history.annotate(!1) : this.data[this.f][this.t].annotate(!1), 
-            this.nrGamesBtn.classList.remove("highlighted")) : ("timeline" == this.plotType ? this.history.annotate(!0) : this.data[this.f][this.t].annotate(!0), 
+            "pie" != this.plotType && "number" != this.plotType && (this.annotated ? ("timeline" == this.plotType ? this.history[this.f].annotate(!1) : this.data[this.f][this.t].annotate(!1), 
+            this.nrGamesBtn.classList.remove("highlighted")) : ("timeline" == this.plotType ? this.history[this.f].annotate(!0) : this.data[this.f][this.t].annotate(!0), 
             this.nrGamesBtn.classList.add("highlighted")), this.annotated = !this.annotated);
         }
     }, {
@@ -1974,26 +2047,26 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
             "classes" == e && (this.mode = "classes"), "decks" == e && (this.mode = "decks"), 
             "bar" == e && (this.plotType = "bar"), "line" == e && (this.plotType = "line"), 
             "pie" == e && (this.plotType = "pie"), "number" == e && (this.plotType = "number"), 
-            "timeline" == e && (this.plotType = "timeline"), "zoom" == this.plotType && "classes" != this.mode && (this.plotType = "bar"), 
-            this.plot();
+            "map" == e && (this.plotType = "map"), "timeline" == e && (this.plotType = "timeline"), 
+            "zoom" == this.plotType && "classes" != this.mode && (this.plotType = "bar"), this.plot();
         }
     }, {
         key: "renderOptions",
         value: function() {
-            var t = !0, e = !1, i = void 0;
+            var t = !0, e = !1, a = void 0;
             try {
-                for (var r, a = this.optionButtons[Symbol.iterator](); !(t = (r = a.next()).done); t = !0) {
+                for (var r, i = this.optionButtons[Symbol.iterator](); !(t = (r = i.next()).done); t = !0) {
                     var s = r.value;
                     s.classList.remove("highlighted"), s.id == this.mode && s.classList.add("highlighted"), 
                     s.id == this.plotType && s.classList.add("highlighted"), "nrGames" == s.id && this.annotated && s.classList.add("highlighted");
                 }
             } catch (t) {
-                e = !0, i = t;
+                e = !0, a = t;
             } finally {
                 try {
-                    !t && a.return && a.return();
+                    !t && i.return && i.return();
                 } finally {
-                    if (e) throw i;
+                    if (e) throw a;
                 }
             }
             document.querySelector("#ladderWindow #formatBtn").innerHTML = MOBILE ? btnIdToText_m[this.f] : btnIdToText[this.f], 
@@ -2001,126 +2074,110 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
             document.querySelector("#ladderWindow #rankBtn").innerHTML = MOBILE ? btnIdToText_m[this.r] : btnIdToText[this.r];
         }
     }, {
+        key: "checkLoadData",
+        value: function(t) {
+            var e = void 0 != t;
+            if (console.log("checkLoadData", e, t), !this.data[this.f].fullyLoaded) {
+                return !!e && this.loadData(this.f, function() {
+                    app.ui.ladderWindow.checkLoadData(t);
+                });
+            }
+            if ("map" == this.plotType && !app.ui.tableWindow.data[this.f].fullyLoaded) {
+                return !!e && app.ui.tableWindow.loadData(this.f, function() {
+                    app.ui.ladderWindow.checkLoadData(t);
+                });
+            }
+            if ("timeline" == this.plotType && !this.history[this.f].fullyLoaded && PREMIUM) {
+                return !!e && this.loadHistoryData(this.f, function() {
+                    app.ui.ladderWindow.checkLoadData(t);
+                });
+            }
+            if (this.data[this.f].fullyLoaded) return !e || t.apply(this);
+        }
+    }, {
         key: "loadData",
-        value: function() {
-            if (DATABASE.ref(this.firebasePath).on("value", this.readData.bind(this), function(t) {
+        value: function(t, e) {
+            this.fullyLoaded = !1;
+            app.fb_db.ref(this.firebasePath + "/" + t).on("value", function(a) {
+                this.readData(a, t, e);
+            }.bind(this), function(t) {
                 return console.log("Could not load Ladder Data", t);
-            }), PREMIUM) {
-                DATABASE.ref(this.firebaseHistoryPath).on("value", this.addHistoryData.bind(this), function(t) {
+            });
+        }
+    }, {
+        key: "loadHistoryData",
+        value: function(t, e) {
+            if (PREMIUM) {
+                app.fb_db.ref(this.firebaseHistoryPath + "/" + t).on("value", function(a) {
+                    this.readHistoryData(a, t, e);
+                }.bind(this), function(t) {
                     return console.log("Could not load history data", t);
                 });
             }
         }
     }, {
         key: "readData",
-        value: function(t) {
+        value: function(t, e, a) {
             if (!this.fullyLoaded) {
-                var e = t.val(), i = !0, r = !1, a = void 0;
+                var r = t.val(), i = !0, s = !1, n = void 0;
                 try {
-                    for (var s, n = this.hsFormats[Symbol.iterator](); !(i = (s = n.next()).done); i = !0) {
-                        var o = s.value, l = !0, h = !1, d = void 0;
-                        try {
-                            for (var c, u = this.hsTimes[Symbol.iterator](); !(l = (c = u.next()).done); l = !0) {
-                                var y = c.value;
-                                this.data[o][y] = new Ladder(e[o][y], o, y, this);
-                            }
-                        } catch (t) {
-                            h = !0, d = t;
-                        } finally {
-                            try {
-                                !l && u.return && u.return();
-                            } finally {
-                                if (h) throw d;
-                            }
-                        }
-                    }
-                } catch (t) {
-                    r = !0, a = t;
-                } finally {
-                    try {
-                        !i && n.return && n.return();
-                    } finally {
-                        if (r) throw a;
-                    }
-                }
-                this.fullyLoaded = !0, console.log("ladder loaded: " + (performance.now() - t0).toFixed(2) + " ms"), 
-                finishedLoading(), this.plot(), ui.hideLoader();
-            }
-        }
-    }, {
-        key: "addHistoryData",
-        value: function(t) {
-            this.history = new History(t.val(), this);
-        }
-    }, {
-        key: "plot",
-        value: function() {
-            if (this.fullyLoaded) {
-                switch (this.plotType) {
-                  case "bar":
-                    this.nrGamesBtn.style.display = "flex", PREMIUM || (this.classDeckOptions.style.display = "none", 
-                    this.mode = "classes");
-                    break;
-
-                  case "line":
-                    this.nrGamesBtn.style.display = "flex";
-                    break;
-
-                  case "pie":
-                    this.nrGamesBtn.style.display = "none", PREMIUM || (this.classDeckOptions.style.display = "flex");
-                    break;
-
-                  case "number":
-                    this.nrGamesBtn.style.display = "none", PREMIUM || (this.classDeckOptions.style.display = "none", 
-                    this.mode = "classes");
-                    break;
-
-                  case "timeline":
-                    this.nrGamesBtn.style.display = "flex";
-                }
-                this.renderOptions(), "timeline" != this.plotType ? this.data[this.f][this.t].plot() : this.history.plot();
-            }
-        }
-    }, {
-        key: "getArchColor",
-        value: function(t, e, i) {
-            if (-1 != hsClasses.indexOf(e)) return {
-                color: hsColors[e],
-                fontColor: hsFontColors[e]
-            };
-            var r;
-            if (t) r = e + " " + t; else {
-                r = e;
-                var a = !0, s = !1, n = void 0;
-                try {
-                    for (var o, l = hsClasses[Symbol.iterator](); !(a = (o = l.next()).done); a = !0) {
+                    for (var o, l = this.hsTimes[Symbol.iterator](); !(i = (o = l.next()).done); i = !0) {
                         var h = o.value;
-                        if (-1 != r.indexOf(h)) {
-                            t = h;
-                            break;
-                        }
+                        this.data[e][h] = new Ladder(r[h], e, h, this);
                     }
                 } catch (t) {
                     s = !0, n = t;
                 } finally {
                     try {
-                        !a && l.return && l.return();
+                        !i && l.return && l.return();
                     } finally {
                         if (s) throw n;
                     }
                 }
+                this.fullyLoaded = !0, this.data[e].fullyLoaded = !0, console.log("ladder loaded: " + (performance.now() - t0).toFixed(2) + " ms"), 
+                app.ui.hideLoader(), a.apply(this), this.plot();
             }
-            if (r in this.archColors[i]) return {
-                color: hsArchColors[t][this.archColors[i][r]],
-                fontColor: hsFontColors[t]
-            };
-            this.archColors[i][r] = this.archColors[i][t].count;
-            var d = this.archColors[i][t].count;
-            this.archColors[i][t].count = (d + 1) % 5;
-            return {
-                color: hsArchColors[t][this.archColors[i][r]],
-                fontColor: hsFontColors[t]
-            };
+        }
+    }, {
+        key: "readHistoryData",
+        value: function(t, e, a) {
+            this.history[e] = new History(t.val(), this), a.apply(this);
+        }
+    }, {
+        key: "plot",
+        value: function() {
+            switch (this.plotType) {
+              case "bar":
+                this.nrGamesBtn.style.display = "flex", PREMIUM || (this.classDeckOptions.style.display = "none", 
+                this.mode = "classes");
+                break;
+
+              case "line":
+                this.nrGamesBtn.style.display = "flex";
+                break;
+
+              case "pie":
+                this.nrGamesBtn.style.display = "none", PREMIUM || (this.classDeckOptions.style.display = "flex");
+                break;
+
+              case "number":
+                this.nrGamesBtn.style.display = "none", PREMIUM || (this.classDeckOptions.style.display = "none", 
+                this.mode = "classes");
+                break;
+
+              case "map":
+                this.nrGamesBtn.style.display = "none";
+                break;
+
+              case "timeline":
+                this.nrGamesBtn.style.display = "flex";
+            }
+            if (this.renderOptions(), !this.checkLoadData()) {
+                return this.checkLoadData(function(t) {
+                    app.ui.ladderWindow.plot();
+                });
+            }
+            "timeline" != this.plotType ? this.data[this.f][this.t].plot() : this.history[this.f].plot();
         }
     }, {
         key: "showRankFolder",
@@ -2136,30 +2193,34 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
         key: "setGraphTitle",
         value: function() {
             var t = "classes" == this.mode ? "Class" : "Deck", e = ([ "lastDay", "last6Hours", "last12Hours" ].indexOf(this.t), 
-            btnIdToText[this.r]), i = "<span style='font-size: 80%'> ( " + this.nrGames.toLocaleString() + " games )</span>";
+            btnIdToText[this.r]), a = this.data[this.f][this.t], r = "<span style='font-size: 80%'> ( " + ("pie" != this.plotType ? a.totGames : a.totGamesBrackets[this.r]).toLocaleString() + " games )</span>";
             switch (this.plotType) {
               case "bar":
-                this.graphTitle.innerHTML = "Class Frequency vs Ranks" + i, this.graphLabel.innerHTML = "Ranks >";
+                this.graphTitle.innerHTML = "Class Frequency vs Ranks" + r, this.graphLabel.innerHTML = "Ranks >";
                 break;
 
               case "zoom":
-                this.graphTitle.innerHTML = this.zoomClass + " Deck Frequency vs Ranks" + i, this.graphLabel.innerHTML = "Ranks >";
+                this.graphTitle.innerHTML = this.zoomClass + " Deck Frequency vs Ranks" + r, this.graphLabel.innerHTML = "Ranks >";
                 break;
 
               case "line":
-                this.graphTitle.innerHTML = t + " Frequency vs Ranks" + i, this.graphLabel.innerHTML = "Ranks >";
+                this.graphTitle.innerHTML = t + " Frequency vs Ranks" + r, this.graphLabel.innerHTML = "Ranks >";
                 break;
 
               case "pie":
-                this.graphTitle.innerHTML = t + " Frequency of " + e + i, this.graphLabel.innerHTML = "";
+                this.graphTitle.innerHTML = t + " Frequency of " + e + r, this.graphLabel.innerHTML = "";
                 break;
 
               case "number":
-                this.graphTitle.innerHTML = t + " Frequency vs Ranks" + i, this.graphLabel.innerHTML = "";
+                this.graphTitle.innerHTML = t + " Frequency vs Ranks" + r, this.graphLabel.innerHTML = "";
                 break;
 
               case "timeline":
-                this.graphTitle.innerHTML = t + " Frequency over Time" + i, this.graphLabel.innerHTML = "";
+                this.graphTitle.innerHTML = t + " Frequency over Time" + r, this.graphLabel.innerHTML = "";
+                break;
+
+              case "map":
+                this.graphTitle.innerHTML = "Meta Score" + r, this.graphLabel.innerHTML = "";
             }
         }
     }, {
@@ -2171,11 +2232,11 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
     }, {
         key: "addLegendItem",
         value: function(t) {
-            var e = document.createElement("div"), i = (document.createElement("div"), document.createElement("l"), 
-            this.getArchColor(null, t, this.f));
-            e.className = "legend-item", e.style.fontSize = "0.8em", e.style = "background-color:" + i.color + "; color:" + i.fontColor, 
+            var e = document.createElement("div"), a = (document.createElement("div"), document.createElement("l"), 
+            app.ui.getArchColor(null, t, this.f));
+            e.className = "legend-item", e.style.fontSize = "0.8em", e.style = "background-color:" + a.color + "; color:" + a.fontColor, 
             e.id = t, e.innerHTML = t, e.onclick = function(t) {
-                ui.deckLink(t.target.id, this.f);
+                app.ui.deckLink(t.target.id, this.f);
             }, this.chartFooter.appendChild(e);
         }
     }, {
@@ -2183,8 +2244,240 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
         value: function() {
             for (;this.chartFooter.firstChild; ) this.chartFooter.removeChild(this.chartFooter.firstChild);
         }
+    }, {
+        key: "setupLayouts",
+        value: function() {
+            var t = [], e = !0, a = !1, r = void 0;
+            try {
+                for (var i, s = range(0, hsRanks)[Symbol.iterator](); !(e = (i = s.next()).done); e = !0) {
+                    var n = i.value, o = n % 5 == 0 ? n + "  " : "";
+                    t.push(o);
+                }
+            } catch (t) {
+                a = !0, r = t;
+            } finally {
+                try {
+                    !e && s.return && s.return();
+                } finally {
+                    if (a) throw r;
+                }
+            }
+            this.layouts.bar = {
+                barmode: "stack",
+                showlegend: !1,
+                displayModeBar: !1,
+                hovermode: "closest",
+                annotations: [],
+                xaxis: {
+                    tickfont: {
+                        family: "Arial, bold",
+                        size: 15,
+                        color: this.fontColor
+                    },
+                    visible: !0,
+                    showgrid: !1,
+                    tickvals: range(0, hsRanks),
+                    ticktext: t,
+                    ticklen: 5,
+                    tickcolor: "transparent",
+                    hoverformat: ".1%",
+                    range: [ 21, -1 ],
+                    color: this.fontColor,
+                    fixedrange: !0,
+                    zeroline: !1,
+                    autorange: "reversed"
+                },
+                yaxis: {
+                    title: "[ % ]  of  Meta",
+                    showgrid: !1,
+                    tickfont: {
+                        family: "Arial, bold",
+                        size: 16
+                    },
+                    ticklen: 5,
+                    tickcolor: "transparent",
+                    showticklabels: !1,
+                    fixedrange: !0,
+                    zeroline: !1,
+                    color: this.fontColorLight,
+                    tickformat: ",.0%",
+                    hoverformat: ",.0%",
+                    visible: !MOBILE
+                },
+                plot_bgcolor: "transparent",
+                paper_bgcolor: "transparent",
+                margin: MOBILE ? {
+                    l: 10,
+                    r: 10,
+                    b: 35,
+                    t: 0
+                } : {
+                    l: 60,
+                    r: 30,
+                    b: 35,
+                    t: 0
+                }
+            }, this.layouts.line = {
+                showlegend: !1,
+                displayModeBar: !1,
+                autosize: !0,
+                hovermode: "closest",
+                xaxis: {
+                    tickfont: {
+                        family: "Arial, bold",
+                        size: 15,
+                        color: this.fontColor
+                    },
+                    visible: !0,
+                    showgrid: !0,
+                    tickvals: range(0, hsRanks),
+                    ticktext: t,
+                    hoverformat: ".1%",
+                    range: [ 21, -1 ],
+                    color: this.fontColor,
+                    fixedrange: !0,
+                    zeroline: !1,
+                    autorange: "reversed"
+                },
+                yaxis: {
+                    tickfont: {
+                        family: "Arial, bold",
+                        size: 19
+                    },
+                    showgrid: !0,
+                    ticklen: 12,
+                    tickcolor: "transparent",
+                    tickformat: ",.0%",
+                    fixedrange: !0,
+                    color: this.fontColorLight
+                },
+                plot_bgcolor: "transparent",
+                paper_bgcolor: "transparent",
+                margin: MOBILE ? {
+                    l: 60,
+                    r: 10,
+                    b: 50,
+                    t: 0
+                } : {
+                    l: 70,
+                    r: 20,
+                    b: 30,
+                    t: 0
+                }
+            }, this.layouts.pie = {
+                showlegend: !1,
+                displayModeBar: !1,
+                autosize: !0,
+                textinfo: "label+percent",
+                hovermode: "closest",
+                plot_bgcolor: "transparent",
+                paper_bgcolor: "transparent",
+                margin: {
+                    l: 70,
+                    r: 20,
+                    b: 30,
+                    t: 30
+                }
+            };
+            var l = {
+                color: "rgba(50,50,50,0.5)",
+                width: 1.5,
+                opacity: .5,
+                dash: "dot"
+            }, h = {
+                color: "rgba(50,50,50,0.5)",
+                width: 1.5,
+                opacity: .5
+            };
+            this.layouts.map = {
+                showlegend: !1,
+                hovermode: "closest",
+                displayModeBar: !1,
+                autosize: !0,
+                margin: MOBILE ? {
+                    l: 10,
+                    r: 10,
+                    b: 35,
+                    t: 0
+                } : {
+                    l: 60,
+                    r: 30,
+                    b: 50,
+                    t: 0
+                },
+                xaxis: {
+                    range: [ 0, 1.05 ],
+                    title: "Winrate",
+                    zeroline: !1,
+                    fixedrange: !0,
+                    tickvals: [ 0, .25, .5, .75, 1 ],
+                    tickfont: {
+                        family: "Arial, bold",
+                        size: 15,
+                        color: this.fontColor
+                    }
+                },
+                yaxis: {
+                    range: [ 0, 1.05 ],
+                    title: "Frequency",
+                    zeroline: !1,
+                    fixedrange: !0,
+                    tickvals: [ 0, .25, .5, .75, 1 ],
+                    tickfont: {
+                        family: "Arial, bold",
+                        size: 15,
+                        color: this.fontColor
+                    }
+                },
+                plot_bgcolor: "transparent",
+                paper_bgcolor: "transparent",
+                shapes: [ {
+                    type: "line",
+                    x0: .5,
+                    x1: .5,
+                    y0: 0,
+                    y1: 1,
+                    line: l
+                }, {
+                    type: "line",
+                    x0: 1,
+                    x1: 1,
+                    y0: 0,
+                    y1: 1,
+                    line: h
+                }, {
+                    type: "line",
+                    x0: 0,
+                    x1: 1,
+                    y0: .5,
+                    y1: .5,
+                    line: l
+                }, {
+                    type: "line",
+                    x0: 0,
+                    x1: 1,
+                    y0: 1,
+                    y1: 1,
+                    line: h
+                }, {
+                    type: "line",
+                    x0: 0,
+                    x1: 1,
+                    y0: 0,
+                    y1: 0,
+                    line: h
+                }, {
+                    type: "line",
+                    x0: 0,
+                    x1: 0,
+                    y0: 0,
+                    y1: 1,
+                    line: h
+                } ]
+            }, this.layouts.number = {}, this.layouts.zoom = this.layouts.bar;
+        }
     } ]), t;
-}(), DISCORDLINK = "https://discordapp.com/invite/0oxwpa5Mtc2VA2xC", POLLLINK = "https://docs.google.com/forms/d/e/1FAIpQLSel6ym_rJHduxkgeimzf9HdNbBMB5Kak7Fmk0Bl2O7O8XhVGg/viewform?usp=sf_link", VSGOLDINFOLINK = "https://www.vicioussyndicate.com/membership/vs-gold/", ladder_times = [ "lastDay", "last2Weeks" ], ladder_times_premium = [ "last6Hours", "last12Hours", "lastDay", "last3Days", "lastWeek", "last2Weeks" ], ladder_ranks = [ "ranks_all" ], ladder_ranks_premium = [ "ranks_all", "ranks_L_5", "ranks_6_15" ], ladder_plotTypes = [], table_times = [ "last2Weeks" ], table_times_premium = [ "last3Days", "lastWeek", "last2Weeks" ], table_sortOptions = [ "frequency" ], table_sortOptions_premium = [ "frequency", "class", "winrate", "matchup" ], table_ranks = [ "ranks_all" ], table_ranks_premium = [ "ranks_all", "ranks_L_5", "ranks_6_15" ], MU_COLOR_IDX = 0, hsRanks = 21, hsClasses = [ "Druid", "Hunter", "Mage", "Paladin", "Priest", "Rogue", "Shaman", "Warlock", "Warrior" ], hsFormats = [ "Standard", "Wild" ], rankRange = {
+}(), DISCORDLINK = "https://discordapp.com/invite/0oxwpa5Mtc2VA2xC", POLLLINK = "https://docs.google.com/forms/d/e/1FAIpQLSel6ym_rJHduxkgeimzf9HdNbBMB5Kak7Fmk0Bl2O7O8XhVGg/viewform?usp=sf_link", VSGOLDINFOLINK = "https://www.vicioussyndicate.com/membership/vs-gold/", ladder_times = [ "lastDay", "last2Weeks" ], ladder_times_premium = [ "last6Hours", "last12Hours", "lastDay", "last3Days", "lastWeek", "last2Weeks" ], ladder_ranks = [ "ranks_all" ], ladder_ranks_premium = [ "ranks_all", "ranks_L_5", "ranks_6_15" ], ladder_plotTypes = [], table_times = [ "last2Weeks" ], table_times_premium = [ "last3Days", "lastWeek", "last2Weeks" ], table_sortOptions = [ "frequency", "winrate" ], table_sortOptions_premium = [ "frequency", "winrate", "matchup" ], table_numArch = 16, table_ranks = [ "ranks_all" ], table_ranks_premium = [ "ranks_all", "ranks_L_5", "ranks_6_15" ], MU_COLOR_IDX = 0, hsRanks = 21, hsClasses = [ "Druid", "Hunter", "Mage", "Paladin", "Priest", "Rogue", "Shaman", "Warlock", "Warrior" ], hsFormats = [ "Standard", "Wild" ], rankRange = {
     ranks_all: [ 0, 20 ],
     ranks_L: [ 0, 0 ],
     ranks_1_5: [ 1, 5 ],
@@ -2280,306 +2573,426 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
     "§": "#88042d"
 }, PowerWindow = function() {
     function t() {
-        _classCallCheck(this, t), this.grid = document.querySelector("#powerGrid"), this.optionButtons = document.querySelectorAll("#powerWindow .optionBtn"), 
+        _classCallCheck(this, t), this.div = document.querySelector("#powerWindow"), this.tab = document.querySelector("#power.tab"), 
+        this.grid = document.querySelector("#powerGrid"), this.optionButtons = document.querySelectorAll("#powerWindow .optionBtn"), 
         this.questionBtn = document.querySelector("#powerWindow .question"), this.overlayDiv = document.querySelector("#powerWindow .overlay"), 
         this.overlayP = document.querySelector("#powerWindow .overlayText"), this.f = "Standard", 
-        this.mode = "tiers", this.t_ladder = {
+        this.mode = "brackets", this.t_ladder = {
             Standard: "lastDay",
             Wild: "last2Weeks"
-        }, PREMIUM && (this.t_ladder.Wild = "lastWeek"), this.t_table = "last2Weeks", this.top = 5, 
-        this.minGames = 50, this.overlayText = "\n            This tab displays the best decks to be played in the respective rank brackets.<br><br>\n            <span class='optionBtn'>Tier Lists</span> shows the top 16 decks across specific rank brackets ('All Ranks', 'Rank 1-5' etc.).<br><br>\n            <span class='optionBtn'>Suggestions</span> shows the top 5 decks for every single rank until rank 20.<br><br>\n            The winrates are calculated by using the deck frequencies of the last 24 hours and the matchup table of the last week.<br><br>\n            If there are fewer than " + this.minGames + ' games in the respective category no data is displayed instead.<br><br>\n            Click on a deck to get to it\'s deck list in the "Decks" tab.<br><br>        \n        ', 
-        this.data = {
-            Standard: [],
-            Wild: [],
-            rankSums: {
-                Standard: [],
-                Wild: []
-            }
+        }, PREMIUM && (this.t_ladder.Wild = "lastWeek"), this.t_table = "last2Weeks", this.maxElementsPerRank = 5, 
+        this.maxElementsPerBracket = PREMIUM ? 16 : 5, this.minGames = 50, this.overlayText = "\n            This tab displays the best decks to be played in the respective rank brackets.<br><br>\n            <span class='optionBtn'>Tier Lists</span> shows the top 16 decks across specific rank brackets ('All Ranks', 'Rank 1-5' etc.).<br><br>\n            <span class='optionBtn'>Suggestions</span> shows the top 5 decks for every single rank until rank 20.<br><br>\n            The winrates are calculated by using the deck frequencies of the last 24 hours and the matchup table of the last week.<br><br>\n            If there are fewer than " + this.minGames + ' games in the respective category no data is displayed instead.<br><br>\n            Click on a deck to get to it\'s deck list in the "Decks" tab.<br><br>        \n        ', 
+        this.rankData = {
+            rankSums: {},
+            fullyLoaded: {}
         };
-        for (var e = 0; e < hsRanks; e++) this.data.Standard.push([]);
-        for (e = 0; e < hsRanks; e++) this.data.Wild.push([]);
-        for (var i = 0; i < this.optionButtons.length; i++) this.optionButtons[i].addEventListener("click", this.buttonTrigger.bind(this));
-        this.tierData = {}, this.tiers = [ {
+        var e = !0, a = !1, r = void 0;
+        try {
+            for (var i, s = hsFormats[Symbol.iterator](); !(e = (i = s.next()).done); e = !0) {
+                var n = i.value;
+                this.rankData[n] = [];
+                var o = !0, l = !1, h = void 0;
+                try {
+                    for (var d, c = range(0, hsRanks)[Symbol.iterator](); !(o = (d = c.next()).done); o = !0) {
+                        d.value;
+                        this.rankData[n].push([]);
+                    }
+                } catch (t) {
+                    l = !0, h = t;
+                } finally {
+                    try {
+                        !o && c.return && c.return();
+                    } finally {
+                        if (l) throw h;
+                    }
+                }
+                this.rankData.rankSums[n] = [], this.rankData.fullyLoaded[n] = !1;
+            }
+        } catch (t) {
+            a = !0, r = t;
+        } finally {
+            try {
+                !e && s.return && s.return();
+            } finally {
+                if (a) throw r;
+            }
+        }
+        this.bracketData = {}, this.rankBrackets = [ {
             name: "All Ranks",
-            games: {
-                Standard: 0,
-                Wild: 0
-            },
+            games: {},
             start: 0,
             end: 15
         }, {
             name: "L",
-            games: {
-                Standard: 0,
-                Wild: 0
-            },
+            games: {},
             start: 0,
             end: 0
         }, {
             name: "1-5",
-            games: {
-                Standard: 0,
-                Wild: 0
-            },
+            games: {},
             start: 1,
             end: 5
         }, {
             name: "6-15",
-            games: {
-                Standard: 0,
-                Wild: 0
-            },
+            games: {},
             start: 6,
             end: 15
-        } ], this.maxTierElements = PREMIUM ? 16 : 5;
-        for (var r = [ "Standard", "Wild" ], a = 0; a < r.length; a++) {
-            var s = r[a];
-            this.tierData[s] = {};
-            var n = !0, o = !1, l = void 0;
-            try {
-                for (var h, d = this.tiers[Symbol.iterator](); !(n = (h = d.next()).done); n = !0) {
-                    var c = h.value;
-                    this.tierData[s][c.name] = [];
-                }
-            } catch (t) {
-                o = !0, l = t;
-            } finally {
+        } ];
+        var u = !0, y = !1, f = void 0;
+        try {
+            for (var p, v = hsFormats[Symbol.iterator](); !(u = (p = v.next()).done); u = !0) {
+                var m = p.value;
+                this.bracketData[m] = {};
+                var b = !0, k = !1, w = void 0;
                 try {
-                    !n && d.return && d.return();
+                    for (var g, x = this.rankBrackets[Symbol.iterator](); !(b = (g = x.next()).done); b = !0) {
+                        var L = g.value;
+                        L.games[m] = 0, this.bracketData[m][L.name] = [];
+                    }
+                } catch (t) {
+                    k = !0, w = t;
                 } finally {
-                    if (o) throw l;
+                    try {
+                        !b && x.return && x.return();
+                    } finally {
+                        if (k) throw w;
+                    }
                 }
             }
+        } catch (t) {
+            y = !0, f = t;
+        } finally {
+            try {
+                !u && v.return && v.return();
+            } finally {
+                if (y) throw f;
+            }
         }
-        this.overlay = !1, this.addData("Standard"), this.addData("Wild"), this.setupUI(), 
-        this.renderOptions();
+        this.overlay = !1, this.addData("Standard", function(t) {}), this.setupUI(), this.renderOptions();
     }
     return _createClass(t, [ {
         key: "setupUI",
         value: function() {
-            var t = PREMIUM ? "inline" : "none";
-            document.querySelector("#powerWindow .content-header #top").style.display = t, this.questionBtn.addEventListener("click", this.toggleOverlay.bind(this)), 
-            this.overlayDiv.addEventListener("click", this.toggleOverlay.bind(this));
+            for (var t = 0; t < this.optionButtons.length; t++) this.optionButtons[t].addEventListener("click", this.buttonTrigger.bind(this));
+            var e = PREMIUM ? "inline" : "none";
+            document.querySelector("#powerWindow .content-header #brackets").style.display = e, 
+            this.questionBtn.addEventListener("click", this.toggleOverlay.bind(this)), this.overlayDiv.addEventListener("click", this.toggleOverlay.bind(this));
         }
     }, {
         key: "buttonTrigger",
         value: function(t) {
             var e = t.target.id;
-            "Standard" == e && (this.f = "Standard"), "Wild" == e && (this.f = "Wild"), "top" == e && (this.mode = "top"), 
-            "tiers" == e && (this.mode = "tiers"), this.plot(), this.renderOptions();
+            "Standard" == e && (this.f = "Standard"), "Wild" == e && (this.f = "Wild"), "ranks" == e && (this.mode = "ranks"), 
+            "brackets" == e && (this.mode = "brackets"), this.plot(), this.renderOptions();
         }
     }, {
         key: "pressButton",
         value: function(t) {
-            ui.deckLink(t.target.id, this.f);
+            app.ui.deckLink(t.target.id, this.f);
         }
     }, {
         key: "renderOptions",
         value: function() {
-            var t = !0, e = !1, i = void 0;
+            var t = !0, e = !1, a = void 0;
             try {
-                for (var r, a = this.optionButtons[Symbol.iterator](); !(t = (r = a.next()).done); t = !0) {
+                for (var r, i = this.optionButtons[Symbol.iterator](); !(t = (r = i.next()).done); t = !0) {
                     var s = r.value;
                     s.classList.remove("highlighted"), s.id == this.mode && s.classList.add("highlighted"), 
                     s.id == this.f && s.classList.add("highlighted");
                 }
             } catch (t) {
-                e = !0, i = t;
+                e = !0, a = t;
             } finally {
                 try {
-                    !t && a.return && a.return();
+                    !t && i.return && i.return();
                 } finally {
-                    if (e) throw i;
+                    if (e) throw a;
                 }
             }
         }
     }, {
         key: "addData",
-        value: function(t) {
-            var e = ladderWindow.data[t][this.t_ladder[t]].archetypes, i = tableWindow.data[t][this.t_table].ranks_all;
-            this.data.rankSums[t] = ladderWindow.data[t][this.t_ladder[t]].rankSums;
-            for (var r = 0; r < hsRanks; r++) {
-                var a = !0, s = !1, n = void 0;
-                try {
-                    for (var o, l = this.tiers[Symbol.iterator](); !(a = (o = l.next()).done); a = !0) {
-                        (D = o.value).start <= r && D.end >= r && (D.games[t] += this.data.rankSums[t][r]);
-                    }
-                } catch (t) {
-                    s = !0, n = t;
-                } finally {
+        value: function(t, e) {
+            var a = app.ui.ladderWindow.data[t][this.t_ladder[t]], r = app.ui.tableWindow.data[t][this.t_table].ranks_all, i = a.archetypes, s = r.archetypes, n = r.table;
+            app.ui.ladderWindow.data[t][this.t_ladder[t]].rankSums;
+            this.rankData.rankSums[t] = app.ui.ladderWindow.data[t][this.t_ladder[t]].rankSums;
+            var o = !0, l = !1, h = void 0;
+            try {
+                for (var d, c = range(0, hsRanks)[Symbol.iterator](); !(o = (d = c.next()).done); o = !0) {
+                    var u = d.value, y = !0, f = !1, p = void 0;
                     try {
-                        !a && l.return && l.return();
+                        for (var v, m = this.rankBrackets[Symbol.iterator](); !(y = (v = m.next()).done); y = !0) {
+                            var b = v.value;
+                            b.start <= u && b.end >= u && (b.games[t] += this.rankData.rankSums[t][u]);
+                        }
+                    } catch (t) {
+                        f = !0, p = t;
                     } finally {
-                        if (s) throw n;
+                        try {
+                            !y && m.return && m.return();
+                        } finally {
+                            if (f) throw p;
+                        }
                     }
                 }
+            } catch (t) {
+                l = !0, h = t;
+            } finally {
+                try {
+                    !o && c.return && c.return();
+                } finally {
+                    if (l) throw h;
+                }
             }
-            var h = !0, d = !1, c = void 0;
+            var k = !0, w = !1, g = void 0;
             try {
-                for (var u, y = e[Symbol.iterator](); !(h = (u = y.next()).done); h = !0) {
-                    var f = u.value, v = i.archetypes.indexOf(f.name);
-                    if (-1 != v) for (r = 0; r < hsRanks; r++) {
-                        var m = 0, p = 0, b = !0, w = !1, k = void 0;
+                for (var x, L = i[Symbol.iterator](); !(k = (x = L.next()).done); k = !0) {
+                    var C = x.value, T = s.indexOf(C.name);
+                    if (-1 != T) {
+                        var S = !0, D = !1, B = void 0;
                         try {
-                            for (var g, x = e[Symbol.iterator](); !(b = (g = x.next()).done); b = !0) {
-                                var T = g.value, C = i.archetypes.indexOf(T.name);
-                                if (-1 != C) {
-                                    var L = T.data[r];
-                                    m += L, p += L * i.table[v][C];
+                            for (var W, M = range(0, hsRanks)[Symbol.iterator](); !(S = (W = M.next()).done); S = !0) {
+                                var _ = W.value, E = 0, q = 0, I = !0, F = !1, R = void 0;
+                                try {
+                                    for (var H, A = i[Symbol.iterator](); !(I = (H = A.next()).done); I = !0) {
+                                        var O = H.value, P = s.indexOf(O.name);
+                                        if (-1 != P) {
+                                            var z = O.fr_ranks[_];
+                                            E += z, q += z * n[T][P];
+                                        }
+                                    }
+                                } catch (t) {
+                                    F = !0, R = t;
+                                } finally {
+                                    try {
+                                        !I && A.return && A.return();
+                                    } finally {
+                                        if (F) throw R;
+                                    }
+                                }
+                                q = E > 0 ? q / E : 0, this.rankData[t][_].push({
+                                    name: C.name,
+                                    wr: q,
+                                    fr: C.fr_ranks[_],
+                                    color: C.color,
+                                    fontColor: C.fontColor
+                                });
+                                var N = !0, G = !1, U = void 0;
+                                try {
+                                    for (var X, Y = this.rankBrackets[Symbol.iterator](); !(N = (X = Y.next()).done); N = !0) {
+                                        var V = X.value, j = this.bracketData[t][V.name];
+                                        _ == V.start && j.push({
+                                            name: C.name,
+                                            wr: q,
+                                            fr: C.fr_ranks[_],
+                                            color: C.color,
+                                            fontColor: C.fontColor,
+                                            count: q > 0 ? 1 : 0
+                                        }), _ > V.start && _ <= V.end && (j[j.length - 1].wr += q, j[j.length - 1].count += q > 0 ? 1 : 0), 
+                                        _ == V.end && j[j.length - 1].count > 0 && (j[j.length - 1].wr /= j[j.length - 1].count);
+                                    }
+                                } catch (t) {
+                                    G = !0, U = t;
+                                } finally {
+                                    try {
+                                        !N && Y.return && Y.return();
+                                    } finally {
+                                        if (G) throw U;
+                                    }
                                 }
                             }
                         } catch (t) {
-                            w = !0, k = t;
+                            D = !0, B = t;
                         } finally {
                             try {
-                                !b && x.return && x.return();
+                                !S && M.return && M.return();
                             } finally {
-                                if (w) throw k;
-                            }
-                        }
-                        0 != m ? p /= m : p = 0, this.data[t][r].push({
-                            name: f.name,
-                            wr: p,
-                            fr: f.data[r],
-                            color: f.color,
-                            fontColor: f.fontColor
-                        });
-                        var S = !0, W = !1, _ = void 0;
-                        try {
-                            for (var M, B = this.tiers[Symbol.iterator](); !(S = (M = B.next()).done); S = !0) {
-                                var D = M.value, I = this.tierData[t][D.name];
-                                r == D.start && I.push({
-                                    name: f.name,
-                                    wr: p,
-                                    fr: f.data[r],
-                                    color: f.color,
-                                    fontColor: f.fontColor,
-                                    count: p > 0 ? 1 : 0
-                                }), r > D.start && r <= D.end && (I[I.length - 1].wr += p, I[I.length - 1].count += p > 0 ? 1 : 0), 
-                                r == D.end && I[I.length - 1].count > 0 && (I[I.length - 1].wr /= I[I.length - 1].count);
-                            }
-                        } catch (t) {
-                            W = !0, _ = t;
-                        } finally {
-                            try {
-                                !S && B.return && B.return();
-                            } finally {
-                                if (W) throw _;
+                                if (D) throw B;
                             }
                         }
                     }
                 }
             } catch (t) {
-                d = !0, c = t;
+                w = !0, g = t;
             } finally {
                 try {
-                    !h && y.return && y.return();
+                    !k && L.return && L.return();
                 } finally {
-                    if (d) throw c;
+                    if (w) throw g;
                 }
             }
-            var E = function(t, e) {
+            var K = function(t, e) {
                 return t.wr > e.wr ? -1 : t.wr < e.wr ? 1 : 0;
-            };
-            for (r = 0; r < hsRanks; r++) this.data[t][r].sort(E);
-            var q = !0, A = !1, F = void 0;
+            }, Z = !0, J = !1, Q = void 0;
             try {
-                for (var H, R = this.tiers[Symbol.iterator](); !(q = (H = R.next()).done); q = !0) {
-                    D = H.value;
-                    this.tierData[t][D.name].sort(E);
+                for (var $, tt = range(0, hsRanks)[Symbol.iterator](); !(Z = ($ = tt.next()).done); Z = !0) {
+                    var et = $.value;
+                    this.rankData[t][et].sort(K);
                 }
             } catch (t) {
-                A = !0, F = t;
+                J = !0, Q = t;
             } finally {
                 try {
-                    !q && R.return && R.return();
+                    !Z && tt.return && tt.return();
                 } finally {
-                    if (A) throw F;
+                    if (J) throw Q;
                 }
             }
+            var at = !0, rt = !1, it = void 0;
+            try {
+                for (var st, nt = this.rankBrackets[Symbol.iterator](); !(at = (st = nt.next()).done); at = !0) {
+                    var ot = st.value;
+                    this.bracketData[t][ot.name].sort(K);
+                }
+            } catch (t) {
+                rt = !0, it = t;
+            } finally {
+                try {
+                    !at && nt.return && nt.return();
+                } finally {
+                    if (rt) throw it;
+                }
+            }
+            if (this.rankData.fullyLoaded[t] = !0, void 0 != e) return e.apply(this);
+        }
+    }, {
+        key: "checkLoadData",
+        value: function(t) {
+            var e = void 0 != t;
+            if (console.log("checkLoadData", e, t), this.rankData.fullyLoaded[this.f]) return !e || t.apply(this);
+            if (!app.ui.ladderWindow.data[this.f].fullyLoaded) {
+                console.log("load ladder data from power window");
+                return !!e && app.ui.ladderWindow.loadData(this.f, function() {
+                    app.ui.powerWindow.checkLoadData(t);
+                });
+            }
+            if (!app.ui.tableWindow.data[this.f].fullyLoaded) {
+                console.log("load table data from power window");
+                return !!e && app.ui.tableWindow.loadData(this.f, function() {
+                    app.ui.powerWindow.checkLoadData(t);
+                });
+            }
+            app.ui.ladderWindow.data[this.f].fullyLoaded && app.ui.tableWindow.data[this.f].fullyLoaded && (console.log("all checks ok"), 
+            this.addData(this.f, t));
         }
     }, {
         key: "plot",
         value: function() {
-            "top" == this.mode && this.plotTop(this.f), "tiers" == this.mode && this.plotTiers(this.f);
+            if (!this.checkLoadData()) return this.renderOptions(), this.checkLoadData(function(t) {
+                app.ui.powerWindow.plot();
+            });
+            "ranks" == this.mode && this.plotRanks(this.f), "brackets" == this.mode && this.plotBrackets(this.f);
         }
     }, {
-        key: "plotTop",
+        key: "display",
+        value: function(t) {
+            t ? (this.div.style.display = "inline-block", this.f = app.path.hsFormat, this.plot()) : (this.div.style.display = "none", 
+            app.path.hsFormat = this.f);
+        }
+    }, {
+        key: "plotRanks",
         value: function(t) {
             for (;this.grid.firstChild; ) this.grid.removeChild(this.grid.firstChild);
             var e = range(0, hsRanks);
             e[0] = "L";
-            for (var i = "1fr ", r = 0; r < this.top; r++) i += "4fr 1fr ";
-            this.grid.style.gridTemplateColumns = i, this.grid.style.gridGap = "0.1rem";
-            (h = document.createElement("div")).className = "header", h.innerHTML = "Rank", 
-            this.grid.appendChild(h);
-            for (r = 0; r < this.top; r++) {
-                (h = document.createElement("div")).className = "header columnTitle", h.innerHTML = "Top " + (r + 1), 
-                this.grid.appendChild(h);
-            }
-            for (r = 0; r < hsRanks; r++) {
-                if ((h = document.createElement("div")).className = "pivot", h.innerHTML = e[r], 
-                this.grid.appendChild(h), this.data.rankSums[t][r] < this.minGames) for (var a = 0; a < this.top; a++) {
-                    (h = document.createElement("div")).className = "blank", this.grid.appendChild(h), 
-                    this.grid.appendChild(document.createElement("div"));
-                } else for (a = 0; a < this.top; a++) {
-                    var s = this.data[t][r][a].name, n = (100 * this.data[t][r][a].wr).toFixed(1) + "%", o = this.data[t][r][a].color, l = this.data[t][r][a].fontColor, h = document.createElement("div"), d = document.createElement("button"), c = document.createElement("span");
-                    c.className = "tooltipText", c.innerHTML = "R:" + r + " #" + (a + 1) + " " + s, 
-                    d.className = "archBtn tooltip", d.id = s, d.style.backgroundColor = o, d.style.color = l, 
-                    d.innerHTML = s, d.onclick = this.pressButton.bind(this), h.classList.add("winrate"), 
-                    h.innerHTML = n, this.grid.appendChild(d), this.grid.appendChild(h);
-                }
-            }
-        }
-    }, {
-        key: "plotTiers",
-        value: function(t) {
-            for (;this.grid.firstChild; ) this.grid.removeChild(this.grid.firstChild);
-            range(0, hsRanks)[0] = "L";
-            for (var e = "", i = 0; i < this.tiers.length; i++) e += "4fr 1fr ";
-            this.grid.style.gridTemplateColumns = e, this.grid.style.gridGap = "0.3rem";
-            var r = !0, a = !1, s = void 0;
+            var a = "1fr ", r = !0, i = !1, s = void 0;
             try {
-                for (var n, o = this.tiers[Symbol.iterator](); !(r = (n = o.next()).done); r = !0) {
-                    var l = n.value;
-                    (m = document.createElement("div")).className = "header columnTitle", m.innerHTML = l.name, 
-                    this.grid.appendChild(m);
+                for (var n, o = range(0, this.maxElementsPerRank)[Symbol.iterator](); !(r = (n = o.next()).done); r = !0) {
+                    n.value;
+                    a += "4fr 1fr ";
                 }
             } catch (t) {
-                a = !0, s = t;
+                i = !0, s = t;
             } finally {
                 try {
                     !r && o.return && o.return();
                 } finally {
-                    if (a) throw s;
+                    if (i) throw s;
                 }
             }
-            for (i = 0; i < this.maxTierElements; i++) {
-                var h = !0, d = !1, c = void 0;
+            this.grid.style.gridTemplateColumns = a, this.grid.style.gridGap = "0.1rem";
+            (f = document.createElement("div")).className = "header", f.innerHTML = "Rank", 
+            this.grid.appendChild(f);
+            for (var l = 0; l < this.maxElementsPerRank; l++) {
+                (f = document.createElement("div")).className = "header columnTitle", f.innerHTML = "Top " + (l + 1), 
+                this.grid.appendChild(f);
+            }
+            for (l = 0; l < hsRanks; l++) {
+                if ((f = document.createElement("div")).className = "pivot", f.innerHTML = e[l], 
+                this.grid.appendChild(f), this.rankData.rankSums[t][l] < this.minGames) for (var h = 0; h < this.maxElementsPerRank; h++) {
+                    (f = document.createElement("div")).className = "blank", this.grid.appendChild(f), 
+                    this.grid.appendChild(document.createElement("div"));
+                } else for (h = 0; h < this.maxElementsPerRank; h++) {
+                    var d = this.rankData[t][l][h].name, c = (100 * this.rankData[t][l][h].wr).toFixed(1) + "%", u = this.rankData[t][l][h].color, y = this.rankData[t][l][h].fontColor, f = document.createElement("div"), p = document.createElement("button"), v = document.createElement("span");
+                    v.className = "tooltipText", v.innerHTML = "R:" + l + " #" + (h + 1) + " " + d, 
+                    p.className = "archBtn tooltip", p.id = d, p.style.backgroundColor = u, p.style.color = y, 
+                    p.innerHTML = d, p.onclick = this.pressButton.bind(this), f.classList.add("winrate"), 
+                    f.innerHTML = c, this.grid.appendChild(p), this.grid.appendChild(f);
+                }
+            }
+        }
+    }, {
+        key: "plotBrackets",
+        value: function(t) {
+            for (;this.grid.firstChild; ) this.grid.removeChild(this.grid.firstChild);
+            range(0, hsRanks)[0] = "L";
+            var e = "", a = !0, r = !1, i = void 0;
+            try {
+                for (var s, n = this.rankBrackets[Symbol.iterator](); !(a = (s = n.next()).done); a = !0) {
+                    s.value;
+                    e += "4fr 1fr ";
+                }
+            } catch (t) {
+                r = !0, i = t;
+            } finally {
                 try {
-                    for (var u, y = this.tiers[Symbol.iterator](); !(h = (u = y.next()).done); h = !0) {
-                        l = u.value;
-                        if (!(this.tierData[t][l.name].length <= i)) {
-                            var f = this.tierData[t][l.name][i];
-                            if (l.games[t] <= this.minGames || void 0 == f) {
-                                (m = document.createElement("div")).className = "blank", this.grid.appendChild(m), 
-                                this.grid.appendChild(document.createElement("div"));
+                    !a && n.return && n.return();
+                } finally {
+                    if (r) throw i;
+                }
+            }
+            this.grid.style.gridTemplateColumns = e, this.grid.style.gridGap = "0.3rem";
+            var o = !0, l = !1, h = void 0;
+            try {
+                for (var d, c = this.rankBrackets[Symbol.iterator](); !(o = (d = c.next()).done); o = !0) {
+                    var u = d.value, y = document.createElement("div");
+                    y.className = "header columnTitle", y.innerHTML = u.name, this.grid.appendChild(y);
+                }
+            } catch (t) {
+                l = !0, h = t;
+            } finally {
+                try {
+                    !o && c.return && c.return();
+                } finally {
+                    if (l) throw h;
+                }
+            }
+            for (var f = 0; f < this.maxElementsPerBracket; f++) {
+                var p = !0, v = !1, m = void 0;
+                try {
+                    for (var b, k = this.rankBrackets[Symbol.iterator](); !(p = (b = k.next()).done); p = !0) {
+                        var w = b.value;
+                        if (!(this.bracketData[t][w.name].length <= f)) {
+                            var g = this.bracketData[t][w.name][f];
+                            if (w.games[t] <= this.minGames || void 0 == g) {
+                                var x = document.createElement("div");
+                                x.className = "blank", this.grid.appendChild(x), this.grid.appendChild(document.createElement("div"));
                             } else {
-                                var v = (100 * f.wr).toFixed(1) + "%", m = document.createElement("div"), p = document.createElement("button"), b = document.createElement("span");
-                                b.className = "tooltipText", b.innerHTML = "#" + (i + 1) + " " + f.name, p.className = "archBtn tooltip", 
-                                p.id = f.name, p.style.backgroundColor = f.color, p.style.color = f.fontColor, p.style.marginLeft = "0.5rem", 
-                                p.innerHTML = f.name, p.onclick = this.pressButton.bind(this), m.className = "winrate", 
-                                m.innerHTML = v, this.grid.appendChild(p), this.grid.appendChild(m);
+                                var L = (100 * g.wr).toFixed(1) + "%", C = document.createElement("div"), T = document.createElement("button"), S = document.createElement("span");
+                                S.className = "tooltipText", S.innerHTML = "#" + (f + 1) + " " + g.name, T.className = "archBtn tooltip", 
+                                T.id = g.name, T.style.backgroundColor = g.color, T.style.color = g.fontColor, T.style.marginLeft = "0.5rem", 
+                                T.innerHTML = g.name, T.onclick = this.pressButton.bind(this), C.className = "winrate", 
+                                C.innerHTML = L, this.grid.appendChild(T), this.grid.appendChild(C);
                             }
                         }
                     }
                 } catch (t) {
-                    d = !0, c = t;
+                    v = !0, m = t;
                 } finally {
                     try {
-                        !h && y.return && y.return();
+                        !p && k.return && k.return();
                     } finally {
-                        if (d) throw c;
+                        if (v) throw m;
                     }
                 }
             }
@@ -2594,21 +3007,21 @@ var DATABASE, powerWindow, decksWindow, tableWindow, ladderWindow, infoWindow, u
 }(), t0 = performance.now(), MOBILE = !1;
 
 window.onload = function() {
-    window.innerWidth <= 756 && (MOBILE = !0, console.log("mobile")), (ui = new UI()).showLoader(), 
-    setupFirebase();
+    window.innerWidth <= 756 && (MOBILE = !0, console.log("mobile")), app = new App();
 };
 
 var Table = function() {
-    function t(e, i, r, a, s) {
-        _classCallCheck(this, t), this.DATA = e, this.f = i, this.t = r, this.r = a, this.window = s, 
+    function t(e, a, r, i, s) {
+        _classCallCheck(this, t), this.DATA = e, this.f = a, this.t = r, this.r = i, this.window = s, 
         this.sortBy = "", this.numArch = this.window.numArch, this.bgColor = "transparent", 
         this.fontColor = "#22222", this.subplotRatio = .6, this.overallString = '<b style="font-size:130%">Overall</b>', 
         this.minGames = 20, this.whiteTile = .50000001, this.blackTile = .51;
-        this.colorScales = [ [ [ 0, "#a04608" ], [ .3, "#d65900" ], [ .5, "#FFFFFF" ], [ .7, "#00a2bc" ], [ 1, "#055c7a" ] ], [ [ 0, "#a04608" ], [ .3, "#d65900" ], [ .5, "#FFFFFF" ], [ .7, "#279e27" ], [ 1, "#28733d" ] ], [ [ 0, "#000" ], [ .3, "#222" ], [ .5, "#FFFFFF" ], [ .7, "#888" ], [ 1, "#999" ] ] ], 
+        if (this.colorScales = [ [ [ 0, "#a04608" ], [ .3, "#d65900" ], [ .5, "#FFFFFF" ], [ .7, "#00a2bc" ], [ 1, "#055c7a" ] ], [ [ 0, "#a04608" ], [ .3, "#d65900" ], [ .5, "#FFFFFF" ], [ .7, "#279e27" ], [ 1, "#28733d" ] ], [ [ 0, "#000" ], [ .3, "#222" ], [ .5, "#FFFFFF" ], [ .7, "#888" ], [ 1, "#999" ] ] ], 
         this.table = [], this.textTable = [], this.frequency = [], this.archetypes = [], 
-        this.classPlusArch = [], this.winrates = [], this.totGames = 0, this.download = "";
+        this.classPlusArch = [], this.winrates = [], this.totGames = 0, this.download = "", 
+        void 0 == e) return console.log("table no data:", this.f, this.t, this.r), void (this.numArch = 0);
         var n = e.frequency.slice(), o = e.table.slice(), l = e.archetypes.slice();
-        this.numArch > l.length && (this.numArch = l.length);
+        this.numArch = Math.min(this.numArch, l.length);
         var h = range(0, n.length);
         h.sort(function(t, e) {
             return n[t] > n[e] ? -1 : n[t] < n[e] ? 1 : 0;
@@ -2619,16 +3032,16 @@ var Table = function() {
             var c = h[d];
             this.frequency.push(n[c]), this.archetypes.push(l[c][1] + " " + l[c][0]), this.classPlusArch.push(l[c][0] + l[c][1]);
             for (var u = d; u < this.numArch; u++) {
-                var y = h[u], f = 0, v = 0, m = 0, p = o[c][y][0], b = o[c][y][1];
-                p + b > 0 && (v = p / (p + b));
-                var w = o[y][c][1], k = o[y][c][0];
-                w + k > 0 && (m = w / (w + k));
-                var g = p + w + b + k;
-                d == u ? (v = .5, m = .5, f = .5) : f = g < this.minGames ? .5 : p + b > 0 && w + k > 0 ? (v + m) / 2 : p + b == 0 ? m : v;
-                var x = l[c][1] + " " + l[c][0], T = l[y][1] + " " + l[y][0];
-                this.table[u][d] = 1 - f, this.table[d][u] = f, this.totGames += g, g >= this.minGames ? (this.textTable[d][u] = x + "<br><b>vs:</b> " + T + "<br><b>wr:</b>  " + (100 * f).toFixed(1) + "%  (" + g + ")", 
-                this.textTable[u][d] = T + "<br><b>vs:</b> " + x + "<br><b>wr:</b>  " + (100 * (1 - f)).toFixed(1) + "%  (" + g + ")") : (this.textTable[d][u] = x + "<br><b>vs:</b> " + T + "<br><b>wr:</b>  Not enough games", 
-                this.textTable[u][d] = T + "<br><b>vs:</b> " + x + "<br><b>wr:</b>  Not enough games");
+                var y = h[u], f = 0, p = 0, v = 0, m = o[c][y][0], b = o[c][y][1];
+                m + b > 0 && (p = m / (m + b));
+                var k = o[y][c][1], w = o[y][c][0];
+                k + w > 0 && (v = k / (k + w));
+                var g = m + k + b + w;
+                d == u ? (p = .5, v = .5, f = .5) : f = g < this.minGames ? .5 : m + b > 0 && k + w > 0 ? (p + v) / 2 : m + b == 0 ? v : p;
+                var x = l[c][1] + " " + l[c][0], L = l[y][1] + " " + l[y][0];
+                this.table[u][d] = 1 - f, this.table[d][u] = f, this.totGames += g, g >= this.minGames ? (this.textTable[d][u] = x + "<br><b>vs:</b> " + L + "<br><b>wr:</b>  " + (100 * f).toFixed(1) + "%  (" + g + ")", 
+                this.textTable[u][d] = L + "<br><b>vs:</b> " + x + "<br><b>wr:</b>  " + (100 * (1 - f)).toFixed(1) + "%  (" + g + ")") : (this.textTable[d][u] = x + "<br><b>vs:</b> " + L + "<br><b>wr:</b>  Not enough games", 
+                this.textTable[u][d] = L + "<br><b>vs:</b> " + x + "<br><b>wr:</b>  Not enough games");
             }
         }
         var C = 0;
@@ -2664,8 +3077,8 @@ var Table = function() {
                 b: 30,
                 t: 100
             },
-            width: MOBILE ? 2 * ui.width : this.window.width,
-            height: MOBILE ? .8 * ui.height : this.window.height,
+            width: MOBILE ? 2 * app.ui.width : this.window.width,
+            height: MOBILE ? .8 * app.ui.height : this.window.height,
             yaxis2: {
                 visible: !1,
                 showticklabels: !1,
@@ -2679,8 +3092,8 @@ var Table = function() {
         key: "getFreqPlotData",
         value: function(t, e) {
             t = this.frequency.slice();
-            for (var i = 0, r = [], a = 0; a < t.length; a++) i += t[a];
-            for (a = 0; a < t.length; a++) t[a] = t[a] / i, r.push("FR: " + (100 * t[a]).toFixed(1) + "%");
+            for (var a = 0, r = [], i = 0; i < t.length; i++) a += t[i];
+            for (i = 0; i < t.length; i++) t[i] = t[i] / a, r.push("FR: " + (100 * t[i]).toFixed(1) + "%");
             this.freqPlotData = {
                 x: [ this.archetypes ],
                 y: [ t ],
@@ -2696,12 +3109,12 @@ var Table = function() {
         key: "plot",
         value: function() {
             "" != this.sortBy && this.sortBy == this.window.sortBy || this.sortTableBy(this.window.sortBy, !1);
-            for (var t = this.winrates, e = this.table.concat([ t ]), i = this.archetypes.concat([ this.overallString ]), r = [], a = 0; a < e[0].length; a++) r.push(this.archetypes[a] + "<br>Overall wr: " + (100 * t[a]).toFixed(1) + "%");
+            for (var t = this.winrates, e = this.table.concat([ t ]), a = this.archetypes.concat([ this.overallString ]), r = [], i = 0; i < e[0].length; i++) r.push(this.archetypes[i] + "<br>Overall wr: " + (100 * t[i]).toFixed(1) + "%");
             var s = this.textTable.concat([ r ]), n = [ {
                 type: "heatmap",
                 z: e,
                 x: this.archetypes,
-                y: i,
+                y: a,
                 text: s,
                 hoverinfo: "text",
                 colorscale: this.colorScales[MU_COLOR_IDX],
@@ -2740,25 +3153,26 @@ var Table = function() {
             var e;
             if (e = -1 == t || t >= this.numArch ? this.winrates.slice() : this.table[t].slice(), 
             !(t > this.numArch)) {
-                for (var i = [], r = 0; r < e.length; r++) i.push("WR: " + (100 * e[r]).toFixed(1) + "%"), 
+                for (var a = [], r = 0; r < e.length; r++) a.push("WR: " + (100 * e[r]).toFixed(1) + "%"), 
                 e[r] -= .5;
-                var a = {
+                var i = {
                     type: "bar",
                     x: [ this.archetypes ],
                     y: [ e ],
-                    text: [ i ],
+                    text: [ a ],
                     visible: !0,
                     hoverinfo: "text",
                     marker: {
                         color: "#222"
                     }
                 };
-                Plotly.restyle("chart2", a, 2);
+                Plotly.restyle("chart2", i, 2);
             }
         }
     }, {
         key: "zoomToggle",
         value: function(t) {
+            console.log("click");
             var e = t.points[0].y;
             0 == this.window.zoomIn ? this.zoomIn(e) : this.zoomOut();
         }
@@ -2767,7 +3181,7 @@ var Table = function() {
         value: function(t) {
             var e = this.archetypes.indexOf(t);
             if (t == this.overallString && (e = this.numArch), -1 != e) {
-                var i = {
+                var a = {
                     yaxis: {
                         range: [ e - .5, e + .5 ],
                         fixedrange: !0,
@@ -2780,7 +3194,7 @@ var Table = function() {
                         fixedrange: !0
                     }
                 };
-                Plotly.relayout("chart2", i), this.subPlotFR(), this.subPlotWR(e);
+                Plotly.relayout("chart2", a), this.subPlotFR(), this.subPlotWR(e);
                 var r = document.querySelector("#tableWindow #matchup");
                 document.querySelector("#tableWindow #winrate");
                 r.style.display = "inline-block", t == this.overallString && (r.style.display = "none"), 
@@ -2806,29 +3220,55 @@ var Table = function() {
             Plotly.relayout("chart2", t), Plotly.restyle("chart2", {
                 visible: !1
             }, [ 1, 2 ]);
-            var e = document.querySelector("#tableWindow #matchup"), i = document.querySelector("#tableWindow #winrate");
-            e.style.display = "none", i.style.display = "inline-block", this.window.zoomIn = !1;
+            var e = document.querySelector("#tableWindow #matchup"), a = document.querySelector("#tableWindow #winrate");
+            e.style.display = "none", a.style.display = "inline-block", this.window.zoomIn = !1;
         }
     }, {
         key: "sortTableBy",
         value: function(t) {
-            var e = !(arguments.length > 1 && void 0 !== arguments[1]) || arguments[1], i = this;
+            var e = !(arguments.length > 1 && void 0 !== arguments[1]) || arguments[1];
             if (this.sortBy != t || this.window.zoomIn) {
-                var r = range(0, this.numArch), a = this.archetypes.indexOf(this.window.zoomArch);
-                "winrate" == t && r.sort(function(t, e) {
+                var a = range(0, this.numArch), r = this.archetypes.indexOf(this.window.zoomArch), i = this;
+                "winrate" == t && a.sort(function(t, e) {
                     return i.winrates[t] > i.winrates[e] ? -1 : i.winrates[t] < i.winrates[e] ? 1 : 0;
-                }), "matchup" == t && r.sort(function(t, e) {
-                    return i.table[a][t] > i.table[a][e] ? -1 : i.table[a][t] < i.table[a][e] ? 1 : 0;
-                }), "frequency" == t && r.sort(function(t, e) {
+                }), "matchup" == t && a.sort(function(t, e) {
+                    return i.table[r][t] > i.table[r][e] ? -1 : i.table[r][t] < i.table[r][e] ? 1 : 0;
+                }), "frequency" == t && a.sort(function(t, e) {
                     return i.frequency[t] > i.frequency[e] ? -1 : i.frequency[t] < i.frequency[e] ? 1 : 0;
-                }), "class" == t && r.sort(function(t, e) {
+                }), "class" == t && a.sort(function(t, e) {
                     return i.classPlusArch[t] < i.classPlusArch[e] ? -1 : i.classPlusArch[t] > i.classPlusArch[e] ? 1 : 0;
                 });
-                for (var s = [], n = [], o = [], l = [], h = [], d = [], c = 0; c < i.numArch; c++) {
-                    var u = r[c];
-                    d.push(i.classPlusArch[u]), o.push(i.archetypes[u]), l.push(i.frequency[u]), h.push(i.winrates[u]);
-                    for (var y = [], f = [], v = 0; v < i.numArch; v++) y.push(i.table[u][r[v]]), f.push(i.textTable[u][r[v]]);
-                    s.push(y), n.push(f);
+                var s = [], n = [], o = [], l = [], h = [], d = [], c = !0, u = !1, y = void 0;
+                try {
+                    for (var f, p = range(0, this.numArch)[Symbol.iterator](); !(c = (f = p.next()).done); c = !0) {
+                        var v = a[f.value];
+                        d.push(this.classPlusArch[v]), o.push(this.archetypes[v]), l.push(this.frequency[v]), 
+                        h.push(this.winrates[v]);
+                        var m = [], b = [], k = !0, w = !1, g = void 0;
+                        try {
+                            for (var x, L = range(0, this.numArch)[Symbol.iterator](); !(k = (x = L.next()).done); k = !0) {
+                                var C = x.value;
+                                m.push(this.table[v][a[C]]), b.push(this.textTable[v][a[C]]);
+                            }
+                        } catch (t) {
+                            w = !0, g = t;
+                        } finally {
+                            try {
+                                !k && L.return && L.return();
+                            } finally {
+                                if (w) throw g;
+                            }
+                        }
+                        s.push(m), n.push(b);
+                    }
+                } catch (t) {
+                    u = !0, y = t;
+                } finally {
+                    try {
+                        !c && p.return && p.return();
+                    } finally {
+                        if (u) throw y;
+                    }
                 }
                 this.table = s, this.textTable = n, this.archetypes = o, this.classPlusArch = d, 
                 this.frequency = l, this.winrates = h, this.sortBy = t, this.window.sortBy = t, 
@@ -2848,14 +3288,16 @@ var Table = function() {
             }
             this.download += "Overall%2C";
             for (t = 0; t < this.numArch; t++) this.download += this.winrates[t] + "%2C";
-            var i = document.createElement("a");
-            i.setAttribute("href", "data:text/plain;charset=utf-8," + this.download), i.setAttribute("download", "matchupTable.csv"), 
-            i.style.display = "none", document.body.appendChild(i), i.click(), document.body.removeChild(i);
+            this.download += "Frequency%2C";
+            for (t = 0; t < this.numArch; t++) this.download += this.freqPlotData.y[t] + "%2C";
+            var a = document.createElement("a");
+            a.setAttribute("href", "data:text/plain;charset=utf-8," + this.download), a.setAttribute("download", "matchupTable.csv"), 
+            a.style.display = "none", document.body.appendChild(a), a.click(), document.body.removeChild(a);
         }
     }, {
         key: "getAnnotations",
         value: function() {
-            for (var t = ui.width >= 900 ? 1 : 0, e = {
+            for (var t = app.ui.width >= 900 ? 1 : 0, e = {
                 x: [],
                 y: [],
                 mode: "text",
@@ -2865,35 +3307,27 @@ var Table = function() {
                     size: 8
                 },
                 hoverinfo: "none"
-            }, i = 0; i < this.numArch; i++) {
-                e.x.push(this.archetypes[i]), e.y.push(this.overallString), e.text.push((100 * this.winrates[i]).toFixed(t) + "%");
-                for (var r = 0; r < this.numArch; r++) e.x.push(this.archetypes[i]), e.y.push(this.archetypes[r]), 
-                e.text.push((100 * this.table[r][i]).toFixed(t) + "%");
+            }, a = 0; a < this.numArch; a++) {
+                e.x.push(this.archetypes[a]), e.y.push(this.overallString), e.text.push((100 * this.winrates[a]).toFixed(t) + "%");
+                for (var r = 0; r < this.numArch; r++) e.x.push(this.archetypes[a]), e.y.push(this.archetypes[r]), 
+                e.text.push((100 * this.table[r][a]).toFixed(t) + "%");
             }
             return e;
         }
     }, {
-        key: "getWr",
-        value: function(t) {
-            var e = this.freqPlotData, i = e.x[0], r = e.y[0], a = i.indexOf(t);
-            if (a < 0) return 0;
-            for (var s = this.table, n = 0, o = 0; o < i.length; o++) n += s[a][o] * r[o];
-            return n;
-        }
-    }, {
         key: "equilibrium",
         value: function() {
-            ui.showLoader();
-            var t = this.freqPlotData, e = t.x[0], i = t.y[0], r = 0, a = !0, s = !1, n = void 0;
+            app.ui.showLoader(), this.window.mode = "equilibrium";
+            var t = this.freqPlotData, e = t.x[0], a = t.y[0], r = 0, i = !0, s = !1, n = void 0;
             try {
-                for (var o, l = i[Symbol.iterator](); !(a = (o = l.next()).done); a = !0) {
+                for (var o, l = a[Symbol.iterator](); !(i = (o = l.next()).done); i = !0) {
                     r += o.value;
                 }
             } catch (t) {
                 s = !0, n = t;
             } finally {
                 try {
-                    !a && l.return && l.return();
+                    !i && l.return && l.return();
                 } finally {
                     if (s) throw n;
                 }
@@ -2918,18 +3352,18 @@ var Table = function() {
                 idx: u,
                 itt: 0,
                 name: e[u],
-                fr: i[u] / r,
+                fr: a[u] / r,
                 trace: [],
                 wr: .5
             });
             for (var y = 0; y < 5e4; y++) this.eq_wr(c, h), this.eq_fr(c);
-            for (var f = [], v = 0; v < c.length; v++) {
-                var m = c[v], p = ladderWindow.getArchColor(null, m.name, this.f).color, b = {
-                    name: m.name,
+            for (var f = [], p = 0; p < c.length; p++) {
+                var v = c[p], m = app.ui.getArchColor(null, v.name, this.f).color, b = {
+                    name: v.name,
                     x: range(0, 5e4),
-                    y: m.trace,
+                    y: v.trace,
                     fill: "tonexty",
-                    fillcolor: p,
+                    fillcolor: m,
                     type: "scatter",
                     mode: "none",
                     marker: {
@@ -2941,20 +3375,20 @@ var Table = function() {
                 };
                 f.push(b);
             }
-            Plotly.newPlot("chart2", this.stackedArea(f), d), ui.hideLoader();
+            Plotly.newPlot("chart2", this.stackedArea(f), d), app.ui.hideLoader();
         }
     }, {
         key: "stackedArea",
         value: function(t) {
-            for (var e = 1; e < t.length; e++) for (var i = 0; i < Math.min(t[e].y.length, t[e - 1].y.length); i++) t[e].y[i] += t[e - 1].y[i];
+            for (var e = 1; e < t.length; e++) for (var a = 0; a < Math.min(t[e].y.length, t[e - 1].y.length); a++) t[e].y[a] += t[e - 1].y[a];
             return t;
         }
     }, {
         key: "eq_wr",
         value: function(t, e) {
-            for (var i = 0; i < t.length; i++) {
-                t[i].wr = 0;
-                for (var r = 0; r < t.length; r++) t[i].wr += e[i][r] * t[r].fr;
+            for (var a = 0; a < t.length; a++) {
+                t[a].wr = 0;
+                for (var r = 0; r < t.length; r++) t[a].wr += e[a][r] * t[r].fr;
             }
         }
     }, {
@@ -2964,12 +3398,12 @@ var Table = function() {
                 return t.wr < e.wr ? -1 : t.wr > e.wr ? 1 : 0;
             });
             for (var e = 0; e < t.length; e++) t[e].trace.push(t[e].fr);
-            for (var i = 0; i < t.length; i++) {
-                var r = t[i];
+            for (var a = 0; a < t.length; a++) {
+                var r = t[a];
                 if (!(r.wr > .5)) {
-                    var a = r.fr * (.5 - r.wr) * .1;
-                    a = r.fr - a >= 1e-4 ? a : r.fr - 1e-4, r.fr -= a;
-                    for (var s = a / (t.length - i - 1), n = i + 1; n < t.length; n++) t[n].fr += s;
+                    var i = r.fr * (.5 - r.wr) * .1;
+                    i = r.fr - i >= 1e-4 ? i : r.fr - 1e-4, r.fr -= i;
+                    for (var s = i / (t.length - a - 1), n = a + 1; n < t.length; n++) t[n].fr += s;
                 }
             }
             t.sort(function(t, e) {
@@ -2978,152 +3412,165 @@ var Table = function() {
         }
     } ]), t;
 }(), TableWindow = function() {
-    function t(e, i, r, a) {
-        _classCallCheck(this, t), this.firebasePath = PREMIUM ? "premiumData/tableData" : "data/tableData", 
-        this.window = document.querySelector("#ladderWindow"), this.optionButtons = document.querySelectorAll("#tableWindow .optionBtn"), 
-        this.questionBtn = document.querySelector("#tableWindow .question"), this.overlayDiv = document.querySelector("#tableWindow .overlay"), 
-        this.overlayP = document.querySelector("#tableWindow .overlayText"), this.nrGamesP = document.querySelector("#tableWindow .nrGames"), 
-        this.nrGamesBtn = document.querySelector("#tableWindow .content-header #nrGames"), 
-        this.data = {}, this.hsFormats = e, this.hsTimes = i, this.ranks = r, this.sortOptions = a, 
+    function t(e) {
+        _classCallCheck(this, t), this.div = document.querySelector("#tableWindow"), this.tab = document.querySelector("#table.tab"), 
+        this.optionButtons = document.querySelectorAll("#tableWindow .optionBtn"), this.questionBtn = document.querySelector("#tableWindow .question"), 
+        this.overlayDiv = document.querySelector("#tableWindow .overlay"), this.overlayP = document.querySelector("#tableWindow .overlayText"), 
+        this.nrGamesP = document.querySelector("#tableWindow .nrGames"), this.nrGamesBtn = document.querySelector("#tableWindow .content-header #showNumbers"), 
+        this.firebasePath = PREMIUM ? "premiumData/tableData" : "data/tableData", this.data = {}, 
+        this.mode = "matchup", this.hsFormats = hsFormats, this.hsTimes = PREMIUM ? table_times_premium : table_times, 
+        this.ranks = PREMIUM ? table_ranks_premium : table_ranks, this.sortOptions = PREMIUM ? table_sortOptions_premium : table_sortOptions, 
         this.numArch = 16, this.annotated = !1, this.nrGames = 0, this.colorTheme = 0, this.overlayText = "\n            Here you can see how your deck on the left hand side performs against any other deck on the top. \n            The colors range  from favorable <span class='blue'>blue</span> to unfavorable <span class='red'>red</span>.<br><br>\n            The matchup table lists the top " + this.numArch + " most frequent decks within the selected time and rank brackets.<br><br>\n            The hover info lists the number of games recorded for that specific matchup in the (parenthesis).<br><br>\n            The 'Overall' line at the bottom shows the overall winrate of the opposing decks in the specified time and rank bracket.<br><br>\n            Sorting the table displays the most frequent/ highest winrate deck in the top left. Changing the format, time or rank brackets automatically sorts the table.<br><br>\n            <img src='Images/muSort.png'></img>\n            \n            <br><br><br><br>\n            Click on a matchup to 'zoom in'. Click again to 'zoom out'.<br><br>\n            In the zoomed in view you see only one deck on the left side.<br><br>\n            Additionally there are 2 subplots displaying the frequency of the opposing decks (brown line chart) and the specific matchup as black bar charts.<br><br>\n            Changing any parameter (Format, time, rank, sorting) keeps you zoomed into the same archetype if possible.<br><br>\n            You can additionally sort 'by Matchup' while zoomed in.<br><br>\n        ", 
         this.width = document.querySelector(".main-wrapper").offsetWidth - 40, this.height = .94 * document.querySelector("#ladderWindow .content").offsetHeight, 
         this.f = this.hsFormats[0], this.t = "last2Weeks", this.r = this.ranks[0], this.sortBy = this.sortOptions[0], 
         PREMIUM && (this.zoomIn = !1, this.zoomArch = null), this.fullyLoaded = !1, this.overlay = !1, 
         this.minGames = 1e3;
-        var s = !0, n = !1, o = void 0;
+        var a = !0, r = !1, i = void 0;
         try {
-            for (var l, h = this.hsFormats[Symbol.iterator](); !(s = (l = h.next()).done); s = !0) {
-                var d = l.value;
-                this.data[d] = {};
-                var c = !0, u = !1, y = void 0;
+            for (var s, n = this.hsFormats[Symbol.iterator](); !(a = (s = n.next()).done); a = !0) {
+                var o = s.value;
+                this.data[o] = {
+                    fullyLoaded: !1
+                };
+                var l = !0, h = !1, d = void 0;
                 try {
-                    for (var f, v = this.hsTimes[Symbol.iterator](); !(c = (f = v.next()).done); c = !0) {
-                        var m = f.value;
-                        this.data[d][m] = {};
-                        var p = !0, b = !1, w = void 0;
+                    for (var c, u = this.hsTimes[Symbol.iterator](); !(l = (c = u.next()).done); l = !0) {
+                        var y = c.value;
+                        this.data[o][y] = {};
+                        var f = !0, p = !1, v = void 0;
                         try {
-                            for (var k, g = this.ranks[Symbol.iterator](); !(p = (k = g.next()).done); p = !0) {
-                                var x = k.value;
-                                this.data[d][m][x] = null;
+                            for (var m, b = this.ranks[Symbol.iterator](); !(f = (m = b.next()).done); f = !0) {
+                                var k = m.value;
+                                this.data[o][y][k] = null;
                             }
                         } catch (t) {
-                            b = !0, w = t;
+                            p = !0, v = t;
                         } finally {
                             try {
-                                !p && g.return && g.return();
+                                !f && b.return && b.return();
                             } finally {
-                                if (b) throw w;
+                                if (p) throw v;
                             }
                         }
                     }
                 } catch (t) {
-                    u = !0, y = t;
+                    h = !0, d = t;
                 } finally {
                     try {
-                        !c && v.return && v.return();
+                        !l && u.return && u.return();
                     } finally {
-                        if (u) throw y;
+                        if (h) throw d;
                     }
                 }
             }
         } catch (t) {
-            n = !0, o = t;
+            r = !0, i = t;
         } finally {
             try {
-                !s && h.return && h.return();
+                !a && n.return && n.return();
             } finally {
-                if (n) throw o;
+                if (r) throw i;
             }
         }
-        this.loadData(), this.setupUI();
+        this.loadData("Standard", e), this.setupUI();
     }
     return _createClass(t, [ {
         key: "setupUI",
         value: function() {
-            document.querySelector("#tableWindow .content-header #formatFolder .dropdown").innerHTML = "";
-            var t = !0, e = !1, i = void 0;
+            this.dropdownFolders = {
+                format: document.querySelector("#tableWindow .content-header #formatFolder .dropdown"),
+                time: document.querySelector("#tableWindow .content-header #timeFolder .dropdown"),
+                rank: document.querySelector("#tableWindow .content-header #rankFolder .dropdown"),
+                sort: document.querySelector("#tableWindow .content-header #sortFolder .dropdown")
+            };
+            var t = function(t) {
+                var e = t.toElement || t.relatedTarget;
+                e.parentNode != this && e != this && this.classList.add("hidden");
+            };
+            for (var e in this.dropdownFolders) {
+                var a = this.dropdownFolders[e];
+                a.innerHTML = "", a.onmouseout = t, console.log(a);
+            }
+            var r = !0, i = !1, s = void 0;
             try {
-                for (var r, a = this.hsFormats[Symbol.iterator](); !(t = (r = a.next()).done); t = !0) {
-                    var s = r.value;
-                    (C = document.createElement("button")).innerHTML = btnIdToText[s], C.id = s, C.className = "folderBtn optionBtn";
-                    var n = function(t) {
-                        this.f = t.target.id, this.plot(), this.renderOptions();
+                for (var n, o = this.hsFormats[Symbol.iterator](); !(r = (n = o.next()).done); r = !0) {
+                    var l = n.value;
+                    (D = document.createElement("button")).innerHTML = btnIdToText[l], D.id = l, D.className = "folderBtn optionBtn";
+                    var h = function(t) {
+                        this.f = t.target.id, this.plot();
                     };
-                    C.onclick = n.bind(this), document.querySelector("#tableWindow .content-header #formatFolder .dropdown").appendChild(C);
+                    D.onclick = h.bind(this), this.dropdownFolders.format.appendChild(D);
                 }
             } catch (t) {
-                e = !0, i = t;
+                i = !0, s = t;
             } finally {
                 try {
-                    !t && a.return && a.return();
+                    !r && o.return && o.return();
                 } finally {
-                    if (e) throw i;
+                    if (i) throw s;
                 }
             }
-            document.querySelector("#tableWindow .content-header #timeFolder .dropdown").innerHTML = "";
-            var o = !0, l = !1, h = void 0;
+            var d = !0, c = !1, u = void 0;
             try {
-                for (var d, c = this.hsTimes[Symbol.iterator](); !(o = (d = c.next()).done); o = !0) {
-                    var u = d.value;
-                    (C = document.createElement("button")).innerHTML = btnIdToText[u], C.id = u, C.className = "folderBtn optionBtn";
-                    n = function(t) {
-                        this.t = t.target.id, this.plot(), this.renderOptions();
+                for (var y, f = this.hsTimes[Symbol.iterator](); !(d = (y = f.next()).done); d = !0) {
+                    var p = y.value;
+                    (D = document.createElement("button")).innerHTML = btnIdToText[p], D.id = p, D.className = "folderBtn optionBtn";
+                    h = function(t) {
+                        this.t = t.target.id, this.plot();
                     };
-                    C.onclick = n.bind(this), document.querySelector("#tableWindow .content-header #timeFolder .dropdown").appendChild(C);
+                    D.onclick = h.bind(this), this.dropdownFolders.time.appendChild(D);
                 }
             } catch (t) {
-                l = !0, h = t;
+                c = !0, u = t;
             } finally {
                 try {
-                    !o && c.return && c.return();
+                    !d && f.return && f.return();
                 } finally {
-                    if (l) throw h;
+                    if (c) throw u;
                 }
             }
-            document.querySelector("#tableWindow .content-header #rankFolder .dropdown").innerHTML = "";
-            var y = !0, f = !1, v = void 0;
+            var v = !0, m = !1, b = void 0;
             try {
-                for (var m, p = this.ranks[Symbol.iterator](); !(y = (m = p.next()).done); y = !0) {
-                    var b = m.value;
-                    (C = document.createElement("button")).innerHTML = btnIdToText[b], C.id = b, C.className = "folderBtn optionBtn";
-                    n = function(t) {
-                        this.r = t.target.id, this.plot(), this.renderOptions();
+                for (var k, w = this.ranks[Symbol.iterator](); !(v = (k = w.next()).done); v = !0) {
+                    var g = k.value;
+                    (D = document.createElement("button")).innerHTML = btnIdToText[g], D.id = g, D.className = "folderBtn optionBtn";
+                    h = function(t) {
+                        this.r = t.target.id, this.plot();
                     };
-                    C.onclick = n.bind(this), document.querySelector("#tableWindow .content-header #rankFolder .dropdown").appendChild(C);
+                    D.onclick = h.bind(this), this.dropdownFolders.rank.appendChild(D);
                 }
             } catch (t) {
-                f = !0, v = t;
+                m = !0, b = t;
             } finally {
                 try {
-                    !y && p.return && p.return();
+                    !v && w.return && w.return();
                 } finally {
-                    if (f) throw v;
+                    if (m) throw b;
                 }
             }
-            document.querySelector("#tableWindow .content-header #sortFolder .dropdown").innerHTML = "";
-            var w = !0, k = !1, g = void 0;
+            var x = !0, L = !1, C = void 0;
             try {
-                for (var x, T = this.sortOptions[Symbol.iterator](); !(w = (x = T.next()).done); w = !0) {
-                    var C, L = x.value;
-                    (C = document.createElement("button")).innerHTML = btnIdToText[L], C.id = L, C.className = "folderBtn optionBtn";
-                    n = function(t) {
+                for (var T, S = this.sortOptions[Symbol.iterator](); !(x = (T = S.next()).done); x = !0) {
+                    var D, B = T.value;
+                    (D = document.createElement("button")).innerHTML = btnIdToText[B], D.id = B, D.className = "folderBtn optionBtn";
+                    h = function(t) {
                         this.sortBy = t.target.id, this.data[this.f][this.t][this.r].sortTableBy(this.sortBy), 
                         this.renderOptions();
                     };
-                    C.onclick = n.bind(this), document.querySelector("#tableWindow .content-header #sortFolder .dropdown").appendChild(C);
+                    D.onclick = h.bind(this), this.dropdownFolders.sort.appendChild(D);
                 }
             } catch (t) {
-                k = !0, g = t;
+                L = !0, C = t;
             } finally {
                 try {
-                    !w && T.return && T.return();
+                    !x && S.return && S.return();
                 } finally {
-                    if (k) throw g;
+                    if (L) throw C;
                 }
             }
             this.questionBtn.addEventListener("click", this.toggleOverlay.bind(this)), this.overlayDiv.addEventListener("click", this.toggleOverlay.bind(this)), 
             this.nrGamesBtn.onclick = this.annotate.bind(this);
-            if (document.querySelector("#tableWindow .changeColorBtn").addEventListener("click", function() {
+            if (document.querySelector("#tableWindow #changeColor").addEventListener("click", function() {
                 this.updateColorTheme();
             }.bind(this)), PREMIUM) {
                 document.querySelector("#tableWindow .equilibriumBtn").addEventListener("click", function() {
@@ -3135,9 +3582,25 @@ var Table = function() {
             }
         }
     }, {
+        key: "display",
+        value: function(t) {
+            t ? (this.div.style.display = "inline-block", this.f = app.path.hsFormat, this.plot()) : (this.div.style.display = "none", 
+            app.path.hsFormat = this.f);
+        }
+    }, {
+        key: "checkLoadData",
+        value: function(t) {
+            return this.data[this.f].fullyLoaded ? void 0 == t || t.apply(this) : void 0 != t && void this.loadData(this.f, t);
+        }
+    }, {
         key: "plot",
         value: function() {
-            this.fullyLoaded && this.data[this.f][this.t][this.r].plot();
+            if (this.fullyLoaded) {
+                if (!this.checkLoadData()) return this.renderOptions(), this.checkLoadData(function(t) {
+                    app.ui.tableWindow.plot();
+                });
+                this.data[this.f][this.t][this.r].plot(), this.renderOptions();
+            }
         }
     }, {
         key: "annotate",
@@ -3157,77 +3620,64 @@ var Table = function() {
             document.querySelector("#tableWindow #timeBtn").innerHTML = MOBILE ? btnIdToText_m[this.t] : btnIdToText[this.t], 
             document.querySelector("#tableWindow #ranksBtn").innerHTML = MOBILE ? btnIdToText_m[this.r] : btnIdToText[this.r], 
             document.querySelector("#tableWindow #sortBtn").innerHTML = MOBILE ? btnIdToText_m[this.sortBy] : btnIdToText[this.sortBy];
-            var t = !0, e = !1, i = void 0;
+            var t = !0, e = !1, a = void 0;
             try {
-                for (var r, a = this.hsTimes[Symbol.iterator](); !(t = (r = a.next()).done); t = !0) {
+                for (var r, i = this.hsTimes[Symbol.iterator](); !(t = (r = i.next()).done); t = !0) {
                     var s = r.value;
                     this.data[this.f][s].ranks_all.totGames < this.minGames && (document.querySelector("#tableWindow .content-header #timeFolder #" + s).style.display = "none");
                 }
             } catch (t) {
-                e = !0, i = t;
+                e = !0, a = t;
             } finally {
                 try {
-                    !t && a.return && a.return();
+                    !t && i.return && i.return();
                 } finally {
-                    if (e) throw i;
+                    if (e) throw a;
                 }
             }
         }
     }, {
         key: "loadData",
-        value: function() {
-            DATABASE.ref(this.firebasePath).on("value", this.readData.bind(this), function(t) {
+        value: function(t, e) {
+            app.fb_db.ref(this.firebasePath + "/" + t).on("value", function(a) {
+                this.readData(a, t, e);
+            }.bind(this), function(t) {
                 return console.log("Could not load Table Data", t);
             });
         }
     }, {
         key: "readData",
-        value: function(t) {
-            if (!this.fullyLoaded) {
-                var e = t.val(), i = !0, r = !1, a = void 0;
-                try {
-                    for (var s, n = this.hsFormats[Symbol.iterator](); !(i = (s = n.next()).done); i = !0) {
-                        var o = s.value, l = !0, h = !1, d = void 0;
+        value: function(t, e, a) {
+            var r = t.val(), i = !0, s = !1, n = void 0;
+            try {
+                for (var o, l = this.hsTimes[Symbol.iterator](); !(i = (o = l.next()).done); i = !0) {
+                    var h = o.value, d = !0, c = !1, u = void 0;
+                    try {
+                        for (var y, f = this.ranks[Symbol.iterator](); !(d = (y = f.next()).done); d = !0) {
+                            var p = y.value;
+                            this.data[e][h][p] = new Table(r[h][p], e, h, p, this);
+                        }
+                    } catch (t) {
+                        c = !0, u = t;
+                    } finally {
                         try {
-                            for (var c, u = this.hsTimes[Symbol.iterator](); !(l = (c = u.next()).done); l = !0) {
-                                var y = c.value, f = !0, v = !1, m = void 0;
-                                try {
-                                    for (var p, b = this.ranks[Symbol.iterator](); !(f = (p = b.next()).done); f = !0) {
-                                        var w = p.value;
-                                        this.data[o][y][w] = new Table(e[o][y][w], o, y, w, this);
-                                    }
-                                } catch (t) {
-                                    v = !0, m = t;
-                                } finally {
-                                    try {
-                                        !f && b.return && b.return();
-                                    } finally {
-                                        if (v) throw m;
-                                    }
-                                }
-                            }
-                        } catch (t) {
-                            h = !0, d = t;
+                            !d && f.return && f.return();
                         } finally {
-                            try {
-                                !l && u.return && u.return();
-                            } finally {
-                                if (h) throw d;
-                            }
+                            if (c) throw u;
                         }
                     }
-                } catch (t) {
-                    r = !0, a = t;
-                } finally {
-                    try {
-                        !i && n.return && n.return();
-                    } finally {
-                        if (r) throw a;
-                    }
                 }
-                this.fullyLoaded = !0, console.log("table loaded: " + (performance.now() - t0).toFixed(2) + " ms"), 
-                this.renderOptions(), finishedLoading();
+            } catch (t) {
+                s = !0, n = t;
+            } finally {
+                try {
+                    !i && l.return && l.return();
+                } finally {
+                    if (s) throw n;
+                }
             }
+            this.fullyLoaded = !0, this.data[e].fullyLoaded = !0, console.log("table loaded: " + (performance.now() - t0).toFixed(2) + " ms"), 
+            this.renderOptions(), a.apply(this);
         }
     }, {
         key: "toggleOverlay",
@@ -3249,30 +3699,48 @@ var Table = function() {
 }(), UI = function() {
     function t() {
         _classCallCheck(this, t), this.tabs = document.querySelectorAll("button.tab"), this.mobileBtns = document.querySelectorAll("button.mobileBtn"), 
-        this.windows = document.querySelectorAll(".tabWindow"), this.folderButtons = document.querySelectorAll(".folder-toggle"), 
+        this.windowTabs = document.querySelectorAll(".tabWindow"), this.folderButtons = document.querySelectorAll(".folder-toggle"), 
         this.loader = document.getElementById("loader"), this.logo = document.querySelector("#vsLogoDiv"), 
-        this.refresh = document.querySelector(".refreshArrow"), this.overlayText = document.querySelector("#overlay .overlayText"), 
-        this.infoWindow = document.querySelector("#infoWindow .content .infoText"), this.getWindowSize(), 
-        this.tabIdx = 0, this.activeTab = this.tabs[0], this.activeWindow = document.querySelector("#ladderWindow"), 
-        this.openFolder = null, this.overlay = !1, this.loggedIn = !1;
-        var e = !0, i = !1, r = void 0;
+        this.overlayText = document.querySelector("#overlay .overlayText");
+        var e = !0, a = !1, r = void 0;
         try {
-            for (var a, s = this.tabs[Symbol.iterator](); !(e = (a = s.next()).done); e = !0) {
-                a.value.addEventListener("click", this.toggleTabs.bind(this));
+            for (var i, s = this.windowTabs[Symbol.iterator](); !(e = (i = s.next()).done); e = !0) {
+                i.value.style.display = "none";
             }
         } catch (t) {
-            i = !0, r = t;
+            a = !0, r = t;
         } finally {
             try {
                 !e && s.return && s.return();
             } finally {
-                if (i) throw r;
+                if (a) throw r;
             }
         }
+        this.windowTabs[0].style.display = "inline-block", this.getWindowSize(), this.tabIdx = 0, 
+        this.openFolder = null, this.overlay = !1, this.decksWindow = null, this.tableWindow = null, 
+        this.ladderWindow = null, this.powerWindow = null, this.infoWindow = null, this.archetypeColors = {};
         var n = !0, o = !1, l = void 0;
         try {
-            for (var h, d = this.folderButtons[Symbol.iterator](); !(n = (h = d.next()).done); n = !0) {
-                h.value.addEventListener("click", this.toggleDropDown.bind(this));
+            for (var h, d = hsFormats[Symbol.iterator](); !(n = (h = d.next()).done); n = !0) {
+                var c = h.value;
+                this.archetypeColors[c] = {};
+                var u = !0, y = !1, f = void 0;
+                try {
+                    for (var p, v = hsClasses[Symbol.iterator](); !(u = (p = v.next()).done); u = !0) {
+                        var m = p.value;
+                        this.archetypeColors[c][m] = {
+                            count: 0
+                        };
+                    }
+                } catch (t) {
+                    y = !0, f = t;
+                } finally {
+                    try {
+                        !u && v.return && v.return();
+                    } finally {
+                        if (y) throw f;
+                    }
+                }
             }
         } catch (t) {
             o = !0, l = t;
@@ -3283,30 +3751,92 @@ var Table = function() {
                 if (o) throw l;
             }
         }
-        if (MOBILE) {
-            var c = !0, u = !1, y = void 0;
+        var b = !0, k = !1, w = void 0;
+        try {
+            for (var g, x = this.tabs[Symbol.iterator](); !(b = (g = x.next()).done); b = !0) {
+                g.value.addEventListener("click", this.toggleTabs.bind(this));
+            }
+        } catch (t) {
+            k = !0, w = t;
+        } finally {
             try {
-                for (var f, v = this.mobileBtns[Symbol.iterator](); !(c = (f = v.next()).done); c = !0) {
-                    f.value.addEventListener("click", this.mobileMenu.bind(this));
+                !b && x.return && x.return();
+            } finally {
+                if (k) throw w;
+            }
+        }
+        var L = !0, C = !1, T = void 0;
+        try {
+            for (var S, D = this.folderButtons[Symbol.iterator](); !(L = (S = D.next()).done); L = !0) {
+                S.value.addEventListener("click", this.toggleDropDown.bind(this));
+            }
+        } catch (t) {
+            C = !0, T = t;
+        } finally {
+            try {
+                !L && D.return && D.return();
+            } finally {
+                if (C) throw T;
+            }
+        }
+        if (MOBILE) {
+            var B = !0, W = !1, M = void 0;
+            try {
+                for (var _, E = this.mobileBtns[Symbol.iterator](); !(B = (_ = E.next()).done); B = !0) {
+                    _.value.addEventListener("click", this.mobileMenu.bind(this));
                 }
             } catch (t) {
-                u = !0, y = t;
+                W = !0, M = t;
             } finally {
                 try {
-                    !c && v.return && v.return();
+                    !B && E.return && E.return();
                 } finally {
-                    if (u) throw y;
+                    if (W) throw M;
                 }
             }
             detectswipe(".navbar", this.swipeTab.bind(this)), document.querySelector("#ladderWindow .content-header .nrGames").style.display = "none", 
             this.hideLoader();
         }
         this.logo.addEventListener("click", this.toggleOverlay.bind(this)), document.querySelector("#overlay").addEventListener("click", this.toggleOverlay.bind(this)), 
-        this.refresh.addEventListener("click", reloadApp), window.addEventListener("orientationchange", this.getWindowSize.bind(this)), 
-        window.addEventListener("resize", this.getWindowSize.bind(this)), this.infoWindow.innerHTML = infoWindowText, 
-        this.renderTabs(), this.renderWindows(), this.toggleOverlay();
+        window.addEventListener("orientationchange", this.getWindowSize.bind(this)), window.addEventListener("resize", this.getWindowSize.bind(this)), 
+        this.toggleOverlay();
     }
     return _createClass(t, [ {
+        key: "toggleTabs",
+        value: function(t) {
+            0 != app.phase && t.target != app.path.window.tab && this.display(t.target.id + "Window");
+        }
+    }, {
+        key: "display",
+        value: function(t) {
+            console.log("load", t), this[t] != app.path.window && (null != app.path.window && app.path.window.display(!1), 
+            app.path.window = this[t], app.path.window.display(!0), this.renderTabs());
+        }
+    }, {
+        key: "deckLink",
+        value: function(t, e) {
+            app.path.arch = t, this.display("decksWindow");
+        }
+    }, {
+        key: "renderTabs",
+        value: function() {
+            var t = !0, e = !1, a = void 0;
+            try {
+                for (var r, i = this.tabs[Symbol.iterator](); !(t = (r = i.next()).done); t = !0) {
+                    r.value.classList.remove("highlighted");
+                }
+            } catch (t) {
+                e = !0, a = t;
+            } finally {
+                try {
+                    !t && i.return && i.return();
+                } finally {
+                    if (e) throw a;
+                }
+            }
+            app.path.window.tab.classList.add("highlighted");
+        }
+    }, {
         key: "getWindowSize",
         value: function() {
             this.width = parseInt(Math.max(document.documentElement.clientWidth, window.innerWidth || 0)), 
@@ -3317,14 +3847,12 @@ var Table = function() {
         key: "swipeTab",
         value: function(t, e) {
             "r" == e && (this.tabIdx -= 1, this.tabIdx < 0 && (this.tabIdx = this.tabs.length - 1)), 
-            "l" == e && (this.tabIdx += 1, this.tabIdx >= this.tabs.length && (this.tabIdx = 0)), 
-            this.activeTab = this.tabs[this.tabIdx], this.activeWindow = document.getElementById(this.activeTab.id + "Window"), 
-            this.renderTabs(), this.renderWindows();
+            "l" == e && (this.tabIdx += 1, this.tabIdx >= this.tabs.length && (this.tabIdx = 0));
         }
     }, {
         key: "toggleDropDown",
         value: function(t) {
-            for (var e = t.target.nextElementSibling, i = 0; null != e && !(e.classList.contains("dropdown") || i > 10); ) i += 1, 
+            for (var e = t.target.nextElementSibling, a = 0; null != e && !(e.classList.contains("dropdown") || a > 10); ) a += 1, 
             e = e.nextElementSibling;
             null != e && (e == this.openFolder ? this.openFolder = null : null != this.openFolder && (this.openFolder.classList.toggle("hidden"), 
             this.openFolder = e), e.classList.toggle("hidden"));
@@ -3333,72 +3861,20 @@ var Table = function() {
         key: "mobileMenu",
         value: function(t) {
             console.log("mobile menu");
-            var e = t.target, i = !0, r = !1, a = void 0;
+            var e = t.target, a = !0, r = !1, i = void 0;
             try {
-                for (var s, n = this.tabs[Symbol.iterator](); !(i = (s = n.next()).done); i = !0) {
+                for (var s, n = this.tabs[Symbol.iterator](); !(a = (s = n.next()).done); a = !0) {
                     var o = s.value;
                     o.id == e.id && (this.activeTab = o, this.activeWindow = document.getElementById(o.id + "Window"), 
                     this.renderTabs(), this.renderWindows());
                 }
             } catch (t) {
-                r = !0, a = t;
+                r = !0, i = t;
             } finally {
                 try {
-                    !i && n.return && n.return();
+                    !a && n.return && n.return();
                 } finally {
-                    if (r) throw a;
-                }
-            }
-        }
-    }, {
-        key: "toggleTabs",
-        value: function(t) {
-            this.activeTab = t.target, this.activeWindow = document.getElementById(t.target.id + "Window"), 
-            this.renderTabs(), this.renderWindows();
-        }
-    }, {
-        key: "deckLink",
-        value: function(t, e) {
-            this.activeTab = document.querySelector(".navbar #decks.tab"), this.activeWindow = document.getElementById("decksWindow"), 
-            this.renderTabs(), this.renderWindows(), decksWindow.deckLink(t, e);
-        }
-    }, {
-        key: "renderTabs",
-        value: function() {
-            var t = !0, e = !1, i = void 0;
-            try {
-                for (var r, a = this.tabs[Symbol.iterator](); !(t = (r = a.next()).done); t = !0) {
-                    var s = r.value;
-                    s != this.activeTab ? s.classList.remove("highlighted") : s.classList.add("highlighted"), 
-                    MOBILE && s.classList.contains("highlighted") && (s.style.display = "inline"), MOBILE && !s.classList.contains("highlighted") && (s.style.display = "none");
-                }
-            } catch (t) {
-                e = !0, i = t;
-            } finally {
-                try {
-                    !t && a.return && a.return();
-                } finally {
-                    if (e) throw i;
-                }
-            }
-        }
-    }, {
-        key: "renderWindows",
-        value: function() {
-            console.log("active window", this.activeWindow.id), "decksWindow" != this.activeWindow.id || decksWindow.fullyLoaded || decksWindow.loadData();
-            var t = !0, e = !1, i = void 0;
-            try {
-                for (var r, a = this.windows[Symbol.iterator](); !(t = (r = a.next()).done); t = !0) {
-                    var s = r.value;
-                    s != this.activeWindow ? s.style.display = "none" : s.style.display = "inline-block";
-                }
-            } catch (t) {
-                e = !0, i = t;
-            } finally {
-                try {
-                    !t && a.return && a.return();
-                } finally {
-                    if (e) throw i;
+                    if (r) throw i;
                 }
             }
         }
@@ -3419,5 +3895,110 @@ var Table = function() {
             this.overlay = !1) : (document.getElementById("overlay").style.display = "block", 
             this.overlay = !0);
         }
+    }, {
+        key: "getArchColor",
+        value: function(t, e, a) {
+            if (-1 != hsClasses.indexOf(e)) return {
+                color: hsColors[e],
+                fontColor: hsFontColors[e]
+            };
+            var r = void 0;
+            if (t) r = e + " " + t; else {
+                r = e;
+                var i = !0, s = !1, n = void 0;
+                try {
+                    for (var o, l = hsClasses[Symbol.iterator](); !(i = (o = l.next()).done); i = !0) {
+                        var h = o.value;
+                        if (-1 != r.indexOf(h)) {
+                            t = h;
+                            break;
+                        }
+                    }
+                } catch (t) {
+                    s = !0, n = t;
+                } finally {
+                    try {
+                        !i && l.return && l.return();
+                    } finally {
+                        if (s) throw n;
+                    }
+                }
+            }
+            if (r in this.archetypeColors[a]) return {
+                color: hsArchColors[t][this.archetypeColors[a][r]],
+                fontColor: hsFontColors[t]
+            };
+            this.archetypeColors[a][r] = this.archetypeColors[a][t].count;
+            var d = this.archetypeColors[a][t].count;
+            this.archetypeColors[a][t].count = (d + 1) % 5;
+            return {
+                color: hsArchColors[t][this.archetypeColors[a][r]],
+                fontColor: hsFontColors[t]
+            };
+        }
     } ]), t;
-}(), overlayText1 = "\n\n<span style='font-size:200%;font-weight:bold;padding-left:2rem;'>Greetings Travelers,</span><br><br><br>\n\nWelcome to the VS Live web app where you can explore the newest Hearthstone data and find \n\nout about frequency and win rates of your favorite decks.<br><br>\n\nTo get more information on the current tab simply click on the \n\n    <div class='fa fa-question-circle' style='display:inline-block'></div>\n\nicon in the top right corner.<br><br>\n\nUpgrade to vS Gold to visit the gold version of this app. Check the link more information:<br><br><br>\n\n<button id='basicBtn'>BASIC</button>\n<img src='Images/arrow.png' class='arrow'>\n<a href=" + VSGOLDINFOLINK + " target=\"_blank\">\n<button id='premiumBtn'>GOLD</button>\n</a>\n\n<br><br>\n\nTo give feedback simply click on the discord link below:<br><br><br>\n\n<a href=" + DISCORDLINK + '\n   target="_blank"><img class=\'discordLogo\' src="Images/discordLogo.png"></a><br><br>\n\n', overlayText2 = "\n\n<span style='font-size:200%;font-weight:bold;padding-left:2rem'>Greetings Travelers,</span><br><br><br>\n\nWelcome to the VS Live web app where you can explore the newest Hearthstone data and find \n\nout about frequency and win rates of your favorite decks.<br><br>\n\nTo get more information on the current tab simply click on the \n\n    <div class='fa fa-question-circle' style='display:inline-block'></div>\n\nicon in the top right corner.<br><br>\n\nThank you for using vS Live Gold.\n\n<br><br>\n\nTo give feedback simply click on the discord link below:<br><br><br>\n\n<a href=" + DISCORDLINK + '\n   target="_blank"><img class=\'discordLogo\' src="Images/discordLogo.png"></a><br><br>\n\n', infoWindowText = "\n\nGreetings and thank you for checking out the VS Live Beta!<br><br>\n\n    Update 16-12-2017:<br><br>\n    - App refresh button in the top right corner added<br>\n    - Chose color theme for the matchup table added<br>\n    - Outdated archetypes no longer show in the overview page<br>\n    - Fixed win rates in the win rates page when data is insufficient<br><br>\n\n   To give feedback simply click on the discord link below:<br><br>\n   \n<a href=" + DISCORDLINK + '\n   target="_blank"><img class=\'discordLogo\' src="Images/discordLogo.png"></a><br><br>\n';
+}(), overlayText1 = "\n\n<span style='font-size:200%;font-weight:bold;padding-left:2rem;'>Greetings Travelers,</span><br><br><br>\n\nWelcome to the VS Live web app where you can explore the newest Hearthstone data and find \n\nout about frequency and win rates of your favorite decks.<br><br>\n\nTo get more information on the current tab simply click on the \n\n    <div class='fa fa-question-circle' style='display:inline-block'></div>\n\nicon in the top right corner.<br><br>\n\nUpgrade to vS Gold to visit the gold version of this app. Check the link more information:<br><br><br>\n\n<button id='basicBtn'>BASIC</button>\n<img src='Images/arrow.png' class='arrow'>\n<a href=" + VSGOLDINFOLINK + " target=\"_blank\">\n<button id='premiumBtn'>GOLD</button>\n</a>\n\n<br><br>\n\nTo give feedback simply click on the discord link below:<br><br><br>\n\n<a href=" + DISCORDLINK + '\n   target="_blank"><img class=\'discordLogo\' src="Images/discordLogo.png"></a><br><br>\n\n', overlayText2 = "\n\n<span style='font-size:200%;font-weight:bold;padding-left:2rem'>Greetings Travelers,</span><br><br><br>\n\nWelcome to the VS Live web app where you can explore the newest Hearthstone data and find \n\nout about frequency and win rates of your favorite decks.<br><br>\n\nTo get more information on the current tab simply click on the \n\n    <div class='fa fa-question-circle' style='display:inline-block'></div>\n\nicon in the top right corner.<br><br>\n\nThank you for using vS Live Gold.\n\n<br><br>\n\nTo give feedback simply click on the discord link below:<br><br><br>\n\n<a href=" + DISCORDLINK + '\n   target="_blank"><img class=\'discordLogo\' src="Images/discordLogo.png"></a><br><br>\n\n', App = function() {
+    function t() {
+        _classCallCheck(this, t), this.ui = new UI(), this.ui.showLoader(), this.path = {
+            window: null,
+            hsFormat: "Standard",
+            windowIdx: 0,
+            mode: "",
+            ranks: "all",
+            time: "last2Weeks",
+            arch: null
+        }, this.fb_db = null, this.fb_loggedIn = !1, this.phase = 0, this.setupFirebase(), 
+        document.querySelector(".refreshArrow").addEventListener("click", this.reload.bind(this));
+    }
+    return _createClass(t, [ {
+        key: "setupFirebase",
+        value: function() {
+            var t = this;
+            this.fb_config = {
+                apiKey: "AIzaSyAt0uIAVOFjB42_bkwrEIqhSWkMT_VmluI",
+                authDomain: "data-reaper.firebaseapp.com",
+                databaseURL: "https://data-reaper.firebaseio.com",
+                projectId: "data-reaper",
+                storageBucket: "data-reaper.appspot.com",
+                messagingSenderId: "1079276848174"
+            }, firebase.apps.length || (firebase.initializeApp(this.fb_config), this.fb_db = firebase.database());
+            firebase.auth().signInWithEmailAndPassword(login.email, login.pw).then(function(e) {
+                if (!t.ui.loggedIn) if (e) {
+                    t.ui.loggedIn = !0;
+                    t.fb_db.ref("premiumUsers/" + e.uid).on("value", function(e) {
+                        !e.val() && PREMIUM && console.log("PERMISSION ERROR", e.val()), t.load(0);
+                    }, function(t) {
+                        return console.log("Could not load User Data", t);
+                    });
+                } else console.log("not logged in"), t.ui.loggedIn = !0, t.load(0);
+            });
+        }
+    }, {
+        key: "load",
+        value: function(t) {
+            var e = function() {};
+            switch (t) {
+              case 0:
+                e = function() {
+                    app.load(1);
+                }, this.ui.ladderWindow = new LadderWindow(e), this.ui.tableWindow = new TableWindow(e), 
+                this.ui.infoWindow = new InfoWindow(e);
+                break;
+
+              case 1:
+                if (!this.ui.tableWindow.fullyLoaded || !this.ui.ladderWindow.fullyLoaded) return;
+                this.phase = 1, this.path.window = this.ui.ladderWindow, this.ui.display("ladderWindow"), 
+                e = function() {
+                    app.load(2);
+                }, this.ui.powerWindow = new PowerWindow(e), this.ui.decksWindow = new DecksWindow(e);
+                break;
+
+              case 2:
+                this.phase = 2, console.log("loaded");
+            }
+        }
+    }, {
+        key: "reload",
+        value: function() {}
+    } ]), t;
+}();

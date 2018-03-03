@@ -18,16 +18,17 @@ html(lang='en')
       #overlay
         p.overlayText
       nav.navbar
-        #mobileFolder.option-folder
-          button#mobileBtn.folder-toggle.fa.fa-bars
-          .dropdown.hidden
-            button#ladder.mobileBtn.optionBtn.folderBtn Overview
-            button#power.mobileBtn.optionBtn.folderBtn Tier List
-            button#table.mobileBtn.optionBtn.folderBtn Matchups
-            button#decks.mobileBtn.optionBtn.folderBtn Decks
-            button#info.mobileBtn.optionBtn.folderBtn Info
+
+        //#mobileFolder.option-folder
+        //  button#mobileBtn.folder-toggle.fa.fa-bars
+        //  .dropdown.hidden
+        //    button#ladder.mobileBtn.optionBtn.folderBtn Overview
+        //    button#power.mobileBtn.optionBtn.folderBtn Tier List
+        //    button#table.mobileBtn.optionBtn.folderBtn Matchups
+        //    button#decks.mobileBtn.optionBtn.folderBtn Decks
+        //    button#info.mobileBtn.optionBtn.folderBtn Info
         .tabs
-          button#ladder.tab Overview
+          button#ladder.tab.highlighted Overview
           button#power.tab Tier List
           button#table.tab Matchups
           button#decks.tab Decks
@@ -48,11 +49,12 @@ html(lang='en')
                 .dropdown.hidden
               #rankFolder.option-folder
                 button#rankBtn.folder-toggle All Ranks
-                .dropdown#rankDropdown.hidden
-              button#nrGames.optionBtn Show Games
+                .dropdown#rankDropdown.hidden              
             .classDeckOptions.optionBar
               button#classes.optionBtn Classes
               button#decks.optionBtn Decks
+              button#showNumbers.optionBtn.fa.fa-hashtag.tooltip
+                span.tooltipText Show Numbers
             #plotFolder.option-folder
               button#plotBtn.folder-toggle.fa.fa-bar-chart
               .dropdown#plotDropdown.hidden
@@ -68,9 +70,11 @@ html(lang='en')
                   span.tooltipText Show Line Chart
               button#pie.optionBtn.fa.fa-pie-chart.tooltip
                   span.tooltipText Show Pie Chart
-              button#number.optionBtn.fa.fa-percent.tooltip
-                  span.tooltipText Show Numbers
-              button#timeline.optionBtn.fa.fa-clock-o.tooltip
+              button#number.optionBtn.fa.fa-th.tooltip
+                  span.tooltipText Show Table
+              button#map.optionBtn.fa.fa-map.tooltip
+                  span.tooltipText Show Power Map
+              button#timeline.optionBtn.fa.fa-hourglass.tooltip
                   span.tooltipText Show Timeline
           .overlay
             p.overlayText
@@ -88,8 +92,8 @@ html(lang='en')
               button#Standard.optionBtn Standard
               button#Wild.optionBtn Wild
             .dispOptions.optionBar
-              button#tiers.optionBtn Tier Lists
-              button#top.optionBtn Suggestions
+              button#brackets.optionBtn Tier Lists
+              button#ranks.optionBtn Ranks
           .overlay
             p.overlayText
           .content
@@ -111,14 +115,16 @@ html(lang='en')
               #rankFolder.option-folder
                 button#ranksBtn.folder-toggle All Ranks
                 .dropdown.hidden
-            .nrGamesOptions.optionBar
-              button#nrGames.optionBtn Show Numbers
-              p.nrGames
+              p.nrGames              
             .graphOptions.optionBar
               p Sort 
               #sortFolder.option-folder
                 button#sortBtn.folder-toggle Sort
                 .dropdown.hidden
+              button#changeColor.optionBtn.fa.fa-paint-brush.tooltip
+                span.tooltipText Change Color
+              button#showNumbers.optionBtn.fa.fa-hashtag.tooltip
+                span.tooltipText Show Numbers
           .overlay
             p.overlayText
           .content
@@ -126,10 +132,11 @@ html(lang='en')
             .question.fa.fa-question-circle
             #chart2.chart
             .chart-footer
-              .colorTheme.chartFooterBtn
-                button.changeColorBtn Change Colors
+              //.colorTheme.chartFooterBtn
+              //  button.changeColorBtn Change Colors
               .equilibrium.chartFooterBtn
                 button.equilibriumBtn Simulation
+                  .fa.fa-rocket
               .download.chartFooterBtn
                 button.downloadBtn Download Table
                   .fa.fa-cloud-download
@@ -137,12 +144,12 @@ html(lang='en')
         #decksWindow.tabWindow
           .content-header
             .ftrOptions.optionBar
-              .option-folder
+              #formatFolder.option-folder
                 button#formatBtn.folder-toggle Standard
                 .dropdown.hidden
                   button#Standard.optionBtn.folderBtn Standard
                   button#Wild.optionBtn.folderBtn Wild
-              .option-folder
+              #classFolder.option-folder
                 button#classBtn.folder-toggle Druid
                 .dropdown.hidden
                   button#Druid.optionBtn.folderBtn Druid 
@@ -155,10 +162,9 @@ html(lang='en')
                   button#Warlock.optionBtn.folderBtn Warlock
                   button#Warrior.optionBtn.folderBtn Warrior
             .displayOptions.optionBar
-              button#overview.optionBtn Overview
               button#description.optionBtn Description
               button#decklists.optionBtn Deck Lists
-              //button#classRadar.optionBtn Class Radar
+              button#overview.optionBtn Dust
           .overlay
             p.overlayText
           .content
@@ -195,6 +201,7 @@ html(lang='en')
           .content-footer
 
     script(src='scripts/build_premium.js')
+    script(src='scripts/app.js')
     script(src='scripts/parameters.js')
     script(src='scripts/script.js')
     script(src='scripts/ui.js')
@@ -206,6 +213,7 @@ html(lang='en')
     script(src='scripts/powerWindow.js')
     script(src='scripts/decksWindow.js')
     script(src='scripts/decklistClass.js')
-    script(src='scripts/firebaseHandler.js')
+    script(src='scripts/infoWindow.js')
+
     //- script(src='bundle-dist.js')
 

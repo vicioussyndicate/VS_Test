@@ -18,10 +18,10 @@ const ladder_plotTypes = []
 const table_times =   ['last2Weeks']
 const table_times_premium = ['last3Days','lastWeek','last2Weeks']
 
-const table_sortOptions = ['frequency']
-const table_sortOptions_premium = ['frequency','class','winrate','matchup']
+const table_sortOptions = ['frequency','winrate']
+const table_sortOptions_premium = ['frequency','winrate','matchup']
 
-
+const table_numArch = 16
 const table_ranks =   ['ranks_all']
 const table_ranks_premium = ['ranks_all','ranks_L_5','ranks_6_15']
 
@@ -29,7 +29,7 @@ const table_ranks_premium = ['ranks_all','ranks_L_5','ranks_6_15']
 var MU_COLOR_IDX = 0
 
 const hsRanks =       21
-const hsClasses =     ['Druid',"Hunter","Mage","Paladin","Priest","Rogue","Shaman","Warlock","Warrior"]
+const hsClasses =     ['Druid','Hunter','Mage','Paladin','Priest','Rogue','Shaman','Warlock','Warrior']
 const hsFormats =     ['Standard','Wild']
 
 

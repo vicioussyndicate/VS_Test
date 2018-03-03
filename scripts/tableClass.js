@@ -1,8 +1,5 @@
 
 
-
-
-
 class Table {
 
     constructor(DATA,f,t,r,window) {
@@ -59,13 +56,17 @@ class Table {
         this.totGames = 0
         this.download = ''
 
+        if (DATA == undefined) { 
+            console.log('table no data:',this.f,this.t,this.r)
+            this.numArch = 0
+            return 
+        }
         
-        
-        
-        var FR =            DATA.frequency.slice()
-        var TABLE =         DATA.table.slice()
-        var ARCHETYPES =    DATA.archetypes.slice()
-        if (this.numArch > ARCHETYPES.length) {this.numArch = ARCHETYPES.length}
+        let FR =            DATA.frequency.slice()
+        let TABLE =         DATA.table.slice()
+        let ARCHETYPES =    DATA.archetypes.slice()
+
+        this.numArch = Math.min(this.numArch, ARCHETYPES.length)
 
         // this.m_raw =    DATA.table.slice()
         // this.fr_raw =   Data.frequency.slice()
@@ -172,8 +173,8 @@ class Table {
             plot_bgcolor: "transparent",
             paper_bgcolor: this.bgColor,
             margin: {l: 120, r: 0, b: 30, t: 100 },
-            width: (MOBILE) ? ui.width*2 : this.window.width,
-            height: (MOBILE) ?  ui.height*0.8 : this.window.height,
+            width: (MOBILE) ? app.ui.width*2 : this.window.width,
+            height: (MOBILE) ? app.ui.height*0.8 : this.window.height,
 
             yaxis2: {
                 visible: false,
@@ -207,9 +208,7 @@ class Table {
             text: [text],
             visible:true,
             hoverinfo: 'text',
-            marker: {
-                color: '#a3a168',
-            },
+            marker: { color: '#a3a168' },
         }
     }
 
@@ -369,13 +368,13 @@ class Table {
 
 
     sortTableBy (what, plot=true) {        
-        var self = this
 
         if (this.sortBy == what && !this.window.zoomIn) {console.log('already sorted by '+what);return}
         
         var idxs = range(0,this.numArch)
         var zoomIdx = this.archetypes.indexOf(this.window.zoomArch)
 
+        var self = this
         var sortByMU = function (a,b) {return self.table[zoomIdx][a] > self.table[zoomIdx][b] ? -1: self.table[zoomIdx][a] < self.table[zoomIdx][b] ? 1 : 0 ;}
         var sortByWR = function (a, b) { return self.winrates[a] > self.winrates[b] ? -1 : self.winrates[a] < self.winrates[b] ? 1 : 0; }
         var sortByFR = function (a, b) { return self.frequency[a] > self.frequency[b] ? -1 : self.frequency[a] < self.frequency[b] ? 1 : 0; }
@@ -394,21 +393,21 @@ class Table {
         var winrates = []
         var classPlusArch = []
 
-        for (var i=0;i<self.numArch;i++) {
+        for (let i of range(0,this.numArch)) {
             var idx = idxs[i]
             
-            classPlusArch.push(self.classPlusArch[idx])
-            archetypes.push(self.archetypes[idx])
-            frequency.push(self.frequency[idx])
-            winrates.push(self.winrates[idx])
+            classPlusArch.push(this.classPlusArch[idx])
+            archetypes.push(this.archetypes[idx])
+            frequency.push(this.frequency[idx])
+            winrates.push(this.winrates[idx])
             
-            
+    
             var tableRow = []
             var textTableRow = []
 
-            for (var j=0;j<self.numArch;j++) {
-                tableRow.push( self.table[idx][idxs[j]] )
-                textTableRow.push( self.textTable[idx][idxs[j]] )
+            for (let j of range(0,this.numArch)) {
+                tableRow.push( this.table[idx][idxs[j]] )
+                textTableRow.push( this.textTable[idx][idxs[j]] )
             }
             table.push(tableRow)
             textTable.push(textTableRow)
@@ -461,7 +460,7 @@ class Table {
 
     getAnnotations() {
 
-        var toFixed = (ui.width >= 900 ) ? 1:0
+        var toFixed = (app.ui.width >= 900 ) ? 1:0
         
         var tr = {
             x: [],
@@ -489,24 +488,11 @@ class Table {
         return tr
     }
 
-    getWr(archname) {
-        let data = this.freqPlotData
-        let arch_names = data.x[0]
-        let arch_freq = data.y[0]
-
-
-        let idx = arch_names.indexOf(archname)
-        if (idx < 0) { return 0 }
-
-        let matrix = this.table
-        let wr = 0
-
-        for (let i=0; i<arch_names.length; i++) { wr += matrix[idx][i] * arch_freq[i] }
-        return wr
-    }
+    
 
     equilibrium() {
-        ui.showLoader()
+        app.ui.showLoader()
+        this.window.mode = 'equilibrium'
         let data = this.freqPlotData
         let arch_names = data.x[0]
         let arch_freq = data.y[0]
@@ -546,7 +532,6 @@ class Table {
 
         // Iterate
         for (var i=0;i<max_itt;i++) {
-            //if (i%1000== 0) {console.log(i)}
             this.eq_wr(archetypes,matrix)
             this.eq_fr(archetypes)
         }
@@ -555,7 +540,7 @@ class Table {
         let traces = []
         for (let i=0;i<archetypes.length; i++) {
             let a = archetypes[i]
-            let color = ladderWindow.getArchColor(null, a.name, this.f).color
+            let color = app.ui.getArchColor(null, a.name, this.f).color
             let trace = {
                 name: a.name,
                 x: range(0,max_itt),
@@ -572,7 +557,7 @@ class Table {
             traces.push(trace)
         }
         Plotly.newPlot('chart2', this.stackedArea(traces), layout);
-        ui.hideLoader()
+        app.ui.hideLoader()
     }
 
     // Stack equilibrium charts

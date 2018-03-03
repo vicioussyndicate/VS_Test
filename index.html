@@ -20,18 +20,16 @@
         <p class="overlayText"></p>
       </div>
       <nav class="navbar">
-        <div class="option-folder" id="mobileFolder">
-          <button class="folder-toggle fa fa-bars" id="mobileBtn"></button>
-          <div class="dropdown hidden">
-            <button class="mobileBtn optionBtn folderBtn" id="ladder">Overview</button>
-            <button class="mobileBtn optionBtn folderBtn" id="power">Tier List</button>
-            <button class="mobileBtn optionBtn folderBtn" id="table">Matchups</button>
-            <button class="mobileBtn optionBtn folderBtn" id="decks">Decks</button>
-            <button class="mobileBtn optionBtn folderBtn" id="info">Info</button>
-          </div>
-        </div>
+        <!--#mobileFolder.option-folder-->
+        <!--  button#mobileBtn.folder-toggle.fa.fa-bars-->
+        <!--  .dropdown.hidden-->
+        <!--    button#ladder.mobileBtn.optionBtn.folderBtn Overview-->
+        <!--    button#power.mobileBtn.optionBtn.folderBtn Tier List-->
+        <!--    button#table.mobileBtn.optionBtn.folderBtn Matchups-->
+        <!--    button#decks.mobileBtn.optionBtn.folderBtn Decks-->
+        <!--    button#info.mobileBtn.optionBtn.folderBtn Info-->
         <div class="tabs">
-          <button class="tab" id="ladder">Overview</button>
+          <button class="tab highlighted" id="ladder">Overview</button>
           <button class="tab" id="power">Tier List</button>
           <button class="tab" id="table">Matchups</button>
           <button class="tab" id="decks">Decks</button>
@@ -55,13 +53,13 @@
               </div>
               <div class="option-folder" id="rankFolder">
                 <button class="folder-toggle" id="rankBtn">All Ranks</button>
-                <div class="dropdown hidden" id="rankDropdown"></div>
+                <div class="dropdown hidden" id="rankDropdown">             </div>
               </div>
-              <button class="optionBtn" id="nrGames">Show Games</button>
             </div>
             <div class="classDeckOptions optionBar">
               <button class="optionBtn" id="classes">Classes</button>
               <button class="optionBtn" id="decks">Decks</button>
+              <button class="optionBtn fa fa-hashtag tooltip" id="showNumbers"><span class="tooltipText">Show Numbers</span></button>
             </div>
             <div class="option-folder" id="plotFolder">
               <button class="folder-toggle fa fa-bar-chart" id="plotBtn"></button>
@@ -77,8 +75,9 @@
               <button class="optionBtn fa fa-bar-chart tooltip" id="bar"><span class="tooltipText">Show Bar Chart</span></button>
               <button class="optionBtn fa fa-line-chart tooltip" id="line"><span class="tooltipText">Show Line Chart</span></button>
               <button class="optionBtn fa fa-pie-chart tooltip" id="pie"><span class="tooltipText">Show Pie Chart</span></button>
-              <button class="optionBtn fa fa-percent tooltip" id="number"><span class="tooltipText">Show Numbers</span></button>
-              <button class="optionBtn fa fa-clock-o tooltip" id="timeline"><span class="tooltipText">Show Timeline</span></button>
+              <button class="optionBtn fa fa-th tooltip" id="number"><span class="tooltipText">Show Table</span></button>
+              <button class="optionBtn fa fa-map tooltip" id="map"><span class="tooltipText">Show Power Map</span></button>
+              <button class="optionBtn fa fa-hourglass tooltip" id="timeline"><span class="tooltipText">Show Timeline</span></button>
             </div>
           </div>
           <div class="overlay">
@@ -100,8 +99,8 @@
               <button class="optionBtn" id="Wild">Wild</button>
             </div>
             <div class="dispOptions optionBar">
-              <button class="optionBtn" id="tiers">Tier Lists</button>
-              <button class="optionBtn" id="top">Suggestions</button>
+              <button class="optionBtn" id="brackets">Tier Lists</button>
+              <button class="optionBtn" id="ranks">Ranks</button>
             </div>
           </div>
           <div class="overlay">
@@ -129,10 +128,7 @@
                 <button class="folder-toggle" id="ranksBtn">All Ranks</button>
                 <div class="dropdown hidden"></div>
               </div>
-            </div>
-            <div class="nrGamesOptions optionBar">
-              <button class="optionBtn" id="nrGames">Show Numbers</button>
-              <p class="nrGames"></p>
+              <p class="nrGames">             </p>
             </div>
             <div class="graphOptions optionBar">
               <p>Sort </p>
@@ -140,6 +136,8 @@
                 <button class="folder-toggle" id="sortBtn">Sort</button>
                 <div class="dropdown hidden"></div>
               </div>
+              <button class="optionBtn fa fa-paint-brush tooltip" id="changeColor"><span class="tooltipText">Change Color</span></button>
+              <button class="optionBtn fa fa-hashtag tooltip" id="showNumbers"><span class="tooltipText">Show Numbers</span></button>
             </div>
           </div>
           <div class="overlay">
@@ -150,11 +148,12 @@
             <div class="question fa fa-question-circle"></div>
             <div class="chart" id="chart2"></div>
             <div class="chart-footer">
-              <div class="colorTheme chartFooterBtn">
-                <button class="changeColorBtn">Change Colors</button>
-              </div>
+              <!--.colorTheme.chartFooterBtn-->
+              <!--  button.changeColorBtn Change Colors-->
               <div class="equilibrium chartFooterBtn">
-                <button class="equilibriumBtn">Simulation</button>
+                <button class="equilibriumBtn">Simulation
+                  <div class="fa fa-rocket"></div>
+                </button>
               </div>
               <div class="download chartFooterBtn">
                 <button class="downloadBtn">Download Table
@@ -168,14 +167,14 @@
         <div class="tabWindow" id="decksWindow">
           <div class="content-header">
             <div class="ftrOptions optionBar">
-              <div class="option-folder">
+              <div class="option-folder" id="formatFolder">
                 <button class="folder-toggle" id="formatBtn">Standard</button>
                 <div class="dropdown hidden">
                   <button class="optionBtn folderBtn" id="Standard">Standard</button>
                   <button class="optionBtn folderBtn" id="Wild">Wild</button>
                 </div>
               </div>
-              <div class="option-folder">
+              <div class="option-folder" id="classFolder">
                 <button class="folder-toggle" id="classBtn">Druid</button>
                 <div class="dropdown hidden">
                   <button class="optionBtn folderBtn" id="Druid">Druid </button>
@@ -191,10 +190,9 @@
               </div>
             </div>
             <div class="displayOptions optionBar">
-              <button class="optionBtn" id="overview">Overview</button>
               <button class="optionBtn" id="description">Description</button>
               <button class="optionBtn" id="decklists">Deck Lists</button>
-              <!--button#classRadar.optionBtn Class Radar-->
+              <button class="optionBtn" id="overview">Dust</button>
             </div>
           </div>
           <div class="overlay">
@@ -241,6 +239,7 @@
       </div>
     </div>
     <script src="scripts/build_premium.js"></script>
+    <script src="scripts/app.js"></script>
     <script src="scripts/parameters.js"></script>
     <script src="scripts/script.js"></script>
     <script src="scripts/ui.js"></script>
@@ -252,6 +251,6 @@
     <script src="scripts/powerWindow.js"></script>
     <script src="scripts/decksWindow.js"></script>
     <script src="scripts/decklistClass.js"></script>
-    <script src="scripts/firebaseHandler.js"></script>
+    <script src="scripts/infoWindow.js"></script>
   </body>
 </html>

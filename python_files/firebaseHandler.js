@@ -112,8 +112,7 @@ function loadFireData() {
         console.log('load Premium')
         ladderWindow = new LadderWindow(hsFormats, ladder_times_premium, ladder_ranks_premium)
         tableWindow = new TableWindow(hsFormats, table_times_premium, table_ranks_premium, table_sortOptions_premium)
-    }
-    else {
+    } else {
         console.log('load basic')
 
         //PREMIUM = false

@@ -1,9 +1,9 @@
 
 
+//@prepros-append scripts/app.js
 //@prepros-append scripts/build_basic.js
 //@prepros-append scripts/decklistClass.js
 //@prepros-append scripts/decksWindow.js
-//@prepros-append scripts/firebaseHandler.js
 //@prepros-append scripts/historyClass.js
 //@prepros-append scripts/infoWindow.js
 //@prepros-append scripts/ladderClass.js

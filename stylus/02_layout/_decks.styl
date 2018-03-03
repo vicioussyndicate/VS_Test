@@ -7,6 +7,13 @@
     .overlay
         img 
             margin-left 20%
+    .content-header
+        .ftrOptions
+            position absolute
+            left 0
+        .displayOptions
+            position absolute
+            right 0
     .content
         display grid
         grid-template-columns 10rem auto 10rem
@@ -18,7 +25,7 @@
             width 100%
         .sidebar
             margin-left 0.5rem
-            margin-top 1rem
+            margin-top 2rem
             width 100%
             .title
                 margin-bottom: 1rem
@@ -32,27 +39,35 @@
                     width 100%
                     margin-top 1rem
                     position relative
+                    border-radius 0.2rem
+                    font-size 80%
                     .archBtn
-                        font-size 1rem
                         display inline-block
-                        font-size 90%
-                        padding 0.3rem
+                        padding 0.1rem 0.2rem
                         width 60%
-                        border solid #ffffff54
+                        border solid #ffffff42
+                        border-radius 0.2rem
                         &:hover
                             cursor pointer
                             color $darkColor !important
                             background-color $accentColor !important
-                        &.highlighted
-                            margin-left 0.5rem
                     .wrDiv
-                        font-size 90%
                         font-weight bold
                         color #5a5959
-                        padding-top 0.45rem
+                        padding-top 0.25rem
+                        padding-right 0.3rem
                         display inline-block
                         float right
                         width 25%
+                    &.highlighted
+                        background-color $darkColor
+                        .archBtn
+                            padding-top 0.5rem
+                            padding-bottom 0.5rem
+                        .wrDiv
+                            color $lightColor
+                            padding-top 0.65rem
+                            padding-bottom 0.5rem
             &.left
                 left 0
             &.right

@@ -49,10 +49,11 @@ html(lang='en')
               #rankFolder.option-folder
                 button#rankBtn.folder-toggle All Ranks
                 .dropdown#rankDropdown.hidden
-              button#nrGames.optionBtn Show Games
             .classDeckOptions.optionBar
               button#classes.optionBtn Classes
               button#decks.optionBtn Decks
+              button#showNumbers.optionBtn.fa.fa-hashtag.tooltip
+                span.tooltipText Show Numbers
             #plotFolder.option-folder
               button#plotBtn.folder-toggle.fa.fa-bar-chart
               .dropdown#plotDropdown.hidden
@@ -70,6 +71,8 @@ html(lang='en')
                   span.tooltipText Show Pie Chart
               button#number.optionBtn.fa.fa-percent.tooltip
                   span.tooltipText Show Numbers
+              button#map.optionBtn.fa.fa-map.tooltip
+                  span.tooltipText Show Power Map
               button#timeline.optionBtn.fa.fa-clock-o.tooltip
                   span.tooltipText Show Timeline
           .overlay
@@ -88,8 +91,8 @@ html(lang='en')
               button#Standard.optionBtn Standard
               button#Wild.optionBtn Wild
             .dispOptions.optionBar
-              button#tiers.optionBtn Tier Lists
-              button#top.optionBtn Suggestions
+              button#brackets.optionBtn Tier Lists
+              button#ranks.optionBtn Ranks
           .overlay
             p.overlayText
           .content
@@ -111,14 +114,16 @@ html(lang='en')
               #rankFolder.option-folder
                 button#ranksBtn.folder-toggle All Ranks
                 .dropdown.hidden
-            .nrGamesOptions.optionBar
-              button#nrGames.optionBtn Show Numbers
               p.nrGames
             .graphOptions.optionBar
               p Sort 
               #sortFolder.option-folder
                 button#sortBtn.folder-toggle Sort
                 .dropdown.hidden
+              button#changeColor.optionBtn.fa.fa-paint-brush.tooltip
+                span.tooltipText Change Color
+              button#showNumbers.optionBtn.fa.fa-hashtag.tooltip
+                span.tooltipText Show Numbers
           .overlay
             p.overlayText
           .content
@@ -126,20 +131,20 @@ html(lang='en')
             .question.fa.fa-question-circle
             #chart2.chart
             .chart-footer
-              .colorTheme.chartFooterBtn
-                button.changeColorBtn Change Colors
+              //.colorTheme.chartFooterBtn
+              //  button.changeColorBtn Change Colors
               //.equilibrium
               //  button.equilibriumBtn Equilibrium
           .content-footer
         #decksWindow.tabWindow
           .content-header
             .ftrOptions.optionBar
-              .option-folder
+              #formatFolder.option-folder
                 button#formatBtn.folder-toggle Standard
                 .dropdown.hidden
                   button#Standard.optionBtn.folderBtn Standard
                   button#Wild.optionBtn.folderBtn Wild
-              .option-folder
+              #classFolder.option-folder
                 button#classBtn.folder-toggle Druid
                 .dropdown.hidden
                   button#Druid.optionBtn.folderBtn Druid 
@@ -154,7 +159,6 @@ html(lang='en')
             .displayOptions.optionBar
               button#description.optionBtn Description
               button#decklists.optionBtn Deck Lists
-              //button#classRadar.optionBtn Class Radar
           .overlay
             p.overlayText
           .content
@@ -182,6 +186,7 @@ html(lang='en')
               p#loginErrorMsg
           .content-footer
 
+    //- script(src='scripts/app.js')
     //- script(src='scripts/build_premium.js')
     //- script(src='scripts/parameters.js')
     //- script(src='scripts/script.js')
@@ -194,6 +199,7 @@ html(lang='en')
     //- script(src='scripts/powerWindow.js')
     //- script(src='scripts/decksWindow.js')
     //- script(src='scripts/decklistClass.js')
-    //- script(src='scripts/firebaseHandler.js')
-    script(src='bundle_basic-dist.js')
+    //- script(src='scripts/infowWindow.js')
+
+    //- script(src='bundle_basic-dist.js')
 

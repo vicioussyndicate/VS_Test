@@ -29,8 +29,14 @@
     tr:hover
         filter: brightness(85%);
 
-
     .content-header
+        .ftrOptions
+            position absolute
+            left 0
+        .graphOptions
+            position absolute
+            right 0
+            height 1.75rem
         #plotBtn
             display: none
     .chart
@@ -41,14 +47,20 @@
         //color black 
         margin 0 50px 0 50px
         .legend-item
-            margin 0.15rem
+            //margin 0.15rem
             font-size: 0.8rem
             font-weight bold
             padding 0.25rem
+            padding-bottom 0
             overflow hidden
-            max-height: 1.6rem
+            //max-height: 1.6rem
+            height 1.6rem
+            margin-top 0.3rem
+            border-radius 5%
             &:hover
                 cursor pointer
+                color $darkColor !important
+                background-color $accentColor !important
         
 
 

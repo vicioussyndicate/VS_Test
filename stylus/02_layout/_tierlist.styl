@@ -20,8 +20,23 @@
                 background $header_btn_hi_bgColor
                 color $header_btn_hi_fColor
                 border 0.1rem solid $header_btn_hi_borderColor
+                
+    .content-header
+        .formatOptions
+            position absolute
+            left 0
+        .dispOptions
+            position absolute
+            right 0
+    .chart-footer
+        position absolute
+        bottom 0
+        height 1rem
+        width 100%
+        background lineargradient(#fff0, #ebebebbf)
+
     #powerGrid
-        max-height 100%
+        height 100%
         display grid
         grid-template-columns repeat(6, 1fr)
         grid-template-rows repeat(21, 3rem)
@@ -34,6 +49,7 @@
             background-color transparent
             color $darkColor
             padding 0.2rem
+            padding-top 30%
             margin-right: 0.5rem
         .header
             background-color transparent 
@@ -46,12 +62,16 @@
             padding 0.2rem
             margin 0.2rem
             font-weight: bold
+            border-radius 0.2rem
             &:hover
                 cursor pointer
+                color $darkColor !important
+                background-color $accentColor !important
         .winrate
             color #999
             font-weight: normal
             padding: 0.2rem
+            padding-top: 25%
         .blank
             background-color $darkColor
             margin: 0.2rem

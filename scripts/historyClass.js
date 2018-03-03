@@ -50,15 +50,21 @@ class History {
             
             this.top = 9
             this.timeFrame = {
-                'last6Hours': 24,
-                'last12Hours':24,
-                'lastDay': 24,
-                'last3Days':14,
-                'lastWeek': 14,
-                'last2Weeks':14,
-                'last3Weeks':21,
-                'lastMonth':30,
+                last6Hours: 24,
+                last12Hours:24,
+                lastDay: 24,
+                last3Days:14,
+                lastWeek: 14,
+                last2Weeks:14,
+                last3Weeks:21,
+                lastMonth:30,
             }
+            this.r2r = {
+                ranks_all: 'ranks_all',
+                ranks_L_5: 'ranks_1_4',
+                ranks_6_15: 'ranks_5_14',
+            }
+            this.fullyLoaded = true
         }
         
         
@@ -69,14 +75,19 @@ class History {
         
             var f = this.window.f
             var t_w = this.window.t
-            var t_h = (this.window.t == 'lastDay' || this.window.t == 'last12Hours' || this.window.t == 'last6Hours') ? 'lastHours' : 'lastDays';
+            var t_h = (t_w == 'lastDay' || t_w == 'last12Hours' || t_w == 'last6Hours') ? 'lastHours' : 'lastDays';
             const baseUnit = (t_h == 'lastHours') ? 'Hour' : 'Day';
             const t_delay = (t_h == 'lastHours') ? 2:0 // hours delay
             var timeFrame = this.timeFrame[t_w]
-            var r = this.window.r
+            var r = this.r2r[this.window.r] // !!!
             var m = this.window.mode
             var x = range(t_delay,timeFrame)
-            var d = this.data[f][t_h][r][m] // data 
+            //var d = this.data[f][t_h][r][m] // data 
+            console.log('plot History',t_h, r, m)
+            console.log(this.data)
+            console.log(this.data[t_h])
+            console.log(this.data[t_h][r])
+            let d = this.data[t_h][r][m]
             var maxEntry = 0
 
             var traces = []
@@ -110,7 +121,7 @@ class History {
                 var colors
                 var archName = d2[i]['name']
                 if (m =='classes') { colors = { color: hsColors[archName], fontColor: hsFontColors[archName] } }
-                else { colors = this.window.getArchColor(0, archName, this.window.f) } 
+                else { colors = app.ui.getArchColor(0, archName, this.window.f) } 
 
                 archetypes.push({name: archName, color: colors.color, fontColor: colors.fontColor})
                 var y = (t_h == 'lastHours') ? this.smoothData(d2[i]['data']) : d2[i]['data'].slice()
@@ -180,15 +191,15 @@ class History {
             // Animation
 
             Plotly.animate('chart1', {
-                data: traces,
-                traces: range(0,traces.length),
-                layout: {},
-              }, {
-                transition: {
-                  duration: 100,
-                  easing: 'linear'//'cubic-in-out'
-                }
-              })
+                    data: traces,
+                    traces: range(0,traces.length),
+                    layout: {},
+                }, {
+                    transition: {
+                          duration: 100,
+                          easing: 'linear'//'cubic-in-out'
+                    }
+                })
         }
     
 
