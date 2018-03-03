@@ -215,22 +215,23 @@ class Table {
     
 
     plot() {
-        if (this.sortBy == '' || this.sortBy != this.window.sortBy) {this.sortTableBy(this.window.sortBy, false)}
 
-        var overallWR = this.winrates
-        var table = this.table.concat([overallWR])
-        var arch = this.archetypes.concat([this.overallString])
-        var textRow = []
+        if (this.window.mode == 'simulation') { return this.simulation() }
 
-        for (var i=0;i<table[0].length;i++) { textRow.push(
-            `${this.archetypes[i]}<br>Overall wr: ${(100*overallWR[i]).toFixed(1)}%`
-            ) }
+        if (this.sortBy == '' || this.sortBy != this.window.sortBy) { this.sortTableBy(this.window.sortBy, false) }
 
-        var textTable = this.textTable.concat([textRow])
 
+        let table = this.table.concat([this.winrates])
+        let arch = this.archetypes.concat([this.overallString])
+        let textRow = []
+        let textTable = this.textTable.concat([textRow])
+
+        for (var i=0;i<table[0].length;i++) { 
+            textRow.push(`${this.archetypes[i]}<br>Overall wr: ${(100*this.winrates[i]).toFixed(1)}%`) 
+        }
 
         
-        var trace_Table = {
+        let trace_Table = {
             type: 'heatmap',
             z: table,
             x: this.archetypes,
@@ -242,7 +243,7 @@ class Table {
         }
 
         // Default Frequency Trace
-        var trace_FR = {
+        let trace_FR = {
             visible: false,	
             x: this.archetypes,
             y: range(0,this.numArch),
@@ -252,7 +253,7 @@ class Table {
             hoverinfo: 'x+y',
         }
         
-        var trace_WR = {
+        let trace_WR = {
             visible: false,	
             x: this.archetypes,
             y: range(0,this.numArch),
@@ -261,9 +262,18 @@ class Table {
             type: 'line',
             hoverinfo: 'x+y',
         }
+
+        let trace_ann = { x: [], y: [], text: [], mode: 'text', font: { color:'#9c9c9c', size: 8 }, hoverinfo: 'none' }
+
+        for (let i of range(0,this.numArch)) {
+            trace_ann.x.push(this.archetypes[i])
+            trace_ann.y.push(this.archetypes[i])
+            trace_ann.text.push(' X ')
+        }
         
-        var data = [trace_Table,trace_FR,trace_WR]
-        if (this.window.annotated) {data.push(this.getAnnotations())}
+        let data = [trace_Table,trace_FR,trace_WR]
+        if (this.window.annotated) { data.push(this.getAnnotations()) }
+        else { data.push( trace_ann ) }
 
         Plotly.newPlot('chart2',data,this.layout,{displayModeBar: false})
         if (PREMIUM) { // enable zoom in for premium users
@@ -306,8 +316,9 @@ class Table {
     }
 
     zoomToggle (data) {
-        console.log('click')
-        var arch = data.points[0].y
+        console.log('click',data)
+        let numPoins = data.points.length
+        var arch = data.points[numPoins-1].y
         if (this.window.zoomIn == false) { this.zoomIn(arch) }
         else { this.zoomOut()}
     }
@@ -461,21 +472,9 @@ class Table {
     getAnnotations() {
 
         var toFixed = (app.ui.width >= 900 ) ? 1:0
-        
-        var tr = {
-            x: [],
-            y: [],
-            mode: 'text',
-            text: [],
-            font: {
-                color:'black',
-                size: 8,
-            },
-            hoverinfo: 'none',
-            //opacity: 0.8,
-        }
-        for (var i=0;i<this.numArch;i++) {
+        var tr = { x: [], y: [], text: [], mode: 'text', font: { color:'black', size: 8 }, hoverinfo: 'none' }
 
+        for (let i of range(0,this.numArch)) {
             tr.x.push(this.archetypes[i])
             tr.y.push(this.overallString)
             tr.text.push((100*this.winrates[i]).toFixed(toFixed)+'%')
@@ -483,16 +482,17 @@ class Table {
             for (var j=0;j<this.numArch;j++) {
                 tr.x.push(this.archetypes[i])
                 tr.y.push(this.archetypes[j])
-                tr.text.push((100*this.table[j][i]).toFixed(toFixed)+'%')
+                let text = (i == j) ? ' X ' : (100*this.table[j][i]).toFixed(toFixed)+'%'
+                tr.text.push(text)
         }}
         return tr
     }
 
     
 
-    equilibrium() {
+    simulation() {
         app.ui.showLoader()
-        this.window.mode = 'equilibrium'
+        this.window.mode = 'simulation'
         let data = this.freqPlotData
         let arch_names = data.x[0]
         let arch_freq = data.y[0]

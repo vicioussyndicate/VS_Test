@@ -377,9 +377,14 @@ class LadderWindow {
 
 
     
+    
 
     showRankFolder() { this.rankFolder.style.display = 'flex' }
-    hideRankFolder() { this.rankFolder.style.display = 'none' }
+    hideRankFolder() { 
+        this.rankFolder.style.display = 'none'
+        let dropdown = document.querySelector('#ladderWindow #rankDropdown')
+        if (!dropdown.classList.contains('hidden')) { dropdown.classList.add('hidden')}
+    }
 
     setGraphTitle() {
         var m = (this.mode == 'classes') ? 'Class' : 'Deck'

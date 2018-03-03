@@ -1,9 +1,8 @@
 
+// script.js loads the app class
+// also has many utility functions
 
 var t0 = performance.now();
-
-
-
 var MOBILE = false
 var app
 

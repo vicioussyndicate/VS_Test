@@ -255,11 +255,14 @@ class DecksWindow {
         let data = DATA.val()
         let f = hsFormat
 
+
+
         for (let hsClass of hsClasses) {
+            this.data[f][hsClass].archetypes = [] // delete existing
             this.data[f][hsClass].text = data[hsClass].text
-            if (!('archetypes' in data[hsClass])) { continue }
-            let keys = Object.keys(data[hsClass].archetypes)
-            for (let key of keys) {
+            if (!('archetypes' in data[hsClass])) { continue } // sometimes a class has 0 archetypes
+            //let keys = Object.keys(data[hsClass].archetypes)
+            for (let key in data[hsClass].archetypes) {
 
                 let wr = 0
                 let fr = 0
@@ -292,7 +295,7 @@ class DecksWindow {
 
    
 
-     deckLink(archName, hsFormat = 'Standard') {
+    deckLink(archName, hsFormat = 'Standard') {
 
         this.mode = 'decklists'
         this.f = hsFormat
@@ -406,6 +409,8 @@ class DecksWindow {
         let top = 3
         let topArch = []
         let botArch = []
+        this.sidebarRightTop.removeBtn()
+        this.sidebarRightBot.removeBtn()
 
         if (wr > 0) { // normal
             let table = this.mu[f].table
@@ -427,9 +432,6 @@ class DecksWindow {
                 botArch.push(archNames[idx2])
             }
 
-            this.sidebarRightTop.removeBtn()
-            this.sidebarRightBot.removeBtn()
-
             // add to sidebar
             for (let archName of topArch) {
                 if (archName == null) { continue }
@@ -442,7 +444,9 @@ class DecksWindow {
                 let arch = this.findArch(archName)
                 this.sidebarRightBot.addArchBtn(arch)
             }
-        } 
+        } else {
+            // check raw data for more
+        }
     }
 
     highlight(e) {
@@ -467,11 +471,13 @@ class DecksWindow {
 
     plotDustWr() {
 
+        let archetypes = this.archetypes[this.f]
+        if (archetypes.length == 0) { return }
+
         this.mode = 'overview'
         this.renderWindows()
           
-        let archetypes = this.archetypes[this.f]
-
+        
         let traces = []
         let x = []
         let y = []
@@ -485,8 +491,8 @@ class DecksWindow {
                 if (dl.dust < minCost) {minCost = dl.dust}
                 if (dl.dust > maxCost) {maxCost = dl.dust}
                 traces.push({
-                    x: [dl.dust],
-                    y: [a.wr],
+                    x: [a.wr],
+                    y: [dl.dust],
                     text: `<b>${dl.name}</b><br>Winrate: ${(a.wr*100).toFixed(2)}%<br>Dust Cost: ${dl.dust}`,
                     hoverinfo: 'text',
                     name: dl.name,
@@ -495,12 +501,12 @@ class DecksWindow {
                     marker: {
                         color: hsColors[a.hsClass],
                         size: 15,
-                        line: { color: '#3e3e3e80', width: 3},
+                        line: { color: 'black', width: 2.2},
                     }
                 })
             }
         }
-        console.log('traces:',traces)
+        //console.log('traces:',traces)
 
         let layout_line = { color: 'rgba(50,50,50,0.5)', width: 1.5, dash: 'dot', opacity: 0.5 }
         let layout = {
@@ -510,19 +516,21 @@ class DecksWindow {
             autosize: true,
             margin: MOBILE ? {l:10,r:10,b:35,t:0,} : {l:60,r:30,b:50,t:0,},
             plot_bgcolor: 'transparent',
-            paper_bgcolor: 'transparent',
-            xaxis: {
+            paper_bgcolor: 'white',
+            yaxis: {
                 title: 'Dust Cost',
                 range: [minCost*0.9,maxCost*1.1],
+                fixedrange: true,
             },
-            yaxis: {
+            xaxis: {
                 tickformat: ',.0%',
                 title: 'Winrate',
+                fixedrange: true,
             },
-            shapes: [{ type: 'line', x0: minCost, y0: 0.5, x1: maxCost, y1: 0.5, line: layout_line}],
+            shapes: [{ type: 'line', y0: minCost, x0: 0.5, y1: maxCost*1.1, x1: 0.5, line: layout_line}],
             margin: {r:0,t:0},
-
         }
+
         Plotly.newPlot('chart3', traces, layout);
         let clickHandler = function (e) {
             console.log('clickHandler:',e)

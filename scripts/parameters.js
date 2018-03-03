@@ -11,7 +11,8 @@ const ladder_times =  ['lastDay','last2Weeks']
 const ladder_times_premium = ['last6Hours','last12Hours','lastDay','last3Days','lastWeek','last2Weeks']
 
 const ladder_ranks =  ['ranks_all']
-const ladder_ranks_premium = ['ranks_all','ranks_L_5','ranks_6_15']
+// const ladder_ranks_premium = ['ranks_all','ranks_L_5','ranks_6_15']
+const ladder_ranks_premium = ['ranks_all','ranks_L','ranks_1_4','ranks_5_14']
 
 const ladder_plotTypes = []
 
@@ -23,7 +24,8 @@ const table_sortOptions_premium = ['frequency','winrate','matchup']
 
 const table_numArch = 16
 const table_ranks =   ['ranks_all']
-const table_ranks_premium = ['ranks_all','ranks_L_5','ranks_6_15']
+// const table_ranks_premium = ['ranks_all','ranks_L_5','ranks_6_15']
+const table_ranks_premium = ['ranks_all','ranks_L','ranks_1_4','ranks_5_14']
 
 
 var MU_COLOR_IDX = 0
@@ -36,9 +38,11 @@ const hsFormats =     ['Standard','Wild']
 const rankRange = {
     ranks_all:      [0,20],
     ranks_L:        [0,0],
-    ranks_1_5:      [1,5], 
+    ranks_1_5:      [1,5],
+    ranks_1_4:      [1,4], 
     ranks_L_5:      [0,5],
     ranks_6_15:     [6,15],
+    ranks_5_14:     [5,14],
 }
 
 function tier_classifier(wr) {
@@ -67,9 +71,11 @@ const btnIdToText = {
     
     ranks_all: 'All Ranks',
     ranks_L: 'Legend Ranks',
+    ranks_1_4: 'Ranks 1-4',
     ranks_1_5: 'Ranks 1-5', 
     ranks_L_5: 'Ranks L-5',
     ranks_6_15: 'Ranks 6-15',
+    ranks_5_14: 'Ranks 5-14',
 
     last6Hours: 'Last 6 Hours',
     last12Hours: 'Last 12 Hours',

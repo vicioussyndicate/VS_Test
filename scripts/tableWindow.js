@@ -6,7 +6,7 @@ class TableWindow {
 
     constructor(callback) {
 
-
+        // html elements
         this.div = document.querySelector('#tableWindow')
         this.tab = document.querySelector('#table.tab')
         this.optionButtons = document.querySelectorAll('#tableWindow .optionBtn')
@@ -14,13 +14,13 @@ class TableWindow {
         this.overlayDiv = document.querySelector('#tableWindow .overlay')
         this.overlayP = document.querySelector('#tableWindow .overlayText')
         this.nrGamesP = document.querySelector('#tableWindow .nrGames')
-        //this.nrGamesBtn = document.querySelector('#tableWindow .content-header #nrGames')
         this.nrGamesBtn = document.querySelector('#tableWindow .content-header #showNumbers')
+        this.simulationBtn = document.querySelector('#tableWindow .equilibriumBtn')
 
         this.firebasePath = (PREMIUM) ? 'premiumData/tableData' : 'data/tableData'
 
         this.data = {}
-        this.mode = 'matchup' // simulation
+        this.mode = 'matchup' // modes = [matchup, simulation]
         this.hsFormats = hsFormats
         this.hsTimes = (PREMIUM) ? table_times_premium : table_times
         this.ranks =   (PREMIUM) ? table_ranks_premium : table_ranks
@@ -29,8 +29,8 @@ class TableWindow {
         this.annotated = false
         this.nrGames = 0
         this.colorTheme = 0 // 0: red blue,  1: red green 2: grey
-
-        this.overlayText = `
+        this.overlayText = {}
+        this.overlayText.matchup = `
             Here you can see how your deck on the left hand side performs against any other deck on the top. 
             The colors range  from favorable <span class='blue'>blue</span> to unfavorable <span class='red'>red</span>.<br><br>
             The matchup table lists the top ${this.numArch} most frequent decks within the selected time and rank brackets.<br><br>
@@ -46,6 +46,14 @@ class TableWindow {
             Changing any parameter (Format, time, rank, sorting) keeps you zoomed into the same archetype if possible.<br><br>
             You can additionally sort 'by Matchup' while zoomed in.<br><br>
         `
+
+        this.overlayText.simulation = `
+            The simulation simulates the meta if all players would rationally switch from weaker to stronger decks according to the current meta.<br><br>
+            &#8226 The x axis shows the simulation over time (simulation steps)<br>
+            &#8226 The y axis shows the percentage of the meta an archetype occupies at a particular time.<br><br>
+            Click on any button to go back to the Matchup chart.
+        `
+
         
         // Defaults
 
@@ -56,10 +64,10 @@ class TableWindow {
         this.t = 'last2Weeks' //this.hsTimes[0] 
         this.r = this.ranks[0] 
         this.sortBy = this.sortOptions[0] //'class' // class, frequency, winrate, matchup
-        if (PREMIUM) {
-            this.zoomIn = false
-            this.zoomArch = null
-        }
+        
+        this.zoomIn = false
+        this.zoomArch = null
+        
         this.fullyLoaded = false
         this.overlay = false
         this.minGames = 1000
@@ -80,8 +88,6 @@ class TableWindow {
 
     setupUI() {
 
-        //for (let i=0;i<this.optionButtons.length;i++) { this.optionButtons[i].addEventListener("click", this.buttonTrigger.bind(this)) }
-
         this.dropdownFolders = {
             format: document.querySelector('#tableWindow .content-header #formatFolder .dropdown'),
             time: document.querySelector('#tableWindow .content-header #timeFolder .dropdown'),
@@ -89,7 +95,7 @@ class TableWindow {
             sort: document.querySelector('#tableWindow .content-header #sortFolder .dropdown'),
         }
 
-        let mouseOut = function(event) { 
+        let mouseOut = function(event) { // hides dropdown folder once you mouse out
             let e = event.toElement || event.relatedTarget;
             if (e.parentNode == this || e == this) { return }
             this.classList.add('hidden') 
@@ -99,7 +105,6 @@ class TableWindow {
             let folder = this.dropdownFolders[key]
             folder.innerHTML = ""
             folder.onmouseout = mouseOut
-            console.log(folder)
         }
 
 
@@ -151,18 +156,16 @@ class TableWindow {
         this.questionBtn.addEventListener('click',this.toggleOverlay.bind(this))
         this.overlayDiv.addEventListener('click',this.toggleOverlay.bind(this))
         this.nrGamesBtn.onclick = this.annotate.bind(this)
-        let changeColors = function () {this.updateColorTheme()}
-        //document.querySelector('#tableWindow .changeColorBtn').addEventListener('click',changeColors.bind(this))
-        document.querySelector('#tableWindow #changeColor').addEventListener('click',changeColors.bind(this))
+        document.querySelector('#tableWindow #changeColor').onclick = this.updateColorTheme.bind(this)
 
         if (PREMIUM) {
-            let equilibrium = function () {this.equilibrium()}
-            document.querySelector('#tableWindow .equilibriumBtn').addEventListener('click',equilibrium.bind(this))
+            this.simulationBtn.onclick = this.simulation.bind(this)
 
             let dlCSV = function () {this.data[this.f][this.t][this.r].downloadCSV()}
             document.querySelector('#tableWindow .downloadBtn').addEventListener('click',dlCSV.bind(this))
         }
     }
+
 
     display(bool) {
         if (bool) {
@@ -176,7 +179,8 @@ class TableWindow {
         }
     }
 
-    checkLoadData(callback) {
+    // check if data for the current parameters is loaded
+    checkLoadData(callback) { // if callback empty -> returns true or false
         if (!this.data[this.f].fullyLoaded) {
             if (callback == undefined) { return false }
             else { this.loadData(this.f, callback) }
@@ -184,8 +188,11 @@ class TableWindow {
         else { return (callback == undefined) ? true : callback.apply(this) }
     }
 
+    
+    // plots the current parameters
     plot () { 
-        if (!this.fullyLoaded) {return}
+        // if (!this.fullyLoaded) {return}
+        if (this.div.style.display == 'none') { return }
         if (!this.checkLoadData()) { 
             this.renderOptions()
             return this.checkLoadData( _ => { app.ui.tableWindow.plot() }) 
@@ -194,13 +201,10 @@ class TableWindow {
         this.renderOptions()
     }
     
+    // adds numbers to the plot 
     annotate() { 
-        if (this.annotated) {
-            //this.data[this.f][this.t][this.r].annotate(false); 
-            this.nrGamesBtn.classList.remove('highlighted') }
-        else {
-            //this.data[this.f][this.t][this.r].annotate(true); 
-            this.nrGamesBtn.classList.add('highlighted') }
+        if (this.annotated) { this.nrGamesBtn.classList.remove('highlighted') }
+        else { this.nrGamesBtn.classList.add('highlighted') }
         this.annotated = !this.annotated        
         this.plot()
     }
@@ -209,21 +213,17 @@ class TableWindow {
 
     
     renderOptions() {
-        
-        // ui.path.hsFormat = this.f
-        // ui.path.time = this.t
-        // ui.path.ranks = this.r
 
         document.querySelector("#tableWindow #formatBtn").innerHTML = (MOBILE) ? btnIdToText_m[this.f] : btnIdToText[this.f]
         document.querySelector("#tableWindow #timeBtn").innerHTML =   (MOBILE) ? btnIdToText_m[this.t] : btnIdToText[this.t]
         document.querySelector("#tableWindow #ranksBtn").innerHTML =  (MOBILE) ? btnIdToText_m[this.r] : btnIdToText[this.r]
         document.querySelector("#tableWindow #sortBtn").innerHTML =   (MOBILE) ? btnIdToText_m[this.sortBy] : btnIdToText[this.sortBy]
 
-        for (var t of this.hsTimes) {
-            if (this.data[this.f][t]['ranks_all'].totGames < this.minGames) {
-                document.querySelector('#tableWindow .content-header #timeFolder #'+t).style.display = 'none'
-            }
-        }
+        // for (var t of this.hsTimes) {
+        //     if (this.data[this.f][t]['ranks_all'].totGames < this.minGames) {
+        //         document.querySelector('#tableWindow .content-header #timeFolder #'+t).style.display = 'none'
+        //     }
+        // }
     }
 
 
@@ -254,7 +254,7 @@ class TableWindow {
     toggleOverlay() {
         if (this.overlay) {this.overlayDiv.style.display = 'none'; this.overlay = false}
         else{
-            this.overlayP.innerHTML = this.overlayText
+            this.overlayP.innerHTML = this.overlayText[this.mode]
             this.overlayDiv.style.display = 'block'; 
             this.overlay = true}
     }
@@ -263,7 +263,21 @@ class TableWindow {
         MU_COLOR_IDX = (MU_COLOR_IDX + 1) % 3
         this.data[this.f][this.t][this.r].plot();
     }
-    equilibrium() { this.data[this.f][this.t][this.r].equilibrium() }
+
+
+    simulation() {
+        let simulationDiv = document.querySelector('#tableWindow .chartFooterBtn.equilibrium')
+
+        if (this.mode == 'simulation') { 
+            simulationDiv.classList.remove('highlighted')
+            this.mode = 'matchup'
+        }
+        else { 
+            simulationDiv.classList.add('highlighted') 
+            this.mode = 'simulation'
+        }     
+        this.plot()
+    }
 
 } // close LadderWindow
 

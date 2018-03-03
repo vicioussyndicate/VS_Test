@@ -363,7 +363,6 @@ class Sidebar {
 
     hide() { if (!this.hidden) {this.div.classList.add('hidden'); this.hidden = false } }
     show() { this.div.classList.remove('hidden'); this.hidden = true}
-
 }// Sidebar
 
 

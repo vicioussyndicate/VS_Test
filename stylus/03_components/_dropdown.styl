@@ -24,7 +24,7 @@
         button
             transition none !important // margin 0.1s ease
             background-color #222
-            border none
+            border 0.1rem solid #222
             margin 0
             &:hover
                 background #fff
@@ -34,5 +34,12 @@
         &.hidden
             button
                 margin-top -2000px
+        &.highlighted
+            background-color red
+            &:active
+                background-color yellow !important
+                color $header_btn_hi_fColor
+                height 110%
+                border none !important
     
     

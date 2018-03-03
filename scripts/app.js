@@ -1,4 +1,14 @@
 
+// app.js defines the App class which serves as the main class
+// app.ui stores all data related to the website
+// app handles the firebase via .setupFirebase()
+// app.load(phase) loads all needed data
+// The data has to be loaded in order -> handled via app.phase 
+// app can be accessed globally (as defined in script.js)
+// -> app.ui.ladderWindow, app.ui.tableWindow, app.ui.powerWindow etc.
+
+
+
 
 class App {
 
@@ -22,7 +32,7 @@ class App {
         this.phase = 0 // loading phase
         this.setupFirebase()
 
-        document.querySelector('.refreshArrow').addEventListener('click', this.reload.bind(this))
+        //document.querySelector('.refreshArrow').addEventListener('click', this.reload.bind(this))
     } // constructor
 
 
@@ -79,6 +89,7 @@ class App {
 
             case 1:
                 if ( !this.ui.tableWindow.fullyLoaded || !this.ui.ladderWindow.fullyLoaded) {return}
+                if (this.phase >= 2) { console.log('RELOAD'); return }
                 this.phase = 1
                 this.path.window = this.ui.ladderWindow
                 this.ui.display('ladderWindow')
@@ -98,7 +109,7 @@ class App {
 
 
     reload() {
-        
+
         //this.path = this.ui.path
         //this.setupFirebase()
     }
