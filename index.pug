@@ -33,11 +33,15 @@ html(lang='en')
           button#table.tab Matchups
           button#decks.tab Decks
           button#info.tab info
+        #updateTimeDiv.tooltip
+          p#updateTime 00:00
+          span.tooltipText Last updated
         #vsLogoDiv
           img(src="Images/vsGoldLogo.png").logo
         //.refreshArrow.fa.fa-refresh
       .content-wrapper
         #loader
+
         #ladderWindow.tabWindow
           .content-header
             .ftrOptions.optionBar
@@ -141,6 +145,7 @@ html(lang='en')
                 button.downloadBtn Download Table
                   .fa.fa-cloud-download
           .content-footer
+
         #decksWindow.tabWindow
           .content-header
             .ftrOptions.optionBar
@@ -188,18 +193,25 @@ html(lang='en')
           
         #infoWindow.tabWindow
           .content-header
+            .graphOptions.optionBar
+              button#info.optionBtn.fa.fa-info.tooltip
+                span.tooltipText Information
+              button#twitter.optionBtn.fa.fa-twitter.tooltip
+                  span.tooltipText Twitter Feed
           .content
             .infoText
-            .login
-              p Test login in with a VS account (vsProUser@vs.com - pw12345):
-              input#emailInput(placeholder='Email')
-              input#passwordInput(placeholder='Password')
-              button#loginBtn Login
-              button#logOutBtn.hidden Logout
-              button#signUpBtn Sign Up
-              p#loginErrorMsg
+            .twitterDiv
+              a( class='twitter-timeline' href='https://twitter.com/ViciousHS?ref_src=twsrc%5Etfw>Tweets by ViciousHS' )
+            //  p Test login in with a VS account (vsProUser@vs.com - pw12345):
+            //  input#emailInput(placeholder='Email')
+            //  input#passwordInput(placeholder='Password')
+            //  button#loginBtn Login
+            //  button#logOutBtn.hidden Logout
+            //  button#signUpBtn Sign Up
+            //  p#loginErrorMsg
           .content-footer
 
+    script(src='https://platform.twitter.com/widgets.js', async, charset='utf-8')
     script(src='scripts/build_premium.js')
     script(src='scripts/app.js')
     script(src='scripts/parameters.js')

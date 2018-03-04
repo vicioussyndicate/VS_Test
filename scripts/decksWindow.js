@@ -106,7 +106,23 @@ class DecksWindow {
 
     plot() { 
         if (!this.checkLoadData()) { return this.checkLoadData(_=>{ app.ui.decksWindow.plot() }) }
-        this.loadFormat(this.f) 
+
+        if (!this.data[this.f].fullyLoaded) { return this.loadFormat(this.f) }
+
+        switch(this.mode) {
+            case 'overview':
+                this.plotDustWr()
+                break
+            case 'decklists':
+                this.loadDecklists()
+                break
+            case 'description':
+                this.loadDescription()
+                break
+
+        }
+
+        //this.loadFormat(this.f) 
         this.renderOptions()
     }
 
@@ -295,14 +311,15 @@ class DecksWindow {
 
    
 
-    deckLink(archName, hsFormat = 'Standard') {
+    deckLink(archName) {
 
         this.mode = 'decklists'
-        this.f = hsFormat
+        this.f = app.path.hsFormat
+        this.div.style.display = 'inline-block'
 
         if (!this.checkLoadData()) {
-            let callback = function() { app.ui.decksWindow.deckLink(archName,hsFormat) }
-            return this.checkLoadData( _=>{ app.ui.decksWindow.deckLink(archName,hsFormat) } )
+            let callback = function() { app.ui.decksWindow.deckLink(archName) }
+            return this.checkLoadData( _=>{ app.ui.decksWindow.deckLink(archName) } )
         }
 
         let hsClass, hsArch
@@ -315,7 +332,7 @@ class DecksWindow {
 
         for (var c of hsClasses) {
             if (archName.indexOf(c) != -1) {hsClass = c}
-            let archetypes = this.data[hsFormat][c].archetypes
+            let archetypes = this.data[this.f][c].archetypes
             for (let a of archetypes) { if (a.name == archName) { hsClass = c; hsArch = a; break } } 
         }
         
@@ -334,9 +351,10 @@ class DecksWindow {
         this.f = hsFormat; 
         if (!this.data[hsFormat].fullyLoaded) {
             let callback = function() { app.ui.decksWindow.loadFormat(hsFormat) }
-            this.loadData(hsFormat,callback)
+            return this.loadData(hsFormat,callback)
         }
-        this.loadClass(this.hsClass) }
+        this.loadClass(this.hsClass) 
+    }
 
 
     loadClass(hsClass) {

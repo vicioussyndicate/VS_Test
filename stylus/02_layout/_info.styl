@@ -5,25 +5,32 @@
   // Infowindow
 #infoWindow
     color $darkColor
-    .infoText
-        margin 2rem
-        .googleFormsLogo
-            display inline-block
-            height 3rem
-        a
-            display inline-block
+    .content-header
+        .graphOptions
+            right 0
+            position absolute
+    .content
+        .twitterDiv
+            padding 1rem
+        .infoText
+            margin 2rem
+            .googleFormsLogo
+                display inline-block
+                height 3rem
+            a
+                display inline-block
+                margin 0 auto
+                img
+                    height 9rem
+                    display: block
+        .login
+            display none
+            width 60%
             margin 0 auto
-            img
-                height 9rem
-                display: block
-    .login
-        display none
-        width 60%
-        margin 0 auto
-        margin-top 3rem
-        button
-            display inline-block
-            &.hidden
-                display none
-        #errorMsg
-            color red
+            margin-top 3rem
+            button
+                display inline-block
+                &.hidden
+                    display none
+            #errorMsg
+                color red

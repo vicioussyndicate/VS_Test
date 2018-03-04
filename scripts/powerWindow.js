@@ -86,7 +86,8 @@ class PowerWindow {
     }// buttonTrigger
 
     pressButton(e) {
-        app.ui.deckLink(e.target.id, this.f) 
+        app.ui.powerWindow.display(false)
+        app.ui.decksWindow.deckLink(e.target.id) 
     }
 
 
@@ -198,6 +199,7 @@ class PowerWindow {
             this.renderOptions()
             return this.checkLoadData( _ => { app.ui.powerWindow.plot() }) 
         }
+        this.renderOptions()
         if (this.mode == 'ranks') {this.plotRanks(this.f)}
         if (this.mode == 'brackets') {this.plotBrackets(this.f)}
     }

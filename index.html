@@ -35,6 +35,9 @@
           <button class="tab" id="decks">Decks</button>
           <button class="tab" id="info">info</button>
         </div>
+        <div class="tooltip" id="updateTimeDiv">
+          <p id="updateTime">00:00</p><span class="tooltipText">Last updated</span>
+        </div>
         <div id="vsLogoDiv"><img class="logo" src="Images/vsGoldLogo.png"></div>
         <!--.refreshArrow.fa.fa-refresh-->
       </nav>
@@ -221,23 +224,28 @@
           <div class="content-footer"></div>
         </div>
         <div class="tabWindow" id="infoWindow">
-          <div class="content-header"></div>
+          <div class="content-header">
+            <div class="graphOptions optionBar">
+              <button class="optionBtn fa fa-info tooltip" id="info"><span class="tooltipText">Information</span></button>
+              <button class="optionBtn fa fa-twitter tooltip" id="twitter"><span class="tooltipText">Twitter Feed</span></button>
+            </div>
+          </div>
           <div class="content">
             <div class="infoText"></div>
-            <div class="login">
-              <p>Test login in with a VS account (vsProUser@vs.com - pw12345):</p>
-              <input id="emailInput" placeholder="Email">
-              <input id="passwordInput" placeholder="Password">
-              <button id="loginBtn">Login</button>
-              <button class="hidden" id="logOutBtn">Logout</button>
-              <button id="signUpBtn">Sign Up</button>
-              <p id="loginErrorMsg"></p>
-            </div>
+            <div class="twitterDiv"><a class="twitter-timeline" href="https://twitter.com/ViciousHS?ref_src=twsrc%5Etfw&gt;Tweets by ViciousHS"></a></div>
+            <!--  p Test login in with a VS account (vsProUser@vs.com - pw12345):-->
+            <!--  input#emailInput(placeholder='Email')-->
+            <!--  input#passwordInput(placeholder='Password')-->
+            <!--  button#loginBtn Login-->
+            <!--  button#logOutBtn.hidden Logout-->
+            <!--  button#signUpBtn Sign Up-->
+            <!--  p#loginErrorMsg-->
           </div>
           <div class="content-footer"></div>
         </div>
       </div>
     </div>
+    <script src="https://platform.twitter.com/widgets.js" async charset="utf-8"></script>
     <script src="scripts/build_premium.js"></script>
     <script src="scripts/app.js"></script>
     <script src="scripts/parameters.js"></script>

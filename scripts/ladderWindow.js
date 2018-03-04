@@ -447,7 +447,12 @@ class LadderWindow {
         legendDiv.style = 'background-color:'+colors.color+'; color:'+colors.fontColor
         legendDiv.id = archName
         legendDiv.innerHTML = archName
-        legendDiv.onclick = function(e) { app.ui.deckLink(e.target.id,this.f);  }
+        legendDiv.onclick = function(e) { 
+            if (app.ui.decksWindow == null) { return }
+            app.path.hsFormat = this.f
+            //app.ui.ladderWindow.display(false)
+            app.ui.deckLink(e.target.id);  
+        }
 
         this.chartFooter.appendChild(legendDiv)
         

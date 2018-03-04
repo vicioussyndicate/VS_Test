@@ -13,6 +13,7 @@ class UI {
         this.loader = document.getElementById('loader')
         this.logo = document.querySelector('#vsLogoDiv')
         this.overlayText = document.querySelector('#overlay .overlayText')
+        this.updateTimeDiv = document.querySelector('#updateTime')
         
         for (let w of this.windowTabs) { w.style.display = 'none' }
         this.windowTabs[0].style.display = 'inline-block'
@@ -55,6 +56,7 @@ class UI {
         window.addEventListener('resize', this.getWindowSize.bind(this))
 
         this.toggleOverlay()
+        this.updateTime()
     } // constructor
 
     
@@ -74,9 +76,13 @@ class UI {
         this.renderTabs()
     }
 
-    deckLink(arch, hsFormat) {
+    deckLink(arch) {
         app.path.arch = arch
-        this.display('decksWindow')      
+        console.log('Decklink',arch)
+        if (app.path.window != null) { app.path.window.display(false) }
+        app.path.window = this.decksWindow
+        this.decksWindow.deckLink(arch)
+        this.renderTabs()
     }
 
     renderTabs() {
@@ -113,6 +119,12 @@ class UI {
         //this.renderWindows()
     }
 
+    updateTime() { 
+        let d = new Date()
+        let minutes = d.getMinutes()
+        if (minutes < 10) { minutes = '0' + minutes}
+        this.updateTimeDiv.innerHTML =  d.getHours() + ':' + minutes
+    }
 
 
     toggleDropDown(e) {

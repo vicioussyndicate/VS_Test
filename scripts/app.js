@@ -89,7 +89,11 @@ class App {
 
             case 1:
                 if ( !this.ui.tableWindow.fullyLoaded || !this.ui.ladderWindow.fullyLoaded) {return}
-                if (this.phase >= 2) { console.log('RELOAD'); return }
+                if (this.phase >= 2) { 
+                    this.ui.updateTime()
+                    console.log('RELOAD')
+                    return 
+                }
                 this.phase = 1
                 this.path.window = this.ui.ladderWindow
                 this.ui.display('ladderWindow')
