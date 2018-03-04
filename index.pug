@@ -154,9 +154,14 @@ html(lang='en')
                 .dropdown.hidden
                   button#Standard.optionBtn.folderBtn Standard
                   button#Wild.optionBtn.folderBtn Wild
+              button#description.optionBtn Text
+              button#decklists.optionBtn Deck Lists
               #classFolder.option-folder
                 button#classBtn.folder-toggle Druid
                 .dropdown.hidden
+                  button.optionBtn.folderBtn Classes
+                  button.optionBtn.folderBtn Meta
+                  button.optionBtn.folderBtn Special
                   button#Druid.optionBtn.folderBtn Druid 
                   button#Hunter.optionBtn.folderBtn Hunter 
                   button#Mage.optionBtn.folderBtn Mage
@@ -167,27 +172,26 @@ html(lang='en')
                   button#Warlock.optionBtn.folderBtn Warlock
                   button#Warrior.optionBtn.folderBtn Warrior
             .displayOptions.optionBar
-              button#description.optionBtn Description
-              button#decklists.optionBtn Deck Lists
               button#overview.optionBtn Dust
           .overlay
             p.overlayText
           .content
             .question.fa.fa-question-circle
-            .sidebar.left
-              //p.title Archetypes
-              //.archetypeList
-            .descriptionBox
-              .description
-            .decklists
-            #chart3.chart
-            .sidebarWrapper
+            .content-left
+              .selectionWrapper
+                .imgWrapper
+                  img(src="https://d1u5p3l4wpay3k.cloudfront.net/hearthstone_gamepedia/thumb/9/98/Rexxar_hero_art.jpg/353px-Rexxar_hero_art.jpg?version=ecdc1e95c9982bf641f540c9f4a3baa5").selectionImg
+                  p.selectionTitle Hunter
+                .buttonWrapper
+              .sidebar.left
+            .content-middle
+              .descriptionBox
+                .description
+              .decklists
+              #chart3.chart
+            .content-right
               .sidebar.right1
               .sidebar.right2
-              //p.title Good vs
-              //.archetypeList
-              //p.title Bad vs
-              //.archetypeList
           .content-footer
             
           

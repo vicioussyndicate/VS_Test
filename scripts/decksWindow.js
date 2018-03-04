@@ -101,6 +101,44 @@ class DecksWindow {
             let folder = this.dropdownFolders[key]
             folder.onmouseout = mouseOut
         }
+
+        this.selection = {}
+        this.selection.div = document.querySelector('#decksWindow .selectionWrapper')
+        this.selection.buttonWrapper = document.querySelector('#decksWindow .selectionWrapper .buttonWrapper')
+        this.selection.imgWrapper = document.querySelector('#decksWindow .selectionWrapper .imgWrapper')
+        this.selection.img = document.querySelector('#decksWindow .selectionWrapper .selectionImg')
+        this.selection.title = document.querySelector('#decksWindow .selectionWrapper .selectionTitle')
+        this.selection.buttons = []
+
+        for (let hsClass of hsClasses) {
+            let btn = this.createSelectionBtn(hsClass, hsClass)
+            btn.style.backgroundColor = hsColors[hsClass]
+            btn.style.color = hsFontColors[hsClass]
+            btn.onclick = this.buttonTrigger.bind(this)
+            this.selection.buttonWrapper.appendChild(btn)
+            this.selection.buttons.push(btn)
+        }
+
+        for (let extra of ['Meta','Random']) {
+            let btn = this.createSelectionBtn(extra,extra)
+            btn.style.backgroundColor = 'black'
+            btn.style.color = 'white'
+            btn.onclick = this.buttonTrigger.bind(this)
+            this.selection.buttonWrapper.appendChild(btn)
+            this.selection.buttons.push(btn)
+        }
+
+        
+
+
+    }
+
+    createSelectionBtn(title, idName) {
+        let btn = document.createElement('div')
+        btn.className = 'selectionBtn'
+        btn.innerHTML = title
+        btn.id = idName
+        return btn
     }
 
 
@@ -201,12 +239,18 @@ class DecksWindow {
             btn.classList.remove('highlighted')
             if (btn.id == this.mode) {btn.classList.add('highlighted')}
         }
+
+        for (let btn of this.selection.buttons) {
+            btn.classList.remove('highlighted')
+            if (btn.id == this.hsClass) { btn.classList.add('highlighted') }
+        }
         
         for (var btn of this.archButtons) { 
             btn.classList.remove('highlighted')
             if (this.hsArch != null) { if (btn.id == this.hsArch.name) {btn.classList.add('highlighted')} }
         }
 
+        this.selection.title.innerHTML = this.hsClass
         document.querySelector("#decksWindow #formatBtn").innerHTML =   btnIdToText[this.f]
         document.querySelector("#decksWindow #classBtn").innerHTML =    this.hsClass
     }

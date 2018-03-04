@@ -429,6 +429,39 @@ var app, _createClass = function() {
             for (var e in this.dropdownFolders) {
                 this.dropdownFolders[e].onmouseout = t;
             }
+            this.selection = {}, this.selection.div = document.querySelector("#decksWindow .selectionWrapper"), 
+            this.selection.buttonWrapper = document.querySelector("#decksWindow .selectionWrapper .buttonWrapper"), 
+            this.selection.imgWrapper = document.querySelector("#decksWindow .selectionWrapper .imgWrapper"), 
+            this.selection.img = document.querySelector("#decksWindow .selectionWrapper .selectionImg"), 
+            this.selection.title = document.querySelector("#decksWindow .selectionWrapper .selectionTitle"), 
+            this.selection.buttons = [];
+            var a = !0, i = !1, r = void 0;
+            try {
+                for (var s, n = hsClasses[Symbol.iterator](); !(a = (s = n.next()).done); a = !0) {
+                    var o = s.value, l = this.createSelectionBtn(o, o);
+                    l.style.backgroundColor = hsColors[o], l.style.color = hsFontColors[o], l.onclick = this.buttonTrigger.bind(this), 
+                    this.selection.buttonWrapper.appendChild(l), this.selection.buttons.push(l);
+                }
+            } catch (t) {
+                i = !0, r = t;
+            } finally {
+                try {
+                    !a && n.return && n.return();
+                } finally {
+                    if (i) throw r;
+                }
+            }
+            for (var h = [ "Meta", "Random" ], d = 0; d < h.length; d++) {
+                var c = h[d], u = this.createSelectionBtn(c, c);
+                u.style.backgroundColor = "black", u.style.color = "white", u.onclick = this.buttonTrigger.bind(this), 
+                this.selection.buttonWrapper.appendChild(u), this.selection.buttons.push(u);
+            }
+        }
+    }, {
+        key: "createSelectionBtn",
+        value: function(t, e) {
+            var a = document.createElement("div");
+            return a.className = "selectionBtn", a.innerHTML = t, a.id = e, a;
         }
     }, {
         key: "plot",
@@ -504,7 +537,7 @@ var app, _createClass = function() {
             var t = !0, e = !1, a = void 0;
             try {
                 for (var i, r = this.optionButtons[Symbol.iterator](); !(t = (i = r.next()).done); t = !0) {
-                    (d = i.value).classList.remove("highlighted"), d.id == this.mode && d.classList.add("highlighted");
+                    (v = i.value).classList.remove("highlighted"), v.id == this.mode && v.classList.add("highlighted");
                 }
             } catch (t) {
                 e = !0, a = t;
@@ -517,9 +550,9 @@ var app, _createClass = function() {
             }
             var s = !0, n = !1, o = void 0;
             try {
-                for (var l, h = this.archButtons[Symbol.iterator](); !(s = (l = h.next()).done); s = !0) {
-                    var d;
-                    (d = l.value).classList.remove("highlighted"), null != this.hsArch && d.id == this.hsArch.name && d.classList.add("highlighted");
+                for (var l, h = this.selection.buttons[Symbol.iterator](); !(s = (l = h.next()).done); s = !0) {
+                    var d = l.value;
+                    d.classList.remove("highlighted"), d.id == this.hsClass && d.classList.add("highlighted");
                 }
             } catch (t) {
                 n = !0, o = t;
@@ -530,7 +563,22 @@ var app, _createClass = function() {
                     if (n) throw o;
                 }
             }
-            document.querySelector("#decksWindow #formatBtn").innerHTML = btnIdToText[this.f], 
+            var c = !0, u = !1, y = void 0;
+            try {
+                for (var f, p = this.archButtons[Symbol.iterator](); !(c = (f = p.next()).done); c = !0) {
+                    var v;
+                    (v = f.value).classList.remove("highlighted"), null != this.hsArch && v.id == this.hsArch.name && v.classList.add("highlighted");
+                }
+            } catch (t) {
+                u = !0, y = t;
+            } finally {
+                try {
+                    !c && p.return && p.return();
+                } finally {
+                    if (u) throw y;
+                }
+            }
+            this.selection.title.innerHTML = this.hsClass, document.querySelector("#decksWindow #formatBtn").innerHTML = btnIdToText[this.f], 
             document.querySelector("#decksWindow #classBtn").innerHTML = this.hsClass;
         }
     }, {

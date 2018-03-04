@@ -11,22 +11,75 @@
         .ftrOptions
             position absolute
             left 0
+            #classFolder
+                visibility hidden
         .displayOptions
             position absolute
             right 0
     .content
-        display grid
-        grid-template-columns 10rem auto 10rem
-        grid-auto-flow: column
-        overflow-x: auto
-        overflow-y hidden
-        grid-gap 2rem
-        .sidebarWrapper
-            width 100%
+        display flex
+        flex-flow row
+        justify-content space-between
+        .content-left
+            width 10rem
+            .selectionWrapper
+                width 10rem
+                height 12rem
+                margin-top 1rem
+                .buttonWrapper
+                    position absolute
+                    width 12rem
+                    margin-left 0.5rem
+                    margin-top 1.1rem
+                    line-height 2rem
+                    visibility hidden
+                    .selectionBtn
+                        font-size 1rem
+                        display inline-block
+                        background-color $accentColor
+                        padding 0.2rem
+                        margin-left 0.2rem
+                        border-radius 0.2rem
+                        line-height normal
+                        &:hover
+                            background-color $darkColor !important
+                            color $accentColor !important
+                            cursor pointer
+                        &:active
+                            background-color yellow !important
+                .imgWrapper
+                    position absolute
+                    height 12rem
+                    .selectionImg
+                        position absolute
+                        width 10rem
+                        padding-left 0.5rem
+                    .selectionTitle
+                        font-size 1.2rem
+                        position absolute
+                        left 3rem
+                        bottom 0
+                        color white
+                        font-weight bold
+                &:hover
+                    .buttonWrapper
+                        visibility visible
+                    .selectionImg
+                        opacity 0.1
+                    .selectionTitle
+                        color black
+                        
+        .content-right
+            width 10rem
+            
         .sidebar
-            margin-left 0.5rem
-            margin-top 2rem
-            width 100%
+            // margin-left 0.5rem
+            //margin-top 2rem
+            width 10rem
+            &.left
+                padding-left 0.5rem
+            &.right
+                padding-right 0.5rem
             .title
                 margin-bottom: 1rem
                 margin-top: 1rem
@@ -68,37 +121,38 @@
                             color $lightColor
                             padding-top 0.65rem
                             padding-bottom 0.5rem
-            &.left
-                left 0
-            &.right
-                right 0
-        .chart
-            display none
-            width 100%
-            height 100%
-        
-        .descriptionBox
-            height $cont-height - 1rem
-            padding 1rem
-            overflow-y: auto
-            .description
-                background-color white
-                color black
-                padding 2rem
-                letter-spacing: 1.2px;
-                font-size: 0.9rem
-                font-weight: normal
-                font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-                text-indent: 20px; 
-                .text
+                            
+        .content-middle
+            //.decklists has own .styl file
+            margin-left 1rem
+            margin-right 1rem
+            .chart
+                display none
+                width 100%
+                height 100%
+            
+            .descriptionBox
+                height $cont-height - 1rem
+                padding 1rem
+                overflow-y: auto
+                .description
                     background-color white
-                    &::first-letter
-                        font-size: 200%  
-                .title                          
-                    font-size: 150%
-                    font-weight: bold
-                    margin-bottom: 1rem
-        
+                    color black
+                    padding 2rem
+                    letter-spacing: 1.2px;
+                    font-size: 0.9rem
+                    font-weight: normal
+                    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                    text-indent: 20px; 
+                    .text
+                        background-color white
+                        &::first-letter
+                            font-size: 200%  
+                    .title                          
+                        font-size: 150%
+                        font-weight: bold
+                        margin-bottom: 1rem
+            
 
             
             

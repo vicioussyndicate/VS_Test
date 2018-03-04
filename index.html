@@ -177,9 +177,14 @@
                   <button class="optionBtn folderBtn" id="Wild">Wild</button>
                 </div>
               </div>
+              <button class="optionBtn" id="description">Text</button>
+              <button class="optionBtn" id="decklists">Deck Lists</button>
               <div class="option-folder" id="classFolder">
                 <button class="folder-toggle" id="classBtn">Druid</button>
                 <div class="dropdown hidden">
+                  <button class="optionBtn folderBtn">Classes</button>
+                  <button class="optionBtn folderBtn">Meta</button>
+                  <button class="optionBtn folderBtn">Special</button>
                   <button class="optionBtn folderBtn" id="Druid">Druid </button>
                   <button class="optionBtn folderBtn" id="Hunter">Hunter </button>
                   <button class="optionBtn folderBtn" id="Mage">Mage</button>
@@ -193,8 +198,6 @@
               </div>
             </div>
             <div class="displayOptions optionBar">
-              <button class="optionBtn" id="description">Description</button>
-              <button class="optionBtn" id="decklists">Deck Lists</button>
               <button class="optionBtn" id="overview">Dust</button>
             </div>
           </div>
@@ -203,22 +206,25 @@
           </div>
           <div class="content">
             <div class="question fa fa-question-circle"></div>
-            <div class="sidebar left">
-              <!--p.title Archetypes-->
-              <!--.archetypeList-->
+            <div class="content-left">
+              <div class="selectionWrapper">
+                <div class="imgWrapper"><img class="selectionImg" src="https://d1u5p3l4wpay3k.cloudfront.net/hearthstone_gamepedia/thumb/9/98/Rexxar_hero_art.jpg/353px-Rexxar_hero_art.jpg?version=ecdc1e95c9982bf641f540c9f4a3baa5">
+                  <p class="selectionTitle">Hunter</p>
+                </div>
+                <div class="buttonWrapper"></div>
+              </div>
+              <div class="sidebar left"></div>
             </div>
-            <div class="descriptionBox">
-              <div class="description"></div>
+            <div class="content-middle">
+              <div class="descriptionBox">
+                <div class="description"></div>
+              </div>
+              <div class="decklists"></div>
+              <div class="chart" id="chart3"></div>
             </div>
-            <div class="decklists"></div>
-            <div class="chart" id="chart3"></div>
-            <div class="sidebarWrapper">
+            <div class="content-right">
               <div class="sidebar right1"></div>
               <div class="sidebar right2"></div>
-              <!--p.title Good vs-->
-              <!--.archetypeList-->
-              <!--p.title Bad vs-->
-              <!--.archetypeList-->
             </div>
           </div>
           <div class="content-footer"></div>
