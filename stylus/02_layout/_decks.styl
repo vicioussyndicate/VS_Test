@@ -32,7 +32,7 @@
                     margin-left 0.5rem
                     margin-top 1.1rem
                     line-height 2rem
-                    visibility hidden
+                    //visibility hidden
                     .selectionBtn
                         font-size 1rem
                         display inline-block
@@ -41,29 +41,37 @@
                         margin-left 0.2rem
                         border-radius 0.2rem
                         line-height normal
+                        opacity 0.4
+                        &.special
+                            font-size 1.3rem
+                            margin-left 0.4rem
                         &:hover
                             background-color $darkColor !important
                             color $accentColor !important
                             cursor pointer
                         &:active
                             background-color yellow !important
-                .imgWrapper
-                    position absolute
-                    height 12rem
-                    .selectionImg
-                        position absolute
-                        width 10rem
-                        padding-left 0.5rem
-                    .selectionTitle
-                        font-size 1.2rem
-                        position absolute
-                        left 3rem
-                        bottom 0
-                        color white
-                        font-weight bold
+                        &.highlighted
+                            opacity 1
+                            font-size 1.3rem
+                        
+                // .imgWrapper
+                //     position absolute
+                //     height 12rem
+                //     .selectionImg
+                //         position absolute
+                //         width 10rem
+                //         padding-left 0.5rem
+                //     .selectionTitle
+                //         font-size 1.2rem
+                //         position absolute
+                //         left 3rem
+                //         bottom 0
+                //         color white
+                //         font-weight bold
                 &:hover
-                    .buttonWrapper
-                        visibility visible
+                    // .buttonWrapper
+                    //     visibility visible
                     .selectionImg
                         opacity 0.1
                     .selectionTitle
@@ -71,61 +79,14 @@
                         
         .content-right
             width 10rem
-            
-        .sidebar
-            // margin-left 0.5rem
-            //margin-top 2rem
-            width 10rem
-            &.left
-                padding-left 0.5rem
-            &.right
-                padding-right 0.5rem
-            .title
-                margin-bottom: 1rem
-                margin-top: 1rem
-                font-weight: bold
-                font-size: 1.1rem
-                color $darkColor
-            .archBtnList
-                width 100%
-                .archBtnWrapper
-                    width 100%
-                    margin-top 1rem
-                    position relative
-                    border-radius 0.2rem
-                    font-size 80%
-                    .archBtn
-                        display inline-block
-                        padding 0.1rem 0.2rem
-                        width 60%
-                        border solid #ffffff42
-                        border-radius 0.2rem
-                        &:hover
-                            cursor pointer
-                            color $darkColor !important
-                            background-color $accentColor !important
-                    .wrDiv
-                        font-weight bold
-                        color #5a5959
-                        padding-top 0.25rem
-                        padding-right 0.3rem
-                        display inline-block
-                        float right
-                        width 25%
-                    &.highlighted
-                        background-color $darkColor
-                        .archBtn
-                            padding-top 0.5rem
-                            padding-bottom 0.5rem
-                        .wrDiv
-                            color $lightColor
-                            padding-top 0.65rem
-                            padding-bottom 0.5rem
-                            
+        // .sidebar in 03_components                  
         .content-middle
             //.decklists has own .styl file
-            margin-left 1rem
+            margin-left 1.5rem
+            overflow-x auto
             margin-right 1rem
+            width 70%
+            //margin auto
             .chart
                 display none
                 width 100%
@@ -154,5 +115,9 @@
                         margin-bottom: 1rem
             
 
-            
+
+// @media (max-width: 756px)
+//     .content
+//         .content-middle
+//             overflow-x visible
             

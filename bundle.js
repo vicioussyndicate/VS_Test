@@ -1,5 +1,8 @@
 
 
+
+
+// @prepros-append scripts/app.js
 // @prepros-append scripts/build_premium.js
 // @prepros-append scripts/decklistClass.js
 // @prepros-append scripts/decksWindow.js
@@ -13,7 +16,6 @@
 // @prepros-append scripts/tableClass.js
 // @prepros-append scripts/tableWindow.js
 // @prepros-append scripts/ui.js 
-// @prepros-append scripts/app.js
 
 
 

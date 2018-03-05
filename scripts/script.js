@@ -71,6 +71,7 @@ function matrixXvector(matrix,fr) {
 // MOBILE
 
 function detectswipe(el,func) {
+    console.log('swipe',el,func)
     var swipe_det = {};
     swipe_det.sX = 0; swipe_det.sY = 0; swipe_det.eX = 0; swipe_det.eY = 0;
     var min_x = 30;  //min x swipe for horizontal swipe

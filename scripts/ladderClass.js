@@ -415,8 +415,8 @@ class Ladder {
 
 
         if (MOBILE == 'portrait' && this.window.plotTyp != 'pie') {
-            layout.width = ui.width*2
-            layout.height = ui.height*0.6
+            layout.width = app.ui.width*2
+            layout.height = app.ui.height*0.6
         }
 
 

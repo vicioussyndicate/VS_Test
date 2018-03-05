@@ -27,8 +27,8 @@ class DecksWindow {
         let sb3 = document.querySelector('#decksWindow .content .sidebar.right2')
 
         this.sidebarLeft = new Sidebar(sb1,'Archetypes')
-        this.sidebarRightTop = new Sidebar(sb2,'Best vs')
-        this.sidebarRightBot = new Sidebar(sb3,'Worst vs')
+        //this.sidebarRightTop = new Sidebar(sb2,'Best vs')
+        //this.sidebarRightBot = new Sidebar(sb3,'Worst vs')
 
 
         this.overlayText = `
@@ -47,7 +47,7 @@ class DecksWindow {
 
         this.archButtons = []
         this.optionButtons = document.querySelectorAll('#decksWindow .optionBtn')
-        for (let oBtn of this.optionButtons) { oBtn.addEventListener("click", this.buttonTrigger.bind(this)) }
+        for (let btn of this.optionButtons) { btn.onclick = this.buttonTrigger.bind(this) }
 
 
 
@@ -85,6 +85,8 @@ class DecksWindow {
         callback.apply(this)
     }// close constructor
 
+
+
     setupUI() {
         this.dropdownFolders = {
             format: document.querySelector('#decksWindow .content-header #formatFolder .dropdown'),
@@ -102,36 +104,61 @@ class DecksWindow {
             folder.onmouseout = mouseOut
         }
 
+        this.infoBtn = document.querySelector('#decksWindow .content-header #info')
+        this.compareBtn = document.querySelector('#decksWindow .content-header #compare')
+        this.infoBtn.active = false
+        this.compareBtn.active = false
+        // this.infoBtn.onclick = this.buttonTrigger.bind(this)
+        // this.compareBtn.onclick = this.buttonTrigger.bind(this)
+
         this.selection = {}
         this.selection.div = document.querySelector('#decksWindow .selectionWrapper')
         this.selection.buttonWrapper = document.querySelector('#decksWindow .selectionWrapper .buttonWrapper')
-        this.selection.imgWrapper = document.querySelector('#decksWindow .selectionWrapper .imgWrapper')
-        this.selection.img = document.querySelector('#decksWindow .selectionWrapper .selectionImg')
-        this.selection.title = document.querySelector('#decksWindow .selectionWrapper .selectionTitle')
+        //this.selection.imgWrapper = document.querySelector('#decksWindow .selectionWrapper .imgWrapper')
+        //this.selection.img = document.querySelector('#decksWindow .selectionWrapper .selectionImg')
+        //this.selection.title = document.querySelector('#decksWindow .selectionWrapper .selectionTitle')
         this.selection.buttons = []
 
-        for (let hsClass of hsClasses) {
-            let btn = this.createSelectionBtn(hsClass, hsClass)
-            btn.style.backgroundColor = hsColors[hsClass]
-            btn.style.color = hsFontColors[hsClass]
-            btn.onclick = this.buttonTrigger.bind(this)
-            this.selection.buttonWrapper.appendChild(btn)
-            this.selection.buttons.push(btn)
+
+        let fontColors = {
+            Druid: '#ab8476',
+            Hunter: '#689f38',
+            Mage: '#4fc3f7',
+            Paladin: '#ffee58',
+            Priest: '#e6e6e6',
+            Rogue: '#989090',
+            Shaman: '#7786da',
+            Warlock: '#bc4bd0',
+            Warrior: '#f44336',
+            Meta: 'white',
+            Random: 'white',
         }
+
 
         for (let extra of ['Meta','Random']) {
             let btn = this.createSelectionBtn(extra,extra)
+            btn.className += ' special'
             btn.style.backgroundColor = 'black'
-            btn.style.color = 'white'
+            btn.style.color = fontColors[extra]
             btn.onclick = this.buttonTrigger.bind(this)
             this.selection.buttonWrapper.appendChild(btn)
             this.selection.buttons.push(btn)
         }
 
-        
 
+
+        for (let hsClass of hsClasses) {
+            let btn = this.createSelectionBtn(hsClass, hsClass)
+            btn.style.backgroundColor = '#454c57'
+            btn.style.color = fontColors[hsClass]
+            btn.onclick = this.buttonTrigger.bind(this)
+            this.selection.buttonWrapper.appendChild(btn)
+            this.selection.buttons.push(btn)
+        }
 
     }
+
+
 
     createSelectionBtn(title, idName) {
         let btn = document.createElement('div')
@@ -139,6 +166,59 @@ class DecksWindow {
         btn.innerHTML = title
         btn.id = idName
         return btn
+    }
+
+    compare(bool) {
+
+        if (!bool) { // remove comparison
+            for (let dl of this.decklists) { dl.declassify()}
+            return
+        }
+
+        let cards = []
+        let numDl = this.decklists.length
+
+        for (let idx1 of range(0,numDl)) {
+
+            //let dl1 = this.decklists[idx1]
+            for (let card of this.decklists[idx1].cards) {
+
+                if (cards.indexOf(card.name) != -1 ) { continue } // card has been classified already
+                cards.push(card.name)
+
+                //if (idx1 == numDl-1) { dl1.classify(card.name, 'unique'); continue }
+
+                let allDecksHave1 = true
+                let allDecksHave2 = true
+                let someDecksDontHave1or2 = false
+                let only1DeckHas1or2 = true
+
+                if ( card.quantity == 1) { allDecksHave2 = false }
+
+                for (let idx2 of range(0,numDl)) {
+                    if (idx1 == idx2) { continue }
+                    let numCard = this.decklists[idx2].findCard(card.name)
+
+                    if (numCard == 0) { allDecksHave2 = false; allDecksHave1 = false }
+                    if (numCard == 1) { allDecksHave2 = false; only1DeckHas1or2 = false }
+                    if (numCard >= 2) { only1DeckHas1or2 = false }
+                }
+
+                if (!only1DeckHas1or2 && !allDecksHave1) { someDecksDontHave1or2 = true }
+
+                let classification = ''
+                if (allDecksHave1) { classification = 'core_x1' }
+                if (allDecksHave2) { classification = 'core_x2' }
+                if (someDecksDontHave1or2) { classification = 'some'}
+                if (only1DeckHas1or2) { classification = 'unique'}
+                
+                for (let dl of this.decklists) { dl.classify(card.name, classification) }
+            }
+        }
+    }
+
+    info(bool) { 
+        for (let dl of this.decklists) { dl.toggleInfo(bool) } 
     }
 
 
@@ -187,8 +267,29 @@ class DecksWindow {
     buttonTrigger(e) {
         
         var btnID = e.target.id
+        //console.log(e)
 
         if (btnID == 'Standard' || btnID == 'Wild') { this.f = btnID; this.plot() }
+        if (btnID == 'Meta') { 
+            this.hsClass = 'Meta'
+            this.sidebarLeft.loadMeta(this.archetypes[this.f]) 
+        }
+        if (btnID == 'Random') {
+            this.hsClass = 'Random'
+            this.sidebarLeft.loadRandom(this.archetypes[this.f]) 
+        }
+
+        if (btnID == 'info') { 
+            //console.log(this.infoBtn, this.infoBtn.active)
+            this.infoBtn.active = !this.infoBtn.active
+            this.info(this.infoBtn.active) 
+        }
+        if (btnID == 'compare') { 
+            //console.log(this.compareBtn, this.compareBtn.active)
+            this.compareBtn.active = !this.compareBtn.active
+            this.compare(this.compareBtn.active) 
+        }
+
 
         if (e.target.classList.contains('archBtn')) { 
             this.hsArch = this.findArch(btnID)
@@ -250,7 +351,12 @@ class DecksWindow {
             if (this.hsArch != null) { if (btn.id == this.hsArch.name) {btn.classList.add('highlighted')} }
         }
 
-        this.selection.title.innerHTML = this.hsClass
+        for (let btn of [this.infoBtn, this.compareBtn]) {
+            btn.classList.remove('highlighted')
+            if (btn.active) { btn.classList.add('highlighted')}
+        }
+
+        //this.selection.title.innerHTML = this.hsClass
         document.querySelector("#decksWindow #formatBtn").innerHTML =   btnIdToText[this.f]
         document.querySelector("#decksWindow #classBtn").innerHTML =    this.hsClass
     }
@@ -289,6 +395,7 @@ class DecksWindow {
             else { return true }
         }
     }
+
 
     loadWinrate() {
         let tw = app.ui.tableWindow.data[this.f][this.table_time][this.table_rank]
@@ -423,18 +530,18 @@ class DecksWindow {
 
         var d = this.data[this.f][this.hsClass]
         this.description.innerHTML = '<p class="title">'+this.hsClass+'</p><p class="text">'+d.text+'</p>'
-        //this.addDescription(this.hsClass,d.text)
     }
 
-    // addDescription(title,text) {
-    //     this.description.innerHTML = '<p class="title">'+title+'</p><p class="text">'+text+'</p>'
-    // }
+    
 
 
 
     loadDecklists() {
         this.mode = 'decklists'
         this.renderWindows()
+       
+        this.infoBtn.active = false
+        if (this.compareBtn.active) { this.compare(false); this.compareBtn.active = false}
         this.decklists = []
 
         this.decksDiv.innerHTML = ''
@@ -442,17 +549,18 @@ class DecksWindow {
         if (this.hsArch == null) { this.hsArch = this.data[this.f][this.hsClass].archetypes[0]}
         if (this.hsArch == undefined) { this.hsArch = null; return}
         
-        var deckCards = []
         var gridTemplateColumns = ''
+        //for (let arch of this.data[this.f][this.hsClass].archetypes) {
         for (var dl of this.hsArch.decklists) {
-            
+            //if (arch.decklists.length == 0) { continue }
+            //let dl = arch.decklists[0]
             gridTemplateColumns += this.deckWidth + ' '
             this.decklists.push(dl)
             this.decksDiv.appendChild(dl.div)
         }
         
         this.decksDiv.style.gridTemplateColumns = gridTemplateColumns
-        this.loadDecklistsMatchups(this.hsArch) // load deck list matchups
+        //this.loadDecklistsMatchups(this.hsArch) // load deck list matchups
     } 
 
 

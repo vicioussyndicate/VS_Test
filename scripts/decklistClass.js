@@ -163,6 +163,39 @@ class Decklist {
 
     }
 
+    findCard(cardName) {
+        for (let card of this.cards) { if (card.name == cardName) {return card.quantity} }
+        return 0
+    }
+
+    classify(cardName, clf) {
+        for (let card of this.cards) { 
+            if (card.name == cardName) {
+                switch(clf) {
+                    case 'core_x1':
+                        if (card.rarity == 'Legendary') { card.classify('core'); break }
+                        if (card.quantity == 1) { card.classify('core'); break }
+                        if (card.quantity == 2) { card.classify('semiCore'); break }
+                        break
+
+                    case 'core_x2':
+                        card.classify('core')
+                        break
+
+                    case 'some':
+                        card.classify('')
+                        break
+
+                    case 'unique':
+                        card.classify('unique')
+                        break
+                }
+                break
+        }}
+    }
+
+    declassify() { for (let card of this.cards) {card.classify('') } }
+
     highlight(cardName) {
         var count = 0
         for (var c of this.cards) {
@@ -180,8 +213,11 @@ class Decklist {
         return count   
     }
 
-    toggleInfo() {
-        if (this.showInfo) {
+    toggleInfo(bool) {
+
+        if (bool!=true && bool!=false) { bool = !this.showInfo}
+
+        if (!bool) {
             this.decklist.style.display = 'block'
             this.deckinfo.style.display = 'none'
             this.infoBtn.innerHTML = 'info'
@@ -225,7 +261,7 @@ class CardDiv {
         this.div = document.createElement('div')
         this.div.className = 'card'
         this.div.id = this.name
-        this.div.style.display = 'block'
+        //this.div.style.display = 'block'
 
         this.hoverDiv = document.createElement('div')
         this.hoverDiv.className = 'hoverDiv'
@@ -266,6 +302,17 @@ class CardDiv {
 
 
     }
+
+    classify(classification) {
+        this.div.classList.remove('core')
+        this.div.classList.remove('semiCore')
+        this.div.classList.remove('unique')
+
+        if (classification == '') { return }
+
+        this.div.classList.add(classification)
+    }
+
 }// class Card
 
 
@@ -280,6 +327,7 @@ class Sidebar {
         this.titleDiv.className = 'title'
         this.setTitle(title)
         this.div.appendChild(this.titleDiv)
+        this.maxEntries = 6
 
         this.archBtnsDiv = document.createElement('div')
         this.archBtnsDiv.className = 'archBtnList'
@@ -298,7 +346,20 @@ class Sidebar {
         this.archetypes = classData.archetypes
         for (let a of this.archetypes) { this.addArchBtn(a) }
     }
+
+    loadMeta(archetypes) {
+        this.removeBtn()
+        let wrSort = function (a,b) {return a.wr > b.wr ? -1: a.wr < b.wr ? 1 : 0 ;}
+        archetypes.sort(wrSort)
+        for (let a of archetypes.slice(0,this.maxEntries)) { this.addArchBtn(a) }
+
+    }
     
+    loadRandom(archetypes) {
+        this.removeBtn()
+        archetypes = shuffle(archetypes)
+        for (let a of archetypes.slice(0,this.maxEntries)) { this.addArchBtn(a) }
+    }
 
     addArchBtn(hsArch) {
         if (hsArch == undefined) {return}

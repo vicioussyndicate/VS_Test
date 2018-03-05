@@ -27,6 +27,8 @@ html(lang='en')
         //    button#table.mobileBtn.optionBtn.folderBtn Matchups
         //    button#decks.mobileBtn.optionBtn.folderBtn Decks
         //    button#info.mobileBtn.optionBtn.folderBtn Info
+        .mobileTabs
+          button.tab Tab Title
         .tabs
           button#ladder.tab.highlighted Overview
           button#power.tab Tier List
@@ -155,7 +157,8 @@ html(lang='en')
                   button#Standard.optionBtn.folderBtn Standard
                   button#Wild.optionBtn.folderBtn Wild
               button#description.optionBtn Text
-              button#decklists.optionBtn Deck Lists
+              button#decklists.optionBtn Decks
+              button#overview.optionBtn Dust
               #classFolder.option-folder
                 button#classBtn.folder-toggle Druid
                 .dropdown.hidden
@@ -172,16 +175,17 @@ html(lang='en')
                   button#Warlock.optionBtn.folderBtn Warlock
                   button#Warrior.optionBtn.folderBtn Warrior
             .displayOptions.optionBar
-              button#overview.optionBtn Dust
+              button#info.optionBtn Info
+              button#compare.optionBtn Compare
           .overlay
             p.overlayText
           .content
             .question.fa.fa-question-circle
             .content-left
               .selectionWrapper
-                .imgWrapper
-                  img(src="https://d1u5p3l4wpay3k.cloudfront.net/hearthstone_gamepedia/thumb/9/98/Rexxar_hero_art.jpg/353px-Rexxar_hero_art.jpg?version=ecdc1e95c9982bf641f540c9f4a3baa5").selectionImg
-                  p.selectionTitle Hunter
+                //.imgWrapper
+                //  img(src="").selectionImg
+                //  p.selectionTitle Hunter
                 .buttonWrapper
               .sidebar.left
             .content-middle
@@ -189,9 +193,9 @@ html(lang='en')
                 .description
               .decklists
               #chart3.chart
-            .content-right
-              .sidebar.right1
-              .sidebar.right2
+            //.content-right
+            //  .sidebar.right1
+            //  .sidebar.right2
           .content-footer
             
           

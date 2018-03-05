@@ -71,6 +71,7 @@ function matrixXvector(t, e) {
 }
 
 function detectswipe(t, e) {
+    console.log("swipe", t, e);
     var a = {};
     a.sX = 0, a.sY = 0, a.eX = 0, a.eY = 0;
     var i = "", r = document.querySelector(t);
@@ -249,6 +250,92 @@ var app, _createClass = function() {
         this.div.appendChild(this.deckTitle), this.div.appendChild(this.decklist), this.div.appendChild(this.deckinfo);
     }
     return _createClass(t, [ {
+        key: "findCard",
+        value: function(t) {
+            var e = !0, a = !1, i = void 0;
+            try {
+                for (var r, s = this.cards[Symbol.iterator](); !(e = (r = s.next()).done); e = !0) {
+                    var n = r.value;
+                    if (n.name == t) return n.quantity;
+                }
+            } catch (t) {
+                a = !0, i = t;
+            } finally {
+                try {
+                    !e && s.return && s.return();
+                } finally {
+                    if (a) throw i;
+                }
+            }
+            return 0;
+        }
+    }, {
+        key: "classify",
+        value: function(t, e) {
+            var a = !0, i = !1, r = void 0;
+            try {
+                for (var s, n = this.cards[Symbol.iterator](); !(a = (s = n.next()).done); a = !0) {
+                    var o = s.value;
+                    if (o.name == t) {
+                        switch (e) {
+                          case "core_x1":
+                            if ("Legendary" == o.rarity) {
+                                o.classify("core");
+                                break;
+                            }
+                            if (1 == o.quantity) {
+                                o.classify("core");
+                                break;
+                            }
+                            if (2 == o.quantity) {
+                                o.classify("semiCore");
+                                break;
+                            }
+                            break;
+
+                          case "core_x2":
+                            o.classify("core");
+                            break;
+
+                          case "some":
+                            o.classify("");
+                            break;
+
+                          case "unique":
+                            o.classify("unique");
+                        }
+                        break;
+                    }
+                }
+            } catch (t) {
+                i = !0, r = t;
+            } finally {
+                try {
+                    !a && n.return && n.return();
+                } finally {
+                    if (i) throw r;
+                }
+            }
+        }
+    }, {
+        key: "declassify",
+        value: function() {
+            var t = !0, e = !1, a = void 0;
+            try {
+                for (var i, r = this.cards[Symbol.iterator](); !(t = (i = r.next()).done); t = !0) {
+                    i.value.classify("");
+                }
+            } catch (t) {
+                e = !0, a = t;
+            } finally {
+                try {
+                    !t && r.return && r.return();
+                } finally {
+                    if (e) throw a;
+                }
+            }
+        }
+    }, {
         key: "highlight",
         value: function(t) {
             var e = 0, a = !0, i = !1, r = void 0;
@@ -271,11 +358,11 @@ var app, _createClass = function() {
         }
     }, {
         key: "toggleInfo",
-        value: function() {
-            this.showInfo ? (this.decklist.style.display = "block", this.deckinfo.style.display = "none", 
-            this.infoBtn.innerHTML = "info", this.showInfo = !1) : (this.decklist.style.display = "none", 
+        value: function(t) {
+            1 != t && 0 != t && (t = !this.showInfo), t ? (this.decklist.style.display = "none", 
             this.deckinfo.style.display = "block", this.infoBtn.innerHTML = "cards", this.showInfo = !0, 
-            this.plot());
+            this.plot()) : (this.decklist.style.display = "block", this.deckinfo.style.display = "none", 
+            this.infoBtn.innerHTML = "info", this.showInfo = !1);
         }
     }, {
         key: "plot",
@@ -297,30 +384,38 @@ var app, _createClass = function() {
             });
         }
     } ]), t;
-}(), CardDiv = function t(e) {
-    _classCallCheck(this, t), this.name = e.name, this.cost = e.manaCost, this.quantity = e.quantity, 
-    this.rarity = e.rarity, this.dust = cardDust[this.rarity], this.div = document.createElement("div"), 
-    this.div.className = "card", this.div.id = this.name, this.div.style.display = "block", 
-    this.hoverDiv = document.createElement("div"), this.hoverDiv.className = "hoverDiv", 
-    this.hoverDiv.id = this.name + "x" + this.quantity;
-    var a = document.createElement("div");
-    a.className = "costContainer";
-    var i = document.createElement("div");
-    i.className = "hex " + this.rarity, i.innerHTML = "&#11042";
-    var r = document.createElement("div");
-    r.innerHTML = this.cost, r.className = "cost", this.cost >= 10 && (r.style.fontSize = "75%", 
-    r.style.paddingLeft = "0.2rem");
-    var s = document.createElement("div");
-    s.innerHTML = this.name, s.className = "name";
-    var n;
-    this.quantity > 1 && ((n = document.createElement("div")).innerHTML = "x" + this.quantity, 
-    n.className = "quantity"), a.appendChild(i), a.appendChild(r), this.div.appendChild(a), 
-    this.div.appendChild(s), this.quantity > 1 && this.div.appendChild(n), this.div.appendChild(this.hoverDiv);
-}, Sidebar = function() {
+}(), CardDiv = function() {
+    function t(e) {
+        _classCallCheck(this, t), this.name = e.name, this.cost = e.manaCost, this.quantity = e.quantity, 
+        this.rarity = e.rarity, this.dust = cardDust[this.rarity], this.div = document.createElement("div"), 
+        this.div.className = "card", this.div.id = this.name, this.hoverDiv = document.createElement("div"), 
+        this.hoverDiv.className = "hoverDiv", this.hoverDiv.id = this.name + "x" + this.quantity;
+        var a = document.createElement("div");
+        a.className = "costContainer";
+        var i = document.createElement("div");
+        i.className = "hex " + this.rarity, i.innerHTML = "&#11042";
+        var r = document.createElement("div");
+        r.innerHTML = this.cost, r.className = "cost", this.cost >= 10 && (r.style.fontSize = "75%", 
+        r.style.paddingLeft = "0.2rem");
+        var s = document.createElement("div");
+        s.innerHTML = this.name, s.className = "name";
+        var n;
+        this.quantity > 1 && ((n = document.createElement("div")).innerHTML = "x" + this.quantity, 
+        n.className = "quantity"), a.appendChild(i), a.appendChild(r), this.div.appendChild(a), 
+        this.div.appendChild(s), this.quantity > 1 && this.div.appendChild(n), this.div.appendChild(this.hoverDiv);
+    }
+    return _createClass(t, [ {
+        key: "classify",
+        value: function(t) {
+            this.div.classList.remove("core"), this.div.classList.remove("semiCore"), this.div.classList.remove("unique"), 
+            "" != t && this.div.classList.add(t);
+        }
+    } ]), t;
+}(), Sidebar = function() {
     function t(e, a, i) {
         _classCallCheck(this, t), this.div = e, this.titleDiv = document.createElement("div"), 
         this.titleDiv.className = "title", this.setTitle(a), this.div.appendChild(this.titleDiv), 
-        this.archBtnsDiv = document.createElement("div"), this.archBtnsDiv.className = "archBtnList", 
+        this.maxEntries = 6, this.archBtnsDiv = document.createElement("div"), this.archBtnsDiv.className = "archBtnList", 
         this.div.appendChild(this.archBtnsDiv), this.archList = [], this.archBtns = [], 
         this.hidden = !1;
     }
@@ -336,6 +431,49 @@ var app, _createClass = function() {
             var e = !0, a = !1, i = void 0;
             try {
                 for (var r, s = this.archetypes[Symbol.iterator](); !(e = (r = s.next()).done); e = !0) {
+                    var n = r.value;
+                    this.addArchBtn(n);
+                }
+            } catch (t) {
+                a = !0, i = t;
+            } finally {
+                try {
+                    !e && s.return && s.return();
+                } finally {
+                    if (a) throw i;
+                }
+            }
+        }
+    }, {
+        key: "loadMeta",
+        value: function(t) {
+            this.removeBtn();
+            t.sort(function(t, e) {
+                return t.wr > e.wr ? -1 : t.wr < e.wr ? 1 : 0;
+            });
+            var e = !0, a = !1, i = void 0;
+            try {
+                for (var r, s = t.slice(0, this.maxEntries)[Symbol.iterator](); !(e = (r = s.next()).done); e = !0) {
+                    var n = r.value;
+                    this.addArchBtn(n);
+                }
+            } catch (t) {
+                a = !0, i = t;
+            } finally {
+                try {
+                    !e && s.return && s.return();
+                } finally {
+                    if (a) throw i;
+                }
+            }
+        }
+    }, {
+        key: "loadRandom",
+        value: function(t) {
+            this.removeBtn(), t = shuffle(t);
+            var e = !0, a = !1, i = void 0;
+            try {
+                for (var r, s = t.slice(0, this.maxEntries)[Symbol.iterator](); !(e = (r = s.next()).done); e = !0) {
                     var n = r.value;
                     this.addArchBtn(n);
                 }
@@ -416,64 +554,64 @@ var app, _createClass = function() {
         this.decksDiv = document.querySelector("#decksWindow .content .decklists"), this.description = document.querySelector("#decksWindow .content .descriptionBox .description"), 
         this.overlayDiv = document.querySelector("#decksWindow .overlay"), this.overlayP = document.querySelector("#decksWindow .overlayText"), 
         this.questionBtn = document.querySelector("#decksWindow .question"), this.subWindows = [ this.descriptionBox, this.decksDiv, this.chartDiv ];
-        var a = document.querySelector("#decksWindow .content .sidebar.left"), i = document.querySelector("#decksWindow .content .sidebar.right1"), r = document.querySelector("#decksWindow .content .sidebar.right2");
-        this.sidebarLeft = new Sidebar(a, "Archetypes"), this.sidebarRightTop = new Sidebar(i, "Best vs"), 
-        this.sidebarRightBot = new Sidebar(r, "Worst vs"), this.overlayText = "\n            Select <span class='optionBtn'>Description</span> to see the latest report on that class.\n            Select <span class='optionBtn'>Deck Lists</span> to see the latest deck lists on that class.<br><br>\n            Select any archetype on the left side to see all the decklists of that archetype.<br><br>\n            Hover over the deck title to copy or get more information on that decklist.<br><br>\n            <img src='Images/clickOnDeckTitle.png'><br><br>\n            Tips:<br><br>\n            • When you hover over a card of a decklist it highlights all cards with the same name in the other decklists.<br><br>\n        ", 
+        var a = document.querySelector("#decksWindow .content .sidebar.left");
+        document.querySelector("#decksWindow .content .sidebar.right1"), document.querySelector("#decksWindow .content .sidebar.right2");
+        this.sidebarLeft = new Sidebar(a, "Archetypes"), this.overlayText = "\n            Select <span class='optionBtn'>Description</span> to see the latest report on that class.\n            Select <span class='optionBtn'>Deck Lists</span> to see the latest deck lists on that class.<br><br>\n            Select any archetype on the left side to see all the decklists of that archetype.<br><br>\n            Hover over the deck title to copy or get more information on that decklist.<br><br>\n            <img src='Images/clickOnDeckTitle.png'><br><br>\n            Tips:<br><br>\n            • When you hover over a card of a decklist it highlights all cards with the same name in the other decklists.<br><br>\n        ", 
         this.firebasePath = "deckData", this.archButtons = [], this.optionButtons = document.querySelectorAll("#decksWindow .optionBtn");
-        var s = !0, n = !1, o = void 0;
+        var i = !0, r = !1, s = void 0;
         try {
-            for (var l, h = this.optionButtons[Symbol.iterator](); !(s = (l = h.next()).done); s = !0) {
-                l.value.addEventListener("click", this.buttonTrigger.bind(this));
+            for (var n, o = this.optionButtons[Symbol.iterator](); !(i = (n = o.next()).done); i = !0) {
+                n.value.onclick = this.buttonTrigger.bind(this);
             }
         } catch (t) {
-            n = !0, o = t;
+            r = !0, s = t;
         } finally {
             try {
-                !s && h.return && h.return();
+                !i && o.return && o.return();
             } finally {
-                if (n) throw o;
+                if (r) throw s;
             }
         }
         this.f = "Standard", this.hsClass = "Druid", this.hsArch = null, this.mode = "description", 
         this.deckWidth = "12rem", this.fullyLoaded = !0, this.overlay = !1, this.table_time = table_times[0], 
         this.table_rank = table_ranks[0], this.mu = {}, this.data = {}, this.decklists = [], 
         this.archetypes = {};
-        var d = !0, c = !1, u = void 0;
+        var l = !0, h = !1, d = void 0;
         try {
-            for (var y, f = this.hsFormats[Symbol.iterator](); !(d = (y = f.next()).done); d = !0) {
-                var p = y.value;
-                this.data[p] = {
+            for (var c, u = this.hsFormats[Symbol.iterator](); !(l = (c = u.next()).done); l = !0) {
+                var y = c.value;
+                this.data[y] = {
                     fullyLoaded: !1
-                }, this.archetypes[p] = [], this.mu[p] = {
+                }, this.archetypes[y] = [], this.mu[y] = {
                     table: {},
                     archNames: {},
                     fr: {},
                     wr: {},
                     fullyLoaded: !1
                 };
-                var v = !0, m = !1, b = void 0;
+                var f = !0, p = !1, v = void 0;
                 try {
-                    for (var k, w = hsClasses[Symbol.iterator](); !(v = (k = w.next()).done); v = !0) {
-                        var g = k.value;
-                        this.data[p][g] = {}, this.data[p][g].archetypes = [], this.data[p][g].text = "";
+                    for (var m, b = hsClasses[Symbol.iterator](); !(f = (m = b.next()).done); f = !0) {
+                        var k = m.value;
+                        this.data[y][k] = {}, this.data[y][k].archetypes = [], this.data[y][k].text = "";
                     }
                 } catch (t) {
-                    m = !0, b = t;
+                    p = !0, v = t;
                 } finally {
                     try {
-                        !v && w.return && w.return();
+                        !f && b.return && b.return();
                     } finally {
-                        if (m) throw b;
+                        if (p) throw v;
                     }
                 }
             }
         } catch (t) {
-            c = !0, u = t;
+            h = !0, d = t;
         } finally {
             try {
-                !d && f.return && f.return();
+                !l && u.return && u.return();
             } finally {
-                if (c) throw u;
+                if (h) throw d;
             }
         }
         this.setupUI(), this.renderOptions(), this.questionBtn.addEventListener("click", this.toggleOverlay.bind(this)), 
@@ -493,32 +631,43 @@ var app, _createClass = function() {
             for (var e in this.dropdownFolders) {
                 this.dropdownFolders[e].onmouseout = t;
             }
-            this.selection = {}, this.selection.div = document.querySelector("#decksWindow .selectionWrapper"), 
+            this.infoBtn = document.querySelector("#decksWindow .content-header #info"), this.compareBtn = document.querySelector("#decksWindow .content-header #compare"), 
+            this.infoBtn.active = !1, this.compareBtn.active = !1, this.selection = {}, this.selection.div = document.querySelector("#decksWindow .selectionWrapper"), 
             this.selection.buttonWrapper = document.querySelector("#decksWindow .selectionWrapper .buttonWrapper"), 
-            this.selection.imgWrapper = document.querySelector("#decksWindow .selectionWrapper .imgWrapper"), 
-            this.selection.img = document.querySelector("#decksWindow .selectionWrapper .selectionImg"), 
-            this.selection.title = document.querySelector("#decksWindow .selectionWrapper .selectionTitle"), 
             this.selection.buttons = [];
-            var a = !0, i = !1, r = void 0;
+            for (var a = {
+                Druid: "#ab8476",
+                Hunter: "#689f38",
+                Mage: "#4fc3f7",
+                Paladin: "#ffee58",
+                Priest: "#e6e6e6",
+                Rogue: "#989090",
+                Shaman: "#7786da",
+                Warlock: "#bc4bd0",
+                Warrior: "#f44336",
+                Meta: "white",
+                Random: "white"
+            }, i = [ "Meta", "Random" ], r = 0; r < i.length; r++) {
+                var s = i[r], n = this.createSelectionBtn(s, s);
+                n.className += " special", n.style.backgroundColor = "black", n.style.color = a[s], 
+                n.onclick = this.buttonTrigger.bind(this), this.selection.buttonWrapper.appendChild(n), 
+                this.selection.buttons.push(n);
+            }
+            var o = !0, l = !1, h = void 0;
             try {
-                for (var s, n = hsClasses[Symbol.iterator](); !(a = (s = n.next()).done); a = !0) {
-                    var o = s.value, l = this.createSelectionBtn(o, o);
-                    l.style.backgroundColor = hsColors[o], l.style.color = hsFontColors[o], l.onclick = this.buttonTrigger.bind(this), 
-                    this.selection.buttonWrapper.appendChild(l), this.selection.buttons.push(l);
+                for (var d, c = hsClasses[Symbol.iterator](); !(o = (d = c.next()).done); o = !0) {
+                    var u = d.value, y = this.createSelectionBtn(u, u);
+                    y.style.backgroundColor = "#454c57", y.style.color = a[u], y.onclick = this.buttonTrigger.bind(this), 
+                    this.selection.buttonWrapper.appendChild(y), this.selection.buttons.push(y);
                 }
             } catch (t) {
-                i = !0, r = t;
+                l = !0, h = t;
             } finally {
                 try {
-                    !a && n.return && n.return();
+                    !o && c.return && c.return();
                 } finally {
-                    if (i) throw r;
+                    if (l) throw h;
                 }
-            }
-            for (var h = [ "Meta", "Random" ], d = 0; d < h.length; d++) {
-                var c = h[d], u = this.createSelectionBtn(c, c);
-                u.style.backgroundColor = "black", u.style.color = "white", u.onclick = this.buttonTrigger.bind(this), 
-                this.selection.buttonWrapper.appendChild(u), this.selection.buttons.push(u);
             }
         }
     }, {
@@ -526,6 +675,112 @@ var app, _createClass = function() {
         value: function(t, e) {
             var a = document.createElement("div");
             return a.className = "selectionBtn", a.innerHTML = t, a.id = e, a;
+        }
+    }, {
+        key: "compare",
+        value: function(t) {
+            if (t) {
+                var e = [], a = this.decklists.length, i = !0, r = !1, s = void 0;
+                try {
+                    for (var n, o = range(0, a)[Symbol.iterator](); !(i = (n = o.next()).done); i = !0) {
+                        var l = n.value, h = !0, d = !1, c = void 0;
+                        try {
+                            for (var u, y = this.decklists[l].cards[Symbol.iterator](); !(h = (u = y.next()).done); h = !0) {
+                                var f = u.value;
+                                if (-1 == e.indexOf(f.name)) {
+                                    e.push(f.name);
+                                    var p = !0, v = !0, m = !1, b = !0;
+                                    1 == f.quantity && (v = !1);
+                                    var k = !0, w = !1, g = void 0;
+                                    try {
+                                        for (var x, L = range(0, a)[Symbol.iterator](); !(k = (x = L.next()).done); k = !0) {
+                                            var C = x.value;
+                                            if (l != C) {
+                                                var T = this.decklists[C].findCard(f.name);
+                                                0 == T && (v = !1, p = !1), 1 == T && (v = !1, b = !1), T >= 2 && (b = !1);
+                                            }
+                                        }
+                                    } catch (t) {
+                                        w = !0, g = t;
+                                    } finally {
+                                        try {
+                                            !k && L.return && L.return();
+                                        } finally {
+                                            if (w) throw g;
+                                        }
+                                    }
+                                    b || p || (m = !0);
+                                    var S = "";
+                                    p && (S = "core_x1"), v && (S = "core_x2"), m && (S = "some"), b && (S = "unique");
+                                    var B = !0, D = !1, W = void 0;
+                                    try {
+                                        for (var M, _ = this.decklists[Symbol.iterator](); !(B = (M = _.next()).done); B = !0) {
+                                            M.value.classify(f.name, S);
+                                        }
+                                    } catch (t) {
+                                        D = !0, W = t;
+                                    } finally {
+                                        try {
+                                            !B && _.return && _.return();
+                                        } finally {
+                                            if (D) throw W;
+                                        }
+                                    }
+                                }
+                            }
+                        } catch (t) {
+                            d = !0, c = t;
+                        } finally {
+                            try {
+                                !h && y.return && y.return();
+                            } finally {
+                                if (d) throw c;
+                            }
+                        }
+                    }
+                } catch (t) {
+                    r = !0, s = t;
+                } finally {
+                    try {
+                        !i && o.return && o.return();
+                    } finally {
+                        if (r) throw s;
+                    }
+                }
+            } else {
+                var q = !0, E = !1, I = void 0;
+                try {
+                    for (var F, R = this.decklists[Symbol.iterator](); !(q = (F = R.next()).done); q = !0) {
+                        F.value.declassify();
+                    }
+                } catch (t) {
+                    E = !0, I = t;
+                } finally {
+                    try {
+                        !q && R.return && R.return();
+                    } finally {
+                        if (E) throw I;
+                    }
+                }
+            }
+        }
+    }, {
+        key: "info",
+        value: function(t) {
+            var e = !0, a = !1, i = void 0;
+            try {
+                for (var r, s = this.decklists[Symbol.iterator](); !(e = (r = s.next()).done); e = !0) {
+                    r.value.toggleInfo(t);
+                }
+            } catch (t) {
+                a = !0, i = t;
+            } finally {
+                try {
+                    !e && s.return && s.return();
+                } finally {
+                    if (a) throw i;
+                }
+            }
         }
     }, {
         key: "plot",
@@ -558,7 +813,11 @@ var app, _createClass = function() {
         key: "buttonTrigger",
         value: function(t) {
             var e = t.target.id;
-            "Standard" != e && "Wild" != e || (this.f = e, this.plot()), t.target.classList.contains("archBtn") && (this.hsArch = this.findArch(e), 
+            "Standard" != e && "Wild" != e || (this.f = e, this.plot()), "Meta" == e && (this.hsClass = "Meta", 
+            this.sidebarLeft.loadMeta(this.archetypes[this.f])), "Random" == e && (this.hsClass = "Random", 
+            this.sidebarLeft.loadRandom(this.archetypes[this.f])), "info" == e && (this.infoBtn.active = !this.infoBtn.active, 
+            this.info(this.infoBtn.active)), "compare" == e && (this.compareBtn.active = !this.compareBtn.active, 
+            this.compare(this.compareBtn.active)), t.target.classList.contains("archBtn") && (this.hsArch = this.findArch(e), 
             void 0 != this.hsArch ? this.hsClass != this.hsArch.hsClass ? (this.hsClass = this.hsArch.hsClass, 
             this.loadClass(this.hsClass)) : this.loadDecklists() : console.log("ERROR: archbtn not found", t)), 
             -1 != hsClasses.indexOf(e) && (this.hsArch = null, this.loadClass(e)), "overview" == e && this.plotDustWr(), 
@@ -642,7 +901,11 @@ var app, _createClass = function() {
                     if (u) throw y;
                 }
             }
-            this.selection.title.innerHTML = this.hsClass, document.querySelector("#decksWindow #formatBtn").innerHTML = btnIdToText[this.f], 
+            for (var m = [ this.infoBtn, this.compareBtn ], b = 0; b < m.length; b++) {
+                var k = m[b];
+                k.classList.remove("highlighted"), k.active && k.classList.add("highlighted");
+            }
+            document.querySelector("#decksWindow #formatBtn").innerHTML = btnIdToText[this.f], 
             document.querySelector("#decksWindow #classBtn").innerHTML = this.hsClass;
         }
     }, {
@@ -827,7 +1090,8 @@ var app, _createClass = function() {
     }, {
         key: "loadDecklists",
         value: function() {
-            if (this.mode = "decklists", this.renderWindows(), this.decklists = [], this.decksDiv.innerHTML = "", 
+            if (this.mode = "decklists", this.renderWindows(), this.infoBtn.active = !1, this.compareBtn.active && (this.compare(!1), 
+            this.compareBtn.active = !1), this.decklists = [], this.decksDiv.innerHTML = "", 
             null == this.hsArch && (this.hsArch = this.data[this.f][this.hsClass].archetypes[0]), 
             void 0 != this.hsArch) {
                 var t = "", e = !0, a = !1, i = void 0;
@@ -845,7 +1109,7 @@ var app, _createClass = function() {
                         if (a) throw i;
                     }
                 }
-                this.decksDiv.style.gridTemplateColumns = t, this.loadDecklistsMatchups(this.hsArch);
+                this.decksDiv.style.gridTemplateColumns = t;
             } else this.hsArch = null;
         }
     }, {
@@ -922,22 +1186,22 @@ var app, _createClass = function() {
                         if (k) throw w;
                     }
                 }
-                var T = !0, S = !1, D = void 0;
+                var T = !0, S = !1, B = void 0;
                 try {
-                    for (var B, W = s[Symbol.iterator](); !(T = (B = W.next()).done); T = !0) {
-                        var M = B.value;
+                    for (var D, W = s[Symbol.iterator](); !(T = (D = W.next()).done); T = !0) {
+                        var M = D.value;
                         if (null != M) {
                             var _ = this.findArch(M);
                             this.sidebarRightBot.addArchBtn(_);
                         }
                     }
                 } catch (t) {
-                    S = !0, D = t;
+                    S = !0, B = t;
                 } finally {
                     try {
                         !T && W.return && W.return();
                     } finally {
-                        if (S) throw D;
+                        if (S) throw B;
                     }
                 }
             }
@@ -1439,13 +1703,13 @@ var app, _createClass = function() {
                 this.totGamesBrackets[x.name] = 0;
                 var L = [], C = !0, T = !1, S = void 0;
                 try {
-                    for (var D, B = hsClasses[Symbol.iterator](); !(C = (D = B.next()).done); C = !0) kt = D.value, 
+                    for (var B, D = hsClasses[Symbol.iterator](); !(C = (B = D.next()).done); C = !0) kt = B.value, 
                     L.push(hsColors[kt]);
                 } catch (t) {
                     T = !0, S = t;
                 } finally {
                     try {
-                        !C && B.return && B.return();
+                        !C && D.return && D.return();
                     } finally {
                         if (T) throw S;
                     }
@@ -1604,15 +1868,15 @@ var app, _createClass = function() {
                 I = mt.value;
                 var kt = hsClasses[I], wt = [], gt = [], xt = 0, Lt = !0, Ct = !1, Tt = void 0;
                 try {
-                    for (var St, Dt = range(0, hsRanks)[Symbol.iterator](); !(Lt = (St = Dt.next()).done); Lt = !0) {
-                        var Bt = St.value, Wt = E[Bt][I];
+                    for (var St, Bt = range(0, hsRanks)[Symbol.iterator](); !(Lt = (St = Bt.next()).done); Lt = !0) {
+                        var Dt = St.value, Wt = E[Dt][I];
                         wt.push(Wt), gt.push(kt + " " + (100 * Wt).toFixed(2) + "%"), xt += Wt;
                         var Mt = !0, _t = !1, qt = void 0;
                         try {
                             for (var Et, It = this.rankBrackets[Symbol.iterator](); !(Mt = (Et = It.next()).done); Mt = !0) {
                                 var Ft;
-                                Bt >= (Ft = Et.value).start && Bt <= Ft.end && (this.traces.pie.classes[Ft.name][0].values[I] += Wt), 
-                                Bt == Ft.end && (this.traces.pie.classes[Ft.name][0].values[I] /= Ft.end - Ft.start + 1);
+                                Dt >= (Ft = Et.value).start && Dt <= Ft.end && (this.traces.pie.classes[Ft.name][0].values[I] += Wt), 
+                                Dt == Ft.end && (this.traces.pie.classes[Ft.name][0].values[I] /= Ft.end - Ft.start + 1);
                             }
                         } catch (t) {
                             _t = !0, qt = t;
@@ -1628,7 +1892,7 @@ var app, _createClass = function() {
                     Ct = !0, Tt = t;
                 } finally {
                     try {
-                        !Lt && Dt.return && Dt.return();
+                        !Lt && Bt.return && Bt.return();
                     } finally {
                         if (Ct) throw Tt;
                     }
@@ -1793,8 +2057,8 @@ var app, _createClass = function() {
                 this.window.showRankFolder(), a = this.traces.map[this.window.r], this.window.mode = "decks", 
                 this.window.renderOptions(), null == a && (a = this.loadMap());
             }
-            "portrait" == MOBILE && "pie" != this.window.plotTyp && (e.width = 2 * ui.width, 
-            e.height = .6 * ui.height), Plotly.newPlot("chart1", a, e, {
+            "portrait" == MOBILE && "pie" != this.window.plotTyp && (e.width = 2 * app.ui.width, 
+            e.height = .6 * app.ui.height), Plotly.newPlot("chart1", a, e, {
                 displayModeBar: !1
             }), this.annotate(this.window.annotated), this.createLegend(this.window.mode), "bar" != this.window.plotType && "zoom" != this.window.plotType || !PREMIUM || document.getElementById("chart1").on("plotly_click", this.zoomToggle.bind(this));
         }
@@ -1898,7 +2162,7 @@ var app, _createClass = function() {
                     if (l) throw h;
                 }
             }
-            var S = !0, D = !1, B = void 0;
+            var S = !0, B = !1, D = void 0;
             try {
                 for (var W, M = this.traces.map[t][Symbol.iterator](); !(S = (W = M.next()).done); S = !0) {
                     var _ = W.value;
@@ -1907,12 +2171,12 @@ var app, _createClass = function() {
                     _.text = "<b>" + _.name + "<br>Meta:</b> " + q.toFixed(2) + "<br><b>WR:</b> " + _.wr.toFixed(2) + " <b>Freq:</b> " + (100 * _.fr).toFixed(0) + "%";
                 }
             } catch (t) {
-                D = !0, B = t;
+                B = !0, D = t;
             } finally {
                 try {
                     !S && M.return && M.return();
                 } finally {
-                    if (D) throw B;
+                    if (B) throw D;
                 }
             }
             return this.traces.map[t];
@@ -2194,10 +2458,10 @@ var app, _createClass = function() {
                     if (g) throw x;
                 }
             }
-            var D = PREMIUM ? "flex" : "none";
+            var B = PREMIUM ? "flex" : "none";
             this.questionBtn.addEventListener("click", this.toggleOverlay.bind(this)), this.overlayDiv.addEventListener("click", this.toggleOverlay.bind(this)), 
-            this.classDeckOptions.style.display = D, document.querySelector("#ladderWindow .content-header .graphOptions #line").style.display = D, 
-            document.querySelector("#ladderWindow .content-header .graphOptions #timeline").style.display = D, 
+            this.classDeckOptions.style.display = B, document.querySelector("#ladderWindow .content-header .graphOptions #line").style.display = B, 
+            document.querySelector("#ladderWindow .content-header .graphOptions #timeline").style.display = B, 
             this.nrGamesBtn.onclick = this.annotate.bind(this), this.optionButtons = document.querySelectorAll("#ladderWindow .optionBtn");
         }
     }, {
@@ -2938,7 +3202,7 @@ var app, _createClass = function() {
                 for (var x, L = r[Symbol.iterator](); !(k = (x = L.next()).done); k = !0) {
                     var C = x.value, T = s.indexOf(C.name);
                     if (-1 != T) {
-                        var S = !0, D = !1, B = void 0;
+                        var S = !0, B = !1, D = void 0;
                         try {
                             for (var W, M = range(0, hsRanks)[Symbol.iterator](); !(S = (W = M.next()).done); S = !0) {
                                 var _ = W.value, q = 0, E = 0, I = !0, F = !1, R = void 0;
@@ -2991,12 +3255,12 @@ var app, _createClass = function() {
                                 }
                             }
                         } catch (t) {
-                            D = !0, B = t;
+                            B = !0, D = t;
                         } finally {
                             try {
                                 !S && M.return && M.return();
                             } finally {
-                                if (D) throw B;
+                                if (B) throw D;
                             }
                         }
                     }
@@ -3727,11 +3991,11 @@ var Table = function() {
             try {
                 for (var n, o = this.hsFormats[Symbol.iterator](); !(i = (n = o.next()).done); i = !0) {
                     var l = n.value;
-                    (D = document.createElement("button")).innerHTML = btnIdToText[l], D.id = l, D.className = "folderBtn optionBtn";
+                    (B = document.createElement("button")).innerHTML = btnIdToText[l], B.id = l, B.className = "folderBtn optionBtn";
                     var h = function(t) {
                         this.f = t.target.id, this.plot();
                     };
-                    D.onclick = h.bind(this), this.dropdownFolders.format.appendChild(D);
+                    B.onclick = h.bind(this), this.dropdownFolders.format.appendChild(B);
                 }
             } catch (t) {
                 r = !0, s = t;
@@ -3746,11 +4010,11 @@ var Table = function() {
             try {
                 for (var y, f = this.hsTimes[Symbol.iterator](); !(d = (y = f.next()).done); d = !0) {
                     var p = y.value;
-                    (D = document.createElement("button")).innerHTML = btnIdToText[p], D.id = p, D.className = "folderBtn optionBtn";
+                    (B = document.createElement("button")).innerHTML = btnIdToText[p], B.id = p, B.className = "folderBtn optionBtn";
                     h = function(t) {
                         this.t = t.target.id, this.plot();
                     };
-                    D.onclick = h.bind(this), this.dropdownFolders.time.appendChild(D);
+                    B.onclick = h.bind(this), this.dropdownFolders.time.appendChild(B);
                 }
             } catch (t) {
                 c = !0, u = t;
@@ -3765,11 +4029,11 @@ var Table = function() {
             try {
                 for (var k, w = this.ranks[Symbol.iterator](); !(v = (k = w.next()).done); v = !0) {
                     var g = k.value;
-                    (D = document.createElement("button")).innerHTML = btnIdToText[g], D.id = g, D.className = "folderBtn optionBtn";
+                    (B = document.createElement("button")).innerHTML = btnIdToText[g], B.id = g, B.className = "folderBtn optionBtn";
                     h = function(t) {
                         this.r = t.target.id, this.plot();
                     };
-                    D.onclick = h.bind(this), this.dropdownFolders.rank.appendChild(D);
+                    B.onclick = h.bind(this), this.dropdownFolders.rank.appendChild(B);
                 }
             } catch (t) {
                 m = !0, b = t;
@@ -3783,13 +4047,13 @@ var Table = function() {
             var x = !0, L = !1, C = void 0;
             try {
                 for (var T, S = this.sortOptions[Symbol.iterator](); !(x = (T = S.next()).done); x = !0) {
-                    var D, B = T.value;
-                    (D = document.createElement("button")).innerHTML = btnIdToText[B], D.id = B, D.className = "folderBtn optionBtn";
+                    var B, D = T.value;
+                    (B = document.createElement("button")).innerHTML = btnIdToText[D], B.id = D, B.className = "folderBtn optionBtn";
                     h = function(t) {
                         this.sortBy = t.target.id, this.data[this.f][this.t][this.r].sortTableBy(this.sortBy), 
                         this.renderOptions();
                     };
-                    D.onclick = h.bind(this), this.dropdownFolders.sort.appendChild(D);
+                    B.onclick = h.bind(this), this.dropdownFolders.sort.appendChild(B);
                 }
             } catch (t) {
                 L = !0, C = t;
@@ -3913,10 +4177,11 @@ var Table = function() {
     } ]), t;
 }(), UI = function() {
     function t() {
-        _classCallCheck(this, t), this.tabs = document.querySelectorAll("button.tab"), this.mobileBtns = document.querySelectorAll("button.mobileBtn"), 
-        this.windowTabs = document.querySelectorAll(".tabWindow"), this.folderButtons = document.querySelectorAll(".folder-toggle"), 
-        this.loader = document.getElementById("loader"), this.logo = document.querySelector("#vsLogoDiv"), 
-        this.overlayText = document.querySelector("#overlay .overlayText"), this.updateTimeDiv = document.querySelector("#updateTime");
+        _classCallCheck(this, t), this.tabs = document.querySelectorAll(".tabs button.tab"), 
+        this.mobileBtns = document.querySelectorAll("button.mobileBtn"), this.windowTabs = document.querySelectorAll(".tabWindow"), 
+        this.folderButtons = document.querySelectorAll(".folder-toggle"), this.loader = document.getElementById("loader"), 
+        this.logo = document.querySelector("#vsLogoDiv"), this.overlayText = document.querySelector("#overlay .overlayText"), 
+        this.updateTimeDiv = document.querySelector("#updateTime"), this.mobileTab = document.querySelector(".navbar .mobileTabs .tab");
         var e = !0, a = !1, i = void 0;
         try {
             for (var r, s = this.windowTabs[Symbol.iterator](); !(e = (r = s.next()).done); e = !0) {
@@ -3933,7 +4198,8 @@ var Table = function() {
         }
         this.windowTabs[0].style.display = "inline-block", this.getWindowSize(), this.tabIdx = 0, 
         this.openFolder = null, this.overlay = !1, this.decksWindow = null, this.tableWindow = null, 
-        this.ladderWindow = null, this.powerWindow = null, this.infoWindow = null, this.archetypeColors = {};
+        this.ladderWindow = null, this.powerWindow = null, this.infoWindow = null, this.windowNames = [ "ladderWindow", "powerWindow", "tableWindow", "decksWindow", "infoWindow" ], 
+        this.archetypeColors = {};
         var n = !0, o = !1, l = void 0;
         try {
             for (var h, d = hsFormats[Symbol.iterator](); !(n = (h = d.next()).done); n = !0) {
@@ -3982,35 +4248,34 @@ var Table = function() {
         }
         var L = !0, C = !1, T = void 0;
         try {
-            for (var S, D = this.folderButtons[Symbol.iterator](); !(L = (S = D.next()).done); L = !0) {
+            for (var S, B = this.folderButtons[Symbol.iterator](); !(L = (S = B.next()).done); L = !0) {
                 S.value.addEventListener("click", this.toggleDropDown.bind(this));
             }
         } catch (t) {
             C = !0, T = t;
         } finally {
             try {
-                !L && D.return && D.return();
+                !L && B.return && B.return();
             } finally {
                 if (C) throw T;
             }
         }
         if (MOBILE) {
-            var B = !0, W = !1, M = void 0;
+            var D = !0, W = !1, M = void 0;
             try {
-                for (var _, q = this.mobileBtns[Symbol.iterator](); !(B = (_ = q.next()).done); B = !0) {
+                for (var _, q = this.mobileBtns[Symbol.iterator](); !(D = (_ = q.next()).done); D = !0) {
                     _.value.addEventListener("click", this.mobileMenu.bind(this));
                 }
             } catch (t) {
                 W = !0, M = t;
             } finally {
                 try {
-                    !B && q.return && q.return();
+                    !D && q.return && q.return();
                 } finally {
                     if (W) throw M;
                 }
             }
-            detectswipe(".navbar", this.swipeTab.bind(this)), document.querySelector("#ladderWindow .content-header .nrGames").style.display = "none", 
-            this.hideLoader();
+            detectswipe(".navbar .mobileTabs .tab", this.swipeTab.bind(this)), this.hideLoader();
         }
         this.logo.addEventListener("click", this.toggleOverlay.bind(this)), document.querySelector("#overlay").addEventListener("click", this.toggleOverlay.bind(this)), 
         window.addEventListener("orientationchange", this.getWindowSize.bind(this)), window.addEventListener("resize", this.getWindowSize.bind(this)), 
@@ -4060,10 +4325,16 @@ var Table = function() {
             MOBILE && (MOBILE = this.height / this.width >= 1 ? "portrait" : "landscape");
         }
     }, {
+        key: "getWindows",
+        value: function() {
+            return [ this.ladderWindow, this.powerWindow, this.tableWindow, this.decksWindow, this.infoWindow ];
+        }
+    }, {
         key: "swipeTab",
         value: function(t, e) {
-            "r" == e && (this.tabIdx -= 1, this.tabIdx < 0 && (this.tabIdx = this.tabs.length - 1)), 
-            "l" == e && (this.tabIdx += 1, this.tabIdx >= this.tabs.length && (this.tabIdx = 0));
+            console.log("swipte", t, e), "r" == e && (this.tabIdx -= 1, this.tabIdx < 0 && (this.tabIdx = this.windowNames.length - 1)), 
+            "l" == e && (this.tabIdx += 1, this.tabIdx >= this.windowNames.length && (this.tabIdx = 0)), 
+            this.mobileTab.innerHTML = this.windowNames[this.tabIdx], this.display(this.windowNames[this.tabIdx]);
         }
     }, {
         key: "updateTime",

@@ -9,6 +9,15 @@
             min-width: 100vw
             height: 100vh
             margin: 0
+            overflow hidden
+            #overlay
+                width 100% !important
+            #vsLogoDiv
+                display: none
+            .overlay
+                width 100% !important
+            #updateTimeDiv
+                display none
             .navbar
                 height: 60px
                 max-width: 100%
@@ -16,11 +25,15 @@
                 #mobileFolder
                     position absolute
                     display inline
+                .mobileTabs
+                    display flex
                 .tabs
+                    display none
                     width 100%
-            #vsLogoDiv
-                .text
-                    display: none
+            
+                
+
+
             .content-wrapper
                 #loader
                     display none
@@ -30,12 +43,34 @@
                 .content-header
                     overflow: hidden
                     height: 5%
+                    #plotFolder
+                        display flex
+                        position absolute
+                        right 1rem
+                    .nrGames
+                        display none
                 .content
                     height: 95%
+                    .question
+                        right none
+                        left 1rem !important
+                        
+                    .chart-header
+                        font-size 90%
+                    .content-middle // deckswindow
+                        overflow-x visible !important
+                        .descriptionBox
+                            width 85%
+                            position absolute
+                            .description
+                                width 100%
+                        .deckBox
+                            overflow-x hidden
                     .chart
                         margin: 0
                     .chart-footer
                         display: none
+                    
                 .content-footer
                     display: none
                 

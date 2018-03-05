@@ -6,7 +6,7 @@ class UI {
 
     constructor () {
 
-        this.tabs = document.querySelectorAll('button.tab');
+        this.tabs = document.querySelectorAll('.tabs button.tab');
         this.mobileBtns = document.querySelectorAll('button.mobileBtn');
         this.windowTabs = document.querySelectorAll('.tabWindow');
         this.folderButtons = document.querySelectorAll('.folder-toggle');
@@ -14,6 +14,7 @@ class UI {
         this.logo = document.querySelector('#vsLogoDiv')
         this.overlayText = document.querySelector('#overlay .overlayText')
         this.updateTimeDiv = document.querySelector('#updateTime')
+        this.mobileTab = document.querySelector('.navbar .mobileTabs .tab')
         
         for (let w of this.windowTabs) { w.style.display = 'none' }
         this.windowTabs[0].style.display = 'inline-block'
@@ -31,6 +32,8 @@ class UI {
         this.powerWindow = null
         this.infoWindow = null
 
+        this.windowNames = ['ladderWindow', 'powerWindow', 'tableWindow', 'decksWindow', 'infoWindow']
+
         this.archetypeColors = {}
         for (let f of hsFormats) { 
             this.archetypeColors[f] = {}
@@ -44,8 +47,7 @@ class UI {
 
         if (MOBILE) {
             for(var mBtn of this.mobileBtns) { mBtn.addEventListener("click", this.mobileMenu.bind(this)) }
-            detectswipe('.navbar',this.swipeTab.bind(this))
-            document.querySelector('#ladderWindow .content-header .nrGames').style.display = 'none'
+            detectswipe('.navbar .mobileTabs .tab',this.swipeTab.bind(this))
             this.hideLoader()
         }
 
@@ -102,16 +104,22 @@ class UI {
         }
     }
 
+    getWindows() { return [this.ladderWindow, this.powerWindow, this.tableWindow, this.decksWindow, this.infoWindow] }
+
 
     swipeTab(e,d) {
+        console.log('swipte',e,d)
         if (d == 'r') {
             this.tabIdx -= 1
-            if (this.tabIdx < 0) {this.tabIdx = this.tabs.length -1}
+            if (this.tabIdx < 0) {this.tabIdx = this.windowNames.length -1}
         }
         if (d == 'l') {
             this.tabIdx += 1
-            if (this.tabIdx >= this.tabs.length) {this.tabIdx = 0}
+            if (this.tabIdx >= this.windowNames.length) {this.tabIdx = 0}
         }
+
+        this.mobileTab.innerHTML = this.windowNames[this.tabIdx]
+        this.display(this.windowNames[this.tabIdx])
 
         //this.activeTab = this.tabs[this.tabIdx]
         //this.activeWindow = document.getElementById(this.activeTab.id+'Window')

@@ -1,0 +1,49 @@
+
+
+.sidebar
+    width 10rem
+    &.left
+        padding-left 0.5rem
+    &.right
+        padding-right 0.5rem
+    .title
+        margin-bottom: 1rem
+        margin-top: 1rem
+        font-weight: bold
+        font-size: 1.1rem
+        color $darkColor
+    .archBtnList
+        width 100%
+        .archBtnWrapper
+            width 100%
+            margin-top 1rem
+            position relative
+            border-radius 0.2rem
+            font-size 80%
+            .archBtn
+                display inline-block
+                padding 0.1rem 0.2rem
+                width 60%
+                border solid #ffffff42
+                border-radius 0.2rem
+                &:hover
+                    cursor pointer
+                    color $darkColor !important
+                    background-color $accentColor !important
+            .wrDiv
+                font-weight bold
+                color #5a5959
+                padding-top 0.25rem
+                padding-right 0.3rem
+                display inline-block
+                float right
+                width 25%
+            &.highlighted
+                background-color $darkColor
+                .archBtn
+                    padding-top 0.5rem
+                    padding-bottom 0.5rem
+                .wrDiv
+                    color $lightColor
+                    padding-top 0.65rem
+                    padding-bottom 0.5rem
