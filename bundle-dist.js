@@ -204,7 +204,7 @@ var app, _createClass = function() {
                 var c = h.value;
                 this.cardNames.push(c.name), s[c.rarity] += 1;
                 var u = new CardDiv(c);
-                u.hoverDiv.onmouseover = this.window.highlight.bind(this.window), u.hoverDiv.onmouseout = this.window.highlight.bind(this.window), 
+                MOBILE && (u.hoverDiv.onmouseover = this.window.highlight.bind(this.window), u.hoverDiv.onmouseout = this.window.highlight.bind(this.window)), 
                 this.cards.push(u), this.dust += u.dust * u.quantity;
                 var y = u.cost >= 10 ? 10 : u.cost;
                 this.manaBin[y] += parseInt(u.quantity), this.decklist.appendChild(u.div);

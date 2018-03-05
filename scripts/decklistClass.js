@@ -71,8 +71,10 @@ class Decklist {
             rarityDist[card.rarity] += 1
 
             var c = new CardDiv(card)
-            c.hoverDiv.onmouseover = this.window.highlight.bind(this.window)
-            c.hoverDiv.onmouseout = this.window.highlight.bind(this.window)
+            if (MOBILE) {
+                c.hoverDiv.onmouseover = this.window.highlight.bind(this.window)
+                c.hoverDiv.onmouseout = this.window.highlight.bind(this.window)
+            }
             this.cards.push(c)
             this.dust += c.dust * c.quantity
             var cost = (c.cost >= 10) ? 10 : c.cost

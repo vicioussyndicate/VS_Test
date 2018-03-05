@@ -204,7 +204,7 @@ var app, _createClass = function() {
                 var c = h.value;
                 this.cardNames.push(c.name), s[c.rarity] += 1;
                 var u = new CardDiv(c);
-                u.hoverDiv.onmouseover = this.window.highlight.bind(this.window), u.hoverDiv.onmouseout = this.window.highlight.bind(this.window), 
+                MOBILE && (u.hoverDiv.onmouseover = this.window.highlight.bind(this.window), u.hoverDiv.onmouseout = this.window.highlight.bind(this.window)), 
                 this.cards.push(u), this.dust += u.dust * u.quantity;
                 var y = u.cost >= 10 ? 10 : u.cost;
                 this.manaBin[y] += parseInt(u.quantity), this.decklist.appendChild(u.div);
@@ -1765,14 +1765,14 @@ var app, _createClass = function() {
             this.totGames += _[I];
             var F = !0, R = !1, H = void 0;
             try {
-                for (var A, O = this.rankBrackets[Symbol.iterator](); !(F = (A = O.next()).done); F = !0) {
-                    I >= (Ft = A.value).start && I <= Ft.end && (this.totGamesBrackets[Ft.name] += _[I]);
+                for (var O, A = this.rankBrackets[Symbol.iterator](); !(F = (O = A.next()).done); F = !0) {
+                    I >= (Ft = O.value).start && I <= Ft.end && (this.totGamesBrackets[Ft.name] += _[I]);
                 }
             } catch (t) {
                 R = !0, H = t;
             } finally {
                 try {
-                    !F && O.return && O.return();
+                    !F && A.return && A.return();
                 } finally {
                     if (R) throw H;
                 }
@@ -1897,7 +1897,7 @@ var app, _createClass = function() {
                         if (Ct) throw Tt;
                     }
                 }
-                var Rt = fillRange(0, hsRanks, 0), Ht = !0, At = !1, Ot = void 0;
+                var Rt = fillRange(0, hsRanks, 0), Ht = !0, Ot = !1, At = void 0;
                 try {
                     for (var Pt, zt = this.archetypes[Symbol.iterator](); !(Ht = (Pt = zt.next()).done); Ht = !0) {
                         var Nt = Pt.value;
@@ -1936,12 +1936,12 @@ var app, _createClass = function() {
                         }
                     }
                 } catch (t) {
-                    At = !0, Ot = t;
+                    Ot = !0, At = t;
                 } finally {
                     try {
                         !Ht && zt.return && zt.return();
                     } finally {
-                        if (At) throw Ot;
+                        if (Ot) throw At;
                     }
                 }
                 var Jt = !0, Qt = !1, $t = void 0;
@@ -3207,10 +3207,10 @@ var app, _createClass = function() {
                             for (var W, M = range(0, hsRanks)[Symbol.iterator](); !(S = (W = M.next()).done); S = !0) {
                                 var _ = W.value, q = 0, E = 0, I = !0, F = !1, R = void 0;
                                 try {
-                                    for (var H, A = r[Symbol.iterator](); !(I = (H = A.next()).done); I = !0) {
-                                        var O = H.value, P = s.indexOf(O.name);
+                                    for (var H, O = r[Symbol.iterator](); !(I = (H = O.next()).done); I = !0) {
+                                        var A = H.value, P = s.indexOf(A.name);
                                         if (-1 != P) {
-                                            var z = O.fr_ranks[_];
+                                            var z = A.fr_ranks[_];
                                             q += z, E += z * n[T][P];
                                         }
                                     }
@@ -3218,7 +3218,7 @@ var app, _createClass = function() {
                                     F = !0, R = t;
                                 } finally {
                                     try {
-                                        !I && A.return && A.return();
+                                        !I && O.return && O.return();
                                     } finally {
                                         if (F) throw R;
                                     }

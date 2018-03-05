@@ -4,6 +4,7 @@
 
 @media (max-width: 756px)
     body
+        margin 0px !important
         .main-wrapper
             max-width: 100vw
             min-width: 100vw
@@ -19,7 +20,7 @@
             #updateTimeDiv
                 display none
             .navbar
-                height: 60px
+                height: 8vh !important
                 max-width: 100%
                 overflow: hidden
                 #mobileFolder
@@ -42,21 +43,32 @@
                     height: 100%
                 .content-header
                     overflow: hidden
-                    height: 5%
+                    height: 5vh !important
                     #plotFolder
                         display flex
                         position absolute
                         right 1rem
+                        .dropdown
+                            top 2rem
+                            left 0.3rem
                     .nrGames
                         display none
                 .content
-                    height: 95%
+                    height: 87vh !important
                     .question
                         right none
                         left 1rem !important
                         
                     .chart-header
                         font-size 90%
+                    .chart
+                        margin: 0
+                    .chart-footer
+                        width 100% !important
+                        display flex !important
+                        margin 0 !important
+                        .legend-item
+                            height auto !important
                     .content-middle // deckswindow
                         overflow-x visible !important
                         .descriptionBox
@@ -66,10 +78,7 @@
                                 width 100%
                         .deckBox
                             overflow-x hidden
-                    .chart
-                        margin: 0
-                    .chart-footer
-                        display: none
+                    
                     
                 .content-footer
                     display: none
