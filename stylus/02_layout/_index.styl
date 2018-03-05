@@ -8,11 +8,13 @@ $cont-header-pad = 0.6rem
 $cont-header-height-tot = $cont-header-height + 2* $cont-header-pad
 $cont-footer-height = 0.5rem
 $cont-height = $cont-wrapper-height - $cont-header-height-tot  - $cont-footer-height
-
+$chart-height = $cont-height - 4.5rem
 
 body
     font-size: 20
     margin 0 !important
+    //background-color #869090;
+
     .main-wrapper
         max-width 80vw
         min-width 510px
@@ -38,9 +40,9 @@ body
             z-index 0
             position relative
             #loader
-                //position fixed
                 z-index 100
             .tabWindow
+                display none
                 height 100%
                 width 100%
                 .overlay
@@ -48,15 +50,26 @@ body
                     width 80vw //100%
                     z-index 20
                 .content-header
+                    position relative
+                    width 100%
                     height $cont-header-height
                     padding $cont-header-pad 0 $cont-header-pad 0
                     z-index 30
                     .dropdown
                         z-index 30
+                    .shadow
+                        width 99% // new style
+                        left 0.5%
+                        background-color #00000026 // new style
+                        height 0.3rem
+                        bottom -0.3rem
+                        position absolute // new style
                 .content
                     z-index 10
                     position relative
                     height $cont-height
+                    width 99% // new style
+                    left 0.5% // new style
                     .chart-header
                         height 1.5rem
                         margin-top 1rem
@@ -69,7 +82,7 @@ body
                         left 0.5rem;
                         z-index: 11
                     .chart
-                        height $cont-height - 4.5rem
+                        height $chart-height
                     .chart-footer
                         position relative
                         height 3rem

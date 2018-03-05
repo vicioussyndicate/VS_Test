@@ -24,14 +24,16 @@
             overflow: hidden
             background-color $midColor
     .tabs
-        display flex
-        align-content center
-        align-items center
-        justify-content center
+        display inline
+        //align-content center
+        //align-items center
+        //justify-content center
         color $nav_fColor
         .tab
-            height 100%
+            float left
+            height 105%
             color $nav_fColor
+            position relative
             padding 0.4rem
             font-size 1.5rem
             font-weight bold
@@ -58,4 +60,12 @@
                 cursor pointer
             &.highlighted
                 background $nav_hi_bgColor !important
+                bottom 5%
+                
+
+
+
+
+
+
                 color $nav_hi_fColor !important

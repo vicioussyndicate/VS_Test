@@ -32,7 +32,6 @@
                     margin-left 0.5rem
                     margin-top 1.1rem
                     line-height 2rem
-                    //visibility hidden
                     .selectionBtn
                         font-size 1rem
                         display inline-block
@@ -55,23 +54,7 @@
                             opacity 1
                             font-size 1.3rem
                         
-                // .imgWrapper
-                //     position absolute
-                //     height 12rem
-                //     .selectionImg
-                //         position absolute
-                //         width 10rem
-                //         padding-left 0.5rem
-                //     .selectionTitle
-                //         font-size 1.2rem
-                //         position absolute
-                //         left 3rem
-                //         bottom 0
-                //         color white
-                //         font-weight bold
                 &:hover
-                    // .buttonWrapper
-                    //     visibility visible
                     .selectionImg
                         opacity 0.1
                     .selectionTitle
@@ -86,11 +69,14 @@
             overflow-x auto
             margin-right 1rem
             width 70%
+            height 100%
             //margin auto
             .chart
                 display none
                 width 100%
-                height 100%
+                height $chart-height -3rem //100%
+                margin-top 2rem
+                margin-bottom 1rem
             
             .descriptionBox
                 height $cont-height - 1rem
