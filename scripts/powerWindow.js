@@ -44,8 +44,8 @@ class PowerWindow {
         this.rankBrackets = [
             {name:'All Ranks',  games:{}, start: 0, end: 15},
             {name:'L',          games:{}, start: 0, end: 0},
-            {name:'1-5',        games:{}, start: 1, end: 5},
-            {name:'6-15',       games:{}, start: 6, end: 15},
+            {name:'1-4',        games:{}, start: 1, end: 4},
+            {name:'5-14',       games:{}, start: 5, end: 14},
         ]
 
         
@@ -245,7 +245,7 @@ class PowerWindow {
             this.grid.appendChild(div)
         }
 
-
+debugger;
         for (var i=0;i<hsRanks;i++) {
 
             var div = document.createElement('div')
@@ -329,13 +329,39 @@ class PowerWindow {
 
                 let arch = this.bracketData[f][bracket.name][i]
 
+                // if (bracket.games[f] <= this.minGames || arch == undefined) { 
+                //     let div = document.createElement('div')
+                //     div.className = 'blank'
+                //     this.grid.appendChild(div)
+                //     this.grid.appendChild(document.createElement('div'))
+                //     continue
+                // }
+                
                 if (bracket.games[f] <= this.minGames || arch == undefined) { 
-                    let div = document.createElement('div')
-                    div.className = 'blank'
-                    this.grid.appendChild(div)
-                    this.grid.appendChild(document.createElement('div'))
-                    continue
+                    if(bracket.games[f] <= this.minGames)
+                    {
+                        if(bracket.name == "L")
+                        {
+                            bracket.games = this.rankBrackets[2].games;
+                            if(bracket.games[f] <= this.minGames )
+                            {
+                                bracket.games = this.rankBrackets[3].games;
+                            }
+                        }
+                        if(bracket.name == "1-4")
+                        {
+                            bracket.games = this.rankBrackets[3].games;                            
+                        }
+                    }
+                    if (bracket.games[f] <= this.minGames || arch == undefined) { 
+                        let div = document.createElement('div')
+                        div.className = 'blank'
+                        this.grid.appendChild(div)
+                        this.grid.appendChild(document.createElement('div'))
+                        continue
+                        }
                 }
+
                 
 
                 let wr = (100*arch.wr).toFixed(1)+ '%'

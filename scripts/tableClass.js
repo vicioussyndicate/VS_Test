@@ -16,7 +16,7 @@ class Table {
         this.fontColor = '#22222'
         this.subplotRatio = 0.6
         this.overallString = '<b style="font-size:130%">Overall</b>'
-        this.minGames = 20
+        this.minGames = 50
         this.whiteTile = 0.50000001
         this.blackTile = 0.51
         let cs_1 =  [ // Green Blue

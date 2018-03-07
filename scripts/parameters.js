@@ -108,7 +108,9 @@ const btnIdToText_m = {
     ranks_1_5: 'R: 1-5', 
     ranks_L_5: 'R: L-5',
     ranks_6_15: 'R: 6-15',
-
+    ranks_1_4:'R: 1-4',
+    ranks_5_14: 'R: 5-14', 
+    
     last6Hours: '6 Hours',
     last12Hours: '12 Hours',
     lastDay: '1 Day',
