@@ -202,64 +202,12 @@ class LadderWindow {
         }
     }
 
-    annotate() { 
-        if (this.plotType == 'pie' || this.plotType == 'number') {return}
-        if (this.annotated) {
-            if (this.plotType == 'timeline') { this.history[this.f].annotate(false) }
-            else { this.data[this.f][this.t].annotate(false) }
-            this.nrGamesBtn.classList.remove('highlighted')
-        }
-        else {
-            if (this.plotType == 'timeline') { this.history[this.f].annotate(true) }
-            else { this.data[this.f][this.t].annotate(true) }
-            this.nrGamesBtn.classList.add('highlighted')
-        }
-        this.annotated = !this.annotated
-    }
-
-    showGames() { if (this.plotType == 'bar' || this.plotType == 'zoom' || this.plotType == 'line') {this.data[this.f][this.t].annotate(true)} }
-    hideGames() { if (!this.annotated) {this.data[this.f][this.t].annotate(false) } }
-
-    buttonTrigger(e) {
-
-        var btnID = e.target.id
-
-        if (btnID == 'classes')     {this.mode = 'classes'}
-        if (btnID == 'decks')       {this.mode = 'decks'}
-
-        if (btnID == 'bar')         {this.plotType = 'bar'}
-        if (btnID == 'line')        {this.plotType = 'line'}
-        if (btnID == 'pie')         {this.plotType = 'pie'}
-        if (btnID == 'number')      {this.plotType = 'number'}
-        if (btnID == 'map')         {this.plotType = 'map'}
-        if (btnID == 'timeline')    {this.plotType = 'timeline'}
-
-        if (this.plotType == 'zoom' && this.mode != 'classes') {this.plotType = 'bar'}
-        
-        this.plot()
-    }// button Handler
-
-
-
-
-    renderOptions() {
-
-        for (let btn of this.optionButtons) { 
-            btn.classList.remove('highlighted')
-            if (btn.id == this.mode)                    {btn.classList.add('highlighted')}
-            if (btn.id == this.plotType)                {btn.classList.add('highlighted')}
-            if (btn.id == 'nrGames' && this.annotated)  {btn.classList.add('highlighted')}
-        }
-        document.querySelector("#ladderWindow #formatBtn").innerHTML = (MOBILE) ? btnIdToText_m[this.f] : btnIdToText[this.f]
-        document.querySelector("#ladderWindow #timeBtn").innerHTML =   (MOBILE) ? btnIdToText_m[this.t] : btnIdToText[this.t]
-        document.querySelector("#ladderWindow #rankBtn").innerHTML =   (MOBILE) ? btnIdToText_m[this.r] : btnIdToText[this.r]
-    }
+    
 
 
     checkLoadData(callback) {
 
         let back = (callback != undefined)
-        console.log('checkLoadData',back,callback)
 
         if (!this.data[this.f].fullyLoaded) {
             let callback2 = function() { app.ui.ladderWindow.checkLoadData(callback) }
@@ -376,7 +324,58 @@ class LadderWindow {
     }
 
 
-    
+    annotate() { 
+        if (this.plotType == 'pie' || this.plotType == 'number') {return}
+        if (this.annotated) {
+            if (this.plotType == 'timeline') { this.history[this.f].annotate(false) }
+            else { this.data[this.f][this.t].annotate(false) }
+            this.nrGamesBtn.classList.remove('highlighted')
+        }
+        else {
+            if (this.plotType == 'timeline') { this.history[this.f].annotate(true) }
+            else { this.data[this.f][this.t].annotate(true) }
+            this.nrGamesBtn.classList.add('highlighted')
+        }
+        this.annotated = !this.annotated
+    }
+
+    showGames() { if (this.plotType == 'bar' || this.plotType == 'zoom' || this.plotType == 'line') {this.data[this.f][this.t].annotate(true)} }
+    hideGames() { if (!this.annotated) {this.data[this.f][this.t].annotate(false) } }
+
+    buttonTrigger(e) {
+
+        var btnID = e.target.id
+
+        if (btnID == 'classes')     {this.mode = 'classes'}
+        if (btnID == 'decks')       {this.mode = 'decks'}
+
+        if (btnID == 'bar')         {this.plotType = 'bar'}
+        if (btnID == 'line')        {this.plotType = 'line'}
+        if (btnID == 'pie')         {this.plotType = 'pie'}
+        if (btnID == 'number')      {this.plotType = 'number'}
+        if (btnID == 'map')         {this.plotType = 'map'}
+        if (btnID == 'timeline')    {this.plotType = 'timeline'}
+
+        if (this.plotType == 'zoom' && this.mode != 'classes') {this.plotType = 'bar'}
+        
+        this.plot()
+    }// button Handler
+
+
+
+
+    renderOptions() {
+
+        for (let btn of this.optionButtons) { 
+            btn.classList.remove('highlighted')
+            if (btn.id == this.mode)                    {btn.classList.add('highlighted')}
+            if (btn.id == this.plotType)                {btn.classList.add('highlighted')}
+            if (btn.id == 'nrGames' && this.annotated)  {btn.classList.add('highlighted')}
+        }
+        document.querySelector("#ladderWindow #formatBtn").innerHTML = (MOBILE) ? btnIdToText_m[this.f] : btnIdToText[this.f]
+        document.querySelector("#ladderWindow #timeBtn").innerHTML =   (MOBILE) ? btnIdToText_m[this.t] : btnIdToText[this.t]
+        document.querySelector("#ladderWindow #rankBtn").innerHTML =   (MOBILE) ? btnIdToText_m[this.r] : btnIdToText[this.r]
+    }
     
 
     showRankFolder() { this.rankFolder.style.display = 'flex' }

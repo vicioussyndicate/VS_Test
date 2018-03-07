@@ -11,7 +11,8 @@ class Table {
         this.window = window
 
         this.sortBy = ''
-        this.numArch = (f == 'Standard') ? this.window.numArch : this.window.numArch;
+        //this.numArch = (f == 'Standard') ? this.window.numArch : this.window.numArch;
+        this.numArch = (MOBILE) ? 12 : this.window.numArch
         this.bgColor = 'transparent'
         this.fontColor = '#22222'
         this.subplotRatio = 0.6
@@ -51,6 +52,7 @@ class Table {
         this.textTable = []
         this.frequency = []
         this.archetypes = []
+        this.archetypes_m = [] // shortened names
         this.classPlusArch = [] // needed for Class Sort
         this.winrates = []
         this.totGames = 0
@@ -90,6 +92,7 @@ class Table {
         
             this.frequency.push(FR[x])
             this.archetypes.push(ARCHETYPES[x][1]+" "+ARCHETYPES[x][0])
+            this.archetypes_m.push(ARCHETYPES[x][1].slice(0,2)+" "+ARCHETYPES[x][0].slice(0,1))
             this.classPlusArch.push(ARCHETYPES[x][0]+ARCHETYPES[x][1])
                 
         
@@ -172,8 +175,8 @@ class Table {
             },
             plot_bgcolor: "transparent",
             paper_bgcolor: this.bgColor,
-            margin: {l: 120, r: 0, b: 30, t: 100 },
-            width: (MOBILE) ? app.ui.width*2 : this.window.width,
+            margin: (MOBILE)? {l: 50, r: 0, b: 20, t: 100 } : {l: 120, r: 0, b: 30, t: 100 },
+            width: (MOBILE) ? app.ui.width*1.0 : this.window.width,
             height: (MOBILE) ? app.ui.height*0.8 : this.window.height,
 
             yaxis2: {
@@ -223,6 +226,7 @@ class Table {
 
         let table = this.table.concat([this.winrates])
         let arch = this.archetypes.concat([this.overallString])
+        if (MOBILE) { arch = this.archetypes_m.concat(['All']) }
         let textRow = []
         let textTable = this.textTable.concat([textRow])
 
@@ -267,7 +271,8 @@ class Table {
 
         for (let i of range(0,this.numArch)) {
             trace_ann.x.push(this.archetypes[i])
-            trace_ann.y.push(this.archetypes[i])
+            if (MOBILE) { trace_ann.y.push(this.archetypes_m[i]) }
+            else { trace_ann.y.push(this.archetypes[i]) }
             trace_ann.text.push(' X ')
         }
         
@@ -276,16 +281,16 @@ class Table {
         else { data.push( trace_ann ) }
 
         Plotly.newPlot('chart2',data,this.layout,{displayModeBar: false})
-        if (PREMIUM) { // enable zoom in for premium users
+
+        if (PREMIUM && !MOBILE) { // enable zoom in for premium users
             document.getElementById('chart2').on('plotly_click', this.zoomToggle.bind(this))
         }
 
-        if (this.window.zoomIn) {this.zoomIn(this.window.zoomArch)}
+        if (this.window.zoomIn) { this.zoomIn(this.window.zoomArch) }
         document.getElementById('loader').style.display = 'none'
 
         this.window.nrGames = this.totGames
         this.window.setTotGames()
-       
     }
 
 
@@ -400,6 +405,7 @@ class Table {
         var table = []
         var textTable = []
         var archetypes = []
+        let archetypes_m = []
         var frequency = []
         var winrates = []
         var classPlusArch = []
@@ -409,6 +415,7 @@ class Table {
             
             classPlusArch.push(this.classPlusArch[idx])
             archetypes.push(this.archetypes[idx])
+            //archetypes_m.push(this.archetypes_m[idx])
             frequency.push(this.frequency[idx])
             winrates.push(this.winrates[idx])
             
@@ -428,6 +435,7 @@ class Table {
         this.table = table
         this.textTable = textTable
         this.archetypes = archetypes
+        //this.archetypes_m = archetypes_m
         this.classPlusArch = classPlusArch
         this.frequency  = frequency
         this.winrates  = winrates
@@ -493,13 +501,17 @@ class Table {
     simulation() {
         app.ui.showLoader()
         this.window.mode = 'simulation'
+
+        
         let data = this.freqPlotData
         let arch_names = data.x[0]
         let arch_freq = data.y[0]
         let totFr = 0
         for (let a of arch_freq) {totFr += a}
         let matrix = this.table
-        let max_itt = 1000*50
+        let max_itt = 1000*50    // maximum iterations of simulation
+        let numPoints = 1000     // number of points on plot
+        this.plotPoints = parseInt(max_itt/numPoints) 
         let layout = {
                 title: 'Meta Simulation',
                 xaxis: {
@@ -526,6 +538,8 @@ class Table {
                 name: arch_names[i],
                 fr: arch_freq[i]/totFr,
                 trace: [],
+                x: [],
+                y: [],
                 wr: 0.5,
             })
         }
@@ -533,7 +547,7 @@ class Table {
         // Iterate
         for (var i=0;i<max_itt;i++) {
             this.eq_wr(archetypes,matrix)
-            this.eq_fr(archetypes)
+            this.eq_fr(archetypes, i)
         }
 
         // traces
@@ -581,7 +595,7 @@ class Table {
     }
 
     // Equilibrium Frequency
-    eq_fr(archetypes) {
+    eq_fr(archetypes, itt) {
         let fr_min = 0.0001
         let damping = 0.1 // Damping
         var sortByIdx = function (a,b) {return a.idx < b.idx ? -1: a.idx > b.idx ? 1 : 0 ;}
@@ -589,7 +603,10 @@ class Table {
 
         archetypes.sort(sortByWr) // 0: smallest wr
         let frTot = 0
+        //if ( itt % this.plotPoints == 0) { // every 1000 iterations 
         for (let i=0;i<archetypes.length;i++) { archetypes[i].trace.push(archetypes[i].fr) }
+        //}
+        
         for (let i=0;i<archetypes.length;i++) {
 
             let a = archetypes[i]

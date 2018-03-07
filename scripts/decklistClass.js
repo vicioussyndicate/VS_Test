@@ -10,7 +10,6 @@ class Decklist {
         this.window = window
 
         this.cards = []
-        this.cardNames = []
         this.dust = 0
         this.manaBin = fillRange(0,11,0)
         this.showInfo = false
@@ -27,19 +26,17 @@ class Decklist {
         
 
 
-        var titleHover = document.createElement('div')
+        let titleHover = document.createElement('div')
         titleHover.className = 'titleHover'
 
         this.infoBtn = document.createElement('div')
-        this.infoBtn.className = 'titleHover-content' 
+        this.infoBtn.className = 'titleHover-content right' 
         this.infoBtn.innerHTML = 'info'
-        this.infoBtn.style.float = 'right'
-        this.infoBtn.addEventListener('click',this.toggleInfo.bind(this))
+        this.infoBtn.onclick = this.toggleInfo.bind(this)
 
         this.copyBtn = document.createElement('div')
-        this.copyBtn.className = 'titleHover-content'
+        this.copyBtn.className = 'titleHover-content left'
         this.copyBtn.innerHTML = 'copy'
-        this.copyBtn.style.float = 'left'
         this.copyBtn.id = 'dl'+randint(0,1000000000)
 
         titleHover.appendChild(this.copyBtn)
@@ -56,28 +53,21 @@ class Decklist {
         this.decklist = document.createElement('div')
         this.decklist.className = 'decklist'
         this.decklist.id = dl.name
-        let rarityDist = {
-            Free: 0,
-            Basic: 0,
-            Common: 0,
-            Rare: 0,
-            Epic: 0,
-            Legendary: 0,
-        }
+        let rarityDistribution = {} // common: 0, rare: 0, etc
+        for (let rarity in cardDust) { rarityDistribution[rarity] = 0}
 
-        for (var card of dl.cards) {
+        for (let card of dl.cards) {
 
-            this.cardNames.push(card.name)
-            rarityDist[card.rarity] += 1
+            rarityDistribution[card.rarity] += 1
 
-            var c = new CardDiv(card)
-            if (MOBILE) {
+            let c = new CardDiv(card)
+            if (!MOBILE) {
                 c.hoverDiv.onmouseover = this.window.highlight.bind(this.window)
                 c.hoverDiv.onmouseout = this.window.highlight.bind(this.window)
             }
             this.cards.push(c)
             this.dust += c.dust * c.quantity
-            var cost = (c.cost >= 10) ? 10 : c.cost
+            let cost = Math.min(c.cost, 10)
             this.manaBin[cost] += parseInt(c.quantity)
             this.decklist.appendChild(c.div)
         }
@@ -86,51 +76,59 @@ class Decklist {
         // Info
 
         this.deckinfo = document.createElement('div')
-        this.deckinfo.className = 'decklist' + ' deckinfo'
+        this.deckinfo.className = 'decklist deckinfo'
         this.deckinfo.id = dl.name 
 
-        var chartTitle = document.createElement('p')
+        let chartTitle = document.createElement('p')
         chartTitle.innerHTML = 'Manacurve'
         chartTitle.className = 'manacurve'
         this.deckinfo.appendChild(chartTitle)
 
         this.chart = document.createElement('div')
-        this.chartId = 'chartId:' + randint(0,100000000)
-        this.chart.id = this.chartId
+        //this.chartId = 'chartId:' + randint(0,100000000)
+        this.chart.id = 'chartId_' + randint(0,100000000) //this.chartId
         this.chart.className = 'manaChart'
         this.deckinfo.appendChild(this.chart)
 
-        var dustDiv = document.createElement('div')
-        var dustInfo = document.createElement('p')
+        let dustDiv = document.createElement('div')
+        dustDiv.className = 'dustDiv'
+        let dustInfo = document.createElement('p')
         dustInfo.innerHTML = this.dust+ '  '
         dustInfo.className = 'dustInfo'
-        var dustImg = document.createElement('img')
+        let dustImg = document.createElement('img')
         dustImg.src = 'Images/dust.png'
         dustImg.className = 'dustImg'
-        var dust_dist = document.createElement('p')
-        dust_dist.innerHTML = `L: ${rarityDist['Legendary']} E: ${rarityDist['Epic']} 
-                                R: ${rarityDist['Rare']} C: ${rarityDist['Common']} 
-                                B: ${rarityDist['Basic']+rarityDist['Free']}`
-        dust_dist.className = 'dustInfo'
+        
+        
         dustDiv.appendChild(dustInfo)
         dustDiv.appendChild(dustImg)
+        for (let rarity in cardDust) {
+            let p = document.createElement('p')
+            p.className = 'dustInfo'
+            p.innerHTML = rarityDistribution[rarity]
+
+            let gem = document.createElement('img')
+            gem.className = 'dustImg'
+            gem.src = 'Images/dust.png' // replace with rarity gems
+
+            dustDiv.appendChild(p)
+            dustDiv.appendChild(gem)            
+        }
+
         this.deckinfo.appendChild(dustDiv)
 
-
-        var cardTypes = document.createElement('p')
+        let cardTypes = document.createElement('p')
         cardTypes.className = 'cardtypes'
-        var ct_txt = ''
-        if (dl.cardTypes.Minion >= 10) {ct_txt += dl.cardTypes.Minion +' Minions<br>' }
-        else if (dl.cardTypes.Minion == 1) {ct_txt += dl.cardTypes.Minion +'  Minion<br>' }
-        else {ct_txt += dl.cardTypes.Minion +'  Minions<br>' }
+        let text = ''
+        for (let key in dl.cardTypes) {
+            let num = dl.cardTypes[key]
+            text += num
+            text += (num >= 10) ? ' ':'  '
+            text += key
+            text += (num > 1 || num == 0) ? 's<br>':'<br>'
+        }
 
-        if (dl.cardTypes.Spell >= 10) {ct_txt += dl.cardTypes.Spell +' Spells<br>' }
-        else if (dl.cardTypes.Spell == 1) {ct_txt += dl.cardTypes.Spell +'  Spell<br>' }
-        else {ct_txt += dl.cardTypes.Spell +'  Spells<br>' }
-
-        if (dl.cardTypes.Weapon) { ct_txt += dl.cardTypes.Weapon+'  Weapons<br>' }
-        if (dl.cardTypes.Hero) { ct_txt += dl.cardTypes.Hero+'  Hero<br>' }
-        cardTypes.innerHTML = ct_txt
+        cardTypes.innerHTML = text
         this.deckinfo.appendChild(cardTypes)
 
         // var winrate = document.createElement('p')
@@ -138,7 +136,7 @@ class Decklist {
         // winrate.innerHTML = 'Win Rate: '+ dl.wr
         // this.deckinfo.appendChild(winrate)
 
-        var author = document.createElement('p')
+        let author = document.createElement('p')
         author.className = 'author'
         author.innerHTML = 'Author: '+ dl.author
         this.deckinfo.appendChild(author)
@@ -147,22 +145,10 @@ class Decklist {
         timeStamp.className = 'timestamp'
         timeStamp.innerHTML = 'Updated '+ dl.timestamp
         this.deckinfo.appendChild(timeStamp)
-
-        if (dl.gameplay != '') {
-            var gameplay = document.createElement('a')
-            gameplay.href = 'https://www.reddit.com/r/ViciousSyndicate/comments/6yqj62/vs_live_web_app_feedback_thread/'
-            gameplay.target = '_blank'
-            gameplay.className = 'gameplay'
-            gameplay.innerHTML = 'Gameplay'
-            this.deckinfo.appendChild(gameplay)
-        }
-        
         
         this.div.appendChild(this.deckTitle)
         this.div.appendChild(this.decklist)
         this.div.appendChild(this.deckinfo)
-        //this.div.appendChild(this.copyBtn)
-
     }
 
     findCard(cardName) {
@@ -170,7 +156,7 @@ class Decklist {
         return 0
     }
 
-    classify(cardName, clf) {
+    classify(cardName, clf) { // adds classifier to card className for the 'compare' mode
         for (let card of this.cards) { 
             if (card.name == cardName) {
                 switch(clf) {
@@ -196,23 +182,24 @@ class Decklist {
         }}
     }
 
+    // removes classifier className
     declassify() { for (let card of this.cards) {card.classify('') } }
 
     highlight(cardName) {
-        var count = 0
-        for (var c of this.cards) {
-            var hl = 0
-            if (c.name + 'x1' == cardName) { hl = 1; count = 1 }
-            if (c.name + 'x2' == cardName) { hl = 2; count = 2 }
+        for (let c of this.cards) {
+            let hl = 0
+            if (c.name + 'x1' == cardName) { hl = 1 }
+            if (c.name + 'x2' == cardName) { hl = 2 }
+
             if (hl == 0) { 
                 c.div.classList.remove('highlighted'); 
                 c.div.classList.remove('half-highlighted'); 
-                continue }
+                continue 
+            }
 
             if (hl == c.quantity) { c.div.classList.add('highlighted') }
             else { c.div.classList.add('half-highlighted') }            
         }
-        return count   
     }
 
     toggleInfo(bool) {
@@ -240,8 +227,12 @@ class Decklist {
             y: this.manaBin,
             type: 'bar',
         }
-        var layout = { margin: {l:15, r:10, b:25, t: 0}, }
-        Plotly.newPlot(this.chartId,[trace], layout, {displayModeBar: false,})
+        var layout = { 
+            xaxis: { fixedrange: true },
+            yaxis: { fixedrange: true },
+            margin: {l:16, r:11, b:25, t: 0}, 
+        }
+        Plotly.newPlot(this.chart.id,[trace], layout, {displayModeBar: false,})
     }
 
 
@@ -249,9 +240,8 @@ class Decklist {
 
 
 
-
+// CardDiv as decklist item
 class CardDiv {
-
 
     constructor (card) {
         this.name = card.name
@@ -263,32 +253,27 @@ class CardDiv {
         this.div = document.createElement('div')
         this.div.className = 'card'
         this.div.id = this.name
-        //this.div.style.display = 'block'
 
         this.hoverDiv = document.createElement('div')
         this.hoverDiv.className = 'hoverDiv'
         this.hoverDiv.id = this.name + 'x' + this.quantity
 
-        var costContainer = document.createElement('div')
+        let costContainer = document.createElement('div')
         costContainer.className = 'costContainer'
 
-        var hex = document.createElement('div')
+        let hex = document.createElement('div')
         hex.className = 'hex '+this.rarity
         hex.innerHTML = `&#11042`
 
-        var cost = document.createElement('div')
+        let cost = document.createElement('div')
         cost.innerHTML = this.cost
-        cost.className = 'cost'
-        if (this.cost >= 10) {
-            cost.style.fontSize = '75%'
-            cost.style.paddingLeft = '0.2rem'
-        }
+        cost.className = (this.cost >= 10) ? 'cost high' : 'cost'
 
-        var name = document.createElement('div')
+        let name = document.createElement('div')
         name.innerHTML = this.name
         name.className = 'name'
 
-        var quantity
+        let quantity
         if (this.quantity > 1) {
             quantity = document.createElement('div')
             quantity.innerHTML = 'x'+this.quantity
@@ -301,8 +286,6 @@ class CardDiv {
         this.div.appendChild(name)
         if (this.quantity > 1) {this.div.appendChild(quantity)}
         this.div.appendChild(this.hoverDiv)
-
-
     }
 
     classify(classification) {
@@ -311,11 +294,12 @@ class CardDiv {
         this.div.classList.remove('unique')
 
         if (classification == '') { return }
-
         this.div.classList.add(classification)
     }
 
 }// class Card
+
+
 
 
 
@@ -329,42 +313,20 @@ class Sidebar {
         this.titleDiv.className = 'title'
         this.setTitle(title)
         this.div.appendChild(this.titleDiv)
-        this.maxEntries = 6
+        this.maxEntries = 5
 
         this.archBtnsDiv = document.createElement('div')
         this.archBtnsDiv.className = 'archBtnList'
         this.div.appendChild(this.archBtnsDiv)
 
-        this.archList = [] // list arch object
         this.archBtns = [] // list of btnDiv
-        this.hidden = false
     } 
 
     setTitle(title) { this.titleDiv.innerHTML = title }
 
-    loadClass(classData) {
-        this.removeBtn()
-        //this.setTitle(classData.hsClass+' Archetypes')
-        this.archetypes = classData.archetypes
-        for (let a of this.archetypes) { this.addArchBtn(a) }
-    }
-
-    loadMeta(archetypes) {
-        this.removeBtn()
-        let wrSort = function (a,b) {return a.wr > b.wr ? -1: a.wr < b.wr ? 1 : 0 ;}
-        archetypes.sort(wrSort)
-        for (let a of archetypes.slice(0,this.maxEntries)) { this.addArchBtn(a) }
-
-    }
-    
-    loadRandom(archetypes) {
-        this.removeBtn()
-        archetypes = shuffle(archetypes)
-        for (let a of archetypes.slice(0,this.maxEntries)) { this.addArchBtn(a) }
-    }
-
     addArchBtn(hsArch) {
-        if (hsArch == undefined) {return}
+        if (hsArch == undefined || this.archBtns.length >= this.maxEntries) { return }
+
         let btnWrapper = document.createElement('div')
         btnWrapper.className = 'archBtnWrapper'
         btnWrapper.id = hsArch.name
@@ -376,30 +338,28 @@ class Sidebar {
         btn.style.backgroundColor = hsColors[hsArch.hsClass]
         btn.innerHTML = hsArch.name
 
-        let self = this
-        let trigger = function(e) {
-            self.highlight(hsArch.name)
-            app.ui.decksWindow.buttonTrigger(e) 
-        }
+        let trigger = function(e) { app.ui.decksWindow.buttonTrigger(e) }
+        btn.onclick = trigger.bind(app.ui.decksWindow)
 
-        btn.addEventListener("click", trigger.bind(app.ui.decksWindow))
-        btnWrapper.appendChild(btn)
 
         let wrDiv = document.createElement('div')
         wrDiv.className = 'wrDiv'
         //wrDiv.innerHTML = (100*hsArch.wr).toFixed(1)+'%'
         wrDiv.innerHTML = 'Tier '+tier_classifier(hsArch.wr)
+        
+
+        btnWrapper.appendChild(btn)
         btnWrapper.appendChild(wrDiv)
     
-
         this.archBtns.push(btnWrapper)
         this.archBtnsDiv.appendChild(btnWrapper)
     }
 
-    highlight(archName) {
+    highlight(arch) {
+        let archName = (arch != null) ? arch.name : ''
         for (let btn of this.archBtns) {
-            if (btn.id == archName && !btn.classList.contains('highlighted')) {
-                btn.classList.add('highlighted')
+            if (btn.id == archName) {
+                if (!btn.classList.contains('highlighted')) { btn.classList.add('highlighted') }
             } else { btn.classList.remove('highlighted') }
         }
     }
@@ -407,41 +367,17 @@ class Sidebar {
     removeBtn(archName = null) {
 
         for (let i=0; i < this.archBtns.length; i++) {
-            let a = this.archList[i]
             let btn = this.archBtns[i]
 
             if (archName == null) { 
                 this.archBtnsDiv.innerHTML = ''
-                this.archList = []
-                return
-            }
-
-            else if ( a.name == archName ) {
-                this.archList.del(a)
-                this.archBtnsDiv.removeChild(btn)
+                this.archBtns = []
                 return
             }
         }
     }// remove Btn
 
-    hide() { if (!this.hidden) {this.div.classList.add('hidden'); this.hidden = false } }
-    show() { this.div.classList.remove('hidden'); this.hidden = true}
 }// Sidebar
-
-
-
-
-class ArchBtn {
-
-    constructor() {
-        this.div = document.createElement('div')
-    }
-}
-
-
-
-
-
 
 
 

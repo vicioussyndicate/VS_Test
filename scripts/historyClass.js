@@ -79,14 +79,9 @@ class History {
             const baseUnit = (t_h == 'lastHours') ? 'Hour' : 'Day';
             const t_delay = (t_h == 'lastHours') ? 2:0 // hours delay
             var timeFrame = this.timeFrame[t_w]
-            var r = this.r2r[this.window.r] // !!!
+            var r = this.window.r //this.r2r[this.window.r] // !!!
             var m = this.window.mode
             var x = range(t_delay,timeFrame)
-            //var d = this.data[f][t_h][r][m] // data 
-            console.log('plot History',t_h, r, m)
-            console.log(this.data)
-            console.log(this.data[t_h])
-            console.log(this.data[t_h][r])
             let d = this.data[t_h][r][m]
             var maxEntry = 0
 

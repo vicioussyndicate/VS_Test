@@ -1,11 +1,12 @@
 
 $decklists-height = $cont-height - 2.5rem
 $deckTitle-height = 2.8rem
+$decklist-width = 12rem
 
 .decklists
     display: none
-    display grid 
-    grid-column-gap 1.5rem
+    display block 
+    //grid-column-gap 1.5rem
     margin-top 1.5rem
     height $decklists-height
     position relative
@@ -13,6 +14,9 @@ $deckTitle-height = 2.8rem
         height $decklists-height
         position relative
         overflow-y hidden
+        display inline-block
+        width $decklist-width
+        margin-left 1rem
         .deckTitle
             display inline-block
             position relative
@@ -23,6 +27,7 @@ $deckTitle-height = 2.8rem
             margin-top 0
             font-weight bold
             p
+                font-size 0.85rem
                 margin 0rem 0.5rem
                 display inline-block
                 margin-top 0
@@ -48,6 +53,10 @@ $deckTitle-height = 2.8rem
                     color white
                     border-radius 3%
                     vertical-align middle
+                    &.right
+                        float right
+                    &.left
+                        float left
                     &:hover
                         cursor pointer
                         background-color $accentColor
@@ -121,6 +130,9 @@ $deckTitle-height = 2.8rem
                         color $lightColor
                         position absolute
                         padding 0.15rem 0 0 0.35rem
+                        &.high
+                            font-size 75%
+                            padding-left 0.2rem
                 .name
                     padding-left 1.5rem //0.25rem 0.1rem 0 1.7rem
                     display inline-block

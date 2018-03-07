@@ -165,7 +165,6 @@ class PowerWindow {
     checkLoadData(callback) {
 
         let back = (callback != undefined)
-        console.log('checkLoadData',back,callback)
 
         if (this.rankData.fullyLoaded[this.f]) {
             // all loaded
@@ -173,21 +172,18 @@ class PowerWindow {
         }
 
         if (!app.ui.ladderWindow.data[this.f].fullyLoaded) {
-            console.log('load ladder data from power window')
             let callback2 = function() { app.ui.powerWindow.checkLoadData(callback) }
             if (back) { return app.ui.ladderWindow.loadData(this.f, callback2) }
             else { return false }
         }
 
         if (!app.ui.tableWindow.data[this.f].fullyLoaded) {
-            console.log('load table data from power window')
             let callback2 = function() { app.ui.powerWindow.checkLoadData(callback) }
             if (back) { return app.ui.tableWindow.loadData(this.f, callback2) }
             else { return false }       
         }
 
         if (app.ui.ladderWindow.data[this.f].fullyLoaded && app.ui.tableWindow.data[this.f].fullyLoaded) {
-            console.log('all checks ok')
             this.addData(this.f, callback)   
         }
     }

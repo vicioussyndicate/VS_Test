@@ -86,6 +86,30 @@ class TableWindow {
     } // close Constructor
 
 
+    // gateway to this window: this.display(true) -> this.plot()
+    display(bool) {
+        if (bool) {
+            this.div.style.display = 'inline-block'
+            this.f = app.path.hsFormat
+            if (this.mode == 'simulation') { return } // dont replot simulation
+            this.plot()
+
+        } else {
+            this.div.style.display = 'none'
+            app.path.hsFormat = this.f
+        }
+    }
+
+
+    // 1. SETUP
+    // 2. LOAD DATA
+    // 3. PLOTTING
+
+
+    // 1. SETUP ---------------------------------------------------------------------
+
+
+    // sets up all option buttons. 
     setupUI() {
 
         this.dropdownFolders = {
@@ -167,17 +191,12 @@ class TableWindow {
     }
 
 
-    display(bool) {
-        if (bool) {
-            this.div.style.display = 'inline-block'
-            this.f = app.path.hsFormat
-            this.plot()
 
-        } else {
-            this.div.style.display = 'none'
-            app.path.hsFormat = this.f
-        }
-    }
+
+
+
+    // 2. LOAD DATA ---------------------------------------------------------------------
+
 
     // check if data for the current parameters is loaded
     checkLoadData(callback) { // if callback empty -> returns true or false
@@ -188,52 +207,14 @@ class TableWindow {
         else { return (callback == undefined) ? true : callback.apply(this) }
     }
 
-    
-    // plots the current parameters
-    plot () { 
-        // if (!this.fullyLoaded) {return}
-        if (this.div.style.display == 'none') { return }
-        if (!this.checkLoadData()) { 
-            this.renderOptions()
-            return this.checkLoadData( _ => { app.ui.tableWindow.plot() }) 
-        }
-        this.data[this.f][this.t][this.r].plot()
-        this.renderOptions()
-    }
-    
-    // adds numbers to the plot 
-    annotate() { 
-        if (this.annotated) { this.nrGamesBtn.classList.remove('highlighted') }
-        else { this.nrGamesBtn.classList.add('highlighted') }
-        this.annotated = !this.annotated        
-        this.plot()
-    }
 
-    setTotGames() { this.nrGamesP.innerHTML = this.nrGames.toLocaleString()+" games" }
-
-    
-    renderOptions() {
-
-        document.querySelector("#tableWindow #formatBtn").innerHTML = (MOBILE) ? btnIdToText_m[this.f] : btnIdToText[this.f]
-        document.querySelector("#tableWindow #timeBtn").innerHTML =   (MOBILE) ? btnIdToText_m[this.t] : btnIdToText[this.t]
-        document.querySelector("#tableWindow #ranksBtn").innerHTML =  (MOBILE) ? btnIdToText_m[this.r] : btnIdToText[this.r]
-        document.querySelector("#tableWindow #sortBtn").innerHTML =   (MOBILE) ? btnIdToText_m[this.sortBy] : btnIdToText[this.sortBy]
-
-        // for (var t of this.hsTimes) {
-        //     if (this.data[this.f][t]['ranks_all'].totGames < this.minGames) {
-        //         document.querySelector('#tableWindow .content-header #timeFolder #'+t).style.display = 'none'
-        //     }
-        // }
-    }
-
-
+    // Firebase query
     loadData(hsFormat, callback) {
         var ref = app.fb_db.ref(this.firebasePath+'/'+hsFormat)
         let loader = function(Data) { this.readData(Data, hsFormat, callback) }
         ref.on('value',loader.bind(this), e => console.log('Could not load Table Data',e))
 
     } // load Data
-
 
 
     readData(DATA, hsFormat,callback) {
@@ -246,25 +227,34 @@ class TableWindow {
 
         this.fullyLoaded = true
         this.data[hsFormat].fullyLoaded = true
-        console.log('table loaded: '+ (performance.now()-t0).toFixed(2)+' ms')
         this.renderOptions()
+        this.hideInsufficientData()
+
+        console.log('table loaded: '+ (performance.now()-t0).toFixed(2)+' ms')
         callback.apply(this)
     }// add Data
 
-    toggleOverlay() {
-        if (this.overlay) {this.overlayDiv.style.display = 'none'; this.overlay = false}
-        else{
-            this.overlayP.innerHTML = this.overlayText[this.mode]
-            this.overlayDiv.style.display = 'block'; 
-            this.overlay = true}
+
+
+
+
+
+
+    // 3. PLOTTING ---------------------------------------------------------------------
+
+    
+    // plots the current parameters
+    plot () { 
+        if (this.div.style.display == 'none') { return }
+        if (!this.checkLoadData()) { 
+            this.renderOptions()
+            return this.checkLoadData( _ => { app.ui.tableWindow.plot() }) 
+        }
+        this.data[this.f][this.t][this.r].plot()
+        this.renderOptions()
     }
 
-    updateColorTheme() { 
-        MU_COLOR_IDX = (MU_COLOR_IDX + 1) % 3
-        this.data[this.f][this.t][this.r].plot();
-    }
-
-
+    // simulation (PREMIUM only)
     simulation() {
         let simulationDiv = document.querySelector('#tableWindow .chartFooterBtn.equilibrium')
 
@@ -278,6 +268,58 @@ class TableWindow {
         }     
         this.plot()
     }
+    
+    // adds numbers to the plot 
+    annotate() { 
+        if (this.annotated) { this.nrGamesBtn.classList.remove('highlighted') }
+        else { this.nrGamesBtn.classList.add('highlighted') }
+        this.annotated = !this.annotated        
+        this.plot()
+    }
 
-} // close LadderWindow
+    // changes color theme of the heatmap
+    updateColorTheme() { 
+        MU_COLOR_IDX = (MU_COLOR_IDX + 1) % 3
+        this.data[this.f][this.t][this.r].plot();
+    }
+    
+    // sets text of option buttons in the content-header
+    renderOptions() {
+        document.querySelector("#tableWindow #formatBtn").innerHTML = (MOBILE) ? btnIdToText_m[this.f] : btnIdToText[this.f]
+        document.querySelector("#tableWindow #timeBtn").innerHTML =   (MOBILE) ? btnIdToText_m[this.t] : btnIdToText[this.t]
+        document.querySelector("#tableWindow #ranksBtn").innerHTML =  (MOBILE) ? btnIdToText_m[this.r] : btnIdToText[this.r]
+        document.querySelector("#tableWindow #sortBtn").innerHTML =   (MOBILE) ? btnIdToText_m[this.sortBy] : btnIdToText[this.sortBy]
+    }
+
+    setTotGames() { this.nrGamesP.innerHTML = this.nrGames.toLocaleString()+" games" }
+
+
+    // hides time options with too few total games
+    hideInsufficientData() {
+        for (var t of this.hsTimes) {
+            let btn = document.querySelector('#tableWindow .content-header #timeFolder #'+t)
+            if (this.data[this.f][t]['ranks_all'].totGames < this.minGames) { btn.style.display = 'none' }
+            else { btn.style.display = 'block' }
+        }
+    }
+
+    toggleOverlay() {
+        if (this.overlay) {this.overlayDiv.style.display = 'none'; this.overlay = false}
+        else{
+            this.overlayP.innerHTML = this.overlayText[this.mode]
+            this.overlayDiv.style.display = 'block'; 
+            this.overlay = true}
+    }
+
+
+
+
+
+    
+
+
+    
+
+
+} // TableWindow
 

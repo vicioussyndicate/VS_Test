@@ -48,6 +48,8 @@ class UI {
         if (MOBILE) {
             for(var mBtn of this.mobileBtns) { mBtn.addEventListener("click", this.mobileMenu.bind(this)) }
             detectswipe('.navbar .mobileTabs .tab',this.swipeTab.bind(this))
+            let swipeLeft = function() { this.swipeTab(0,'l') }
+            this.mobileTab.onclick = swipeLeft.bind(this)
             this.hideLoader()
         }
 
@@ -203,62 +205,7 @@ class UI {
 
 
 
-const overlayText1 = `
 
-<span style='font-size:200%;font-weight:bold;padding-left:2rem;'>Greetings Travelers,</span><br><br><br>
-
-Welcome to the VS Live web app where you can explore the newest Hearthstone data and find 
-
-out about frequency and win rates of your favorite decks.<br><br>
-
-To get more information on the current tab simply click on the 
-
-    <div class='fa fa-question-circle' style='display:inline-block'></div>
-
-icon in the top right corner.<br><br>
-
-Upgrade to vS Gold to visit the gold version of this app. Check the link more information:<br><br><br>
-
-<button id='basicBtn'>BASIC</button>
-<img src='Images/arrow.png' class='arrow'>
-<a href=${VSGOLDINFOLINK} target="_blank">
-<button id='premiumBtn'>GOLD</button>
-</a>
-
-<br><br>
-
-To give feedback simply click on the discord link below:<br><br><br>
-
-<a href=${DISCORDLINK}
-   target="_blank"><img class='discordLogo' src="Images/discordLogo.png"></a><br><br>
-
-`
-
-
-const overlayText2 = `
-
-<span style='font-size:200%;font-weight:bold;padding-left:2rem'>Greetings Travelers,</span><br><br><br>
-
-Welcome to the VS Live web app where you can explore the newest Hearthstone data and find 
-
-out about frequency and win rates of your favorite decks.<br><br>
-
-To get more information on the current tab simply click on the 
-
-    <div class='fa fa-question-circle' style='display:inline-block'></div>
-
-icon in the top right corner.<br><br>
-
-Thank you for using vS Live Gold.
-
-<br><br>
-
-To give feedback simply click on the discord link below:<br><br><br>
-
-<a href=${DISCORDLINK}
-   target="_blank"><img class='discordLogo' src="Images/discordLogo.png"></a><br><br>
-
-`
 
 
 
