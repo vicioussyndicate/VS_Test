@@ -10,6 +10,20 @@ class InfoWindow {
         this.text =`
                 Greetings and thank you for checking out the VS Live Beta!<br><br>
 
+                    Update 2.0 (01-04-2018):<br><br>
+
+                    - New Power Score plot in the overview tab.<br>
+                    - You can now change the color scheme in the Matchups tab.<br>
+                    - Added meta simulation tool for Premium users in the Matchups tab.<br>
+                    - Reworked Deck tab. Includes a deck comparison feature and a dust vs winrate plot.<br>
+                    - Embeded the vicious syndicate twitter feed into the info tab.<br>
+                    - App now loads less data on first load.<br>
+                    - App now updates dynamically. Last update time shown in the top right corner.<br>
+                    - App now has a somewhat workable mobile version.<br>
+                    - Udates to lots of interface elements (new icons/ text/ colors etc.)<br>
+                    - Fixes to bugs and "features".<br><br>
+
+
                     Update 16-12-2017:<br><br>
                     - App refresh button in the top right corner added<br>
                     - Chose color theme for the matchup table added<br>
@@ -45,7 +59,6 @@ class InfoWindow {
 
     buttonTrigger(e) {
         let btnID = e.target.id
-        // console.log(btnID,e)
         this.mode = btnID
         this.plot()
     }

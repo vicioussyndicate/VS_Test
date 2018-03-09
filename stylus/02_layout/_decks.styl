@@ -22,26 +22,34 @@
         justify-content space-between
         .content-left
             width 10rem
+            .sidebar
+                margin-top 17rem
             .selectionWrapper
-                width 10rem
-                height 12rem
+                $selButtonWidth = 2.5rem
+                position absolute
+                width 5*$selButtonWidth 
+                height auto
                 margin-top 1rem
                 .buttonWrapper
-                    position absolute
-                    width 12rem
                     margin-left 0.5rem
                     margin-top 1.1rem
                     line-height 2rem
                     .selectionBtn
-                        font-size 1rem
+                        font-size 0 //1rem
                         display inline-block
                         background-color $accentColor
-                        padding 0.2rem
-                        margin-left 0.2rem
+                        border 0.3rem solid #0000004d
+                        //padding 0.2rem
+                        margin-left 0.5rem
                         border-radius 0.2rem
                         line-height normal
                         opacity 0.4
+                        width $selButtonWidth
+                        height $selButtonWidth
+                        overflow hidden
                         &.special
+                            width auto //$selButtonWidth*1.3
+                            height $selButtonWidth*0.5
                             font-size 1.3rem
                             margin-left 0.4rem
                         &:hover
@@ -52,7 +60,8 @@
                             background-color yellow !important
                         &.highlighted
                             opacity 1
-                            font-size 1.3rem
+                            border-color black
+                            //font-size 1.3rem
                         
                 &:hover
                     .selectionImg
@@ -79,7 +88,7 @@
                 margin-bottom 1rem
             
             .descriptionBox
-                height $cont-height - 1rem
+                height 100% //$cont-height - 1rem
                 padding 1rem
                 overflow-y: auto
                 .description

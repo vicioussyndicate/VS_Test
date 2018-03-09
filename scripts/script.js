@@ -19,6 +19,8 @@ window.onload = function() {
 
 // Utility
 
+let wrSort = function (a,b) {return a.wr > b.wr ? -1: a.wr < b.wr ? 1 : 0 }
+
 function choice(arr) {return arr[Math.floor(Math.random()*arr.length)]}
 function randint(min, max) {
   min = Math.ceil(min);
@@ -71,7 +73,6 @@ function matrixXvector(matrix,fr) {
 // MOBILE
 
 function detectswipe(el,func) {
-    console.log('swipe',el,func)
     var swipe_det = {};
     swipe_det.sX = 0; swipe_det.sY = 0; swipe_det.eX = 0; swipe_det.eY = 0;
     var min_x = 30;  //min x swipe for horizontal swipe

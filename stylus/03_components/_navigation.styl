@@ -40,26 +40,37 @@
             letter-spacing 2px
             overflow: hidden
             //transition background 0.3s ease, color 0.3s ease
+            border-left solid 2.5px #04336326
+            border-right solid 0.5px #08085838
             &#ladder
                 background-color: $midColor
-                background: linear-gradient(#1e6b97,#1b6086)
-                //color $darkColor
+                //background: linear-gradient(#1e6b97,#1b6086)
+                border-left none //solid $borderThicknes-right #1d557b
             &#power
                 background-color: $midColor2
-                background: linear-gradient(#398ab9,#3279a2)
+                //background: linear-gradient(#398ab9,#3279a2)
+                //border-left solid $borderThicknes-left #37719a
+                //border-right solid $borderThicknes-right #2f6e9a
             &#table
                 background-color: $midColor3
-                background linear-gradient(#599fb5,#5396ad)
+                //background linear-gradient(#599fb5,#5396ad)
+                //border-left solid $borderThicknes-left #4c869c
+                //border-right solid $borderThicknes-right #4f8398
             &#decks
                 background-color: $midColor4
-                background linear-gradient(#7fb0b4,#719da0)
+                //background linear-gradient(#7fb0b4,#719da0)
+                //border-left solid $borderThicknes-left #6f989c
+                //border-right solid $borderThicknes-right #7f9698
             &#info
                 background-color transparent
                 color $darkColor
+                //border-left solid $borderThicknes-left #cfdbea
+                border-right none
             &:hover
                 cursor pointer
             &.highlighted
                 background $nav_hi_bgColor !important
+                border none !important
                 bottom 5%
                 
 

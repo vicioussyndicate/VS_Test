@@ -8,7 +8,7 @@ class DecksWindow {
 
         this.hsFormats = hsFormats
 
-        //this.sidebarLeft = document.querySelector('#decksWindow .content .sidebar.left .archetypeList')
+        //this.sidebar = document.querySelector('#decksWindow .content .sidebar.left .archetypeList')
         //this.sidebarRight1 = document.querySelector('#decksWindow .content .sidebar.right .archetypeList')
         this.div = document.querySelector('#decksWindow')
         this.tab = document.querySelector('#decks.tab')
@@ -21,14 +21,9 @@ class DecksWindow {
         this.questionBtn = document.querySelector('#decksWindow .question')
 
         this.subWindows = [this.descriptionBox, this.decksDiv ,this.chartDiv] // depending on mode
-
+        
         let sb1 = document.querySelector('#decksWindow .content .sidebar.left')
-        let sb2 = document.querySelector('#decksWindow .content .sidebar.right1')
-        let sb3 = document.querySelector('#decksWindow .content .sidebar.right2')
-
-        this.sidebarLeft = new Sidebar(sb1,'Archetypes')
-        //this.sidebarRightTop = new Sidebar(sb2,'Best vs')
-        //this.sidebarRightBot = new Sidebar(sb3,'Worst vs')
+        this.sidebar = new Sidebar(sb1,'Archetypes')
 
 
         this.overlayText = `
@@ -55,7 +50,7 @@ class DecksWindow {
         this.f = 'Standard'
         this.hsClass = 'Druid'
         this.hsArch = null
-        this.mode = 'description' // decklists, description, overview
+        this.mode = 'description' // decklists, description, dustWr
         this.deckWidth = '12rem'
         this.fullyLoaded = true
         this.overlay = false
@@ -78,11 +73,10 @@ class DecksWindow {
         }}
 
         this.setupUI()
-        this.renderOptions()
         this.questionBtn.addEventListener('click',this.toggleOverlay.bind(this))
         this.overlayDiv.addEventListener('click',this.toggleOverlay.bind(this))
 
-        callback.apply(this)
+        if (callback != undefined) { callback() }
     }// close constructor
 
 
@@ -108,15 +102,10 @@ class DecksWindow {
         this.compareBtn = document.querySelector('#decksWindow .content-header #compare')
         this.infoBtn.active = false
         this.compareBtn.active = false
-        // this.infoBtn.onclick = this.buttonTrigger.bind(this)
-        // this.compareBtn.onclick = this.buttonTrigger.bind(this)
 
         this.selection = {}
         this.selection.div = document.querySelector('#decksWindow .selectionWrapper')
         this.selection.buttonWrapper = document.querySelector('#decksWindow .selectionWrapper .buttonWrapper')
-        //this.selection.imgWrapper = document.querySelector('#decksWindow .selectionWrapper .imgWrapper')
-        //this.selection.img = document.querySelector('#decksWindow .selectionWrapper .selectionImg')
-        //this.selection.title = document.querySelector('#decksWindow .selectionWrapper .selectionTitle')
         this.selection.buttons = []
 
 
@@ -135,22 +124,21 @@ class DecksWindow {
         }
 
 
-        for (let extra of ['Meta','Random']) {
-            let btn = this.createSelectionBtn(extra,extra)
-            btn.className += ' special'
-            btn.style.backgroundColor = 'black'
-            btn.style.color = fontColors[extra]
+        for (let hsClass of hsClasses) {
+            let btn = this.createSelectionBtn(hsClass, hsClass)
+            btn.style.backgroundColor = '#454c57'
+            btn.style.color = fontColors[hsClass]
+            btn.style.backgroundColor = fontColors[hsClass]
             btn.onclick = this.buttonTrigger.bind(this)
             this.selection.buttonWrapper.appendChild(btn)
             this.selection.buttons.push(btn)
         }
 
-
-
-        for (let hsClass of hsClasses) {
-            let btn = this.createSelectionBtn(hsClass, hsClass)
-            btn.style.backgroundColor = '#454c57'
-            btn.style.color = fontColors[hsClass]
+        for (let extra of ['Meta','Random']) {
+            let btn = this.createSelectionBtn(extra,extra)
+            btn.className += ' special'
+            btn.style.backgroundColor = 'black'
+            btn.style.color = fontColors[extra]
             btn.onclick = this.buttonTrigger.bind(this)
             this.selection.buttonWrapper.appendChild(btn)
             this.selection.buttons.push(btn)
@@ -168,7 +156,160 @@ class DecksWindow {
         return btn
     }
 
+
+
+
+    
+
+
+
+    display(bool) { // gateway to this tab
+        if (bool) {
+            this.div.style.display = 'inline-block'
+            this.f = app.path.hsFormat
+            this.plot()
+        } else {
+            app.path.hsFormat = this.f
+            this.div.style.display = 'none'
+        }
+    }
+
+
+
+    plot() { 
+        if (!this.checkLoadData()) { return this.checkLoadData(_=>{ app.ui.decksWindow.plot() }) }
+
+        this.renderWindows()
+        this.renderOptions()
+
+        switch(this.mode) {
+            case 'description':
+                this.plotDescriptions()
+                break
+
+            case 'decklists':
+                this.plotDecklists()
+                break
+
+            case 'dustWr':
+                this.plotDustWr()
+                break
+        }   
+    }
+
+
+    
+
+
+
+
+
+
+    
+
+    buttonTrigger(e) {
+        
+        var btnID = e.target.id
+
+        // class button
+        if (hsClasses.indexOf(btnID) != -1) { this.loadClass(btnID) }
+
+        // archetype button
+        if (e.target.classList.contains('archBtn')) { 
+            this.hsArch = this.findArch(btnID)
+            if (this.hsArch != null) { 
+                this.sidebar.removeBtn()
+                this.hsClass = this.hsArch.hsClass 
+            } 
+            this.mode = 'decklists'
+        }
+
+
+        switch (btnID) {
+            case 'Standard':
+                this.f = 'Standard'
+                break
+
+            case 'Wild':
+                this.f = 'Wild'
+                break
+
+            case 'Meta':
+                this.hsClass = 'Meta'
+                this.hsArch = null
+                this.loadDecks('Meta')
+                break
+
+            case 'Random':
+                this.hsClass = 'Random'
+                this.hsArch = null
+                this.loadDecks('Random')
+                break
+
+            case 'info':
+                this.info(!this.infoBtn.active)
+                return 
+                break
+
+            case 'compare':
+                this.compare(!this.compareBtn.active)
+                return
+                break
+
+            case 'description':
+                this.mode = 'description'
+                break
+
+            case 'decklists':
+                this.mode = 'decklists'
+                break
+
+            case 'dustWr':
+                this.mode = 'dustWr'
+                break
+        }
+
+        this.plot() 
+    }
+
+
+
+
+    loadDecks(w) {
+        if (!this.checkLoadData()) { return this.checkLoadData(_=>{ app.ui.decksWindow.loadDecks(w) }) }
+
+        this.decklists = []
+        this.compare(false)
+        this.sidebar.removeBtn()
+
+        let wrSort = function (a,b) {return a.wr > b.wr ? -1: a.wr < b.wr ? 1 : 0 }
+        
+        if (w == 'Random') { this.archetypes[this.f] = shuffle(this.archetypes[this.f]) }
+        else { this.archetypes[this.f].sort(wrSort) }
+
+
+        if (w == 'Class') {
+            if (hsClasses.indexOf(this.hsClass) == -1) { this.hsClass = hsClasses[0] }
+
+            for (let a of this.archetypes[this.f]) {
+                if ( a.hsClass != this.hsClass ) { continue }
+                this.sidebar.addArchBtn(a)
+        }}
+
+
+        if (w == 'Meta' || w == 'Random') {
+            for (let a of this.archetypes[this.f].slice(0,5)) { 
+                if (a.decklists.length == 0) { continue }
+                this.decklists.push(choice(a.decklists))
+                this.sidebar.addArchBtn(a)
+        }}
+
+    }
+
     compare(bool) {
+
+        this.compareBtn.active = bool
+        this.renderOptions()
 
         if (!bool) { // remove comparison
             for (let dl of this.decklists) { dl.declassify()}
@@ -179,14 +320,10 @@ class DecksWindow {
         let numDl = this.decklists.length
 
         for (let idx1 of range(0,numDl)) {
-
-            //let dl1 = this.decklists[idx1]
             for (let card of this.decklists[idx1].cards) {
 
                 if (cards.indexOf(card.name) != -1 ) { continue } // card has been classified already
                 cards.push(card.name)
-
-                //if (idx1 == numDl-1) { dl1.classify(card.name, 'unique'); continue }
 
                 let allDecksHave1 = true
                 let allDecksHave2 = true
@@ -218,125 +355,35 @@ class DecksWindow {
     }
 
     info(bool) { 
+        this.infoBtn.active = bool
         for (let dl of this.decklists) { dl.toggleInfo(bool) } 
-    }
-
-
-    plot() { 
-        if (!this.checkLoadData()) { return this.checkLoadData(_=>{ app.ui.decksWindow.plot() }) }
-
-        if (!this.data[this.f].fullyLoaded) { return this.loadFormat(this.f) }
-
-        switch(this.mode) {
-            case 'overview':
-                this.plotDustWr()
-                break
-            case 'decklists':
-                this.loadDecklists()
-                break
-            case 'description':
-                this.loadDescription()
-                break
-
-        }
-
-        //this.loadFormat(this.f) 
         this.renderOptions()
     }
-
-
-    display(bool) {
-        if (bool) {
-            console.log('first display')
-            this.div.style.display = 'inline-block'
-            this.f = app.path.hsFormat
-            this.plot()
-        } else {
-            app.path.hsFormat = this.f
-            this.div.style.display = 'none'
-        }
-    }
-
-
-
-
-
-
-    
-
-    buttonTrigger(e) {
-        
-        var btnID = e.target.id
-        //console.log(e)
-
-        if (btnID == 'Standard' || btnID == 'Wild') { this.f = btnID; this.plot() }
-        if (btnID == 'Meta') { 
-            this.hsClass = 'Meta'
-            this.sidebarLeft.loadMeta(this.archetypes[this.f]) 
-        }
-        if (btnID == 'Random') {
-            this.hsClass = 'Random'
-            this.sidebarLeft.loadRandom(this.archetypes[this.f]) 
-        }
-
-        if (btnID == 'info') { 
-            //console.log(this.infoBtn, this.infoBtn.active)
-            this.infoBtn.active = !this.infoBtn.active
-            this.info(this.infoBtn.active) 
-        }
-        if (btnID == 'compare') { 
-            //console.log(this.compareBtn, this.compareBtn.active)
-            this.compareBtn.active = !this.compareBtn.active
-            this.compare(this.compareBtn.active) 
-        }
-
-
-        if (e.target.classList.contains('archBtn')) { 
-            this.hsArch = this.findArch(btnID)
-            if (this.hsArch != undefined) {
-                if (this.hsClass != this.hsArch.hsClass) { 
-                    this.hsClass = this.hsArch.hsClass
-                    this.loadClass(this.hsClass) 
-                }
-                else { this.loadDecklists() }
-            }
-
-            else { console.log('ERROR: archbtn not found', e) }
-        }
-
-        if (hsClasses.indexOf(btnID) != -1) {
-            this.hsArch = null
-            this.loadClass(btnID)
-        }        
-
-        if (btnID == 'overview')    { this.plotDustWr() }
-        if (btnID == 'decklists')   { this.loadDecklists() }
-        if (btnID == 'description') { this.loadDescription() }
-        
-        this.renderWindows()
-        this.renderOptions()   
-    }
-
-
-
 
     renderWindows() {
         for (let w of this.subWindows) { w.style.display = 'none'}
         switch(this.mode) {
             case 'description':
-                this.descriptionBox.style.display = 'inline'
+                this.descriptionBox.style.display = 'inline-block'
                 break;
             case 'decklists':
-                this.decksDiv.style.display = 'grid'
+                this.decksDiv.style.display = 'inline-block'
                 break;
-            case 'overview':
+            case 'dustWr':
                 this.chartDiv.style.display = 'inline-block'
                 break;
         }
     }
 
+
     renderOptions() {
-         for (var btn of this.optionButtons) { 
+
+        // show or hide info and compare option
+        if (this.mode == 'decklists') { document.querySelector('#decksWindow .displayOptions').style.display = 'flex' }
+        else {  document.querySelector('#decksWindow .displayOptions').style.display = 'none' }
+
+
+        for (var btn of this.optionButtons) { 
             btn.classList.remove('highlighted')
             if (btn.id == this.mode) {btn.classList.add('highlighted')}
         }
@@ -345,20 +392,20 @@ class DecksWindow {
             btn.classList.remove('highlighted')
             if (btn.id == this.hsClass) { btn.classList.add('highlighted') }
         }
-        
-        for (var btn of this.archButtons) { 
-            btn.classList.remove('highlighted')
-            if (this.hsArch != null) { if (btn.id == this.hsArch.name) {btn.classList.add('highlighted')} }
-        }
 
+
+        // highlight info and compare option
         for (let btn of [this.infoBtn, this.compareBtn]) {
             btn.classList.remove('highlighted')
             if (btn.active) { btn.classList.add('highlighted')}
         }
+        
+        // highlight archetype button
+        if (this.mode == 'decklists') { this.sidebar.highlight(this.hsArch) }
+        else { this.sidebar.highlight() }
+        
 
-        //this.selection.title.innerHTML = this.hsClass
-        document.querySelector("#decksWindow #formatBtn").innerHTML =   btnIdToText[this.f]
-        document.querySelector("#decksWindow #classBtn").innerHTML =    this.hsClass
+        document.querySelector("#decksWindow #formatBtn").innerHTML = btnIdToText[this.f]
     }
 
 
@@ -371,10 +418,8 @@ class DecksWindow {
     checkLoadData(callback) {
 
         let back = (callback != undefined)
-        console.log('checkLoadData',back,callback)
 
         if (!app.ui.tableWindow.data[this.f].fullyLoaded) {
-            console.log('check 1')
             let callback2 = function() { app.ui.decksWindow.checkLoadData(callback) }
             if (back) { return app.ui.tableWindow.loadData(this.f, callback2)}
             else { return false }
@@ -383,18 +428,18 @@ class DecksWindow {
         if (app.ui.tableWindow.data[this.f].fullyLoaded && !this.mu[this.f].fullyLoaded) { this.loadWinrate() }
 
         if (!this.data[this.f].fullyLoaded) {
-            console.log('check 2')
             let callback2 = function() { app.ui.decksWindow.checkLoadData(callback) }
             if (back) { return this.loadData(this.f, callback2)}
             else { return false }
         }
 
         if (this.data[this.f].fullyLoaded && app.ui.tableWindow.data[this.f].fullyLoaded) {
-            console.log('all checks clear')
             if (back) { return callback.apply(this) }
             else { return true }
         }
     }
+
+
 
 
     loadWinrate() {
@@ -440,7 +485,6 @@ class DecksWindow {
                 this.archetypes[f].push(archetype)
                 this.data[f][hsClass].archetypes.push(archetype)
 
-
                 let idx = this.data[f][hsClass].archetypes.length -1
 
                 let arch = data[hsClass].archetypes[key]
@@ -468,66 +512,47 @@ class DecksWindow {
         this.f = app.path.hsFormat
         this.div.style.display = 'inline-block'
 
-        if (!this.checkLoadData()) {
-            let callback = function() { app.ui.decksWindow.deckLink(archName) }
-            return this.checkLoadData( _=>{ app.ui.decksWindow.deckLink(archName) } )
-        }
+        if (!this.checkLoadData()) { return this.checkLoadData(_=>{ app.ui.decksWindow.deckLink(archName) }) }
 
-        let hsClass, hsArch
         this.hsArch = this.findArch(archName)
+        this.hsClass = (this.hsClass != undefined) ? this.hsArch.hsClass : 'Druid'
+
         if (this.hsArch == undefined) {
-            for (let c of hsClasses) { if (archName.indexOf(c) != -1) { this.hsClass = c; break } }
-            if (this.hsClass == undefined) { this.hsClass = 'Druid' }
-            this.hsArch = this.data[this.f][this.hsClass].archetypes[0]
-        }
-
-        for (var c of hsClasses) {
-            if (archName.indexOf(c) != -1) {hsClass = c}
-            let archetypes = this.data[this.f][c].archetypes
-            for (let a of archetypes) { if (a.name == archName) { hsClass = c; hsArch = a; break } } 
+            for (let a of this.archetypes[this.f]) { 
+                if (a.name == archName) { this.hsClass = c; this.hsArch = a; break } 
+            }
         }
         
-        if (hsClass == undefined) { hsClass = 'Druid'}
-        if (hsArch == undefined)  { hsArch = null; this.mode = 'description' }
-        
-        this.hsClass = hsClass
-        this.hsArch = hsArch
+        if (this.hsArch == undefined) {
+            this.mode = 'description'
+            for (var c of hsClasses) {
+                if (archName.indexOf(c) != -1) { this.hsClass = c; break }
+            }
+        }
 
+        this.loadDecks('Class')
         this.display(true)
-        this.renderOptions()
     }
 
 
-    loadFormat(hsFormat) { 
-        this.f = hsFormat; 
-        if (!this.data[hsFormat].fullyLoaded) {
-            let callback = function() { app.ui.decksWindow.loadFormat(hsFormat) }
-            return this.loadData(hsFormat,callback)
-        }
-        this.loadClass(this.hsClass) 
-    }
 
 
     loadClass(hsClass) {
 
         this.hsClass = hsClass
-
-        if (this.mode == 'description') {this.loadDescription()}
-        if (this.mode == 'decklists') {this.loadDecklists()}
-
-        let data = this.data[this.f][this.hsClass]
-        this.sidebarLeft.loadClass(data)
-        if (data.archetypes.length > 0 && this.hsArch == null) { this.hsArch = data.archetypes[0] }
-        this.sidebarLeft.highlight(this.hsArch.name)
+        this.archetypes[this.f].sort(wrSort)
+        for (let a of this.archetypes[this.f]) {
+            if (a.hsClass == this.hsClass && a.decklists.length > 0) { this.hsArch = a; break}
+        }
+        this.sidebar.highlight(this.hsArch)
+        this.loadDecks('Class')
     }
 
 
 
-    loadDescription() {
-
-        this.mode = 'description'
-        this.renderWindows()
-
+    plotDescriptions() {
+        if (hsClasses.indexOf(this.hsClass) == -1) { this.hsClass = hsClasses[0] }
+        // if hsclass == meta -> load/ link meta report
         var d = this.data[this.f][this.hsClass]
         this.description.innerHTML = '<p class="title">'+this.hsClass+'</p><p class="text">'+d.text+'</p>'
     }
@@ -535,45 +560,40 @@ class DecksWindow {
     
 
 
+    plotDecklists() {
 
-    loadDecklists() {
-        this.mode = 'decklists'
-        this.renderWindows()
-       
         this.infoBtn.active = false
-        if (this.compareBtn.active) { this.compare(false); this.compareBtn.active = false}
-        this.decklists = []
+        this.compare(false)
+
+        this.archetypes[this.f].sort(wrSort)
+
+        // load decklists
+        if (hsClasses.indexOf(this.hsClass) != -1) {
+
+            if (this.hsArch == null) {
+                for (let a of this.archetypes[this.f]) { 
+                    if (a.hsClass == this.hsClass && a.decklists.length > 0) { this.hsArch = a; break}
+                }
+                if (this.hsArch == null) { return } // did not find archetype
+            }
+            this.decklists = this.hsArch.decklists
+        } 
 
         this.decksDiv.innerHTML = ''
-
-        if (this.hsArch == null) { this.hsArch = this.data[this.f][this.hsClass].archetypes[0]}
-        if (this.hsArch == undefined) { this.hsArch = null; return}
-        
-        var gridTemplateColumns = ''
-        //for (let arch of this.data[this.f][this.hsClass].archetypes) {
-        for (var dl of this.hsArch.decklists) {
-            //if (arch.decklists.length == 0) { continue }
-            //let dl = arch.decklists[0]
-            gridTemplateColumns += this.deckWidth + ' '
-            this.decklists.push(dl)
-            this.decksDiv.appendChild(dl.div)
-        }
-        
-        this.decksDiv.style.gridTemplateColumns = gridTemplateColumns
-        //this.loadDecklistsMatchups(this.hsArch) // load deck list matchups
+        for (var dl of this.decklists) { this.decksDiv.appendChild(dl.div) }
     } 
 
 
     findArch(archName) {
         for (let hsClass of hsClasses) {
-            for (let a of this.data[this.f][hsClass].archetypes) {
+            for (let a of this.archetypes[this.f]) {
                 if (a.name == archName) { return a }
         }}
         return undefined
     }
 
 
-    loadDecklistsMatchups(hsArch) { // load deck matchups in right sidebar
+    plotDecklistsMatchups(hsArch) { // load deck matchups in right sidebar
         let f = this.f
         let wr = hsArch.wr
         let top = 3
@@ -586,7 +606,7 @@ class DecksWindow {
             let table = this.mu[f].table
             let archNames = this.mu[f].archNames
             let idx = archNames.indexOf(hsArch.name)
-            if (idx == -1) { hsArch.wr = 0; this.loadDecklistsMatchups(hsArch); return }
+            if (idx == -1) { hsArch.wr = 0; this.plotDecklistsMatchups(hsArch); return }
 
             let row = table[idx].slice()
             row.sort()
@@ -621,11 +641,10 @@ class DecksWindow {
 
     highlight(e) {
 
-        var eType = e.type
-        if (eType == 'mouseover') {
-            var cardName = e.target.id
-            var decklistName = e.target.parentElement.parentElement.id
-            for (var dl of this.decklists) {
+        if (e.type == 'mouseover') {
+            let cardName = e.target.id
+            let decklistName = e.target.parentElement.parentElement.id
+            for (let dl of this.decklists) {
                 if (dl.name == decklistName) {continue}
                 dl.highlight(cardName)
             }
@@ -633,7 +652,7 @@ class DecksWindow {
             var decklistName = e.target.parentElement.parentElement.id
             for (var dl of this.decklists) { 
                 if (dl.name == decklistName) {continue}
-                dl.highlight(cardName) }
+                dl.highlight() }
         }        
     }
 
@@ -643,10 +662,6 @@ class DecksWindow {
 
         let archetypes = this.archetypes[this.f]
         if (archetypes.length == 0) { return }
-
-        this.mode = 'overview'
-        this.renderWindows()
-          
         
         let traces = []
         let x = []
@@ -671,12 +686,11 @@ class DecksWindow {
                     marker: {
                         color: hsColors[a.hsClass],
                         size: 15,
-                        line: { color: 'black', width: 2.2},
+                        line: { color: '#00000059', width: 2.2},
                     }
                 })
             }
         }
-        //console.log('traces:',traces)
 
         let layout_line = { color: 'rgba(50,50,50,0.5)', width: 1.5, dash: 'dot', opacity: 0.5 }
         let layout = {
@@ -710,13 +724,6 @@ class DecksWindow {
         }
         document.getElementById('chart3').on('plotly_click', clickHandler.bind(this))
     }// plot dust vs wr
-
-
-
-
-    loadOverviewSidebar() {
-
-    }
 
 
     toggleOverlay() {

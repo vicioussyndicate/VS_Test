@@ -5,6 +5,71 @@ const POLLLINK = 'https://docs.google.com/forms/d/e/1FAIpQLSel6ym_rJHduxkgeimzf9
 const VSGOLDINFOLINK = 'https://www.vicioussyndicate.com/membership/vs-gold/'
 
 
+// Message when opening app - Basic
+const overlayText1 = `
+
+<span style='font-size:200%;font-weight:bold;padding-left:2rem;'>Greetings Travelers,</span><br><br><br>
+
+Welcome to the VS Live web app where you can explore the newest Hearthstone data and find 
+
+out about frequency and win rates of your favorite decks.<br><br>
+
+To get more information on the current tab simply click on the 
+
+    <div class='fa fa-question-circle' style='display:inline-block'></div>
+
+icon in the top right corner.<br><br>
+
+Upgrade to vS Gold to visit the gold version of this app. Check the link more information:<br><br><br>
+
+<button id='basicBtn'>BASIC</button>
+<img src='Images/arrow.png' class='arrow'>
+<a href=${VSGOLDINFOLINK} target="_blank">
+<button id='premiumBtn'>GOLD</button>
+</a>
+
+<br><br>
+
+<b class='marker'>Update:</b> VS Live version <b>2.0</b> has launched. Head on to the info tab to find out more.<br><br>
+
+To give feedback simply click on the discord link below:<br><br><br>
+
+<a href=${DISCORDLINK}
+   target="_blank"><img class='discordLogo' src="Images/discordLogo.png"></a><br><br>
+
+`
+
+// Message when opening app - PREMIUM
+const overlayText2 = `
+
+<span style='font-size:200%;font-weight:bold;padding-left:2rem'>Greetings Travelers,</span><br><br><br>
+
+Welcome to the VS Live web app where you can explore the newest Hearthstone data and find 
+
+out about frequency and win rates of your favorite decks.<br><br>
+
+To get more information on the current tab simply click on the 
+
+    <div class='fa fa-question-circle' style='display:inline-block'></div>
+
+icon in the top right corner.<br><br>
+
+<b class='marker'>Update:</b> VS Live version <b>2.0</b> has launched. Head on to the info tab to find out more.<br><br>
+
+Thank you for using vS Live Gold.
+
+<br><br>
+
+To give feedback simply click on the discord link below:<br><br><br>
+
+<a href=${DISCORDLINK}
+   target="_blank"><img class='discordLogo' src="Images/discordLogo.png"></a><br><br>
+
+`
+
+
+
+
 // Global Variables
 
 const ladder_times =  ['lastDay','last2Weeks']
