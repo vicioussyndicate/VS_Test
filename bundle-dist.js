@@ -1404,8 +1404,10 @@ var app, _createClass = function() {
             lastMonth: 30
         }, this.r2r = {
             ranks_all: "ranks_all",
-            ranks_L_5: "ranks_1_4",
-            ranks_6_15: "ranks_5_14"
+            ranks_L: "ranks_L",
+            ranks_L_4: "ranks_L_4",
+            ranks_1_4: "ranks_1_4",
+            ranks_5_14: "ranks_5_14"
         }, this.fullyLoaded = !0;
     }
     return _createClass(t, [ {
@@ -1542,7 +1544,7 @@ var app, _createClass = function() {
     function t(e) {
         _classCallCheck(this, t), this.div = document.querySelector("#infoWindow"), this.tab = document.querySelector("#info.tab"), 
         this.infoText = document.querySelector("#infoWindow .content .infoText"), this.twitterFeed = document.querySelector("#infoWindow .content .twitterDiv"), 
-        this.mode = "info", this.text = '\n                Greetings and thank you for checking out the VS Live Beta!<br><br>\n\n                    Update 2.0 (01-04-2018):<br><br>\n\n                    - New Power Score plot in the overview tab.<br>\n                    - You can now change the color scheme in the Matchups tab.<br>\n                    - Added meta simulation tool for Premium users in the Matchups tab.<br>\n                    - Reworked Deck tab. Includes a deck comparison feature and a dust vs winrate plot.<br>\n                    - Embeded the vicious syndicate twitter feed into the info tab.<br>\n                    - App now loads less data on first load.<br>\n                    - App now updates dynamically. Last update time shown in the top right corner.<br>\n                    - App now has a somewhat workable mobile version.<br>\n                    - Udates to lots of interface elements (new icons/ text/ colors etc.)<br>\n                    - Fixes to bugs and "features".<br><br>\n\n\n                    Update 16-12-2017:<br><br>\n                    - App refresh button in the top right corner added<br>\n                    - Chose color theme for the matchup table added<br>\n                    - Outdated archetypes no longer show in the overview page<br>\n                    - Fixed win rates in the win rates page when data is insufficient<br>\n                    - Simulation tool in Matchup tab (VS Gold only)<br><br>\n\n                    Update 1-3-2018:<br><br>\n                    - Loading only data needed<br>\n                    - Decks now show counters and best matchups<br>\n                    - Decks features a Dust vs Winrate plot<br>\n                    - VS Power Score in the Overview tab (map icon)<br>\n                    - New icons / wordings<br><br>\n\n                   To give feedback simply click on the discord link below:<br><br>\n                   \n                <a href=' + DISCORDLINK + '\n                   target="_blank"><img class=\'discordLogo\' src="Images/discordLogo.png"></a><br><br>\n                ', 
+        this.mode = "info", this.text = '\n                Greetings and thank you for checking out the vS Live Beta!<br><br>\n\n                    Update 2.0 (01-04-2018):<br><br>\n\n                    - New Power Score plot in the overview tab.<br>\n                    - You can now change the color scheme in the Matchups tab.<br>\n                    - Added meta simulation tool for Premium users in the Matchups tab.<br>\n                    - Reworked Deck tab. Includes a deck comparison feature and a dust vs winrate plot.<br>\n                    - Embeded the vicious syndicate twitter feed into the info tab.<br>\n                    - App now loads less data on first load.<br>\n                    - App now updates dynamically. Last update time shown in the top right corner.<br>\n                    - App now has a somewhat workable mobile version.<br>\n                    - Udates to lots of interface elements (new icons/ text/ colors etc.)<br>\n                    - Fixes to bugs and "features".<br><br>\n\n\n                    Update 16-12-2017:<br><br>\n                    - App refresh button in the top right corner added<br>\n                    - Chose color theme for the matchup table added<br>\n                    - Outdated archetypes no longer show in the overview page<br>\n                    - Fixed win rates in the win rates page when data is insufficient<br>\n                    - Simulation tool in Matchup tab (vS Gold only)<br><br>\n\n                    Update 1-3-2018:<br><br>\n                    - Loading only data needed<br>\n                    - Decks now show counters and best matchups<br>\n                    - Decks features a Dust vs Winrate plot<br>\n                    - vS Power Score in the Overview tab (map icon)<br>\n                    - New icons / wordings<br><br>\n\n                   To give feedback simply click on the discord link below:<br><br>\n                   \n                <a href=' + DISCORDLINK + '\n                   target="_blank"><img class=\'discordLogo\' src="Images/discordLogo.png"></a><br><br>\n                ', 
         this.infoText.innerHTML = this.text, this.setupUI();
     }
     return _createClass(t, [ {
@@ -2309,7 +2311,7 @@ var app, _createClass = function() {
         this.overlayText.pie = "\n        This pie graph displays the class/ deck frequencies as pie slices. You can vary the rank brackets in the header.<br><br>\n        In <span class='optionBtn'>Decks</span> mode decks with 3% or lower frequencies have been merged with the 'Other' decks of that class.<br><br>\n        Tips:<br><br>\n        • Click on a class or deck button at the bottom of the graph to get to the respective description or decklist.<br><br>\n        ", 
         this.overlayText.number = "\n        This table displays the class/ deck frequencies over ladder ranks (rank 20 - Legend). You can vary the rank brackets in the header.<br><br>\n        In <span class='optionBtn'>Decks</span> mode decks with 3% or lower frequencies have been merged with the 'Other' decks of that class.<br><br>\n        Click on the \"download\" button at the bottom of the graph to download the data as '.csv' file.<br><br>\n        ", 
         this.overlayText.timeline = "\n        This line graph displays the class/ deck frequencies on the y-axis and time (in hours or days) on the x-axis.<br><br>\n        If you choose 'Last Day', 'Last 6 Hours' or 'Last 12 Hours' the time unit is in 'Hours' whereas for 'Last 3 Days' etc. it's in 'Days'.<br><br>\n        The 'Hours' lines have been averaged between +/- 1 Hour to make for a smoother curve.<br><br>\n        In <span class='optionBtn'>Decks</span> mode the chart displays the 9 most frequent decks.<br><br>\n        Tips:<br><br>\n        • Click on a class or deck button at the bottom of the graph to get to the respective description or decklist.<br><br>\n        ", 
-        this.overlayText.map = "\n        The VS Meta Score aims to give a broad overview over the current state of the ladder meta.<br><br>\n        Each archetype is represented as a colored dot and plotted according to its winrate (x-axis) and frequency (y-axis).\n        Both axis are scaled from 0 to 1.<br><br> \n        &#8226 Frequency is scaled from 0% of the meta (0 on the plot) to the highest frequency of any archetype (1 on the plot) <br><br>\n        &#8226 Winrates are scaled from the highest winrate among all archetypes (1 on the plot) to 50% - delta where delta is the \n        distance of the highest winrate above 50%<br><br>\n        ", 
+        this.overlayText.map = "\n        The vS Meta Score aims to give a broad overview over the current state of the ladder meta.<br><br>\n        Each archetype is represented as a colored dot and plotted according to its winrate (x-axis) and frequency (y-axis).\n        Both axis are scaled from 0 to 1.<br><br> \n        &#8226 Frequency is scaled from 0% of the meta (0 on the plot) to the highest frequency of any archetype (1 on the plot) <br><br>\n        &#8226 Winrates are scaled from the highest winrate among all archetypes (1 on the plot) to 50% - delta where delta is the \n        distance of the highest winrate above 50%<br><br>\n        ", 
         this.fontColor = "#222", this.fontColorLight = "#999", this.overlay = !1, this.annotated = !1, 
         this.colorScale_c1 = [ 255, 255, 255 ], this.colorScale_c2 = [ 87, 125, 186 ], this.colorScale_f = .15, 
         this.data = {}, this.hsFormats = hsFormats, this.hsTimes = PREMIUM ? ladder_times_premium : ladder_times, 
@@ -2907,14 +2909,15 @@ var app, _createClass = function() {
             }, this.layouts.number = {}, this.layouts.zoom = this.layouts.bar;
         }
     } ]), t;
-}(), DISCORDLINK = "https://discordapp.com/invite/0oxwpa5Mtc2VA2xC", POLLLINK = "https://docs.google.com/forms/d/e/1FAIpQLSel6ym_rJHduxkgeimzf9HdNbBMB5Kak7Fmk0Bl2O7O8XhVGg/viewform?usp=sf_link", VSGOLDINFOLINK = "https://www.vicioussyndicate.com/membership/vs-gold/", overlayText1 = "\n\n<span style='font-size:200%;font-weight:bold;padding-left:2rem;'>Greetings Travelers,</span><br><br><br>\n\nWelcome to the VS Live web app where you can explore the newest Hearthstone data and find \n\nout about frequency and win rates of your favorite decks.<br><br>\n\nTo get more information on the current tab simply click on the \n\n    <div class='fa fa-question-circle' style='display:inline-block'></div>\n\nicon in the top right corner.<br><br>\n\nUpgrade to vS Gold to visit the gold version of this app. Check the link more information:<br><br><br>\n\n<button id='basicBtn'>BASIC</button>\n<img src='Images/arrow.png' class='arrow'>\n<a href=" + VSGOLDINFOLINK + " target=\"_blank\">\n<button id='premiumBtn'>GOLD</button>\n</a>\n\n<br><br>\n\n<b class='marker'>Update:</b> VS Live version <b>2.0</b> has launched. Head on to the info tab to find out more.<br><br>\n\nTo give feedback simply click on the discord link below:<br><br><br>\n\n<a href=" + DISCORDLINK + '\n   target="_blank"><img class=\'discordLogo\' src="Images/discordLogo.png"></a><br><br>\n\n', overlayText2 = "\n\n<span style='font-size:200%;font-weight:bold;padding-left:2rem'>Greetings Travelers,</span><br><br><br>\n\nWelcome to the VS Live web app where you can explore the newest Hearthstone data and find \n\nout about frequency and win rates of your favorite decks.<br><br>\n\nTo get more information on the current tab simply click on the \n\n    <div class='fa fa-question-circle' style='display:inline-block'></div>\n\nicon in the top right corner.<br><br>\n\n<b class='marker'>Update:</b> VS Live version <b>2.0</b> has launched. Head on to the info tab to find out more.<br><br>\n\nThank you for using vS Live Gold.\n\n<br><br>\n\nTo give feedback simply click on the discord link below:<br><br><br>\n\n<a href=" + DISCORDLINK + '\n   target="_blank"><img class=\'discordLogo\' src="Images/discordLogo.png"></a><br><br>\n\n', ladder_times = [ "lastDay", "last2Weeks" ], ladder_times_premium = [ "last6Hours", "last12Hours", "lastDay", "last3Days", "lastWeek", "last2Weeks" ], ladder_ranks = [ "ranks_all" ], ladder_ranks_premium = [ "ranks_all", "ranks_L", "ranks_1_4", "ranks_5_14" ], ladder_plotTypes = [], table_times = [ "last2Weeks" ], table_times_premium = [ "last3Days", "lastWeek", "last2Weeks" ], table_sortOptions = [ "frequency", "winrate" ], table_sortOptions_premium = [ "frequency", "winrate", "matchup" ], table_numArch = 16, table_ranks = [ "ranks_all" ], table_ranks_premium = [ "ranks_all", "ranks_L", "ranks_1_4", "ranks_5_14" ], MU_COLOR_IDX = 0, hsRanks = 21, hsClasses = [ "Druid", "Hunter", "Mage", "Paladin", "Priest", "Rogue", "Shaman", "Warlock", "Warrior" ], hsFormats = [ "Standard", "Wild" ], rankRange = {
-    ranks_all: [ 0, 20 ],
+}(), DISCORDLINK = "https://discord.vicioussyndicate.com/", POLLLINK = "https://docs.google.com/forms/d/e/1FAIpQLSel6ym_rJHduxkgeimzf9HdNbBMB5Kak7Fmk0Bl2O7O8XhVGg/viewform?usp=sf_link", VSGOLDINFOLINK = "https://www.vicioussyndicate.com/membership/vs-gold/", overlayText1 = "\n\n<span style='font-size:200%;font-weight:bold;padding-left:2rem;'>Greetings Travelers,</span><br><br><br>\n\nWelcome to the vS Live web app where you can explore the newest Hearthstone data and find \n\nout about frequency and win rates of your favorite decks.<br><br>\n\nTo get more information on the current tab simply click on the \n\n    <div class='fa fa-question-circle' style='display:inline-block'></div>\n\nicon in the top right corner.<br><br>\n\nUpgrade to vS Gold to visit the gold version of this app. Check the link more information:<br><br><br>\n\n<button id='basicBtn'>BASIC</button>\n<img src='Images/arrow.png' class='arrow'>\n<a href=" + VSGOLDINFOLINK + " target=\"_blank\">\n<button id='premiumBtn'>GOLD</button>\n</a>\n\n<br><br>\n\n<b class='marker'>Update:</b> vS Live version <b>2.0</b> has launched. Head on to the info tab to find out more.<br><br>\n\nTo give feedback simply click on the discord link below:<br><br><br>\n\n<a href=" + DISCORDLINK + '\n   target="_blank"><img class=\'discordLogo\' src="Images/discordLogo.png"></a><br><br>\n\n', overlayText2 = "\n\n<span style='font-size:200%;font-weight:bold;padding-left:2rem'>Greetings Travelers,</span><br><br><br>\n\nWelcome to the vS Live web app where you can explore the newest Hearthstone data and find \n\nout about frequency and win rates of your favorite decks.<br><br>\n\nTo get more information on the current tab simply click on the \n\n    <div class='fa fa-question-circle' style='display:inline-block'></div>\n\nicon in the top right corner.<br><br>\n\n<b class='marker'>Update:</b> vS Live version <b>2.0</b> has launched. Head on to the info tab to find out more.<br><br>\n\nThank you for using vS Live Gold.\n\n<br><br>\n\nTo give feedback simply click on the discord link below:<br><br><br>\n\n<a href=" + DISCORDLINK + '\n   target="_blank"><img class=\'discordLogo\' src="Images/discordLogo.png"></a><br><br>\n\n', ladder_times = [ "lastDay", "last2Weeks" ], ladder_times_premium = [ "last6Hours", "last12Hours", "lastDay", "last3Days", "lastWeek", "last2Weeks" ], ladder_ranks = [ "ranks_all" ], ladder_ranks_premium = [ "ranks_all", "ranks_L", "ranks_L_4", "ranks_1_4", "ranks_5_14" ], ladder_plotTypes = [], table_times = [ "last2Weeks" ], table_times_premium = [ "last3Days", "lastWeek", "last2Weeks" ], table_sortOptions = [ "frequency", "winrate" ], table_sortOptions_premium = [ "frequency", "winrate", "matchup" ], table_numArch = 16, table_ranks = [ "ranks_all" ], table_ranks_premium = [ "ranks_all", "ranks_L", "ranks_L_4", "ranks_1_4", "ranks_5_14" ], MU_COLOR_IDX = 0, hsRanks = 21, hsClasses = [ "Druid", "Hunter", "Mage", "Paladin", "Priest", "Rogue", "Shaman", "Warlock", "Warrior" ], hsFormats = [ "Standard", "Wild" ], rankRange = {
+    ranks_all: [ 0, 14 ],
     ranks_L: [ 0, 0 ],
-    ranks_1_5: [ 1, 5 ],
-    ranks_1_4: [ 1, 4 ],
+    ranks_L_4: [ 0, 4 ],
     ranks_L_5: [ 0, 5 ],
-    ranks_6_15: [ 6, 15 ],
-    ranks_5_14: [ 5, 14 ]
+    ranks_1_4: [ 1, 4 ],
+    ranks_1_5: [ 1, 5 ],
+    ranks_5_14: [ 5, 14 ],
+    ranks_6_15: [ 6, 15 ]
 }, cardDust = {
     Free: 0,
     Basic: 0,
@@ -2926,12 +2929,13 @@ var app, _createClass = function() {
     Standard: "Standard",
     Wild: "Wild",
     ranks_all: "All Ranks",
-    ranks_L: "Legend Ranks",
+    ranks_L: "Legend",
+    ranks_L_4: "Ranks L-4",
+    ranks_L_5: "Ranks L-5",
     ranks_1_4: "Ranks 1-4",
     ranks_1_5: "Ranks 1-5",
-    ranks_L_5: "Ranks L-5",
-    ranks_6_15: "Ranks 6-15",
     ranks_5_14: "Ranks 5-14",
+    ranks_6_15: "Ranks 6-15",
     last6Hours: "Last 6 Hours",
     last12Hours: "Last 12 Hours",
     lastDay: "Last Day",
@@ -2953,8 +2957,11 @@ var app, _createClass = function() {
     Wild: "Wild",
     ranks_all: "R: All",
     ranks_L: "R: L",
-    ranks_1_5: "R: 1-5",
+    ranks_L_4: "R: L-4",
     ranks_L_5: "R: L-5",
+    ranks_1_4: "R: 1-4",
+    ranks_1_5: "R: 1-5",
+    ranks_5_14: "R: 5-14",
     ranks_6_15: "R: 6-15",
     last6Hours: "6 Hours",
     last12Hours: "12 Hours",
@@ -3062,15 +3069,20 @@ var app, _createClass = function() {
             start: 0,
             end: 0
         }, {
-            name: "1-5",
+            name: "L-4",
+            games: {},
+            start: 0,
+            end: 4
+        }, {
+            name: "1-4",
             games: {},
             start: 1,
-            end: 5
+            end: 4
         }, {
-            name: "6-15",
+            name: "5-14",
             games: {},
-            start: 6,
-            end: 15
+            start: 5,
+            end: 14
         } ];
         var u = !0, y = !1, f = void 0;
         try {
