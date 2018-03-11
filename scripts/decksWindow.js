@@ -188,6 +188,9 @@ class DecksWindow {
                 break
 
             case 'decklists':
+                this.loadArchetypes(this.hsClass)
+                let archName = (this.hsArch != null) ? this.hsArch.name : null
+                this.loadDecklists(archName)
                 this.plotDecklists()
                 break
 
@@ -212,16 +215,33 @@ class DecksWindow {
         var btnID = e.target.id
 
         // class button
-        if (hsClasses.indexOf(btnID) != -1) { this.loadClass(btnID) }
+        if (hsClasses.indexOf(btnID) != -1) { 
+            this.hsClass = btnID
+            this.data[this.f][this.hsClass].archetypes.sort(wrSort)
+            this.hsArch = this.data[this.f][this.hsClass].archetypes[0]
+            this.loadArchetypes(btnID)
+            if (this.hsArch == null) { return }
+            this.loadDecklists(this.hsArch.name)
+        }
 
         // archetype button
         if (e.target.classList.contains('archBtn')) { 
             this.hsArch = this.findArch(btnID)
-            if (this.hsArch != null) { 
-                this.sidebar.removeBtn()
-                this.hsClass = this.hsArch.hsClass 
-            } 
+            if (this.hsArch == null) { return }
+
             this.mode = 'decklists'
+
+            if (this.hsClass == 'Meta' || this.hsClass == 'Random') {
+                this.loadDecklists(this.hsArch.name)
+            } 
+            else {
+                this.hsClass = this.hsArch.hsClass
+                this.loadArchetypes(this.hsClass)
+                this.loadDecklists(this.hsArch.name)
+            }
+
+            this.sidebar.highlight(this.hsArch)
+            this.plotDecklists()
         }
 
 
@@ -235,15 +255,17 @@ class DecksWindow {
                 break
 
             case 'Meta':
-                this.hsClass = 'Meta'
+                this.hsClass = btnID
                 this.hsArch = null
-                this.loadDecks('Meta')
+                this.loadArchetypes(btnID)
+                this.loadDecklists(btnID)
                 break
 
             case 'Random':
-                this.hsClass = 'Random'
+                this.hsClass = btnID
                 this.hsArch = null
-                this.loadDecks('Random')
+                this.loadArchetypes(btnID)
+                this.loadDecklists(btnID)
                 break
 
             case 'info':
@@ -275,35 +297,54 @@ class DecksWindow {
 
 
 
-    loadDecks(w) {
-        if (!this.checkLoadData()) { return this.checkLoadData(_=>{ app.ui.decksWindow.loadDecks(w) }) }
+    loadArchetypes(w) { // trigger when press class/ random/ meta button
 
-        this.decklists = []
-        this.compare(false)
+        if (!this.checkLoadData()) { return this.checkLoadData(_=>{ app.ui.decksWindow.loadArchetypes(w) }) }
+
         this.sidebar.removeBtn()
+        this.archetypes[this.f].sort(wrSort)
+        this.hsClass = w
 
-        let wrSort = function (a,b) {return a.wr > b.wr ? -1: a.wr < b.wr ? 1 : 0 }
-        
-        if (w == 'Random') { this.archetypes[this.f] = shuffle(this.archetypes[this.f]) }
-        else { this.archetypes[this.f].sort(wrSort) }
-
-
-        if (w == 'Class') {
-            if (hsClasses.indexOf(this.hsClass) == -1) { this.hsClass = hsClasses[0] }
-
+        if (hsClasses.indexOf(w) != -1) {
             for (let a of this.archetypes[this.f]) {
-                if ( a.hsClass != this.hsClass ) { continue }
-                this.sidebar.addArchBtn(a)
-        }}
+                if ( a.hsClass == this.hsClass ) { this.sidebar.addArchBtn(a) }
+            }
+        }
 
 
         if (w == 'Meta' || w == 'Random') {
+            if (w == 'Random') { this.archetypes[this.f] = shuffle(this.archetypes[this.f]) }
             for (let a of this.archetypes[this.f].slice(0,5)) { 
-                if (a.decklists.length == 0) { continue }
-                this.decklists.push(choice(a.decklists))
-                this.sidebar.addArchBtn(a)
-        }}
+                if (a.decklists.length > 0) { this.sidebar.addArchBtn(a) }
+            }      
+        }
+    }
 
+
+
+    loadDecklists(w) { // trigger when pushed on archetype button, w == Meta, Random, ArchName
+
+        this.decklists = []
+        this.archetypes[this.f].sort(wrSort)
+        console.log('loadDecklists',w)
+
+        if (w == 'Meta' || w == 'Random') {
+            if (w == 'Random') { this.archetypes[this.f] = shuffle(this.archetypes[this.f]) }
+            for (let a of this.archetypes[this.f].slice(0,5)) {
+                if (a.decklists.length > 0) { this.decklists.push(choice(a.decklists)) }
+            }
+            return
+        }
+
+
+        for (let a of this.archetypes[this.f]) {
+            //console.log(w, a.name)
+            if (a.name == w) { 
+                //console.log('found')
+                this.decklists = a.decklists
+                break 
+            }
+        }
     }
 
     compare(bool) {
@@ -515,7 +556,7 @@ class DecksWindow {
         if (!this.checkLoadData()) { return this.checkLoadData(_=>{ app.ui.decksWindow.deckLink(archName) }) }
 
         this.hsArch = this.findArch(archName)
-        this.hsClass = (this.hsClass != undefined) ? this.hsArch.hsClass : 'Druid'
+        this.hsClass = (this.hsArch != undefined) ? this.hsArch.hsClass : 'Druid'
 
         if (this.hsArch == undefined) {
             for (let a of this.archetypes[this.f]) { 
@@ -525,12 +566,11 @@ class DecksWindow {
         
         if (this.hsArch == undefined) {
             this.mode = 'description'
-            for (var c of hsClasses) {
-                if (archName.indexOf(c) != -1) { this.hsClass = c; break }
-            }
+            for (var c of hsClasses) { if (archName.indexOf(c) != -1) { this.hsClass = c; break } }
         }
 
-        this.loadDecks('Class')
+        //this.loadArchetypes(this.hsClass)
+        //this.loadDecklists(this.hsArch)
         this.display(true)
     }
 
@@ -545,7 +585,7 @@ class DecksWindow {
             if (a.hsClass == this.hsClass && a.decklists.length > 0) { this.hsArch = a; break}
         }
         this.sidebar.highlight(this.hsArch)
-        this.loadDecks('Class')
+        this.loadArchetypes('Class')
     }
 
 
@@ -562,22 +602,8 @@ class DecksWindow {
 
     plotDecklists() {
 
-        this.infoBtn.active = false
+        this.info(false)
         this.compare(false)
-
-        this.archetypes[this.f].sort(wrSort)
-
-        // load decklists
-        if (hsClasses.indexOf(this.hsClass) != -1) {
-
-            if (this.hsArch == null) {
-                for (let a of this.archetypes[this.f]) { 
-                    if (a.hsClass == this.hsClass && a.decklists.length > 0) { this.hsArch = a; break}
-                }
-                if (this.hsArch == null) { return } // did not find archetype
-            }
-            this.decklists = this.hsArch.decklists
-        } 
 
         this.decksDiv.innerHTML = ''
         for (var dl of this.decklists) { this.decksDiv.appendChild(dl.div) }
@@ -660,9 +686,8 @@ class DecksWindow {
 
     plotDustWr() {
 
-        let archetypes = this.archetypes[this.f]
-        if (archetypes.length == 0) { return }
-        
+        if (this.archetypes[this.f].length == 0) { return }
+
         let traces = []
         let x = []
         let y = []
@@ -670,7 +695,7 @@ class DecksWindow {
         let minCost = 30*1600
         let maxCost = 0
 
-        for (let a of archetypes) {
+        for (let a of this.archetypes[this.f]) {
             if (a.wr == 0) { continue }
             for (let dl of a.decklists) {
                 if (dl.dust < minCost) {minCost = dl.dust}
