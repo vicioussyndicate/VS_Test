@@ -25,7 +25,7 @@ class PowerWindow {
         
         this.overlayText = `
             This tab displays the best decks to be played in the respective rank brackets.<br><br>
-            <span class='optionBtn'>Tier Lists</span> shows the top 16 decks across specific rank brackets ('All Ranks', 'Rank 1-5' etc.).<br><br>
+            <span class='optionBtn'>Tier Lists</span> shows the top 16 decks across specific rank brackets ('All Ranks', 'Rank 1-4' etc.).<br><br>
             <span class='optionBtn'>Suggestions</span> shows the top 5 decks for every single rank until rank 20.<br><br>
             The winrates are calculated by using the deck frequencies of the last 24 hours and the matchup table of the last week.<br><br>
             If there are fewer than ${this.minGames} games in the respective category no data is displayed instead.<br><br>
@@ -44,6 +44,7 @@ class PowerWindow {
         this.rankBrackets = [
             {name:'All Ranks',  games:{}, start: 0, end: 15},
             {name:'L',          games:{}, start: 0, end: 0},
+            {name:'L-4',        games:{}, start: 0, end: 4},
             {name:'1-4',        games:{}, start: 1, end: 4},
             {name:'5-14',       games:{}, start: 5, end: 14},
         ]

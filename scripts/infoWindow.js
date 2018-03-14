@@ -8,21 +8,21 @@ class InfoWindow {
         this.twitterFeed = document.querySelector('#infoWindow .content .twitterDiv')
         this.mode = 'info' // [info, twitter]
         this.text =`
-                Greetings and thank you for checking out the VS Live Beta!<br><br>
+                Greetings and thank you for checking out the vS Live!<br><br>
 
-                    Update 16-12-2017:<br><br>
+                    Update 2018-03-01:<br><br>
+                    - Loading only data needed<br>
+                    - Decks now show counters and best matchups<br>
+                    - Decks features a Dust vs Winrate plot<br>
+                    - vS Power Score in the Overview tab (map icon)<br>
+                    - New icons / wordings<br><br>
+
+                    Update 2017-12-16:<br><br>
                     - App refresh button in the top right corner added<br>
                     - Chose color theme for the matchup table added<br>
                     - Outdated archetypes no longer show in the overview page<br>
                     - Fixed win rates in the win rates page when data is insufficient<br>
-                    - Simulation tool in Matchup tab (VS Gold only)<br><br>
-
-                    Update 1-3-2018:<br><br>
-                    - Loading only data needed<br>
-                    - Decks now show counters and best matchups<br>
-                    - Decks features a Dust vs Winrate plot<br>
-                    - VS Power Score in the Overview tab (map icon)<br>
-                    - New icons / wordings<br><br>
+                    - Simulation tool in Matchup tab (vS Gold only)<br><br>
 
                    To give feedback simply click on the discord link below:<br><br>
                    

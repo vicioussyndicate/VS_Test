@@ -207,7 +207,7 @@ const overlayText1 = `
 
 <span style='font-size:200%;font-weight:bold;padding-left:2rem;'>Greetings Travelers,</span><br><br><br>
 
-Welcome to the VS Live web app where you can explore the newest Hearthstone data and find 
+Welcome to the vS Live web app where you can explore the newest Hearthstone data and find 
 
 out about frequency and win rates of your favorite decks.<br><br>
 
@@ -239,7 +239,7 @@ const overlayText2 = `
 
 <span style='font-size:200%;font-weight:bold;padding-left:2rem'>Greetings Travelers,</span><br><br><br>
 
-Welcome to the VS Live web app where you can explore the newest Hearthstone data and find 
+Welcome to the vS Live web app where you can explore the newest Hearthstone data and find 
 
 out about frequency and win rates of your favorite decks.<br><br>
 
