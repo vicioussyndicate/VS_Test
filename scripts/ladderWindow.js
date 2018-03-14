@@ -468,7 +468,7 @@ class LadderWindow {
             let label = ( rank % 5 == 0 ) ? rank+'  ' : ''
             rankLabels.push(label)
         }
-
+        rankLabels[0] = 'L'
 
         // LAYOUT BAR
         this.layouts.bar = {

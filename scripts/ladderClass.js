@@ -161,8 +161,7 @@ class Ladder {
             } // for ranks
 
             fr_avg /= hsRanks
-
-
+            
             var arch_bar = {
                 x:range(0,hsRanks),
                 y:archFr.slice(),

@@ -74,6 +74,7 @@ $decklist-width = 12rem
                     opacity 1
         .deckinfo
             display none
+            background-color white
             .dustInfo
                 padding 0.4rem
                 font-weight bold
@@ -101,18 +102,21 @@ $decklist-width = 12rem
                 color $midColor
                 padding 1rem
         .decklist
-            max-height 0.88*$decklists-height
+            height 0.88*$decklists-height
             margin-top: 1rem
             margin-bottom: 1rem
             overflow-y auto
             overflow-x hidden
-            background-color: white
+            //background-color: white
             .card
                 position relative
                 font-size 1rem
                 line-height 1.45rem
+                background-color white
                 .costContainer
                     position absolute
+                    width 100%
+                    height 100%
                     .hex
                         position absolute
                         font-size 140%
@@ -129,10 +133,12 @@ $decklist-width = 12rem
                     .cost
                         color $lightColor
                         position absolute
-                        padding 0.15rem 0 0 0.35rem
+                        //padding 0.15rem 0 0 0.35rem
+                        left 0.35rem
+                        top 0.15rem
                         &.high
                             font-size 75%
-                            padding-left 0.2rem
+                            left 0.2rem
                 .name
                     padding-left 1.5rem //0.25rem 0.1rem 0 1.7rem
                     display inline-block
