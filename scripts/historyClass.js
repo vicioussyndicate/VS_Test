@@ -61,8 +61,10 @@ class History {
             }
             this.r2r = {
                 ranks_all: 'ranks_all',
+                ranks_L: 'ranks_L',
+                ranks_L_4: 'ranks_L_4',
                 ranks_L_5: 'ranks_1_4',
-                ranks_6_15: 'ranks_5_14',
+                ranks_5_14: 'ranks_5_14',
             }
             this.fullyLoaded = true
         }
@@ -253,4 +255,3 @@ class History {
             return data_smoothed
         }
     }
-    
