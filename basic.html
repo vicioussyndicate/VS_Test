@@ -11,7 +11,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <!-- <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> -->
+    <script src="https://cdn.plot.ly/plotly-1.51.2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/clipboard@1/dist/clipboard.min.js"></script>
     <link
       rel="stylesheet"
@@ -27,37 +28,32 @@
         <p class="overlayText"></p>
       </div>
       <nav class="navbar">
-        <div class="option-folder" id="mobileFolder">
-          <button class="folder-toggle fa fa-bars" id="mobileBtn"></button>
-          <div class="dropdown hidden">
-            <button class="mobileBtn optionBtn folderBtn" id="ladder">
-              Overview
-            </button>
-            <button class="mobileBtn optionBtn folderBtn" id="power">
-              Tier List
-            </button>
-            <button class="mobileBtn optionBtn folderBtn" id="table">
-              Matchups
-            </button>
-            <button class="mobileBtn optionBtn folderBtn" id="decks">
-              Decks
-            </button>
-            <button class="mobileBtn optionBtn folderBtn" id="info">
-              Info
-            </button>
-          </div>
+        <!--#mobileFolder.option-folder-->
+        <!--  button#mobileBtn.folder-toggle.fa.fa-bars-->
+        <!--  .dropdown.hidden-->
+        <!--    button#ladder.mobileBtn.optionBtn.folderBtn Overview-->
+        <!--    button#power.mobileBtn.optionBtn.folderBtn Tier List-->
+        <!--    button#table.mobileBtn.optionBtn.folderBtn Matchups-->
+        <!--    button#decks.mobileBtn.optionBtn.folderBtn Decks-->
+        <!--    button#info.mobileBtn.optionBtn.folderBtn Info-->
+        <div class="mobileTabs">
+          <button class="tab">Tab Title</button>
         </div>
         <div class="tabs">
-          <button class="tab" id="ladder">Overview</button>
+          <button class="tab highlighted" id="ladder">Overview</button>
           <button class="tab" id="power">Tier List</button>
           <button class="tab" id="table">Matchups</button>
           <button class="tab" id="decks">Decks</button>
-          <button class="tab" id="info">info</button>
+          <!-- <button class="tab" id="info">info</button> -->
+        </div>
+        <div class="tooltip" id="updateTimeDiv">
+          <p id="updateTime"></p>
+          <span class="tooltipText">Last updated</span>
         </div>
         <div id="vsLogoDiv">
-          <img class="logo" src="Images/vsLiveLogo.png" />
+          <img class="logo" src="Images/vsGoldLogo.png" />
         </div>
-        <div class="refreshArrow fa fa-refresh"></div>
+        <!--.refreshArrow.fa.fa-refresh-->
       </nav>
       <div class="content-wrapper">
         <div id="loader"></div>
@@ -103,11 +99,11 @@
                   id="pie"
                 ></button>
                 <button
-                  class="optionBtn folderBtn fa fa-percent"
+                  class="optionBtn folderBtn fa fa-th"
                   id="number"
                 ></button>
                 <button
-                  class="optionBtn folderBtn fa fa-clock-o"
+                  class="optionBtn folderBtn fa fa-hourglass"
                   id="timeline"
                 ></button>
               </div>
@@ -122,16 +118,17 @@
               <button class="optionBtn fa fa-pie-chart tooltip" id="pie">
                 <span class="tooltipText">Show Pie Chart</span>
               </button>
-              <button class="optionBtn fa fa-percent tooltip" id="number">
-                <span class="tooltipText">Show Numbers</span>
+              <button class="optionBtn fa fa-th tooltip" id="number">
+                <span class="tooltipText">Show Table</span>
               </button>
               <button class="optionBtn fa fa-map tooltip" id="map">
                 <span class="tooltipText">Show Power Map</span>
               </button>
-              <button class="optionBtn fa fa-clock-o tooltip" id="timeline">
+              <button class="optionBtn fa fa-hourglass tooltip" id="timeline">
                 <span class="tooltipText">Show Timeline</span>
               </button>
             </div>
+            <div class="shadow"></div>
           </div>
           <div class="overlay">
             <p class="overlayText"></p>
@@ -143,7 +140,10 @@
             <div class="chart" id="chart1"></div>
             <div class="chart-footer"></div>
           </div>
-          <div class="content-footer"></div>
+          <div class="content-footer">
+            Copyright (vS) Vicious Syndicate Gaming - www.ViciousSyndicate.com -
+            © 2016-2020. All rights reserved.
+          </div>
         </div>
         <div class="tabWindow" id="powerWindow">
           <div class="content-header">
@@ -155,6 +155,7 @@
               <button class="optionBtn" id="brackets">Tier Lists</button>
               <button class="optionBtn" id="ranks">Ranks</button>
             </div>
+            <div class="shadow"></div>
           </div>
           <div class="overlay">
             <p class="overlayText"></p>
@@ -164,7 +165,10 @@
             <div class="chart" id="powerGrid"></div>
             <div class="chart-footer"></div>
           </div>
-          <div class="content-footer"></div>
+          <div class="content-footer">
+            Copyright (vS) Vicious Syndicate Gaming - www.ViciousSyndicate.com -
+            © 2016-2020. All rights reserved.
+          </div>
         </div>
         <div class="tabWindow" id="tableWindow">
           <div class="content-header">
@@ -199,22 +203,35 @@
                 <span class="tooltipText">Show Numbers</span>
               </button>
             </div>
+            <div class="shadow"></div>
           </div>
           <div class="overlay">
             <p class="overlayText"></p>
           </div>
           <div class="content">
-            <!--p.graphTitle Versus-->
             <div class="question fa fa-question-circle"></div>
             <div class="chart" id="chart2"></div>
             <div class="chart-footer">
               <!--.colorTheme.chartFooterBtn-->
               <!--  button.changeColorBtn Change Colors-->
-              <!--.equilibrium-->
-              <!--  button.equilibriumBtn Equilibrium-->
+              <div class="equilibrium chartFooterBtn">
+                <button class="equilibriumBtn">
+                  Simulation
+                  <div class="fa fa-rocket"></div>
+                </button>
+              </div>
+              <div class="download chartFooterBtn">
+                <button class="downloadBtn">
+                  Download Table
+                  <div class="fa fa-cloud-download"></div>
+                </button>
+              </div>
             </div>
           </div>
-          <div class="content-footer"></div>
+          <div class="content-footer">
+            Copyright (vS) Vicious Syndicate Gaming - www.ViciousSyndicate.com -
+            © 2016-2020. All rights reserved.
+          </div>
         </div>
         <div class="tabWindow" id="decksWindow">
           <div class="content-header">
@@ -228,9 +245,15 @@
                   <button class="optionBtn folderBtn" id="Wild">Wild</button>
                 </div>
               </div>
+              <button class="optionBtn" id="description">Text</button>
+              <button class="optionBtn" id="decklists">Decks</button>
+              <button class="optionBtn" id="dustWr">Dust</button>
               <div class="option-folder" id="classFolder">
                 <button class="folder-toggle" id="classBtn">Druid</button>
                 <div class="dropdown hidden">
+                  <button class="optionBtn folderBtn">Classes</button>
+                  <button class="optionBtn folderBtn">Meta</button>
+                  <button class="optionBtn folderBtn">Special</button>
                   <button class="optionBtn folderBtn" id="Druid">Druid</button>
                   <button class="optionBtn folderBtn" id="Hunter">
                     Hunter
@@ -256,45 +279,92 @@
               </div>
             </div>
             <div class="displayOptions optionBar">
-              <button class="optionBtn" id="description">Description</button>
-              <button class="optionBtn" id="decklists">Deck Lists</button>
+              <button class="optionBtn" id="info">Info</button>
+              <button class="optionBtn" id="compare">Compare</button>
             </div>
+            <div class="shadow"></div>
           </div>
           <div class="overlay">
             <p class="overlayText"></p>
           </div>
           <div class="content">
             <div class="question fa fa-question-circle"></div>
-            <div class="archetypes">
-              <p class="title">Archetypes</p>
-              <div class="archetypeList"></div>
+            <div class="content-left">
+              <div class="selectionWrapper">
+                <!--.imgWrapper-->
+                <!--  img(src="").selectionImg-->
+                <!--  p.selectionTitle Hunter-->
+                <div class="buttonWrapper"></div>
+              </div>
+              <div class="sidebar left"></div>
             </div>
-            <div class="descriptionBox">
-              <div class="description"></div>
+            <div class="content-middle">
+              <div class="descriptionBox">
+                <div class="description"></div>
+              </div>
+              <div class="decklists"></div>
+              <div class="chart" id="chart3"></div>
             </div>
-            <div class="decklists"></div>
+            <!--.content-right-->
+            <!--  .sidebar.right1-->
+            <!--  .sidebar.right2-->
           </div>
-          <div class="content-footer"></div>
+          <div class="content-footer">
+            Copyright (vS) Vicious Syndicate Gaming - www.ViciousSyndicate.com -
+            © 2016-2020. All rights reserved.
+          </div>
         </div>
         <div class="tabWindow" id="infoWindow">
-          <div class="content-header"></div>
+          <div class="content-header">
+            <div class="graphOptions optionBar">
+              <button class="optionBtn fa fa-info tooltip" id="info">
+                <span class="tooltipText">Information</span>
+              </button>
+              <button class="optionBtn fa fa-twitter tooltip" id="twitter">
+                <span class="tooltipText">Twitter Feed</span>
+              </button>
+            </div>
+            <div class="shadow"></div>
+          </div>
           <div class="content">
             <div class="infoText"></div>
-            <div class="login">
-              <p>
-                Test login in with a VS account (vsProUser@vs.com - pw12345):
-              </p>
-              <input id="emailInput" placeholder="Email" />
-              <input id="passwordInput" placeholder="Password" />
-              <button id="loginBtn">Login</button>
-              <button class="hidden" id="logOutBtn">Logout</button>
-              <button id="signUpBtn">Sign Up</button>
-              <p id="loginErrorMsg"></p>
+            <div class="twitterDiv">
+              <!--a( class='twitter-timeline' href='https://twitter.com/ViciousHS?ref_src=twsrc%5Etfw>Tweets by ViciousHS' )-->
             </div>
+            <!--  p Test login in with a VS account (vsProUser@vs.com - pw12345):-->
+            <!--  input#emailInput(placeholder='Email')-->
+            <!--  input#passwordInput(placeholder='Password')-->
+            <!--  button#loginBtn Login-->
+            <!--  button#logOutBtn.hidden Logout-->
+            <!--  button#signUpBtn Sign Up-->
+            <!--  p#loginErrorMsg-->
           </div>
-          <div class="content-footer"></div>
+          <div class="content-footer">
+            Copyright (vS) Vicious Syndicate Gaming - www.ViciousSyndicate.com -
+            © 2016-2020. All rights reserved.
+          </div>
         </div>
       </div>
     </div>
+    <script
+      src="https://platform.twitter.com/widgets.js"
+      async
+      charset="utf-8"
+    ></script>
+    <!-- <script src="scripts/build_premium.js"></script> -->
+    <script src="scripts/build_basic.js"></script>
+    <script src="scripts/app.js"></script>
+    <script src="scripts/parameters.js"></script>
+    <script src="scripts/script.js"></script>
+    <script src="scripts/ui.js"></script>
+    <script src="scripts/ladderClass.js"></script>
+    <script src="scripts/historyClass.js"></script>
+    <script src="scripts/ladderWindow.js"></script>
+    <script src="scripts/tableClass.js"></script>
+    <script src="scripts/tableWindow.js"></script>
+    <script src="scripts/powerWindow.js"></script>
+    <script src="scripts/decksWindow.js"></script>
+    <script src="scripts/decklistClass.js"></script>
+    <script src="scripts/infoWindow.js"></script>
   </body>
 </html>

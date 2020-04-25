@@ -1,17 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <link rel="icon" href="Images/vsLogo.png">
-    <link rel="apple-touch-icon-precomposed" size="57x57" href="Images/vsLogo57x57.png">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="Images/vsLogo.png" />
+    <link
+      rel="apple-touch-icon-precomposed"
+      size="57x57"
+      href="Images/vsLogo57x57.png"
+    />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <!-- <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> -->
+    <script src="https://cdn.plot.ly/plotly-1.51.2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/clipboard@1/dist/clipboard.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
     <!--link(rel='stylesheet', href='reset.css')-->
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/styles.css" />
     <title>VS</title>
   </head>
   <body>
@@ -36,12 +44,15 @@
           <button class="tab" id="power">Tier List</button>
           <button class="tab" id="table">Matchups</button>
           <button class="tab" id="decks">Decks</button>
-          <button class="tab" id="info">info</button>
+          <!-- <button class="tab" id="info">info</button> -->
         </div>
         <div class="tooltip" id="updateTimeDiv">
-          <p id="updateTime"></p><span class="tooltipText">Last updated</span>
+          <p id="updateTime"></p>
+          <span class="tooltipText">Last updated</span>
         </div>
-        <div id="vsLogoDiv"><img class="logo" src="Images/vsGoldLogo.png"></div>
+        <div id="vsLogoDiv">
+          <img class="logo" src="Images/vsGoldLogo.png" />
+        </div>
         <!--.refreshArrow.fa.fa-refresh-->
       </nav>
       <div class="content-wrapper">
@@ -59,31 +70,63 @@
               </div>
               <div class="option-folder" id="rankFolder">
                 <button class="folder-toggle" id="rankBtn">All Ranks</button>
-                <div class="dropdown hidden" id="rankDropdown">             </div>
+                <div class="dropdown hidden" id="rankDropdown"></div>
               </div>
             </div>
             <div class="classDeckOptions optionBar">
               <button class="optionBtn" id="classes">Classes</button>
               <button class="optionBtn" id="decks">Decks</button>
-              <button class="optionBtn fa fa-hashtag tooltip" id="showNumbers"><span class="tooltipText">Show Numbers</span></button>
+              <button class="optionBtn fa fa-hashtag tooltip" id="showNumbers">
+                <span class="tooltipText">Show Numbers</span>
+              </button>
             </div>
             <div class="option-folder" id="plotFolder">
-              <button class="folder-toggle fa fa-bar-chart" id="plotBtn"></button>
+              <button
+                class="folder-toggle fa fa-bar-chart"
+                id="plotBtn"
+              ></button>
               <div class="dropdown hidden" id="plotDropdown">
-                <button class="optionBtn folderBtn fa fa-bar-chart" id="bar"></button>
-                <button class="optionBtn folderBtn fa fa-line-chart" id="line"></button>
-                <button class="optionBtn folderBtn fa fa-pie-chart" id="pie"></button>
-                <button class="optionBtn folderBtn fa fa-th" id="number"></button>
-                <button class="optionBtn folderBtn fa fa-hourglass" id="timeline"></button>
+                <button
+                  class="optionBtn folderBtn fa fa-bar-chart"
+                  id="bar"
+                ></button>
+                <button
+                  class="optionBtn folderBtn fa fa-line-chart"
+                  id="line"
+                ></button>
+                <button
+                  class="optionBtn folderBtn fa fa-pie-chart"
+                  id="pie"
+                ></button>
+                <button
+                  class="optionBtn folderBtn fa fa-th"
+                  id="number"
+                ></button>
+                <button
+                  class="optionBtn folderBtn fa fa-hourglass"
+                  id="timeline"
+                ></button>
               </div>
             </div>
             <div class="graphOptions optionBar">
-              <button class="optionBtn fa fa-bar-chart tooltip" id="bar"><span class="tooltipText">Show Bar Chart</span></button>
-              <button class="optionBtn fa fa-line-chart tooltip" id="line"><span class="tooltipText">Show Line Chart</span></button>
-              <button class="optionBtn fa fa-pie-chart tooltip" id="pie"><span class="tooltipText">Show Pie Chart</span></button>
-              <button class="optionBtn fa fa-th tooltip" id="number"><span class="tooltipText">Show Table</span></button>
-              <button class="optionBtn fa fa-map tooltip" id="map"><span class="tooltipText">Show Power Map</span></button>
-              <button class="optionBtn fa fa-hourglass tooltip" id="timeline"><span class="tooltipText">Show Timeline</span></button>
+              <button class="optionBtn fa fa-bar-chart tooltip" id="bar">
+                <span class="tooltipText">Show Bar Chart</span>
+              </button>
+              <button class="optionBtn fa fa-line-chart tooltip" id="line">
+                <span class="tooltipText">Show Line Chart</span>
+              </button>
+              <button class="optionBtn fa fa-pie-chart tooltip" id="pie">
+                <span class="tooltipText">Show Pie Chart</span>
+              </button>
+              <button class="optionBtn fa fa-th tooltip" id="number">
+                <span class="tooltipText">Show Table</span>
+              </button>
+              <button class="optionBtn fa fa-map tooltip" id="map">
+                <span class="tooltipText">Show Power Map</span>
+              </button>
+              <button class="optionBtn fa fa-hourglass tooltip" id="timeline">
+                <span class="tooltipText">Show Timeline</span>
+              </button>
             </div>
             <div class="shadow"></div>
           </div>
@@ -97,7 +140,10 @@
             <div class="chart" id="chart1"></div>
             <div class="chart-footer"></div>
           </div>
-          <div class="content-footer">Copyright (vS) Vicious Syndicate Gaming - www.ViciousSyndicate.com - © 2016-2018. All rights reserved.</div>
+          <div class="content-footer">
+            Copyright (vS) Vicious Syndicate Gaming - www.ViciousSyndicate.com -
+            © 2016-2020. All rights reserved.
+          </div>
         </div>
         <div class="tabWindow" id="powerWindow">
           <div class="content-header">
@@ -119,7 +165,10 @@
             <div class="chart" id="powerGrid"></div>
             <div class="chart-footer"></div>
           </div>
-          <div class="content-footer">Copyright (vS) Vicious Syndicate Gaming - www.ViciousSyndicate.com - © 2016-2018. All rights reserved.</div>
+          <div class="content-footer">
+            Copyright (vS) Vicious Syndicate Gaming - www.ViciousSyndicate.com -
+            © 2016-2020. All rights reserved.
+          </div>
         </div>
         <div class="tabWindow" id="tableWindow">
           <div class="content-header">
@@ -136,16 +185,23 @@
                 <button class="folder-toggle" id="ranksBtn">All Ranks</button>
                 <div class="dropdown hidden"></div>
               </div>
-              <p class="nrGames">             </p>
+              <p class="nrGames"></p>
             </div>
             <div class="graphOptions optionBar">
-              <p>Sort </p>
+              <p>Sort</p>
               <div class="option-folder" id="sortFolder">
                 <button class="folder-toggle" id="sortBtn">Sort</button>
                 <div class="dropdown hidden"></div>
               </div>
-              <button class="optionBtn fa fa-paint-brush tooltip" id="changeColor"><span class="tooltipText">Change Color</span></button>
-              <button class="optionBtn fa fa-hashtag tooltip" id="showNumbers"><span class="tooltipText">Show Numbers</span></button>
+              <button
+                class="optionBtn fa fa-paint-brush tooltip"
+                id="changeColor"
+              >
+                <span class="tooltipText">Change Color</span>
+              </button>
+              <button class="optionBtn fa fa-hashtag tooltip" id="showNumbers">
+                <span class="tooltipText">Show Numbers</span>
+              </button>
             </div>
             <div class="shadow"></div>
           </div>
@@ -159,18 +215,23 @@
               <!--.colorTheme.chartFooterBtn-->
               <!--  button.changeColorBtn Change Colors-->
               <div class="equilibrium chartFooterBtn">
-                <button class="equilibriumBtn">Simulation
+                <button class="equilibriumBtn">
+                  Simulation
                   <div class="fa fa-rocket"></div>
                 </button>
               </div>
               <div class="download chartFooterBtn">
-                <button class="downloadBtn">Download Table
+                <button class="downloadBtn">
+                  Download Table
                   <div class="fa fa-cloud-download"></div>
                 </button>
               </div>
             </div>
           </div>
-          <div class="content-footer">Copyright (vS) Vicious Syndicate Gaming - www.ViciousSyndicate.com - © 2016-2018. All rights reserved.</div>
+          <div class="content-footer">
+            Copyright (vS) Vicious Syndicate Gaming - www.ViciousSyndicate.com -
+            © 2016-2020. All rights reserved.
+          </div>
         </div>
         <div class="tabWindow" id="decksWindow">
           <div class="content-header">
@@ -178,7 +239,9 @@
               <div class="option-folder" id="formatFolder">
                 <button class="folder-toggle" id="formatBtn">Standard</button>
                 <div class="dropdown hidden">
-                  <button class="optionBtn folderBtn" id="Standard">Standard</button>
+                  <button class="optionBtn folderBtn" id="Standard">
+                    Standard
+                  </button>
                   <button class="optionBtn folderBtn" id="Wild">Wild</button>
                 </div>
               </div>
@@ -191,15 +254,27 @@
                   <button class="optionBtn folderBtn">Classes</button>
                   <button class="optionBtn folderBtn">Meta</button>
                   <button class="optionBtn folderBtn">Special</button>
-                  <button class="optionBtn folderBtn" id="Druid">Druid </button>
-                  <button class="optionBtn folderBtn" id="Hunter">Hunter </button>
+                  <button class="optionBtn folderBtn" id="Druid">Druid</button>
+                  <button class="optionBtn folderBtn" id="Hunter">
+                    Hunter
+                  </button>
                   <button class="optionBtn folderBtn" id="Mage">Mage</button>
-                  <button class="optionBtn folderBtn" id="Paladin">Paladin</button>
-                  <button class="optionBtn folderBtn" id="Priest">Priest</button>
+                  <button class="optionBtn folderBtn" id="Paladin">
+                    Paladin
+                  </button>
+                  <button class="optionBtn folderBtn" id="Priest">
+                    Priest
+                  </button>
                   <button class="optionBtn folderBtn" id="Rogue">Rogue</button>
-                  <button class="optionBtn folderBtn" id="Shaman">Shaman</button>
-                  <button class="optionBtn folderBtn" id="Warlock">Warlock</button>
-                  <button class="optionBtn folderBtn" id="Warrior">Warrior</button>
+                  <button class="optionBtn folderBtn" id="Shaman">
+                    Shaman
+                  </button>
+                  <button class="optionBtn folderBtn" id="Warlock">
+                    Warlock
+                  </button>
+                  <button class="optionBtn folderBtn" id="Warrior">
+                    Warrior
+                  </button>
                 </div>
               </div>
             </div>
@@ -234,13 +309,20 @@
             <!--  .sidebar.right1-->
             <!--  .sidebar.right2-->
           </div>
-          <div class="content-footer">Copyright (vS) Vicious Syndicate Gaming - www.ViciousSyndicate.com - © 2016-2018. All rights reserved.</div>
+          <div class="content-footer">
+            Copyright (vS) Vicious Syndicate Gaming - www.ViciousSyndicate.com -
+            © 2016-2020. All rights reserved.
+          </div>
         </div>
         <div class="tabWindow" id="infoWindow">
           <div class="content-header">
             <div class="graphOptions optionBar">
-              <button class="optionBtn fa fa-info tooltip" id="info"><span class="tooltipText">Information</span></button>
-              <button class="optionBtn fa fa-twitter tooltip" id="twitter"><span class="tooltipText">Twitter Feed</span></button>
+              <button class="optionBtn fa fa-info tooltip" id="info">
+                <span class="tooltipText">Information</span>
+              </button>
+              <button class="optionBtn fa fa-twitter tooltip" id="twitter">
+                <span class="tooltipText">Twitter Feed</span>
+              </button>
             </div>
             <div class="shadow"></div>
           </div>
@@ -257,12 +339,20 @@
             <!--  button#signUpBtn Sign Up-->
             <!--  p#loginErrorMsg-->
           </div>
-          <div class="content-footer">Copyright (vS) Vicious Syndicate Gaming - www.ViciousSyndicate.com - © 2016-2018. All rights reserved.</div>
+          <div class="content-footer">
+            Copyright (vS) Vicious Syndicate Gaming - www.ViciousSyndicate.com -
+            © 2016-2020. All rights reserved.
+          </div>
         </div>
       </div>
     </div>
-    <script src="https://platform.twitter.com/widgets.js" async charset="utf-8"></script>
+    <script
+      src="https://platform.twitter.com/widgets.js"
+      async
+      charset="utf-8"
+    ></script>
     <script src="scripts/build_premium.js"></script>
+    <!-- <script src="scripts/build_basic.js"></script> -->
     <script src="scripts/app.js"></script>
     <script src="scripts/parameters.js"></script>
     <script src="scripts/script.js"></script>
