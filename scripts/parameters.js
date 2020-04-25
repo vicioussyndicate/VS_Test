@@ -81,21 +81,20 @@ const ladder_ranks = ["ranks_all"];
 /*
 .  Overview tab Rank filter drop down for some of the graphs
    ranks are cumulative as defined below in the format "key" -> label - description
+  "ranks_l" -> Legend - Only Legend league
+  "ranks_l_d4" -> D4+ = All games from D1-4 & Legend together
+  "ranks_l_d10" ->D10+ = All games from D5-10, D1-4, & Legend
+  "ranks_l_p" -> platinum+ = All games from Platinum, D5-10, D1-4, & Legend
   "ranks_all" -> All Ranks - All Games
-  "legend" -> Legend - Only Legend league
-  "diamond_1_4" -> D4+ = All games from D1-4 & Legend together
-  "diamond_5_10" ->D10+ = All games from D5-10, D1-4, & Legend
-  "platinum" -> platinum+ = All games from Platinum, D5-10, D1-4, & Legend
 */
 
 const ladder_ranks_premium = [
   //   "ranks_all",   "ranks_L",  "ranks_1_4", "ranks_5_14", "ranks_6_15",
+  "ranks_l",
+  "ranks_l_d4",
+  "ranks_l_d10",
+  "ranks_l_p",
   "ranks_all",
-  "legend",
-  "diamond_1_4",
-  "diamond_5_10",
-  "platinum",
-  //"gold_silver_bronze",
 ];
 
 const ladder_plotTypes = [];
@@ -114,20 +113,19 @@ const table_ranks = ["ranks_all"];
 /*
 .  Match up tab Rank filter drop down
    ranks are cumulative as defined below in the format "key" -> label - description
+  "ranks_l" -> Legend - Only Legend league
+  "ranks_l_d4" -> D4+ = All games from D1-4 & Legend together
+  "ranks_l_d10" ->D10+ = All games from D5-10, D1-4, & Legend
+  "ranks_l_p" -> platinum+ = All games from Platinum, D5-10, D1-4, & Legend
   "ranks_all" -> All Ranks - All Games
-  "legend" -> Legend - Only Legend league
-  "diamond_1_4" -> D4+ = All games from D1-4 & Legend together
-  "diamond_5_10" ->D10+ = All games from D5-10, D1-4, & Legend
-  "platinum" -> platinum+ = All games from Platinum, D5-10, D1-4, & Legend
 */
 
 const table_ranks_premium = [
+  "ranks_l",
+  "ranks_l_d4",
+  "ranks_l_d10",
+  "ranks_l_p",
   "ranks_all",
-  "legend",
-  "diamond_1_4",
-  "diamond_5_10",
-  "platinum",
-  //"gold_silver_bronze",
 ];
 
 const rankingSystem = {
@@ -158,15 +156,13 @@ const hsClasses = [
 const hsFormats = ["Standard", "Wild"];
 
 // const rankRange = { ranks_all: [0, 51], ranks_L: [0, 0], ranks_1_5: [1, 5], ranks_1_4: [1, 4], ranks_L_5: [0, 5], ranks_6_15: [6, 15], ranks_5_14: [5, 14], };
-// const rankRange = {ranks_all: [0, 50],legend: [0, 0],diamond_1_4: [1, 4],diamond_5_10: [5, 10],platinum: [11, 20],gold_silver_bronze: [31, 50],};
 
 const rankRange = {
-  ranks_all: [0, 19],
-  legend: [0, 0],
-  diamond_1_4: [0, 4],
-  diamond_5_10: [0, 10],
-  platinum: [0, 15],
-  gold_silver_bronze: [0, 19],
+  ranks_all: [0, 50],
+  ranks_l_p: [0, 20],
+  ranks_l_d10: [0, 10],
+  ranks_l_d4: [0, 4],
+  ranks_l: [0, 0],
 };
 
 function tier_classifier(wr) {
@@ -198,12 +194,11 @@ const btnIdToText = {
   Wild: "Wild",
   // ranks_all: "All Ranks", ranks_L: "Legend Ranks", ranks_1_4: "Ranks 1-4", ranks_1_5: "Ranks 1-5", ranks_L_5: "Ranks L-5", ranks_6_15: "Ranks 6-15", ranks_5_14: "Ranks 5-14",
   // labels for matchup dropdowns
+  ranks_l: "Legend",
+  ranks_l_d4: "D4+",
+  ranks_l_d10: "D10+",
+  ranks_l_p: "Platinum+",
   ranks_all: "All Ranks",
-  legend: "Legend",
-  diamond_1_4: "D4+",
-  diamond_5_10: "D10+",
-  platinum: "Platinum+",
-  gold_silver_bronze: "G S B",
 
   last6Hours: "Last 6 Hours",
   last12Hours: "Last 12 Hours",
@@ -230,12 +225,11 @@ const btnIdToText_m = {
   Standard: "Std",
   Wild: "Wild",
   // ranks_all: "R: All", ranks_L: "R: L", ranks_1_5: "R: 1-5", ranks_L_5: "R: L-5", ranks_6_15: "R: 6-15", ranks_1_4: "R: 1-4", ranks_5_14: "R: 5-14",
+  ranks_l: "Legend",
+  ranks_l_d4: "D4+",
+  ranks_l_d10: "D10+",
+  ranks_l_p: "Platinum+",
   ranks_all: "All",
-  legend: "Legend",
-  diamond_1_4: "D4+",
-  diamond_5_10: "D10+",
-  platinum: "Platinum+",
-  gold_silver_bronze: "G S B",
 
   last6Hours: "6 Hours",
   last12Hours: "12 Hours",
